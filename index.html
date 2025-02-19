@@ -258,6 +258,46 @@
         .icon-button:hover {
             background: rgba(255, 238, 50, 0.2);
         }
+
+        /* Pop-up Styles */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid var(--neon-yellow);
+            padding: 20px;
+            box-shadow: 0 0 25px var(--neon-yellow);
+            z-index: 1000;
+            text-align: center;
+        }
+
+        .popup img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .popup a {
+            color: var(--neon-yellow);
+            text-decoration: none;
+            font-size: 1.2em;
+        }
+
+        .popup button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: var(--neon-yellow);
+            border: none;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1em;
+        }
+
+        .popup button:hover {
+            background: var(--hologram-blue);
+        }
     </style>
 </head>
 <body>
@@ -281,10 +321,11 @@
         <!-- Centered Live Stream -->
         <div class="live-stream-main">
             <div class="live-stream-container">
-                <iframe src="https://player.kick.com/excavationpro"></iframe>
-                <div class="live-stream-overlay">
-                    <a href="https://kick.com/excavationpro" target="_blank">Watch on Kick</a>
-                </div>
+                <div id="rumble_v6k6390"></div>
+                <script>
+                    !function(r,u,m,b,l,e){r._Rumble=b,r[b]||(r[b]=function(){(r[b]._=r[b]._||[]).push(arguments);if(r[b]._.length==1){l=u.createElement(m),e=u.getElementsByTagName(m)[0],l.async=1,l.src="https://rumble.com/embedJS/u1th29y"+(arguments[1].video?'.'+arguments[1].video:'')+"/?url="+encodeURIComponent(location.href)+"&args="+encodeURIComponent(JSON.stringify([].slice.apply(arguments))),e.parentNode.insertBefore(l,e)}})}(window, document, "script", "Rumble");
+                    Rumble("play", {"video":"v6k6390","div":"rumble_v6k6390"});
+                </script>
             </div>
         </div>
 
@@ -357,6 +398,13 @@
         </div>
     </div>
 
+    <!-- Pop-up -->
+    <div class="popup" id="popup">
+        <img src="image.png" alt="Crypto.com Referral">
+        <p>Use my referral <a href="https://crypto.com/app/hbpy3d4r3f" target="_blank">https://crypto.com/app/hbpy3d4r3f</a> to sign up for Crypto․com, and we'll get $50 USD each 🫶😀</p>
+        <button onclick="closePopup()">Close</button>
+    </div>
+
     <!-- Scripts -->
     <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
     <script src="https://rumble.com/embedJS/u1th29y"></script>
@@ -386,6 +434,25 @@
 
         // Auto-refresh every 30 seconds
         setInterval(fetchAdvice, 30000);
+    </script>
+
+    <!-- Pop-up Script -->
+    <script>
+        const popup = document.getElementById('popup');
+
+        function showPopup() {
+            popup.style.display = 'block';
+        }
+
+        function closePopup() {
+            popup.style.display = 'none';
+        }
+
+        // Show pop-up every 10 minutes
+        setInterval(showPopup, 600000);
+
+        // Show pop-up immediately on page load
+        window.onload = showPopup;
     </script>
 </body>
 </html>

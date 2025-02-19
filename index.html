@@ -218,6 +218,39 @@
             font-weight: 500;
         }
 
+        /* Enhanced Header with Holographic Glow */
+        .bio-section h1 {
+            font-size: 4.5em;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            text-shadow: 
+                0 0 5px var(--neon-yellow),
+                0 0 10px var(--neon-yellow),
+                0 0 20px var(--neon-yellow),
+                0 0 40px var(--neon-yellow);
+            animation: glow-pulse 2s infinite alternate;
+        }
+
+        @keyframes glow-pulse {
+            0% { text-shadow: 0 0 5px var(--neon-yellow), 0 0 10px var(--neon-yellow), 0 0 20px var(--neon-yellow), 0 0 40px var(--neon-yellow); }
+            100% { text-shadow: 0 0 10px var(--neon-yellow), 0 0 20px var(--neon-yellow), 0 0 40px var(--neon-yellow), 0 0 80px var(--neon-yellow); }
+        }
+
+        /* Excavator Icon */
+        .excavator-icon {
+            font-size: 1.2em;
+            color: var(--neon-yellow);
+            animation: excavator-bounce 2s infinite;
+        }
+
+        @keyframes excavator-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
         /* Enhanced Button Styles */
         .icon-button {
             display: flex;
@@ -339,7 +372,10 @@
         
         <!-- Bio Section -->
         <div class="bio-section">
-            <h1>EXCAVATIONPRO</h1>
+            <h1>
+                <i class="fas fa-truck-monster excavator-icon"></i>
+                EXCAVATIONPRO
+            </h1>
             <h2>Building Beats & Breaking Ground</h2>
             <p class="bio-text">
                 <strong>👷♂️ Elite Construction Supervisor by day, BeatSmith by night!</strong><br>

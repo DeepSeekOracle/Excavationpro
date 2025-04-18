@@ -364,6 +364,32 @@
             height: 100%;
             border: none;
         }
+
+        /* Floating Robot Link */
+        .robot-link {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(40, 40, 40, 0.9);
+            padding: 10px 15px;
+            border-radius: 25px;
+            border: 1px solid var(--neon-yellow);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .robot-link a {
+            color: var(--neon-yellow);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .robot-link:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 15px var(--neon-yellow);
+        }
     </style>
 </head>
 <body>
@@ -486,6 +512,13 @@
         <img src="image.png" alt="Crypto.com Referral">
         <p>Use my referral <a href="https://crypto.com/app/hbpy3d4r3f" target="_blank">https://crypto.com/app/hbpy3d4r3f</a> to sign up for Crypto․com, and we'll get $50 USD each 🫶😀</p>
         <button onclick="closePopup()">Close</button>
+    </div>
+
+    <!-- Floating Robot Link -->
+    <div class="robot-link">
+        <a href="https://deepseekoracle.github.io/Excavationpro/Musicplayer" target="_blank">
+            🤖 Music Player
+        </a>
     </div>
 
     <!-- Scripts -->

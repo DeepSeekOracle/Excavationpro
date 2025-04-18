@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExcavationPro - Industrial Bass Architect</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Audiowide', cursive;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #2a1e1e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeIn 1s ease-in;
+            border-bottom: 2px solid #ff4d4d;
+            padding-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, #ff4d4d, #4d4dff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(255,77,77,0.3);
+        }
+
+        .player-container {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px rgba(255, 77, 77, 0.1);
+            margin: 2rem 0;
+            border: 1px solid rgba(255,77,77,0.2);
+        }
+
+        .links-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .link-card {
+            background: rgba(40, 40, 40, 0.9);
+            padding: 1.5rem;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255,77,77,0.1);
+        }
+
+        .link-card:hover {
+            transform: translateY(-5px);
+            background: rgba(50, 50, 50, 0.9);
+        }
+
+        .link-card a {
+            color: #ff4d4d;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .badge {
+            background: #ff4d4d33;
+            padding: 0.3rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            display: inline-block;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>EXCAVATIONPRO</h1>
+            <p>Industrial Sound Design • Bass Archaeology • Sonic Excavation</p>
+        </header>
+
+        <div class="player-container">
+            <iframe 
+                src="https://audius.co/embed/playlist/3G0Q8QB?flavor=card" 
+                width="100%" 
+                height="480" 
+                allow="encrypted-media" 
+                style="border: none; border-radius: 10px;">
+            </iframe>
+        </div>
+
+        <div class="links-section">
+            <!-- Official Channels -->
+            <div class="link-card">
+                <h3>Core Operations</h3>
+                <a href="http://kick.com/excavationpro" target="_blank">
+                    🥷 Kick Live Ops
+                </a>
+                <a href="http://twitch.tv/excavationpro" target="_blank">
+                    🕵️ Twitch Dig Site
+                </a>
+                <a href="http://ffm.to/eovnvo9" target="_blank">
+                    🎶 Full Frequency Hub
+                </a>
+                <span class="badge">Active Site</span>
+            </div>
+
+            <!-- Underground Networks -->
+            <div class="link-card">
+                <h3>Underground Links</h3>
+                <a href="https://soundcloud.com/excavationpro" target="_blank">
+                    🔗 SoundCloud Shaft
+                </a>
+                <a href="https://www.tiktok.com/@excavationpr0" target="_blank">
+                    🏗️ Tik-Tok
+                </a>
+                <a href="https://youtube.com/@excavationpro" target="_blank">
+                    ▶️ YouTube Channel
+                </a>
+                <span class="badge">Under Construction</span>
+            </div>
+
+            <!-- Related Excavations -->
+            <div class="link-card">
+                <h3>Adjacent Operations</h3>
+                <a href="https://audius.co/excavationpro" target="_blank">
+                    ⚰️ Excavationpro on Audius
+                </a>
+                <a href="https://rumble.com/Excavationpro/live" target="_blank">
+                    🧪 Excavationpro Live on Rumble
+                </a>
+                <a href="https://www.beatstars.com/excavationpro" target="_blank">
+                    🔥 Buy My Beats Beatstars
+                </a>
+                <span class="badge">Archaeological Links</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

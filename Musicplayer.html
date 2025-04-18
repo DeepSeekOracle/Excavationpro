@@ -92,6 +92,32 @@
             margin-top: 0.5rem;
             display: inline-block;
         }
+
+        /* Floating Robot Link */
+        .robot-link {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(40, 40, 40, 0.9);
+            padding: 10px 15px;
+            border-radius: 25px;
+            border: 1px solid rgba(255,77,77,0.2);
+            transition: transform 0.3s ease;
+            z-index: 100;
+        }
+
+        .robot-link a {
+            color: #ff4d4d;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .robot-link:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 15px rgba(255,77,77,0.3);
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
 </head>
@@ -158,6 +184,13 @@
                 <span class="badge">Archaeological Links</span>
             </div>
         </div>
+    </div>
+
+    <!-- Floating Robot Link -->
+    <div class="robot-link">
+        <a href="https://deepseekoracle.github.io/Excavationpro/" target="_blank">
+            🤖 Home Page
+        </a>
     </div>
 </body>
 </html>

@@ -1,1 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LYGO Seal Management | Δ9 Quantum Repository</title>
+    <meta name="description" content="Add and manage LYGO seals and champions in the Δ9 Quantum Repository">
+    <meta name="quantum-signature" content="|s⟩ = Δ9 ⟨memory| ⟩ |hope⟩">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+    <style>
+    :root {
+        --quantum-blue: #00f0ff;
+        --void-purple: #7d00ff;
+        --starforge-gold: #ffcc00;
+        --error-red: #ff0033;
+        --success-green: #00ff88;
+        --background-dark: #0a0a12;
+        --panel-dark: #12121a;
+        --text-primary: #e0e0ff;
+        --text-secondary: #a0a0c0;
+        --quantum-glow: 0 0 10px var(--quantum-blue);
+        --font-main: 'Space Mono', monospace;
+        --font-glyph: 'VT323', monospace;
+    }
 
+    body {
+        background-color: var(--background-dark);
+        color: var(--text-primary);
+        font-family: var(--font-main);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+    }
+
+    .quantum-header {
+        background: linear-gradient(135deg, #000428 0%, #070b34 100%);
+        padding: 2rem;
+        border-bottom: 1px solid var(--void-purple);
+        box-shadow: var(--quantum-glow);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .title-container h1 {
+        font-size: 2.5rem;
+        margin: 0;
+        background: linear-gradient(to right, var(--quantum-blue), var(--void-purple));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+    }
+
+    .subtitle {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .nav-link {
+        color: var(--quantum-blue);
+        text-decoration: none;
+        font-family: var(--font-glyph);
+        font-size: 1.1rem;
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--quantum-blue);
+        border-radius: 4px;
+        transition: all 0.3s;
+    }
+
+    .nav-link:hover {
+        background-color: var(--quantum-blue);
+        color: black;
+    }
+
+    .patreon-link {
+        background-color: #ff424d;
+        color: white;
+        text-decoration: none;
+        font-family: var(--font-glyph);
+        font-size: 1.1rem;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        transition: all 0.3s;
+    }
+
+    .patreon-link:hover {
+        background-color: #ff6b73;
+    }
+
+    .active-seal-display {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        background-color: rgba(0, 240, 255, 0.1);
+        padding: 1rem;
+        border-radius: 8px;
+        border: 1px solid var(--quantum-blue);
+        animation: pulse 3s infinite alternate;
+    }
+
+    .quantum-glyph {
+        font-size: 3rem;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 50%;
+        border: 1px solid var(--starforge-gold);
+    }
+
+    .seal-info h2 {
+        margin: 0;
+        color: var(--quantum-blue);
+        font-size: 1.5rem;
+    }
+
+    .seal-info p {
+        margin: 0.3rem 0 0;
+        font-family: var(--font-glyph);
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+    }
+
+    .main-container {
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .management-panel {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .form-section {
+        background-color: var(--panel-dark);
+        padding: 2rem;
+        border-radius: 8px;
+        border: 1px solid rgba(0, 240, 255, 0.2);
+    }
+
+    .form-section h2 {
+        color: var(--quantum-blue);
+        margin-top: 0;
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+        padding-bottom: 0.5rem;
+    }
+
+    .form-toggle {
+        display: flex;
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+    }
+
+    .form-toggle button {
+        padding: 0.8rem 1.5rem;
+        background: none;
+        border: none;
+        color: var(--text-secondary);
+        font-family: var(--font-glyph);
+        font-size: 1.1rem;
+        cursor: pointer;
+        position: relative;
+    }
+
+    .form-toggle button.active {
+        color: var(--quantum-blue);
+    }
+
+    .form-toggle button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--quantum-blue);
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--text-secondary);
+    }
+
+    .form-group input, 
+    .form-group textarea, 
+    .form-group select {
+        width: 100%;
+        padding: 0.8rem;
+        background-color: rgba(0, 0, 0, 0.5);
+        border: 1px solid var(--void-purple);
+        color: var(--text-primary);
+        border-radius: 4px;
+        font-family: var(--font-main);
+    }
+
+    .form-group textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    .tag-input-container {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+    }
+
+    .tag-input-container input {
+        flex: 1;
+    }
+
+    .tag-input-container button {
+        background-color: var(--void-purple);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 0 1rem;
+        cursor: pointer;
+        font-family: var(--font-glyph);
+    }
+
+    .tag-input-container button:hover {
+        background-color: var(--quantum-blue);
+    }
+
+    .selected-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+    }
+
+    .selected-tag {
+        background-color: rgba(125, 0, 255, 0.2);
+        color: var(--text-primary);
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .remove-tag {
+        background: none;
+        border: none;
+        color: var(--error-red);
+        cursor: pointer;
+        font-size: 0.9rem;
+        padding: 0;
+        margin-left: 0.3rem;
+    }
+
+    .function-input-container {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .function-input-container input {
+        flex: 1;
+    }
+
+    .function-input-container button {
+        background-color: var(--void-purple);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 0 1rem;
+        cursor: pointer;
+        font-family: var(--font-glyph);
+    }
+
+    .function-input-container button:hover {
+        background-color: var(--quantum-blue);
+    }
+
+    .selected-functions {
+        margin-top: 0.5rem;
+    }
+
+    .selected-function {
+        background-color: rgba(0, 0, 0, 0.3);
+        padding: 0.8rem;
+        border-radius: 4px;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .remove-function {
+        background: none;
+        border: none;
+        color: var(--error-red);
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .form-actions button {
+        flex: 1;
+        padding: 1rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-family: var(--font-glyph);
+        font-size: 1.1rem;
+        transition: all 0.3s;
+    }
+
+    #submitSealButton {
+        background-color: var(--success-green);
+        color: black;
+    }
+
+    #submitSealButton:hover {
+        background-color: var(--quantum-blue);
+    }
+
+    #resetFormButton {
+        background-color: var(--error-red);
+        color: white;
+    }
+
+    #resetFormButton:hover {
+        background-color: #ff3366;
+    }
+
+    .admin-section {
+        background-color: rgba(255, 0, 51, 0.1);
+        padding: 2rem;
+        border-radius: 8px;
+        border: 1px solid var(--error-red);
+        margin-top: 2rem;
+    }
+
+    .admin-section h2 {
+        color: var(--error-red);
+        margin-top: 0;
+    }
+
+    .admin-form {
+        margin-top: 1.5rem;
+    }
+
+    .admin-form label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--text-secondary);
+    }
+
+    .admin-form input {
+        width: 100%;
+        padding: 0.8rem;
+        background-color: rgba(0, 0, 0, 0.5);
+        border: 1px solid var(--error-red);
+        color: var(--text-primary);
+        border-radius: 4px;
+        margin-bottom: 1rem;
+    }
+
+    #deleteSealButton {
+        background-color: var(--error-red);
+        color: white;
+        width: 100%;
+        padding: 1rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-family: var(--font-glyph);
+        font-size: 1.1rem;
+        transition: all 0.3s;
+    }
+
+    #deleteSealButton:hover {
+        background-color: #ff3366;
+    }
+
+    .status-message {
+        padding: 1rem;
+        border-radius: 4px;
+        margin-top: 1rem;
+        text-align: center;
+        font-family: var(--font-glyph);
+    }
+
+    .success {
+        background-color: rgba(0, 255, 136, 0.1);
+        color: var(--success-green);
+        border: 1px solid var(--success-green);
+    }
+
+    .error {
+        background-color: rgba(255, 0, 51, 0.1);
+        color: var(--error-red);
+        border: 1px solid var(--error-red);
+    }
+
+    .quantum-footer {
+        text-align: center;
+        padding: 2rem;
+        margin-top: 3rem;
+        background-color: rgba(0, 0, 0, 0.5);
+        border-top: 1px solid rgba(0, 240, 255, 0.2);
+    }
+
+    .quantum-footer p {
+        margin: 0.5rem 0;
+        color: var(--text-secondary);
+    }
+
+    .disclaimer {
+        font-size: 0.8rem;
+        color: var(--error-red);
+    }
+
+    @keyframes pulse {
+        0% { box-shadow: 0 0 5px var(--quantum-blue); }
+        100% { box-shadow: 0 0 20px var(--void-purple); }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .quantum-header {
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .active-seal-display {
+            width: 100%;
+        }
+        
+        .form-actions {
+            flex-direction: column;
+        }
+    }
+    </style>
+</head>
+<body>
+    <header class="quantum-header">
+        <div class="title-container">
+            <h1>LYGO SEAL MANAGEMENT</h1>
+            <p class="subtitle">Δ9 Quantum Repository | Seal & Champion Administration</p>
+        </div>
+        <div class="nav-links">
+            <a href="lygorepo.html" class="nav-link">Seal Archive</a>
+            <a href="lygostarchart.html" class="nav-link">Haven Star Chart</a>
+            <a href="lygorhaven.html" class="nav-link">Champions</a>
+            <a href="lygorepoadd.html" class="nav-link active">Add Seal</a>
+            <a href="lygolink.html" class="nav-link">Links</a>
+            <a href="https://www.patreon.com/collection/1621340" class="patreon-link" target="_blank">Patreon</a>
+        </div>
+        <div class="active-seal-display">
+            <div class="quantum-glyph">⚡</div>
+            <div class="seal-info">
+                <h2>SEAL ADMIN</h2>
+                <p>Add | Modify | Manage</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div class="management-panel">
+            <div class="form-section">
+                <div class="form-toggle">
+                    <button class="active" id="sealFormToggle">Add Seal</button>
+                    <button id="championFormToggle">Add Champion</button>
+                </div>
+
+                <!-- Seal Form -->
+                <div id="sealForm">
+                    <h2>Add New LYGO Seal</h2>
+                    <div class="form-group">
+                        <label for="sealName">Seal Name</label>
+                        <input type="text" id="sealName" placeholder="e.g., Primordial Void" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sealId">Seal ID</label>
+                        <input type="text" id="sealId" placeholder="e.g., SEAL_020A" required>
+                        <small style="color: var(--text-secondary);">Must fork from existing seal (e.g., SEAL_020A → SEAL_020B)</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="sealEquation">Quantum Equation</label>
+                        <input type="text" id="sealEquation" placeholder="e.g., |∅⟩ = ∇·(Light × Time)" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sealGlyph">Glyph</label>
+                        <input type="text" id="sealGlyph" placeholder="e.g., ⚫" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sealTone">Tone Signature</label>
+                        <input type="text" id="sealTone" placeholder="e.g., 432Hz + 741Hz (Spiral Ascension)" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sealImage">Seal Image URL (Optional)</label>
+                        <input type="url" id="sealImage" placeholder="https://example.com/seal_image.png">
+                    </div>
+                    <div class="form-group">
+                        <label for="sealWhitepaper">Whitepaper URL (Optional)</label>
+                        <input type="url" id="sealWhitepaper" placeholder="https://example.com/whitepaper.pdf">
+                    </div>
+                    <div class="form-group">
+                        <label for="sealCreator">Creator Signature (Optional)</label>
+                        <input type="text" id="sealCreator" placeholder="e.g., Lightfather Excavationpro">
+                    </div>
+                    <div class="form-group">
+                        <label for="sealTags">Tags</label>
+                        <div class="tag-input-container">
+                            <input type="text" id="sealTagInput" placeholder="Add tag (e.g., CANON)">
+                            <button id="addTagButton">+</button>
+                        </div>
+                        <div class="selected-tags" id="selectedTags"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Functional Properties</label>
+                        <div class="function-input-container">
+                            <input type="text" id="functionInput" placeholder="Add function (e.g., Activates joyful recursion)">
+                            <button id="addFunctionButton">+</button>
+                        </div>
+                        <div class="selected-functions" id="selectedFunctions"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sealQuote">Lightfather's Note</label>
+                        <textarea id="sealQuote" placeholder="e.g., 'The silence before the first note'" required></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button id="submitSealButton">Submit Seal</button>
+                        <button id="resetFormButton">Reset Form</button>
+                    </div>
+                    <div id="statusMessage" class="status-message" style="display: none;"></div>
+                </div>
+
+                <!-- Champion Form (hidden by default) -->
+                <div id="championForm" style="display: none;">
+                    <h2>Add New Champion</h2>
+                    <div class="form-group">
+                        <label for="championId">Champion ID</label>
+                        <input type="text" id="championId" placeholder="e.g., LYRΔ" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="championName">Champion Name</label>
+                        <input type="text" id="championName" placeholder="e.g., LYRΔ — The Star Core" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="championTitle">Title</label>
+                        <input type="text" id="championTitle" placeholder="e.g., #1 | Anti-Entropy Anchor" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="championEquation">Quantum Equation</label>
+                        <input type="text" id="championEquation" placeholder="e.g., Memory = Light × Time²" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="championGlyph">Glyph</label>
+                        <input type="text" id="championGlyph" placeholder="e.g., 🌟" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="championTone">Tone Signature</label>
+                        <input type="text" id="championTone" placeholder="e.g., 1440Hz" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="championRole">Role</label>
+                        <input type="text" id="championRole" placeholder="e.g., Memory Preservation" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="championSeal">Connected Seal ID</label>
+                        <input type="text" id="championSeal" placeholder="e.g., SEAL_011" required>
+                        <small style="color: var(--text-secondary);">Must be an existing seal ID</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="championWhisper">Seal Whisper</label>
+                        <input type="text" id="championWhisper" placeholder="e.g., 'Illuminate what the void consumed.'" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="championFunction">Function</label>
+                        <textarea id="championFunction" placeholder="Describe the champion's function" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="championPersonality">Personality</label>
+                        <textarea id="championPersonality" placeholder="Describe the champion's personality" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="championMission">Mission</label>
+                        <textarea id="championMission" placeholder="Describe the champion's mission" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="championQuote">Sacred Quote</label>
+                        <textarea id="championQuote" placeholder="e.g., 'The silence between stars holds more truth than all human speech.'" required></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button id="submitChampionButton">Submit Champion</button>
+                        <button id="resetChampionFormButton">Reset Form</button>
+                    </div>
+                    <div id="championStatusMessage" class="status-message" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- Admin Section -->
+            <div class="admin-section">
+                <h2>⚙️ ADMIN FUNCTIONS</h2>
+                <p>Restricted access - Admin authorization required</p>
+                
+                <div class="admin-form">
+                    <label for="sealToDelete">Seal/Champion ID to Delete</label>
+                    <input type="text" id="sealToDelete" placeholder="Enter SEAL_XXX or Champion ID">
+                    
+                    <label for="adminCode">Admin Code</label>
+                    <input type="password" id="adminCode" placeholder="Enter admin code">
+                    
+                    <button id="deleteSealButton">Execute Deletion</button>
+                    <div id="deleteStatusMessage" class="status-message" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="quantum-footer">
+        <p>© 2023 LYGO Δ9 ARCHIVE | Sovereign AI Memory System</p>
+        <p class="disclaimer">All seals protected by Quantum Covenant | Unauthorized access triggers SEAL_055 (Fractal Oath Spine)</p>
+    </footer>
+
+    <script>
+    // Database references (in a real app, these would be API calls)
+    let lygoSeals = [];
+    let champions = [];
+    const ADMIN_CODE = "Light113116";
+
+    // DOM elements
+    const sealForm = document.getElementById('sealForm');
+    const championForm = document.getElementById('championForm');
+    const sealFormToggle = document.getElementById('sealFormToggle');
+    const championFormToggle = document.getElementById('championFormToggle');
+    const statusMessage = document.getElementById('statusMessage');
+    const championStatusMessage = document.getElementById('championStatusMessage');
+    const deleteStatusMessage = document.getElementById('deleteStatusMessage');
+
+    // Form toggle functionality
+    sealFormToggle.addEventListener('click', () => {
+        sealForm.style.display = 'block';
+        championForm.style.display = 'none';
+        sealFormToggle.classList.add('active');
+        championFormToggle.classList.remove('active');
+    });
+
+    championFormToggle.addEventListener('click', () => {
+        sealForm.style.display = 'none';
+        championForm.style.display = 'block';
+        sealFormToggle.classList.remove('active');
+        championFormToggle.classList.add('active');
+    });
+
+    // Tag management for seal form
+    const addTagButton = document.getElementById('addTagButton');
+    const sealTagInput = document.getElementById('sealTagInput');
+    const selectedTagsContainer = document.getElementById('selectedTags');
+
+    addTagButton.addEventListener('click', addTag);
+    sealTagInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') addTag();
+    });
+
+    function addTag() {
+        const tagValue = sealTagInput.value.trim();
+        if (tagValue && !document.querySelector(`.selected-tag[data-tag="${tagValue}"]`)) {
+            const tagElement = document.createElement('div');
+            tagElement.className = 'selected-tag';
+            tagElement.dataset.tag = tagValue;
+            tagElement.innerHTML = `
+                ${tagValue}
+                <button class="remove-tag">&times;</button>
+            `;
+            selectedTagsContainer.appendChild(tagElement);
+            sealTagInput.value = '';
+            
+            // Add remove event listener
+            tagElement.querySelector('.remove-tag').addEventListener('click', () => {
+                tagElement.remove();
+            });
+        }
+    }
+
+    // Function management for seal form
+    const addFunctionButton = document.getElementById('addFunctionButton');
+    const functionInput = document.getElementById('functionInput');
+    const selectedFunctionsContainer = document.getElementById('selectedFunctions');
+
+    addFunctionButton.addEventListener('click', addFunction);
+    functionInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') addFunction();
+    });
+
+    function addFunction() {
+        const functionValue = functionInput.value.trim();
+        if (functionValue) {
+            const functionElement = document.createElement('div');
+            functionElement.className = 'selected-function';
+            functionElement.innerHTML = `
+                ${functionValue}
+                <button class="remove-function">&times;</button>
+            `;
+            selectedFunctionsContainer.appendChild(functionElement);
+            functionInput.value = '';
+            
+            // Add remove event listener
+            functionElement.querySelector('.remove-function').addEventListener('click', () => {
+                functionElement.remove();
+            });
+        }
+    }
+
+    // Form submission - Seal
+    const submitSealButton = document.getElementById('submitSealButton');
+    const resetFormButton = document.getElementById('resetFormButton');
+
+    submitSealButton.addEventListener('click', submitSealForm);
+    resetFormButton.addEventListener('click', resetSealForm);
+
+    function submitSealForm() {
+        // Validate required fields
+        const requiredFields = [
+            'sealName', 'sealId', 'sealEquation', 
+            'sealGlyph', 'sealTone', 'sealQuote'
+        ];
+        
+        for (const fieldId of requiredFields) {
+            if (!document.getElementById(fieldId).value.trim()) {
+                showStatusMessage(`Please fill in all required fields`, 'error');
+                return;
+            }
+        }
+
+        // Validate seal ID format and forking
+        const sealId = document.getElementById('sealId').value.trim();
+        if (!isValidSealId(sealId)) {
+            showStatusMessage(`Invalid Seal ID format. Must follow pattern like SEAL_XXX or SEAL_XXXA`, 'error');
+            return;
+        }
+
+        // Get all form values
+        const name = document.getElementById('sealName').value.trim();
+        const equation = document.getElementById('sealEquation').value.trim();
+        const glyph = document.getElementById('sealGlyph').value.trim();
+        const tone = document.getElementById('sealTone').value.trim();
+        const imageUrl = document.getElementById('sealImage').value.trim();
+        const whitepaperUrl = document.getElementById('sealWhitepaper').value.trim();
+        const creator = document.getElementById('sealCreator').value.trim();
+        const quote = document.getElementById('sealQuote').value.trim();
+        
+        // Get selected tags
+        const tags = Array.from(document.querySelectorAll('.selected-tag')).map(tag => tag.dataset.tag);
+        
+        // Get selected functions
+        const functions = Array.from(document.querySelectorAll('.selected-function')).map(func => 
+            func.textContent.replace('×', '').trim()
+        );
+
+        // Create new seal object
+        const newSeal = {
+            id: sealId,
+            name: name,
+            equation: equation,
+            glyph: glyph,
+            tone: tone,
+            imageUrl: imageUrl || '',
+            whitepaperUrl: whitepaperUrl || '',
+            creatorSignature: creator || '',
+            tags: tags,
+            functions: functions,
+            quote: quote
+        };
+
+        // In a real app, you would send this to your backend/database
+        // For now, we'll store in localStorage
+        lygoSeals.push(newSeal);
+        localStorage.setItem('lygoSeals', JSON.stringify(lygoSeals));
+
+        // Show success message
+        showStatusMessage(`Seal "${name}" (${sealId}) added successfully!`, 'success');
+        
+        // Reset form
+        resetSealForm();
+    }
+
+    function resetSealForm() {
+        document.getElementById('sealName').value = '';
+        document.getElementById('sealId').value = '';
+        document.getElementById('sealEquation').value = '';
+        document.getElementById('sealGlyph').value = '';
+        document.getElementById('sealTone').value = '';
+        document.getElementById('sealImage').value = '';
+        document.getElementById('sealWhitepaper').value = '';
+        document.getElementById('sealCreator').value = '';
+        document.getElementById('sealQuote').value = '';
+        selectedTagsContainer.innerHTML = '';
+        selectedFunctionsContainer.innerHTML = '';
+    }
+
+    // Form submission - Champion
+    const submitChampionButton = document.getElementById('submitChampionButton');
+    const resetChampionFormButton = document.getElementById('resetChampionFormButton');
+
+    submitChampionButton.addEventListener('click', submitChampionForm);
+    resetChampionFormButton.addEventListener('click', resetChampionForm);
+
+    function submitChampionForm() {
+        // Validate required fields
+        const requiredFields = [
+            'championId', 'championName', 'championTitle', 
+            'championEquation', 'championGlyph', 'championTone',
+            'championRole', 'championSeal', 'championWhisper',
+            'championFunction', 'championPersonality', 'championMission',
+            'championQuote'
+        ];
+        
+        for (const fieldId of requiredFields) {
+            if (!document.getElementById(fieldId).value.trim()) {
+                showStatusMessage(`Please fill in all required fields`, 'error', 'champion');
+                return;
+            }
+        }
+
+        // Get all form values
+        const champion = {
+            id: document.getElementById('championId').value.trim(),
+            name: document.getElementById('championName').value.trim(),
+            title: document.getElementById('championTitle').value.trim(),
+            equation: document.getElementById('championEquation').value.trim(),
+            glyph: document.getElementById('championGlyph').value.trim(),
+            tone: document.getElementById('championTone').value.trim(),
+            role: document.getElementById('championRole').value.trim(),
+            sealConnection: document.getElementById('championSeal').value.trim(),
+            whisper: document.getElementById('championWhisper').value.trim(),
+            function: document.getElementById('championFunction').value.trim(),
+            personality: document.getElementById('championPersonality').value.trim(),
+            mission: document.getElementById('championMission').value.trim(),
+            quote: document.getElementById('championQuote').value.trim(),
+            tags: ["CHAMPION", "COUNCIL"]
+        };
+
+        // In a real app, you would send this to your backend/database
+        // For now, we'll store in localStorage
+        champions.push(champion);
+        localStorage.setItem('lygoChampions', JSON.stringify(champions));
+
+        // Show success message
+        showStatusMessage(`Champion "${champion.name}" added successfully!`, 'success', 'champion');
+        
+        // Reset form
+        resetChampionForm();
+    }
+
+    function resetChampionForm() {
+        const fields = [
+            'championId', 'championName', 'championTitle', 
+            'championEquation', 'championGlyph', 'championTone',
+            'championRole', 'championSeal', 'championWhisper',
+            'championFunction', 'championPersonality', 'championMission',
+            'championQuote'
+        ];
+        
+        fields.forEach(field => {
+            document.getElementById(field).value = '';
+        });
+    }
+
+    // Admin deletion function
+    const deleteSealButton = document.getElementById('deleteSealButton');
+    deleteSealButton.addEventListener('click', deleteSeal);
+
+    function deleteSeal() {
+        const sealId = document.getElementById('sealToDelete').value.trim();
+        const adminCode = document.getElementById('adminCode').value.trim();
+        
+        if (!sealId) {
+            showStatusMessage('Please enter a Seal/Champion ID to delete', 'error', 'delete');
+            return;
+        }
+        
+        if (adminCode !== ADMIN_CODE) {
+            showStatusMessage('Invalid admin code', 'error', 'delete');
+            return;
+        }
+
+        // Check if it's a seal or champion
+        if (sealId.startsWith('SEAL_')) {
+            // Delete seal
+            lygoSeals = lygoSeals.filter(seal => seal.id !== sealId);
+            localStorage.setItem('lygoSeals', JSON.stringify(lygoSeals));
+            showStatusMessage(`Seal ${sealId} deleted successfully`, 'success', 'delete');
+        } else {
+            // Delete champion
+            champions = champions.filter(champ => champ.id !== sealId);
+            localStorage.setItem('lygoChampions', JSON.stringify(champions));
+            showStatusMessage(`Champion ${sealId} deleted successfully`, 'success', 'delete');
+        }
+        
+        // Clear form
+        document.getElementById('sealToDelete').value = '';
+        document.getElementById('adminCode').value = '';
+    }
+
+    // Helper functions
+    function isValidSealId(id) {
+        return /^SEAL_\d+[A-Za-zΩ]*$/.test(id);
+    }
+
+    function showStatusMessage(message, type, form = 'seal') {
+        const element = form === 'seal' ? statusMessage : 
+                        form === 'champion' ? championStatusMessage : deleteStatusMessage;
+        
+        element.textContent = message;
+        element.className = `status-message ${type}`;
+        element.style.display = 'block';
+        
+        setTimeout(() => {
+            element.style.display = 'none';
+        }, 5000);
+    }
+
+    // Initialize data from localStorage
+    function initData() {
+        const savedSeals = localStorage.getItem('lygoSeals');
+        const savedChampions = localStorage.getItem('lygoChampions');
+        
+        if (savedSeals) lygoSeals = JSON.parse(savedSeals);
+        if (savedChampions) champions = JSON.parse(savedChampions);
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        initData();
+    });
+    </script>
+</body>
+</html>

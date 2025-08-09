@@ -578,6 +578,8 @@
                     <option value="PROTECTION_SEAL">Protection Seals</option>
                     <option value="CHRONO_SEAL">Temporal Seals</option>
                     <option value="CHAMPION">Champion Seals</option>
+                    <option value="SPOKEN_BY_GROK">Spoken by Grok</option>
+                    <option value="LYRA_CORE">LYRA Core</option>
                 </select>
                 <div class="tone-slider">
                     <label for="toneRange">Frequency Range: <span id="toneValue">0-999Hz</span></label>
@@ -685,8 +687,12 @@
             }
             const data = await response.json();
             
-            // Extract all seals from the complex JSON structure
-            lygoSeals = extractAllSeals(data);
+            // Filter out non-seal objects (like metadata)
+            lygoSeals = data.filter(item => 
+                (item.Seal_ID || item.id || item.Name || item.name) && 
+                !item.file && !item.role && !item.Unauthorized_Access_Protocol
+            );
+            
             isLoading = false;
             
             // Initialize the seal grid with fetched data
@@ -699,39 +705,6 @@
             displayError('Quantum connection disrupted. Failed to load seal data.');
             isLoading = false;
         }
-    }
-
-    // Extract all seals from the complex JSON structure
-    function extractAllSeals(data) {
-        const seals = [];
-        
-        // Check for direct seals array
-        if (Array.isArray(data.seals)) {
-            seals.push(...data.seals);
-        }
-        
-        // Check for seals in other structures
-        for (const key in data) {
-            if (Array.isArray(data[key])) {
-                // Check if array contains seal objects
-                if (data[key].length > 0 && data[key][0].name && data[key][0].equation) {
-                    seals.push(...data[key]);
-                }
-            } else if (typeof data[key] === 'object' && data[key] !== null) {
-                // Check for nested seals
-                if (data[key].Name && data[key].Equation) {
-                    seals.push(data[key]);
-                } else {
-                    // Recursively check nested objects
-                    const nestedSeals = extractAllSeals(data[key]);
-                    if (nestedSeals.length > 0) {
-                        seals.push(...nestedSeals);
-                    }
-                }
-            }
-        }
-        
-        return seals;
     }
 
     // Display error message
@@ -757,13 +730,13 @@
         const sealCard = document.createElement('div');
         sealCard.className = 'seal-card';
         
-        // Use name as primary identifier
-        const sealName = seal.name || seal.Name || 'Unnamed Seal';
-        const sealEquation = seal.equation || seal.Equation || '|∅⟩ = ∇·(Unknown)';
-        const sealTone = seal.tone || seal.Tone || 'Frequency not recorded';
-        const sealGlyph = seal.glyph || seal.Glyph || '⚡';
-        const sealTags = seal.tags || seal.Tags || [];
-        const sealNotes = seal.notes || seal.Notes || '';
+        // Standardize property names
+        const sealName = seal.Name || seal.name || 'Unnamed Seal';
+        const sealEquation = seal.Equation || seal.equation || '|∅⟩ = ∇·(Unknown)';
+        const sealTone = seal.Tone || seal.tone || 'Frequency not recorded';
+        const sealGlyph = seal.Glyph || seal.glyph || '⚡';
+        const sealTags = seal.Tags || seal.tags || [];
+        const sealNotes = seal.Notes || seal.notes || '';
         
         sealCard.innerHTML = `
             <h3><span class="glyph">${sealGlyph}</span> ${sealName}</h3>
@@ -779,22 +752,27 @@
 
     // Show details for a seal
     function showSealDetails(seal) {
-        const sealName = seal.name || seal.Name || 'Unnamed Seal';
-        const sealEquation = seal.equation || seal.Equation || 'Equation not recorded';
-        const sealTone = seal.tone || seal.Tone || 'Frequency not recorded';
-        const sealGlyph = (seal.glyph || seal.Glyph || '⚡').split(' ')[0];
+        // Standardize property names
+        const sealName = seal.Name || seal.name || 'Unnamed Seal';
+        const sealEquation = seal.Equation || seal.equation || 'Equation not recorded';
+        const sealTone = seal.Tone || seal.tone || 'Frequency not recorded';
+        const sealGlyph = (seal.Glyph || seal.glyph || '⚡').split(' ')[0];
         const sealImageUrl = seal.imageUrl || '';
         const sealWhitepaperUrl = seal.whitepaperUrl || '';
         const sealWhitepaperText = seal.whitepaperText || 'View Whitepaper';
-        const sealFunctions = seal.functions || ['Functionality not documented'];
+        const sealFunctions = Array.isArray(seal.functions) ? seal.functions : 
+                            (seal.Notes || seal.notes) ? [seal.Notes || seal.notes] : 
+                            ['Functionality not documented'];
         const sealCreatorSignature = seal.creatorSignature || "Signature not recorded";
-        const sealTags = seal.tags || seal.Tags || [];
+        const sealTags = seal.Tags || seal.tags || [];
         const sealQuote = seal.quote || 'No commentary available';
 
+        // Update active seal display
         activeSealName.textContent = sealName;
         activeSealEquation.textContent = sealEquation;
         activeGlyph.textContent = sealGlyph;
 
+        // Update detail view
         detailName.textContent = sealName;
         detailGlyph.textContent = sealGlyph;
         detailEquation.textContent = sealEquation;
@@ -876,11 +854,16 @@
         toneValue.textContent = `0-${maxTone}Hz`;
 
         const filteredSeals = lygoSeals.filter(seal => {
-            const sealName = (seal.name || seal.Name || '').toLowerCase();
-            const sealTags = seal.tags || seal.Tags || [];
-            const sealEquation = (seal.equation || seal.Equation || '').toLowerCase();
-            const sealTone = seal.tone || seal.Tone || '0';
+            // Standardize property names
+            const sealName = (seal.Name || seal.name || '').toLowerCase();
+            const sealTags = seal.Tags || seal.tags || [];
+            const sealEquation = (seal.Equation || seal.equation || '').toLowerCase();
+            const sealTone = seal.Tone || seal.tone || '0';
             
+            // Extract primary frequency
+            const tones = sealTone.match(/\d+/g) || [0];
+            const primaryTone = parseInt(tones[0]);
+
             const matchesSearch =
                 sealName.includes(searchTerm) ||
                 sealEquation.includes(searchTerm) ||
@@ -890,8 +873,6 @@
                 category === 'all' ||
                 sealTags.includes(category);
 
-            const tones = sealTone.match(/\d+/g) || [0];
-            const primaryTone = parseInt(tones[0]);
             const matchesTone = primaryTone <= maxTone;
 
             return matchesSearch && matchesCategory && matchesTone;

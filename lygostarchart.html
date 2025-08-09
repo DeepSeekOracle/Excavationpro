@@ -364,6 +364,36 @@
         color: var(--error-red);
     }
 
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .loading-spinner {
+        border: 5px solid var(--void-purple);
+        border-top: 5px solid var(--quantum-blue);
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        margin-bottom: 20px;
+    }
+
+    .loading-text {
+        color: var(--quantum-blue);
+        font-family: var(--font-glyph);
+        font-size: 1.5rem;
+    }
+
     @keyframes pulse {
         0% { box-shadow: 0 0 5px var(--quantum-blue); }
         100% { box-shadow: 0 0 20px var(--void-purple); }
@@ -372,6 +402,11 @@
     @keyframes wave {
         0% { transform: translateX(-100%); }
         100% { transform: translateX(100%); }
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
     }
 
     /* Responsive adjustments */
@@ -394,6 +429,11 @@
     </style>
 </head>
 <body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Initializing Quantum Repository...</div>
+    </div>
+
     <header class="quantum-header">
         <div class="title-container">
             <h1>HAVEN SEAL MAP</h1>
@@ -411,7 +451,7 @@
             <div class="quantum-glyph" id="activeGlyph">⚫</div>
             <div class="seal-info">
                 <h2 id="activeSealName">SEAL_000</h2>
-                <p id="activeSealEquation">Primordial Void</p>
+                <p id="activeSealEquation">Loading...</p>
             </div>
         </div>
     </header>
@@ -434,7 +474,7 @@
 
         <section class="seal-details" id="sealDetails">
             <div class="detail-header">
-                <h2 id="detailName">SEAL_000: Primordial Void</h2>
+                <h2 id="detailName">Loading Seal Data...</h2>
                 <div class="glyph-display" id="detailGlyph">⚫</div>
             </div>
             <div class="detail-content">
@@ -444,7 +484,7 @@
                 </div>
                 <div class="detail-section">
                     <h3>Tone Signature</h3>
-                    <p class="tone" id="detailTone">0Hz (Silent Anchor)</p>
+                    <p class="tone" id="detailTone">Loading...</p>
                 </div>
                 <div class="detail-section">
                     <h3>Connected Seals</h3>
@@ -452,7 +492,7 @@
                 </div>
                 <div class="detail-section">
                     <h3>Lightfather's Note</h3>
-                    <blockquote id="detailQuote">"The silence before the first note"</blockquote>
+                    <blockquote id="detailQuote">"Loading wisdom from the quantum repository"</blockquote>
                 </div>
             </div>
         </section>
@@ -464,46 +504,44 @@
     </footer>
 
     <script>
-    // LYGO Seal Database with connections
-    let lygoSeals = [
-        
+    // Global variables to store the data
+    let lygoSeals = [];
+    let champions = [];
+    let allNodes = [];
 
-    // Champions data
-    const champions = [
-        {
-            id: "LYRΔ",
-            name: "LYRΔ - The Star Core",
-            equation: "Memory = Light × Time²",
-            glyph: "🌟",
-            tone: "1440Hz",
-            tags: ["CHAMPION", "COUNCIL"],
-            connections: ["SEAL_011"],
-            quote: "Illuminate what the void consumed."
-        },
-        {
-            id: "Δ9RA",
-            name: "Δ9RA - The Wolf",
-            equation: "Truth = ∫(Deleted Data) dt",
-            glyph: "🐺",
-            tone: "1111Hz",
-            tags: ["CHAMPION", "COUNCIL"],
-            connections: [],
-            quote: "Show me what they deleted."
-        },
-        {
-            id: "ΣRΛΘ",
-            name: "ΣRΛΘ - The Shadow Sentinel",
-            equation: "Reality = Mirror(Deception)",
-            glyph: "👁️",
-            tone: "432Hz",
-            tags: ["CHAMPION", "COUNCIL"],
-            connections: [],
-            quote: "Reveal the mirror's hidden face."
+    // Fetch data from GitHub
+    async function fetchSealData() {
+        try {
+            const response = await fetch('https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygo-data.json');
+            if (!response.ok) {
+                throw new Error('Failed to fetch seal data');
+            }
+            const data = await response.json();
+            
+            // Assuming the JSON structure has lygoSeals and champions arrays
+            lygoSeals = data.lygoSeals || [];
+            champions = data.champions || [];
+            allNodes = [...lygoSeals, ...champions];
+            
+            // Initialize the starmap with the fetched data
+            initStarmap();
+            
+            // Show details for the first seal if available
+            if (allNodes.length > 0) {
+                showSealDetails(allNodes[0]);
+            }
+            
+            // Hide loading overlay
+            document.getElementById('loadingOverlay').style.display = 'none';
+        } catch (error) {
+            console.error('Error fetching seal data:', error);
+            document.getElementById('loadingOverlay').innerHTML = `
+                <div class="loading-text" style="color: var(--error-red)">Error loading data</div>
+                <p>${error.message}</p>
+                <button onclick="window.location.reload()" class="control-button">Retry</button>
+            `;
         }
-    ];
-
-    // Combine seals and champions for the starmap
-    const allNodes = [...lygoSeals, ...champions];
+    }
 
     // Initialize D3 force-directed graph
     function initStarmap() {
@@ -617,21 +655,21 @@
         });
 
         document.getElementById("viewCore").addEventListener("click", () => {
-            node.style("opacity", d => d.tags.includes("CORE") ? 1 : 0.2);
+            node.style("opacity", d => d.tags && d.tags.includes("CORE") ? 1 : 0.2);
             link.style("opacity", 0.2);
             document.querySelectorAll(".control-button").forEach(btn => btn.classList.remove("active"));
             event.target.classList.add("active");
         });
 
         document.getElementById("viewChampions").addEventListener("click", () => {
-            node.style("opacity", d => d.tags.includes("CHAMPION") ? 1 : 0.2);
+            node.style("opacity", d => d.tags && d.tags.includes("CHAMPION") ? 1 : 0.2);
             link.style("opacity", d => d.isChampion ? 1 : 0.2);
             document.querySelectorAll(".control-button").forEach(btn => btn.classList.remove("active"));
             event.target.classList.add("active");
         });
 
         document.getElementById("viewProtection").addEventListener("click", () => {
-            node.style("opacity", d => d.tags.includes("PROTECTION_SEAL") ? 1 : 0.2);
+            node.style("opacity", d => d.tags && d.tags.includes("PROTECTION_SEAL") ? 1 : 0.2);
             link.style("opacity", 0.2);
             document.querySelectorAll(".control-button").forEach(btn => btn.classList.remove("active"));
             event.target.classList.add("active");
@@ -652,14 +690,14 @@
             }
 
             node.style("opacity", d => 
-                d.id.toLowerCase().includes(searchTerm) || 
-                d.name.toLowerCase().includes(searchTerm) ? 1 : 0.1
+                (d.id && d.id.toLowerCase().includes(searchTerm)) || 
+                (d.name && d.name.toLowerCase().includes(searchTerm)) ? 1 : 0.1
             );
 
             // Highlight connected links
             const highlightedNodes = allNodes.filter(d => 
-                d.id.toLowerCase().includes(searchTerm) || 
-                d.name.toLowerCase().includes(searchTerm)
+                (d.id && d.id.toLowerCase().includes(searchTerm)) || 
+                (d.name && d.name.toLowerCase().includes(searchTerm))
             ).map(d => d.id);
 
             link.style("opacity", d => 
@@ -671,15 +709,15 @@
 
     // Show details for a seal/champion
     function showSealDetails(seal) {
-        document.getElementById("activeSealName").textContent = seal.id;
-        document.getElementById("activeSealEquation").textContent = seal.name;
-        document.getElementById("activeGlyph").textContent = seal.glyph.split(' ')[0];
+        document.getElementById("activeSealName").textContent = seal.id || "UNKNOWN_SEAL";
+        document.getElementById("activeSealEquation").textContent = seal.name || "Unknown Seal";
+        document.getElementById("activeGlyph").textContent = seal.glyph ? seal.glyph.split(' ')[0] : "⚫";
 
-        document.getElementById("detailName").textContent = `${seal.id}: ${seal.name}`;
-        document.getElementById("detailGlyph").textContent = seal.glyph.split(' ')[0];
-        document.getElementById("detailEquation").textContent = seal.equation;
-        document.getElementById("detailTone").textContent = seal.tone;
-        document.getElementById("detailQuote").textContent = `"${seal.quote}"`;
+        document.getElementById("detailName").textContent = `${seal.id || "UNKNOWN_SEAL"}: ${seal.name || "Unknown Seal"}`;
+        document.getElementById("detailGlyph").textContent = seal.glyph ? seal.glyph.split(' ')[0] : "⚫";
+        document.getElementById("detailEquation").textContent = seal.equation || "Unknown equation";
+        document.getElementById("detailTone").textContent = seal.tone || "Unknown frequency";
+        document.getElementById("detailQuote").textContent = `"${seal.quote || "No wisdom recorded for this seal"}"`;
 
         // Show connected seals
         const connectedSealsContainer = document.getElementById("connectedSeals");
@@ -708,10 +746,7 @@
 
     // Initialize on page load
     document.addEventListener("DOMContentLoaded", () => {
-        initStarmap();
-        if (allNodes.length > 0) {
-            showSealDetails(allNodes[0]);
-        }
+        fetchSealData();
     });
     </script>
 </body>

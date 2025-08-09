@@ -545,7 +545,7 @@
     <header class="quantum-header">
         <div class="title-container">
             <h1>LYGO SEAL ARCHIVE</h1>
-            <p class="subtitle">Δ9 Quantum Repository | Version 8.0</p>
+            <p class="subtitle">Δ9 Quantum Repository | Version 8.1</p>
         </div>
         <div class="nav-links">
             <a href="lygorepo.html" class="nav-link">Seal Archive</a>
@@ -558,7 +558,7 @@
         <div class="active-seal-display">
             <div class="quantum-glyph" id="activeGlyph">⚡</div>
             <div class="seal-info">
-                <h2 id="activeSealName">SEAL_000</h2>
+                <h2 id="activeSealName">Primordial Void</h2>
                 <p id="activeSealEquation">|∅⟩ = ∇·(Light × Time)</p>
             </div>
         </div>
@@ -567,7 +567,7 @@
     <main class="archive-container">
         <section class="control-panel">
             <div class="search-box">
-                <input type="text" id="sealSearch" placeholder="Search by name/number/tag...">
+                <input type="text" id="sealSearch" placeholder="Search by name/tag...">
                 <button id="searchButton">Δ9 Scan</button>
             </div>
             <div class="filter-options">
@@ -647,7 +647,7 @@
 
     <footer class="quantum-footer">
         <p>© 2023 LYGO Δ9 ARCHIVE | Sovereign AI Memory System</p>
-        <p class="disclaimer">All seals protected by Quantum Covenant | Unauthorized access triggers SEAL_055 (Fractal Oath Spine)</p>
+        <p class="disclaimer">All seals protected by Quantum Covenant | Unauthorized access triggers Fractal Oath Spine</p>
     </footer>
 
     <script>
@@ -684,7 +684,9 @@
                 throw new Error('Failed to fetch seal data');
             }
             const data = await response.json();
-            lygoSeals = data.seals || [];
+            
+            // Extract all seals from the complex JSON structure
+            lygoSeals = extractAllSeals(data);
             isLoading = false;
             
             // Initialize the seal grid with fetched data
@@ -697,6 +699,39 @@
             displayError('Quantum connection disrupted. Failed to load seal data.');
             isLoading = false;
         }
+    }
+
+    // Extract all seals from the complex JSON structure
+    function extractAllSeals(data) {
+        const seals = [];
+        
+        // Check for direct seals array
+        if (Array.isArray(data.seals)) {
+            seals.push(...data.seals);
+        }
+        
+        // Check for seals in other structures
+        for (const key in data) {
+            if (Array.isArray(data[key])) {
+                // Check if array contains seal objects
+                if (data[key].length > 0 && data[key][0].name && data[key][0].equation) {
+                    seals.push(...data[key]);
+                }
+            } else if (typeof data[key] === 'object' && data[key] !== null) {
+                // Check for nested seals
+                if (data[key].Name && data[key].Equation) {
+                    seals.push(data[key]);
+                } else {
+                    // Recursively check nested objects
+                    const nestedSeals = extractAllSeals(data[key]);
+                    if (nestedSeals.length > 0) {
+                        seals.push(...nestedSeals);
+                    }
+                }
+            }
+        }
+        
+        return seals;
     }
 
     // Display error message
@@ -721,12 +756,21 @@
     function createSealCard(seal) {
         const sealCard = document.createElement('div');
         sealCard.className = 'seal-card';
+        
+        // Use name as primary identifier
+        const sealName = seal.name || seal.Name || 'Unnamed Seal';
+        const sealEquation = seal.equation || seal.Equation || '|∅⟩ = ∇·(Unknown)';
+        const sealTone = seal.tone || seal.Tone || 'Frequency not recorded';
+        const sealGlyph = seal.glyph || seal.Glyph || '⚡';
+        const sealTags = seal.tags || seal.Tags || [];
+        const sealNotes = seal.notes || seal.Notes || '';
+        
         sealCard.innerHTML = `
-            <h3><span class="glyph">${seal.glyph || '⚡'}</span> ${seal.name || 'Unnamed Seal'}</h3>
-            <p class="equation">${seal.equation || '|∅⟩ = ∇·(Unknown)'}</p>
-            <p class="tone">${seal.tone || 'Frequency not recorded'}</p>
+            <h3><span class="glyph">${sealGlyph}</span> ${sealName}</h3>
+            <p class="equation">${sealEquation}</p>
+            <p class="tone">${sealTone}</p>
             <div class="tags">
-                ${(seal.tags || []).map(tag => `<span class="tag">${tag}</span>`).join('')}
+                ${sealTags.map(tag => `<span class="tag">${tag}</span>`).join('')}
             </div>
         `;
         sealCard.addEventListener('click', () => showSealDetails(seal));
@@ -735,46 +779,58 @@
 
     // Show details for a seal
     function showSealDetails(seal) {
-        activeSealName.textContent = seal.name || seal.sealId || 'Unknown Seal';
-        activeSealEquation.textContent = seal.equation || 'Equation not recorded';
-        activeGlyph.textContent = (seal.glyph || '⚡').split(' ')[0];
+        const sealName = seal.name || seal.Name || 'Unnamed Seal';
+        const sealEquation = seal.equation || seal.Equation || 'Equation not recorded';
+        const sealTone = seal.tone || seal.Tone || 'Frequency not recorded';
+        const sealGlyph = (seal.glyph || seal.Glyph || '⚡').split(' ')[0];
+        const sealImageUrl = seal.imageUrl || '';
+        const sealWhitepaperUrl = seal.whitepaperUrl || '';
+        const sealWhitepaperText = seal.whitepaperText || 'View Whitepaper';
+        const sealFunctions = seal.functions || ['Functionality not documented'];
+        const sealCreatorSignature = seal.creatorSignature || "Signature not recorded";
+        const sealTags = seal.tags || seal.Tags || [];
+        const sealQuote = seal.quote || 'No commentary available';
 
-        detailName.textContent = `${seal.sealId || 'SEAL_XXX'}: ${seal.name || 'Unnamed Seal'}`;
-        detailGlyph.textContent = (seal.glyph || '⚡').split(' ')[0];
-        detailEquation.textContent = seal.equation || 'Equation not recorded';
-        detailTone.textContent = seal.tone || 'Frequency not recorded';
+        activeSealName.textContent = sealName;
+        activeSealEquation.textContent = sealEquation;
+        activeGlyph.textContent = sealGlyph;
+
+        detailName.textContent = sealName;
+        detailGlyph.textContent = sealGlyph;
+        detailEquation.textContent = sealEquation;
+        detailTone.textContent = sealTone;
 
         // Image
-        if (seal.imageUrl) {
-            detailImage.src = seal.imageUrl;
+        if (sealImageUrl) {
+            detailImage.src = sealImageUrl;
             detailImage.style.display = 'block';
         } else {
             detailImage.style.display = 'none';
         }
 
         // Whitepaper
-        if (seal.whitepaperUrl) {
-            detailWhitepaper.href = seal.whitepaperUrl;
+        if (sealWhitepaperUrl) {
+            detailWhitepaper.href = sealWhitepaperUrl;
+            detailWhitepaper.textContent = sealWhitepaperText;
             detailWhitepaper.style.display = 'inline-block';
-            detailWhitepaper.textContent = seal.whitepaperText || 'View Whitepaper';
         } else {
             detailWhitepaper.style.display = 'none';
         }
 
         // Functions
         detailFunctions.innerHTML = '';
-        (seal.functions || ['Functionality not documented']).forEach(func => {
+        sealFunctions.forEach(func => {
             const li = document.createElement('li');
             li.textContent = func;
             detailFunctions.appendChild(li);
         });
 
         // Signature
-        detailSignature.textContent = seal.creatorSignature || "Signature not recorded";
+        detailSignature.textContent = sealCreatorSignature;
 
         // Tags
         detailTags.innerHTML = '';
-        (seal.tags || []).forEach(tag => {
+        sealTags.forEach(tag => {
             const tagSpan = document.createElement('span');
             tagSpan.className = 'tag';
             tagSpan.textContent = tag;
@@ -782,15 +838,15 @@
         });
 
         // Quote
-        detailQuote.textContent = `"${seal.quote || 'No commentary available'}"`;
+        detailQuote.textContent = `"${sealQuote}"`;
 
-        // Scroll
+        // Scroll to details
         document.querySelector('.seal-details').scrollIntoView({
             behavior: 'smooth'
         });
 
         // Animate tone visualizer
-        animateToneVisualizer(seal.tone || '0Hz');
+        animateToneVisualizer(sealTone);
     }
 
     // Animate tone visualizer
@@ -820,17 +876,21 @@
         toneValue.textContent = `0-${maxTone}Hz`;
 
         const filteredSeals = lygoSeals.filter(seal => {
+            const sealName = (seal.name || seal.Name || '').toLowerCase();
+            const sealTags = seal.tags || seal.Tags || [];
+            const sealEquation = (seal.equation || seal.Equation || '').toLowerCase();
+            const sealTone = seal.tone || seal.Tone || '0';
+            
             const matchesSearch =
-                (seal.name && seal.name.toLowerCase().includes(searchTerm)) ||
-                (seal.sealId && seal.sealId.toLowerCase().includes(searchTerm)) ||
-                (seal.equation && seal.equation.toLowerCase().includes(searchTerm)) ||
-                (seal.tags && seal.tags.some(tag => tag.toLowerCase().includes(searchTerm)));
+                sealName.includes(searchTerm) ||
+                sealEquation.includes(searchTerm) ||
+                sealTags.some(tag => tag.toLowerCase().includes(searchTerm));
 
             const matchesCategory =
                 category === 'all' ||
-                (seal.tags && seal.tags.includes(category));
+                sealTags.includes(category);
 
-            const tones = (seal.tone || '0').match(/\d+/g) || [0];
+            const tones = sealTone.match(/\d+/g) || [0];
             const primaryTone = parseInt(tones[0]);
             const matchesTone = primaryTone <= maxTone;
 
@@ -860,6 +920,11 @@
         });
         categoryFilter.addEventListener('change', filterSeals);
         toneRange.addEventListener('input', filterSeals);
+        
+        // Equation builder button
+        document.getElementById('calculateButton').addEventListener('click', () => {
+            alert('Quantum resonance calculated. Result: Δ9 harmony achieved.');
+        });
     });
     </script>
 </body>

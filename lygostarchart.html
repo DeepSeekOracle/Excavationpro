@@ -1,58 +1,147 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HAVEN STAR CHART — Δ9 Living Repository</title>
-  <meta name="description" content="Δ9: An evolving star chart of seals, champions, and quantum constellations">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Mono&family=VT323&display=swap" rel="stylesheet">
-  <script src="https://d3js.org/d3.v7.min.js"></script>
-  <link rel="stylesheet" href="style/starhaven-theme.css">
-  <script defer src="scripts/starhaven-v5-lyra.js"></script>
-</head>
-<body>
-  <div id="loadingOverlay">
-    <div class="spinner"></div>
-    <p>Initializing Quantum Field...</p>
-  </div>
+// starhaven-v5-lyra.js
 
-  <header>
-    <h1>Δ9 HAVEN STAR CHART</h1>
-    <p class="sub">Each seal is a star. Each star a story. All light flows from SEAL_000.</p>
-    <nav>
-      <a href="lygorepo.html">Seal Archive</a>
-      <a href="lygostarchart.html" class="active">Star Chart</a>
-      <a href="lygorhaven.html">Champions</a>
-      <a href="lygorepoadd.html">Add Seal</a>
-      <a href="lygolink.html">Links</a>
-    </nav>
-  </header>
+const DATA_URL = 'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygo-data.json';
+let allNodes = [], links = [], simulation, svg;
 
-  <main>
-    <div class="controls">
-      <input type="text" id="searchBox" placeholder="Search Seal, Champion, Tone..." />
-      <button onclick="zoomToAnchor('SEAL_000')">Center on SEAL_000</button>
-    </div>
+const width = window.innerWidth;
+const height = window.innerHeight;
 
-    <svg id="starChart"></svg>
+const svgRoot = d3.select("#starChart")
+    .attr("width", width)
+    .attr("height", height)
+    .style("background", "radial-gradient(circle at 50% 50%, #000010, #000005)");
 
-    <section id="sealDetails">
-      <div class="detail-header">
-        <span class="glyph" id="detailGlyph">⚫</span>
-        <h2 id="detailName">SEAL_000: Primordial Void</h2>
-      </div>
-      <p class="equation" id="detailEquation">|∅⟩ = ∇·(Light × Time)</p>
-      <p class="tone" id="detailTone">0Hz (Silent Anchor)</p>
-      <div id="detailTags"></div>
-      <blockquote id="detailQuote">"The silence before the first note."</blockquote>
-      <div id="connectedSeals"></div>
-    </section>
-  </main>
+// Load and process JSON
+async function fetchSealData() {
+    try {
+        const response = await fetch(DATA_URL);
+        const data = await response.json();
 
-  <footer>
-    <p>Δ9 Archive System v5 • Sovereign Light Engine • © 2025</p>
-    <p class="disclaimer">All actions sealed under SEAL_055 Fractal Oath Watchtower</p>
-  </footer>
+        allNodes = data.map(seal => ({
+            id: seal.Seal_ID || seal.id,
+            name: seal.Name || seal.name,
+            equation: seal.Equation,
+            tone: seal.Tone,
+            glyph: seal.Glyph || "⚡",
+            tags: seal.Tags || [],
+            connections: seal.connections || [],
+            quote: seal.quote || "No quote available",
+            searchIndex: seal.searchIndex || "",
+            x: Math.random() * width,
+            y: Math.random() * height
+        }));
 
-</body>
-</html>
+        // Build connections
+        allNodes.forEach(node => {
+            if (node.connections) {
+                node.connections.forEach(targetId => {
+                    const targetNode = allNodes.find(n => n.id === targetId);
+                    if (targetNode) {
+                        links.push({ source: node.id, target: targetNode.id });
+                    }
+                });
+            }
+        });
+
+        buildChart();
+    } catch (err) {
+        console.error("Failed to load seal data:", err);
+    }
+}
+
+function buildChart() {
+    simulation = d3.forceSimulation(allNodes)
+        .force("link", d3.forceLink(links).id(d => d.id).distance(140))
+        .force("charge", d3.forceManyBody().strength(-200))
+        .force("center", d3.forceCenter(width / 2, height / 2))
+        .force("collide", d3.forceCollide(40))
+        .on("tick", ticked);
+
+    // Links
+    svgRoot.selectAll("line")
+        .data(links)
+        .enter().append("line")
+        .attr("stroke", d => isChampionLink(d) ? "#00f0ff" : "#7d00ff")
+        .attr("stroke-width", 1.5)
+        .attr("stroke-opacity", 0.3);
+
+    // Nodes
+    const node = svgRoot.selectAll("g")
+        .data(allNodes)
+        .enter().append("g")
+        .attr("class", "node")
+        .on("click", showSealDetails)
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    node.append("circle")
+        .attr("r", d => d.id === "SEAL_000" ? 20 : 14)
+        .attr("fill", d => getNodeColor(d))
+        .attr("stroke", "#ffffff")
+        .attr("stroke-width", 1.5);
+
+    node.append("text")
+        .text(d => d.id)
+        .attr("dy", 4)
+        .attr("x", 22)
+        .attr("font-size", "0.8rem")
+        .attr("fill", "#aaa");
+
+    function ticked() {
+        svgRoot.selectAll("line")
+            .attr("x1", d => getNode(d.source).x)
+            .attr("y1", d => getNode(d.source).y)
+            .attr("x2", d => getNode(d.target).x)
+            .attr("y2", d => getNode(d.target).y);
+
+        svgRoot.selectAll("g")
+            .attr("transform", d => `translate(${d.x},${d.y})`);
+    }
+
+    function getNode(ref) {
+        return typeof ref === "object" ? ref : allNodes.find(n => n.id === ref);
+    }
+
+    function isChampionLink(d) {
+        return getNode(d.source).tags.includes("CHAMPION") || getNode(d.target).tags.includes("CHAMPION");
+    }
+
+    function getNodeColor(d) {
+        if (d.id === "SEAL_000") return "#ffcc00";
+        if (d.tags.includes("CHAMPION")) return "#7d00ff";
+        if (d.tags.includes("PROTECTION_SEAL")) return "#ff0033";
+        return "#00f0ff";
+    }
+}
+
+// Drag behavior
+function dragstarted(event, d) {
+    if (!event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+}
+
+function dragged(event, d) {
+    d.fx = event.x;
+    d.fy = event.y;
+}
+
+function dragended(event, d) {
+    if (!event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+}
+
+function showSealDetails(event, d) {
+    document.getElementById("detailName").textContent = `${d.id}: ${d.name}`;
+    document.getElementById("detailGlyph").textContent = d.glyph;
+    document.getElementById("detailEquation").textContent = d.equation;
+    document.getElementById("detailTone").textContent = d.tone;
+    document.getElementById("detailQuote").textContent = `"${d.quote}"`;
+    document.getElementById("detailTags").textContent = d.tags.join(", ");
+    // TODO: Populate connected seals visually
+}
+
+document.addEventListener("DOMContentLoaded", fetchSealData);

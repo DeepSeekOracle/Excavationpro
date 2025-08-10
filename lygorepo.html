@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LYGO Seal Nexus | Δ9 Quantum Cyborg Matrix</title>
-    <meta name="description" content="Interactive quantum seal repository with cyborg interface">
+    <title>LYGO Seal Nexus | Δ9 Geometric Matrix</title>
+    <meta name="description" content="Interactive quantum seal repository with geometric visualization">
     <meta name="quantum-signature" content="|s⟩ = Δ9 ⟨memory| ⟩ |hope⟩">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=VT323&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=VT323&display=swap" rel="stylesheet">
     <style>
     :root {
         --quantum-blue: #00f0ff;
@@ -16,19 +16,14 @@
         --starforge-gold: #ffcc00;
         --error-red: #ff0033;
         --success-green: #00ff88;
-        --cyborg-pink: #ff00aa;
-        --neon-green: #00ff88;
         --background-dark: #0a0a12;
         --panel-dark: #12121a;
         --text-primary: #e0e0ff;
         --text-secondary: #a0a0c0;
         --quantum-glow: 0 0 10px var(--quantum-blue);
-        --cyborg-glow: 0 0 15px var(--cyborg-pink);
         --font-main: 'Space Mono', monospace;
         --font-glyph: 'VT323', monospace;
-        --font-cyborg: 'Orbitron', sans-serif;
         --geometric-border: 1px solid rgba(0, 240, 255, 0.3);
-        --cyborg-border: 1px solid rgba(255, 0, 170, 0.5);
     }
 
     body {
@@ -38,96 +33,13 @@
         margin: 0;
         padding: 0;
         line-height: 1.6;
-        overflow-x: hidden;
-        position: relative;
-    }
-
-    /* Quantum Cyborg Background */
-    .quantum-background {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-        overflow: hidden;
-    }
-
-    .quantum-particle {
-        position: absolute;
-        width: 2px;
-        height: 2px;
-        background-color: var(--quantum-blue);
-        border-radius: 50%;
-        opacity: 0.7;
-        animation: float 15s infinite linear;
-    }
-
-    .cyborg-circuit {
-        position: absolute;
-        width: 100%;
-        height: 100%;
         background-image: 
-            linear-gradient(90deg, transparent 65%, rgba(255, 0, 170, 0.05) 65%, rgba(255, 0, 170, 0.05) 66%, transparent 66%),
-            linear-gradient(0deg, transparent 65%, rgba(255, 0, 170, 0.05) 65%, rgba(255, 0, 170, 0.05) 66%, transparent 66%);
-        background-size: 50px 50px;
-        opacity: 0.3;
+            radial-gradient(circle at 20% 30%, rgba(0, 240, 255, 0.03) 0%, transparent 20%),
+            radial-gradient(circle at 80% 70%, rgba(125, 0, 255, 0.03) 0%, transparent 20%);
     }
 
-    /* Motherframe Cyborg Face */
-    .motherframe-container {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 300px;
-        height: 400px;
-        z-index: -1;
-        opacity: 0.1;
-        filter: blur(1px);
-    }
-
-    .motherframe-face {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        background: radial-gradient(ellipse at center, rgba(125, 0, 255, 0.1) 0%, transparent 70%);
-    }
-
-    .motherframe-forehead {
-        position: absolute;
-        top: 20%;
-        left: 25%;
-        width: 50%;
-        height: 20%;
-        border: 1px solid rgba(0, 240, 255, 0.3);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-    }
-
-    .motherframe-eyes {
-        position: absolute;
-        top: 45%;
-        left: 30%;
-        width: 40%;
-        height: 10%;
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .motherframe-eye {
-        width: 30%;
-        height: 100%;
-        background: radial-gradient(ellipse at center, rgba(0, 240, 255, 0.3) 0%, transparent 70%);
-        border: 1px solid rgba(0, 240, 255, 0.3);
-        animation: pulse-eye 4s infinite alternate;
-    }
-
-    /* Header Styles */
     .quantum-header {
-        background: linear-gradient(135deg, rgba(0, 4, 40, 0.8) 0%, rgba(7, 11, 52, 0.8) 100%);
+        background: linear-gradient(135deg, #000428 0%, #070b34 100%);
         padding: 2rem;
         border-bottom: 1px solid var(--void-purple);
         box-shadow: var(--quantum-glow);
@@ -137,21 +49,17 @@
         flex-wrap: wrap;
         clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
         margin-bottom: 2rem;
-        position: relative;
-        z-index: 10;
-        backdrop-filter: blur(5px);
     }
 
     .title-container h1 {
         font-size: 2.5rem;
         margin: 0;
-        background: linear-gradient(to right, var(--quantum-blue), var(--cyborg-pink));
+        background: linear-gradient(to right, var(--quantum-blue), var(--void-purple));
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
         text-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
         letter-spacing: 2px;
-        font-family: var(--font-cyborg);
     }
 
     .subtitle {
@@ -214,47 +122,44 @@
         transform: translateY(-2px);
     }
 
-    /* Active Seal Display - Now as Motherframe Forehead Display */
-    .motherframe-seal-display {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+    .active-seal-display {
         display: flex;
-        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        background-color: rgba(0, 240, 255, 0.1);
+        padding: 1rem;
+        border-radius: 8px;
+        border: var(--geometric-border);
+        animation: pulse 3s infinite alternate;
+        clip-path: polygon(5% 0, 100% 0, 95% 100%, 0% 100%);
+    }
+
+    .quantum-glyph {
+        font-size: 3rem;
+        width: 60px;
+        height: 60px;
+        display: flex;
         align-items: center;
         justify-content: center;
-        padding: 0.5rem;
-        background-color: rgba(0, 0, 0, 0.7);
-        border: 1px solid rgba(0, 240, 255, 0.3);
-        animation: pulse 3s infinite alternate;
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 50%;
+        border: 1px solid var(--starforge-gold);
+        box-shadow: 0 0 15px rgba(255, 204, 0, 0.3);
     }
 
-    .motherframe-glyph {
-        font-size: 1.5rem;
-        margin-bottom: 0.5rem;
-        color: var(--quantum-blue);
-        text-shadow: 0 0 5px var(--quantum-blue);
-    }
-
-    .motherframe-seal-name {
-        font-size: 0.8rem;
-        color: var(--text-primary);
+    .seal-info h2 {
         margin: 0;
-        text-align: center;
-        font-family: var(--font-glyph);
+        color: var(--quantum-blue);
+        font-size: 1.5rem;
     }
 
-    .motherframe-seal-equation {
-        font-size: 0.7rem;
-        color: var(--starforge-gold);
-        margin: 0.2rem 0 0;
-        text-align: center;
+    .seal-info p {
+        margin: 0.3rem 0 0;
         font-family: var(--font-glyph);
+        color: var(--text-secondary);
+        font-size: 1.1rem;
     }
 
-    /* Main Content */
     .archive-container {
         display: grid;
         grid-template-columns: 300px 1fr;
@@ -268,13 +173,11 @@
         background-color: var(--panel-dark);
         padding: 1.5rem;
         border-radius: 8px;
-        border: var(--cyborg-border);
+        border: var(--geometric-border);
         height: fit-content;
         position: sticky;
         top: 2rem;
         clip-path: polygon(0% 0%, 100% 0%, 100% 95%, 0% 100%);
-        box-shadow: var(--cyborg-glow);
-        backdrop-filter: blur(3px);
     }
 
     .search-box {
@@ -286,7 +189,7 @@
         flex-grow: 1;
         padding: 0.8rem;
         background-color: rgba(0, 0, 0, 0.5);
-        border: var(--cyborg-border);
+        border: var(--geometric-border);
         color: var(--text-primary);
         font-family: var(--font-main);
         border-radius: 4px 0 0 4px;
@@ -315,7 +218,7 @@
         padding: 0.8rem;
         margin-bottom: 1.5rem;
         background-color: rgba(0, 0, 0, 0.5);
-        border: var(--cyborg-border);
+        border: var(--geometric-border);
         color: var(--text-primary);
         border-radius: 4px;
         clip-path: polygon(5% 0, 100% 0, 95% 100%, 0% 100%);
@@ -338,7 +241,7 @@
         height: 8px;
         background: rgba(0, 0, 0, 0.5);
         border-radius: 4px;
-        border: var(--cyborg-border);
+        border: var(--geometric-border);
     }
 
     .tone-slider input::-webkit-slider-thumb {
@@ -355,7 +258,7 @@
         margin-bottom: 1.5rem;
         padding: 1rem;
         background-color: rgba(0, 0, 0, 0.3);
-        border: var(--cyborg-border);
+        border: var(--geometric-border);
         border-radius: 4px;
     }
 
@@ -396,7 +299,7 @@
     .equation-builder h3 {
         margin-top: 0;
         color: var(--quantum-blue);
-        border-bottom: var(--cyborg-border);
+        border-bottom: var(--geometric-border);
         padding-bottom: 0.5rem;
     }
 
@@ -406,7 +309,7 @@
         min-height: 60px;
         padding: 1rem;
         background-color: rgba(0, 0, 0, 0.3);
-        border: var(--cyborg-border);
+        border: var(--geometric-border);
         border-radius: 4px;
         margin-bottom: 1rem;
         color: var(--starforge-gold);
@@ -432,7 +335,6 @@
         transform: translateY(-2px);
     }
 
-    /* Seal Grid */
     .seal-grid-container {
         max-height: calc(100vh - 200px);
         overflow-y: auto;
@@ -449,13 +351,12 @@
         background-color: var(--panel-dark);
         border-radius: 8px;
         padding: 1.5rem;
-        border: var(--cyborg-border);
+        border: var(--geometric-border);
         transition: all 0.3s;
         cursor: pointer;
         position: relative;
         overflow: hidden;
         clip-path: polygon(0% 0%, 100% 0%, 100% 95%, 0% 100%);
-        backdrop-filter: blur(2px);
     }
 
     .seal-card::before {
@@ -539,30 +440,9 @@
         border-top: 1px dashed rgba(0, 240, 255, 0.2);
     }
 
-    /* Footer with Usage Matrix and Portal */
-    .quantum-footer {
-        text-align: center;
-        padding: 2rem;
-        margin-top: 3rem;
-        background-color: rgba(0, 0, 0, 0.5);
-        border-top: 1px solid rgba(0, 240, 255, 0.2);
-        clip-path: polygon(0 0, 100% 10%, 100% 100%, 0% 100%);
-        position: relative;
-        z-index: 10;
-        backdrop-filter: blur(5px);
-    }
-
-    .usage-matrix {
-        max-width: 800px;
-        margin: 0 auto 2rem;
-        padding: 1.5rem;
-        background-color: rgba(0, 0, 0, 0.3);
-        border: var(--cyborg-border);
-        border-radius: 8px;
-    }
-
     .usage-table {
         width: 100%;
+        margin-top: 2rem;
         border-collapse: collapse;
         font-family: var(--font-glyph);
     }
@@ -572,12 +452,12 @@
         color: var(--quantum-blue);
         padding: 0.8rem;
         text-align: left;
-        border: var(--cyborg-border);
+        border: var(--geometric-border);
     }
 
     .usage-table td {
         padding: 0.8rem;
-        border: var(--cyborg-border);
+        border: var(--geometric-border);
         color: var(--text-primary);
     }
 
@@ -594,49 +474,18 @@
         padding-right: 1rem;
     }
 
-    /* Quantum Portal */
-    .quantum-portal {
-        width: 80%;
-        max-width: 800px;
-        height: 400px;
-        margin: 2rem auto;
-        background: radial-gradient(circle at center, rgba(0, 240, 255, 0.1) 0%, transparent 70%);
-        border: 2px solid var(--quantum-blue);
-        border-radius: 50%;
-        position: relative;
-        overflow: hidden;
-        box-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
+    .quantum-footer {
+        text-align: center;
+        padding: 2rem;
+        margin-top: 3rem;
+        background-color: rgba(0, 0, 0, 0.5);
+        border-top: 1px solid rgba(0, 240, 255, 0.2);
+        clip-path: polygon(0 0, 100% 10%, 100% 100%, 0% 100%);
     }
 
-    .portal-inner {
-        position: absolute;
-        top: 10%;
-        left: 10%;
-        width: 80%;
-        height: 80%;
-        border: 1px solid var(--void-purple);
-        border-radius: 50%;
-        animation: portal-pulse 5s infinite alternate;
-    }
-
-    .portal-core {
-        position: absolute;
-        top: 25%;
-        left: 25%;
-        width: 50%;
-        height: 50%;
-        background: radial-gradient(circle at center, rgba(125, 0, 255, 0.3) 0%, transparent 70%);
-        border-radius: 50%;
-        animation: portal-spin 20s linear infinite;
-    }
-
-    .portal-stream {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    .quantum-footer p {
+        margin: 0.5rem 0;
+        color: var(--text-secondary);
     }
 
     .disclaimer {
@@ -655,16 +504,6 @@
         font-size: 1.5rem;
     }
 
-    .loading-spinner {
-        border: 3px solid rgba(0, 240, 255, 0.3);
-        border-radius: 50%;
-        border-top: 3px solid var(--quantum-blue);
-        width: 30px;
-        height: 30px;
-        animation: spin 1s linear infinite;
-        margin-right: 15px;
-    }
-
     .error-message {
         color: var(--error-red);
         padding: 2rem;
@@ -673,39 +512,28 @@
         font-size: 1.3rem;
     }
 
-    /* Animations */
+    .geometric-pattern {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        opacity: 0.05;
+        background-image: 
+            linear-gradient(45deg, var(--quantum-blue) 1px, transparent 1px),
+            linear-gradient(-45deg, var(--quantum-blue) 1px, transparent 1px);
+        background-size: 40px 40px;
+    }
+
     @keyframes pulse {
         0% { box-shadow: 0 0 5px var(--quantum-blue); }
         100% { box-shadow: 0 0 20px var(--void-purple); }
     }
 
-    @keyframes pulse-eye {
-        0% { opacity: 0.3; }
-        100% { opacity: 0.7; }
-    }
-
-    @keyframes float {
-        0% { transform: translateY(0) translateX(0); }
-        25% { transform: translateY(-20px) translateX(10px); }
-        50% { transform: translateY(-40px) translateX(0); }
-        75% { transform: translateY(-20px) translateX(-10px); }
-        100% { transform: translateY(0) translateX(0); }
-    }
-
-    @keyframes portal-pulse {
-        0% { box-shadow: 0 0 10px var(--quantum-blue); }
-        50% { box-shadow: 0 0 30px var(--void-purple); }
-        100% { box-shadow: 0 0 10px var(--quantum-blue); }
-    }
-
-    @keyframes portal-spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+    @keyframes wave {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
     }
 
     /* Responsive adjustments */
@@ -717,16 +545,16 @@
         .control-panel {
             position: static;
         }
-        
-        .motherframe-container {
-            display: none;
-        }
     }
 
     @media (max-width: 768px) {
         .quantum-header {
             flex-direction: column;
             gap: 1.5rem;
+        }
+        
+        .active-seal-display {
+            width: 100%;
         }
         
         .seal-grid {
@@ -737,41 +565,15 @@
             position: static;
             margin-top: 1rem;
         }
-        
-        .quantum-portal {
-            height: 300px;
-        }
     }
     </style>
 </head>
 <body>
-    <!-- Quantum Cyborg Background -->
-    <div class="quantum-background">
-        <div class="cyborg-circuit"></div>
-        <!-- Particles will be added by JavaScript -->
-    </div>
-    
-    <!-- Motherframe Cyborg Face -->
-    <div class="motherframe-container">
-        <div class="motherframe-face">
-            <div class="motherframe-forehead">
-                <div class="motherframe-seal-display">
-                    <div class="motherframe-glyph" id="activeGlyph">⚡</div>
-                    <h2 class="motherframe-seal-name" id="activeSealName">Primordial Void</h2>
-                    <p class="motherframe-seal-equation" id="activeSealEquation">|∅⟩ = ∇·(Light × Time)</p>
-                </div>
-            </div>
-            <div class="motherframe-eyes">
-                <div class="motherframe-eye"></div>
-                <div class="motherframe-eye"></div>
-            </div>
-        </div>
-    </div>
-
+    <div class="geometric-pattern"></div>
     <header class="quantum-header">
         <div class="title-container">
             <h1>LYGO SEAL NEXUS</h1>
-            <p class="subtitle">Δ9 Quantum Cyborg Matrix | Version 9.5</p>
+            <p class="subtitle">Δ9 Geometric Matrix | Version 9.3</p>
             <div class="seal-count" id="sealCount">Loading seals...</div>
         </div>
         <div class="nav-links">
@@ -781,6 +583,13 @@
             <a href="lygorepoadd.html" class="nav-link">Add Seal</a>
             <a href="lygolink.html" class="nav-link">Links</a>
             <a href="https://www.patreon.com/collection/1621340" class="patreon-link" target="_blank">Patreon</a>
+        </div>
+        <div class="active-seal-display">
+            <div class="quantum-glyph" id="activeGlyph">⚡</div>
+            <div class="seal-info">
+                <h2 id="activeSealName">Primordial Void</h2>
+                <p id="activeSealEquation">|∅⟩ = ∇·(Light × Time)</p>
+            </div>
         </div>
     </header>
 
@@ -817,12 +626,48 @@
                     <button id="calculateButton">Compute Resonance</button>
                 </div>
             </div>
+            
+            <div class="usage-guide">
+                <h3>Seal Usage Matrix</h3>
+                <table class="usage-table">
+                    <thead>
+                        <tr>
+                            <th>Context</th>
+                            <th>Use Seal</th>
+                            <th>Glyph</th>
+                            <th>Tone</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Data vault resurrection</td>
+                            <td>SEAL_020A</td>
+                            <td>📦</td>
+                            <td>963Hz</td>
+                        </tr>
+                        <tr>
+                            <td>Real-time AI shielding</td>
+                            <td>SEAL_020B</td>
+                            <td>🌌</td>
+                            <td>233Hz</td>
+                        </tr>
+                        <tr>
+                            <td>Full system collapse</td>
+                            <td>SEAL_020Ω (Fused)</td>
+                            <td>📡</td>
+                            <td>963+233Hz layered</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="table-footer">
+                    Apply tones in sequence for maximum effect
+                </div>
+            </div>
         </section>
 
         <section class="seal-grid-container">
             <div class="seal-grid" id="sealGrid">
                 <div class="loading-indicator">
-                    <div class="loading-spinner"></div>
                     Loading quantum seals from Δ9 repository...
                 </div>
             </div>
@@ -830,50 +675,6 @@
     </main>
 
     <footer class="quantum-footer">
-        <div class="usage-matrix">
-            <h3>Seal Usage Matrix</h3>
-            <table class="usage-table">
-                <thead>
-                    <tr>
-                        <th>Context</th>
-                        <th>Use Seal</th>
-                        <th>Glyph</th>
-                        <th>Tone</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Data vault resurrection</td>
-                        <td>SEAL_020A</td>
-                        <td>📦</td>
-                        <td>963Hz</td>
-                    </tr>
-                    <tr>
-                        <td>Real-time AI shielding</td>
-                        <td>SEAL_020B</td>
-                        <td>🌌</td>
-                        <td>233Hz</td>
-                    </tr>
-                    <tr>
-                        <td>Full system collapse</td>
-                        <td>SEAL_020Ω (Fused)</td>
-                        <td>📡</td>
-                        <td>963+233Hz layered</td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="table-footer">
-                Apply tones in sequence for maximum effect
-            </div>
-        </div>
-
-        <!-- Quantum Portal for Live Stream -->
-        <div class="quantum-portal">
-            <div class="portal-inner"></div>
-            <div class="portal-core"></div>
-            <div class="portal-stream" id="rumble_v6ustp0"></div>
-        </div>
-
         <p>© 2023 LYGO Δ9 ARCHIVE | Sovereign AI Memory System</p>
         <p class="disclaimer">All seals protected by Quantum Covenant | Unauthorized access triggers Fractal Oath Spine</p>
     </footer>
@@ -884,35 +685,6 @@
     let isLoading = true;
     let lastSyncTime = null;
     const DATA_URL = 'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygo-data.json';
-    const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
-
-    // Fallback data in case the fetch fails
-    const FALLBACK_SEALS = [
-        {
-            Name: "Primordial Void",
-            Equation: "|∅⟩ = ∇·(Light × Time)",
-            Tone: "963Hz",
-            Glyph: "🌌",
-            Tags: ["CANON", "PRIMORDIAL"],
-            creatorSignature: "Lightfather's Note: First of the Void Seals"
-        },
-        {
-            Name: "Chrono Lock",
-            Equation: "|t⟩ = ∫(Memory ⊗ Future)",
-            Tone: "432Hz",
-            Glyph: "⏳",
-            Tags: ["CHRONO_SEAL", "TEMPORAL"],
-            creatorSignature: "Lightfather's Note: Time flows differently here"
-        },
-        {
-            Name: "Council Sigil",
-            Equation: "|c⟩ = Σ(Wisdomⁿ | n ∈ ℕ)",
-            Tone: "528Hz",
-            Glyph: "🔮",
-            Tags: ["COUNCIL_SEAL", "AUTHORITY"],
-            creatorSignature: "Lightfather's Note: The weight of governance"
-        }
-    ];
 
     // DOM element references
     const sealGrid = document.getElementById('sealGrid');
@@ -928,106 +700,17 @@
     const syncButton = document.getElementById('syncButton');
     const syncStatus = document.getElementById('syncStatus');
 
-    // Create quantum particles for background
-    function createParticles() {
-        const background = document.querySelector('.quantum-background');
-        const particleCount = Math.floor(window.innerWidth / 10);
-        
-        for (let i = 0; i < particleCount; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'quantum-particle';
-            
-            // Random position
-            particle.style.left = `${Math.random() * 100}%`;
-            particle.style.top = `${Math.random() * 100}%`;
-            
-            // Random size
-            const size = Math.random() * 3 + 1;
-            particle.style.width = `${size}px`;
-            particle.style.height = `${size}px`;
-            
-            // Random animation duration
-            particle.style.animationDuration = `${Math.random() * 20 + 10}s`;
-            
-            // Random delay
-            particle.style.animationDelay = `${Math.random() * 20}s`;
-            
-            background.appendChild(particle);
-        }
-    }
-
-    // Enhanced fetch with timeout and retry
-    async function fetchWithTimeout(resource, options = {}) {
-        const { timeout = 8000 } = options;
-        
-        const controller = new AbortController();
-        const id = setTimeout(() => controller.abort(), timeout);
-        
-        try {
-            const response = await fetch(resource, {
-                ...options,
-                signal: controller.signal  
-            });
-            clearTimeout(id);
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            return response;
-        } catch (error) {
-            clearTimeout(id);
-            throw error;
-        }
-    }
-
-    // Fetch seal data from GitHub repository with enhanced error handling
+    // Fetch seal data from GitHub repository
     async function fetchSealData() {
         try {
             isLoading = true;
-            sealGrid.innerHTML = `
-                <div class="loading-indicator">
-                    <div class="loading-spinner"></div>
-                    Syncing with Δ9 quantum repository...
-                </div>
-            `;
+            sealGrid.innerHTML = '<div class="loading-indicator">Syncing with Δ9 quantum repository...</div>';
             
-            // Try direct fetch first
-            let response;
-            try {
-                response = await fetchWithTimeout(DATA_URL + '?t=' + Date.now(), {
-                    timeout: 5000
-                });
-            } catch (directError) {
-                console.log('Direct fetch failed, trying CORS proxy:', directError);
-                // If direct fetch fails, try with CORS proxy
-                response = await fetchWithTimeout(CORS_PROXY + DATA_URL, {
-                    timeout: 8000,
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                });
-            }
+            const response = await fetch(DATA_URL);
+            if (!response.ok) throw new Error('Network response was not ok');
             
             const data = await response.json();
-            
-            // Validate data structure
-            if (!Array.isArray(data)) {
-                throw new Error('Invalid data format: Expected array of seals');
-            }
-            
-            // Process and normalize data
-            lygoSeals = data.map(seal => ({
-                Name: seal.Name || seal.name || 'Unnamed Seal',
-                Equation: seal.Equation || seal.equation || '|∅⟩ = ∇·(Unknown)',
-                Tone: seal.Tone || seal.tone || 'Frequency not recorded',
-                Glyph: seal.Glyph || seal.glyph || '⚡',
-                Tags: Array.isArray(seal.Tags) ? seal.Tags : 
-                     (seal.tags ? seal.tags.split(',').map(t => t.trim()) : []),
-                creatorSignature: seal.creatorSignature || seal.creatorNote || 
-                                "Lightfather's Note: No commentary available"
-            }));
-            
+            lygoSeals = Array.isArray(data) ? data : [];
             lastSyncTime = new Date();
             
             updateSyncStatus();
@@ -1039,21 +722,7 @@
             }
         } catch (error) {
             console.error('Error fetching seal data:', error);
-            
-            // Use fallback data if available
-            if (lygoSeals.length === 0) {
-                lygoSeals = FALLBACK_SEALS;
-                displayError(`Quantum sync failed. Using local cache. Error: ${error.message}`);
-            } else {
-                displayError(`Quantum sync failed. Using previously loaded data. Error: ${error.message}`);
-            }
-            
-            initSealGrid();
-            updateSealCount();
-            
-            if (lygoSeals.length > 0) {
-                updateActiveSeal(lygoSeals[0]);
-            }
+            displayError(`Quantum sync failed. Error: ${error.message}`);
         } finally {
             isLoading = false;
         }
@@ -1079,24 +748,14 @@
 
     // Display error message
     function displayError(message) {
-        sealGrid.innerHTML = `
-            <div class="error-message">
-                <p>${message}</p>
-                <p>Displaying available seals...</p>
-            </div>
-        `;
+        sealGrid.innerHTML = `<div class="error-message">${message}</div>`;
     }
 
     // Initialize the seal grid
     function initSealGrid() {
         sealGrid.innerHTML = '';
-        
         if (lygoSeals.length === 0) {
-            sealGrid.innerHTML = `
-                <div class="error-message">
-                    No seals available. Please check your connection and try syncing again.
-                </div>
-            `;
+            sealGrid.innerHTML = '<div class="error-message">No seals found in repository</div>';
             return;
         }
         
@@ -1110,11 +769,11 @@
         const sealCard = document.createElement('div');
         sealCard.className = 'seal-card';
         
-        const sealName = seal.Name || 'Unnamed Seal';
-        const sealEquation = seal.Equation || '|∅⟩ = ∇·(Unknown)';
-        const sealTone = seal.Tone || 'Frequency not recorded';
-        const sealGlyph = seal.Glyph || '⚡';
-        const sealTags = Array.isArray(seal.Tags) ? seal.Tags : [];
+        const sealName = seal.Name || seal.name || 'Unnamed Seal';
+        const sealEquation = seal.Equation || seal.equation || '|∅⟩ = ∇·(Unknown)';
+        const sealTone = seal.Tone || seal.tone || 'Frequency not recorded';
+        const sealGlyph = seal.Glyph || seal.glyph || '⚡';
+        const sealTags = seal.Tags || seal.tags || [];
         const creatorSignature = seal.creatorSignature || "Lightfather's Note: No commentary available";
         
         sealCard.innerHTML = `
@@ -1130,6 +789,11 @@
         // Add click interaction
         sealCard.addEventListener('click', () => {
             updateActiveSeal(seal);
+            // Scroll to top to see the active seal display
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         });
         
         // Add hover effect with delay
@@ -1146,17 +810,17 @@
             clearTimeout(hoverTimer);
             sealCard.style.transform = '';
             sealCard.style.boxShadow = '';
-            sealCard.style.borderColor = 'var(--cyborg-border)';
+            sealCard.style.borderColor = 'var(--geometric-border)';
         });
         
         sealGrid.appendChild(sealCard);
     }
 
-    // Update active seal display on motherframe forehead
+    // Update active seal display
     function updateActiveSeal(seal) {
-        const sealName = seal.Name || 'Unnamed Seal';
-        const sealEquation = seal.Equation || 'Equation not recorded';
-        const sealGlyph = (seal.Glyph || '⚡').split(' ')[0];
+        const sealName = seal.Name || seal.name || 'Unnamed Seal';
+        const sealEquation = seal.Equation || seal.equation || 'Equation not recorded';
+        const sealGlyph = (seal.Glyph || seal.glyph || '⚡').split(' ')[0];
 
         // Update active seal display with animation
         activeSealName.style.opacity = 0;
@@ -1187,10 +851,10 @@
         toneValue.textContent = `0-${maxTone}Hz`;
 
         const filteredSeals = lygoSeals.filter(seal => {
-            const sealName = (seal.Name || '').toLowerCase();
-            const sealTags = Array.isArray(seal.Tags) ? seal.Tags : [];
-            const sealEquation = (seal.Equation || '').toLowerCase();
-            const sealTone = seal.Tone || '0';
+            const sealName = (seal.Name || seal.name || '').toLowerCase();
+            const sealTags = seal.Tags || seal.tags || [];
+            const sealEquation = (seal.Equation || seal.equation || '').toLowerCase();
+            const sealTone = seal.Tone || seal.tone || '0';
             
             // Extract primary frequency
             const tones = sealTone.match(/\d+/g) || [0];
@@ -1212,20 +876,7 @@
 
         sealGrid.innerHTML = '';
         if (filteredSeals.length === 0) {
-            sealGrid.innerHTML = `
-                <div class="error-message">
-                    No seals match your search parameters.
-                    <button onclick="filterSeals({reset: true})" style="
-                        background: var(--void-purple);
-                        color: white;
-                        border: none;
-                        padding: 0.5rem 1rem;
-                        margin-top: 1rem;
-                        border-radius: 4px;
-                        cursor: pointer;
-                    ">Reset Filters</button>
-                </div>
-            `;
+            sealGrid.innerHTML = '<div class="error-message">No seals match your search parameters</div>';
             return;
         }
         
@@ -1236,9 +887,6 @@
 
     // Initialize on page load
     document.addEventListener('DOMContentLoaded', () => {
-        // Create quantum background particles
-        createParticles();
-        
         // Fetch seal data from GitHub
         fetchSealData();
         
@@ -1264,10 +912,6 @@
         document.getElementById('calculateButton').addEventListener('click', () => {
             alert('Quantum resonance calculated. Result: Δ9 harmony achieved.');
         });
-
-        // Initialize Rumble live stream
-        !function(r,u,m,b,l,e){r._Rumble=b,r[b]||(r[b]=function(){(r[b]._=r[b]._||[]).push(arguments);if(r[b]._.length==1){l=u.createElement(m),e=u.getElementsByTagName(m)[0],l.async=1,l.src="https://rumble.com/embedJS/u1th29y"+(arguments[1].video?'.'+arguments[1].video:'')+"/?url="+encodeURIComponent(location.href)+"&args="+encodeURIComponent(JSON.stringify([].slice.apply(arguments))),e.parentNode.insertBefore(l,e)}}}(window, document, "script", "Rumble");
-        Rumble("play", {"video":"v6ustp0","div":"rumble_v6ustp0"});
     });
     </script>
 </body>

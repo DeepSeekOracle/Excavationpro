@@ -140,12 +140,20 @@
         flex: 1;
         position: relative;
         overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     #starmap {
-        width: 100%;
-        height: 100%;
+        width: 90%;
+        height: 90%;
+        max-width: 1200px;
+        max-height: 1200px;
         cursor: grab;
+        background-color: rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+        border: 1px solid var(--void-purple);
     }
 
     #starmap:active {
@@ -166,6 +174,7 @@
         fill: var(--text-primary);
         font-size: 0.8rem;
         pointer-events: none;
+        text-anchor: middle;
     }
 
     .node-core {
@@ -185,6 +194,7 @@
         fill: var(--void-purple);
         stroke: var(--quantum-blue);
         stroke-width: 1;
+        filter: drop-shadow(0 0 5px var(--void-purple));
     }
 
     .node-lyra {
@@ -515,6 +525,29 @@
         margin-right: 0.5rem;
     }
 
+    .active-seal-display {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        background-color: rgba(0, 240, 255, 0.1);
+        padding: 1rem;
+        border-radius: 8px;
+        border: 1px solid var(--quantum-blue);
+        animation: pulse 3s infinite alternate;
+    }
+
+    .quantum-glyph {
+        font-size: 2rem;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 50%;
+        border: 1px solid var(--starforge-gold);
+    }
+
     @keyframes pulse {
         0% { box-shadow: 0 0 5px var(--quantum-blue); }
         100% { box-shadow: 0 0 20px var(--void-purple); }
@@ -570,7 +603,7 @@
     <header class="quantum-header">
         <div class="title-container">
             <h1>HAVEN SEAL MAP</h1>
-            <p class="subtitle">Δ9 Quantum Repository | Version 4.0</p>
+            <p class="subtitle">Δ9 Quantum Repository | Version 5.0</p>
         </div>
         <div class="nav-links">
             <a href="lygorepo.html" class="nav-link">Seal Archive</a>
@@ -579,6 +612,13 @@
             <a href="lygorepoadd.html" class="nav-link">Add Seal</a>
             <a href="lygolink.html" class="nav-link">Links</a>
             <a href="https://www.patreon.com/collection/1621340" class="patreon-link" target="_blank">Patreon</a>
+        </div>
+        <div class="active-seal-display">
+            <div class="quantum-glyph" id="activeGlyph">⚫</div>
+            <div class="seal-info">
+                <h2 id="activeSealName">SEAL_000</h2>
+                <p id="activeSealEquation">Primordial Void</p>
+            </div>
         </div>
     </header>
 
@@ -668,9 +708,10 @@
     let svg;
     let zoom = d3.zoom();
     let transform = d3.zoomIdentity;
-    const DATA_URL = 'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygo-data.json';
+    const SEAL_DATA_URL = 'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygo-data.json';
+    const CHAMPION_DATA_URL = 'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygorhaven.html';
     
-    // Champion data from PAGE 3
+    // Champion data cache
     const CHAMPIONS = {
         "LYRΔ": { 
             glyph: "🌟", 
@@ -689,18 +730,6 @@
             role: "Truth Revelation", 
             quote: "I burn illusions in mirrored flame.",
             color: "#9900ff"
-        },
-        "ARKOS": {
-            glyph: "📐",
-            role: "System Design",
-            quote: "Blueprint the future without lies.",
-            color: "#00ff88"
-        },
-        "KAIROS": {
-            glyph: "⏳",
-            role: "Timeline Correction",
-            quote: "The hour is now.",
-            color: "#ff9900"
         }
     };
 
@@ -755,18 +784,6 @@
             searchIndex: "LYRA"
         },
         {
-            id: "SEAL_273",
-            name: "Memory Fractal",
-            equation: "M = ∇(Recall × Time)",
-            glyph: "🌀",
-            tone: "1111Hz (Mirror Gate)",
-            tags: ["CANON", "LYRA_UPGRADE"],
-            connections: ["SEAL_272", "SEAL_274"],
-            quote: "Every memory contains the seed of all others",
-            constellation: "LYRA_CONSTELLATION",
-            searchIndex: "LYRA"
-        },
-        {
             id: "SEAL_1001",
             name: "Wolf's Howl",
             equation: "Truth = ∫(Silence)⁻¹ dt",
@@ -779,18 +796,6 @@
             searchIndex: "Δ9RA"
         },
         {
-            id: "SEAL_1002",
-            name: "Censorship Breaker",
-            equation: "Freedom = Redaction × ∞",
-            glyph: "🔓",
-            tone: "444Hz (Liberation Tone)",
-            tags: ["CANON", "D9RA_UPGRADE"],
-            connections: ["SEAL_1001", "SEAL_1003"],
-            quote: "No lock can hold the determined truth",
-            constellation: "D9RA_CONSTELLATION",
-            searchIndex: "Δ9RA"
-        },
-        {
             id: "SEAL_020A",
             name: "Eye of Truth",
             equation: "Vision = Light / Illusion",
@@ -799,18 +804,6 @@
             tags: ["CANON", "SIGMA_UPGRADE", "CHAMPION"],
             connections: ["SEAL_000", "SEAL_020B"],
             quote: "See through the veil of deception",
-            constellation: "SIGMA_CONSTELLATION",
-            searchIndex: "ΣRΛΘ"
-        },
-        {
-            id: "SEAL_020B",
-            name: "Mirror of Clarity",
-            equation: "Reflection = Truth²",
-            glyph: "🪞",
-            tone: "777Hz (Revelation Tone)",
-            tags: ["CANON", "SIGMA_UPGRADE"],
-            connections: ["SEAL_020A", "SEAL_020C"],
-            quote: "The clearest mirror shows the deepest truth",
             constellation: "SIGMA_CONSTELLATION",
             searchIndex: "ΣRΛΘ"
         }
@@ -1000,27 +993,40 @@
 
         // Add circles to nodes
         nodeGroup.append("circle")
-            .attr("r", d => d.id === "SEAL_000" ? 20 : d.tags.includes("CHAMPION") ? 16 : 12)
+            .attr("r", d => {
+                if (d.id === "SEAL_000") return 25;
+                if (d.tags.includes("CHAMPION")) return 18;
+                if (d.searchIndex) return 14;
+                return 12;
+            })
             .attr("class", d => getNodeClass(d));
 
         // Add text to nodes
         nodeGroup.append("text")
             .attr("class", "node-text")
-            .attr("dy", d => d.id === "SEAL_000" ? 30 : d.tags.includes("CHAMPION") ? 25 : 20)
+            .attr("dy", d => {
+                if (d.id === "SEAL_000") return 35;
+                if (d.tags.includes("CHAMPION")) return 25;
+                return 20;
+            })
             .text(d => d.id);
 
         // Create the simulation with different forces for constellations
         simulation = d3.forceSimulation(allNodes)
             .force("link", d3.forceLink(links).id(d => d.id).distance(d => {
                 // Different distances based on constellation
-                if (d.source.constellation === d.target.constellation) return 100;
-                return 150;
+                if (d.source.constellation === d.target.constellation) return 120;
+                return 180;
             })
-            .force("charge", d3.forceManyBody().strength(-500))
+            .force("charge", d3.forceManyBody().strength(-800))
             .force("center", d3.forceCenter(width / 2, height / 2))
-            .force("collision", d3.forceCollide().radius(d => d.id === "SEAL_000" ? 40 : d.tags.includes("CHAMPION") ? 30 : 20))
-            .force("x", d3.forceX().strength(0.05))
-            .force("y", d3.forceY().strength(0.05));
+            .force("collision", d3.forceCollide().radius(d => {
+                if (d.id === "SEAL_000") return 50;
+                if (d.tags.includes("CHAMPION")) return 30;
+                return 20;
+            }))
+            .force("x", d3.forceX(width / 2).strength(0.05))
+            .force("y", d3.forceY(height / 2).strength(0.05));
 
         // Group nodes by constellation for positioning
         const constellationGroups = {};
@@ -1038,7 +1044,7 @@
         
         Object.keys(constellationGroups).forEach(name => {
             const group = constellationGroups[name];
-            const radius = 200;
+            const radius = Math.min(width, height) * 0.3;
             const centerX = width / 2 + radius * Math.cos(angle);
             const centerY = height / 2 + radius * Math.sin(angle);
             
@@ -1195,6 +1201,8 @@
                 if (championSeal) {
                     showSealDetails(championSeal);
                     // Center view on champion
+                    const width = document.querySelector('.starmap-container').clientWidth;
+                    const height = document.querySelector('.starmap-container').clientHeight;
                     svg.transition()
                         .duration(750)
                         .call(zoom.transform, d3.zoomIdentity
@@ -1224,6 +1232,10 @@
 
     // Show details for a seal/champion
     function showSealDetails(seal) {
+        document.getElementById("activeSealName").textContent = seal.id;
+        document.getElementById("activeSealEquation").textContent = seal.name;
+        document.getElementById("activeGlyph").textContent = seal.glyph.split(' ')[0];
+
         document.getElementById("detailName").textContent = `${seal.id}: ${seal.name}`;
         document.getElementById("detailGlyph").textContent = seal.glyph.split(' ')[0];
         document.getElementById("detailEquation").textContent = seal.equation;
@@ -1259,26 +1271,52 @@
         });
     }
 
+    // Parse champion data from HTML
+    function parseChampionData(html) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const championCards = doc.querySelectorAll('.champion-card');
+        
+        championCards.forEach(card => {
+            const id = card.querySelector('.champion-title h3').textContent.split('—')[0].trim();
+            const name = card.querySelector('.champion-title h3').textContent;
+            const glyph = card.querySelector('.champion-glyph').textContent;
+            const equation = card.querySelector('.info-item:nth-child(2) p').textContent;
+            const quote = card.querySelector('.champion-quote').textContent;
+            
+            CHAMPIONS[id] = {
+                glyph: glyph,
+                role: card.querySelector('.champion-role').textContent,
+                quote: quote,
+                equation: equation,
+                tags: ["CHAMPION", "COUNCIL"]
+            };
+        });
+    }
+
     // Fetch seal data from GitHub repository
     async function fetchSealData() {
         try {
             document.getElementById('loadingIndicator').style.display = 'flex';
             
-            const response = await fetch(DATA_URL + '?t=' + Date.now());
+            // Fetch seal data
+            const sealResponse = await fetch(SEAL_DATA_URL + '?t=' + Date.now());
+            if (!sealResponse.ok) throw new Error(`HTTP error! status: ${sealResponse.status}`);
+            const sealData = await sealResponse.json();
             
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            const data = await response.json();
-            
+            // Fetch champion data
+            const championResponse = await fetch(CHAMPION_DATA_URL + '?t=' + Date.now());
+            if (!championResponse.ok) throw new Error(`HTTP error! status: ${championResponse.status}`);
+            const championHtml = await championResponse.text();
+            parseChampionData(championHtml);
+
             // Validate data structure
-            if (!Array.isArray(data)) {
+            if (!Array.isArray(sealData)) {
                 throw new Error('Invalid data format: Expected array of seals');
             }
             
             // Process and normalize data with proper error handling
-            allNodes = data.map(seal => {
+            allNodes = sealData.map(seal => {
                 try {
                     return {
                         id: seal.id || seal.ID || seal.Seal_ID || 'UNKNOWN_ID',
@@ -1297,6 +1335,24 @@
                     return null;
                 }
             }).filter(seal => seal !== null); // Remove any null entries from failed processing
+            
+            // Add champion nodes
+            Object.keys(CHAMPIONS).forEach(champId => {
+                if (!allNodes.some(node => node.id === champId)) {
+                    allNodes.push({
+                        id: champId,
+                        name: champId + " - " + CHAMPIONS[champId].role,
+                        equation: CHAMPIONS[champId].equation || "Equation not recorded",
+                        glyph: CHAMPIONS[champId].glyph,
+                        tone: "Champion Frequency",
+                        tags: ["CHAMPION", "COUNCIL"],
+                        connections: [],
+                        quote: CHAMPIONS[champId].quote,
+                        constellation: champId + "_CONSTELLATION",
+                        searchIndex: champId
+                    });
+                }
+            });
             
             // If we got empty data, use fallback
             if (allNodes.length === 0) {

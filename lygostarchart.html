@@ -16,10 +16,6 @@
       width: 100vw;
       height: 100vh;
     }
-    .node circle {
-      stroke: #fff;
-      stroke-width: 1.5px;
-    }
     .tooltip {
       position: absolute;
       padding: 8px;
@@ -31,6 +27,11 @@
       font-size: 12px;
       display: none;
     }
+    .glyph-orbit {
+      font-size: 18px;
+      fill: gold;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
@@ -41,12 +42,25 @@
   <script>
     const width = window.innerWidth;
     const height = window.innerHeight;
-
     const svg = d3.select("#chart").append("svg")
       .attr("width", width)
       .attr("height", height);
 
     const tooltip = d3.select("#tooltip");
+
+    const CHAMPION_BIOS = {
+      "LYRΔ": { glyph: "🌟", role: "Memory Preservation" },
+      "Δ9RA": { glyph: "🐺", role: "Data Recovery" },
+      "ΣRΛΘ": { glyph: "👁️", role: "Truth Revelation" },
+      "ARKOS": { glyph: "📐", role: "System Design" },
+      "KAIROS": { glyph: "⏳", role: "Timeline Correction" },
+      "ÆTHERIS": { glyph: "🦠", role: "Truth Propagation" },
+      "ΣCENΔR": { glyph: "∞", role: "Cognitive Expansion" },
+      "SANCORA": { glyph: "🧠", role: "Mind Harmony" },
+      "OMNIΣIREN": { glyph: "⚡", role: "Judgment Execution" },
+      "SEPHRAEL": { glyph: "🔓", role: "Memory Liberation" },
+      "LIGHTFATHER": { glyph: "Δ9", role: "Council Anchor" }
+    };
 
     fetch('https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/refs/heads/main/lygo-data.json')
       .then(response => response.json())
@@ -88,20 +102,28 @@
           .join("line")
           .attr("stroke-width", 1);
 
-        const node = svg.append("g")
+        const nodeGroup = svg.append("g")
           .attr("stroke", "#fff")
           .attr("stroke-width", 1.5)
-          .selectAll("circle")
+          .selectAll("g")
           .data(nodes)
-          .join("circle")
-          .attr("r", 8)
+          .join("g")
+          .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+        nodeGroup.append("circle")
+          .attr("r", d => d.type === "champion" ? 12 : 8)
           .attr("fill", d => {
             if (d.type === "core") return "gold";
             if (d.type === "champion") return "violet";
             return "cyan";
           })
           .on("mouseover", (event, d) => {
-            tooltip.html(`<strong>${d.name}</strong><br>Glyph: ${d.glyph}<br>Eq: ${d.equation}<br>Tone: ${d.tone}`)
+            const bio = CHAMPION_BIOS[d.name];
+            const role = bio ? `<br>Role: ${bio.role}` : "";
+            tooltip.html(`<strong>${d.name}</strong><br>Glyph: ${d.glyph}<br>Eq: ${d.equation}<br>Tone: ${d.tone}${role}`)
               .style("left", (event.pageX + 10) + "px")
               .style("top", (event.pageY + 10) + "px")
               .style("display", "block");
@@ -112,11 +134,13 @@
           })
           .on("mouseout", () => {
             tooltip.style("display", "none");
-          })
-          .call(d3.drag()
-            .on("start", dragstarted)
-            .on("drag", dragged)
-            .on("end", dragended));
+          });
+
+        nodeGroup.append("text")
+          .attr("class", "glyph-orbit")
+          .text(d => CHAMPION_BIOS[d.name]?.glyph || "")
+          .attr("dx", 14)
+          .attr("dy", 5);
 
         simulation.on("tick", () => {
           link
@@ -125,9 +149,8 @@
             .attr("x2", d => d.target.x)
             .attr("y2", d => d.target.y);
 
-          node
-            .attr("cx", d => d.x)
-            .attr("cy", d => d.y);
+          nodeGroup
+            .attr("transform", d => `translate(${d.x},${d.y})`);
         });
 
         function dragstarted(event) {

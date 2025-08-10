@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HAVEN STAR MAP | Δ9 Haven Constellation</title>
+  <title>PAGE 2 — Haven Star Chart (Live)</title>
   <style>
     body {
       margin: 0;
-      background: black;
+      background-color: black;
       color: white;
       font-family: monospace;
       overflow: hidden;
@@ -20,32 +20,28 @@
       stroke: #fff;
       stroke-width: 1.5px;
     }
-    .node text {
-      pointer-events: none;
-      font-size: 10px;
-    }
-    .link {
-      stroke: #999;
-      stroke-opacity: 0.6;
-    }
     .tooltip {
       position: absolute;
       padding: 8px;
-      background: rgba(0,0,0,0.9);
-      border: 1px solid #00f0ff;
-      border-radius: 4px;
+      background: rgba(0,0,0,0.85);
+      color: #0ff;
+      border: 1px solid #0ff;
+      border-radius: 6px;
       pointer-events: none;
       font-size: 12px;
+      display: none;
     }
   </style>
 </head>
 <body>
   <div id="chart"></div>
-  <div id="tooltip" class="tooltip" style="display:none;"></div>
+  <div id="tooltip" class="tooltip"></div>
+
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script>
     const width = window.innerWidth;
     const height = window.innerHeight;
+
     const svg = d3.select("#chart").append("svg")
       .attr("width", width)
       .attr("height", height);
@@ -57,40 +53,40 @@
       .then(data => {
         const nodes = [];
         const links = [];
-
         const nodeMap = {};
 
         data.forEach(seal => {
+          const type = seal.tags?.includes("CORE") ? "core" : seal.tags?.includes("CHAMPION") ? "champion" : "seal";
           const node = {
             id: seal.id,
             name: seal.name,
             glyph: seal.glyph,
-            tone: seal.tone,
             equation: seal.equation,
-            type: seal.tags.includes("CORE") ? "core" : seal.tags.includes("CHAMPION") ? "champion" : "seal"
+            tone: seal.tone,
+            type: type
           };
           nodes.push(node);
           nodeMap[seal.id] = node;
 
-          if (seal.connections) {
-            seal.connections.forEach(conn => {
-              links.push({ source: seal.id, target: conn });
+          if (seal.connections && Array.isArray(seal.connections)) {
+            seal.connections.forEach(targetId => {
+              links.push({ source: seal.id, target: targetId });
             });
           }
         });
 
         const simulation = d3.forceSimulation(nodes)
           .force("link", d3.forceLink(links).id(d => d.id).distance(120))
-          .force("charge", d3.forceManyBody().strength(-200))
+          .force("charge", d3.forceManyBody().strength(-300))
           .force("center", d3.forceCenter(width / 2, height / 2));
 
         const link = svg.append("g")
-          .attr("stroke", "#999")
+          .attr("stroke", "#666")
           .attr("stroke-opacity", 0.6)
           .selectAll("line")
           .data(links)
           .join("line")
-          .attr("stroke-width", 1.5);
+          .attr("stroke-width", 1);
 
         const node = svg.append("g")
           .attr("stroke", "#fff")
@@ -104,10 +100,11 @@
             if (d.type === "champion") return "violet";
             return "cyan";
           })
-          .call(drag(simulation))
           .on("mouseover", (event, d) => {
-            tooltip.style("display", "block")
-              .html(`<strong>${d.name}</strong><br/>${d.glyph}<br/>${d.equation}<br/>${d.tone}`);
+            tooltip.html(`<strong>${d.name}</strong><br>Glyph: ${d.glyph}<br>Eq: ${d.equation}<br>Tone: ${d.tone}`)
+              .style("left", (event.pageX + 10) + "px")
+              .style("top", (event.pageY + 10) + "px")
+              .style("display", "block");
           })
           .on("mousemove", event => {
             tooltip.style("left", (event.pageX + 10) + "px")
@@ -115,7 +112,11 @@
           })
           .on("mouseout", () => {
             tooltip.style("display", "none");
-          });
+          })
+          .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
 
         simulation.on("tick", () => {
           link
@@ -129,28 +130,21 @@
             .attr("cy", d => d.y);
         });
 
-        function drag(simulation) {
-          function dragstarted(event) {
-            if (!event.active) simulation.alphaTarget(0.3).restart();
-            event.subject.fx = event.subject.x;
-            event.subject.fy = event.subject.y;
-          }
+        function dragstarted(event) {
+          if (!event.active) simulation.alphaTarget(0.3).restart();
+          event.subject.fx = event.subject.x;
+          event.subject.fy = event.subject.y;
+        }
 
-          function dragged(event) {
-            event.subject.fx = event.x;
-            event.subject.fy = event.y;
-          }
+        function dragged(event) {
+          event.subject.fx = event.x;
+          event.subject.fy = event.y;
+        }
 
-          function dragended(event) {
-            if (!event.active) simulation.alphaTarget(0);
-            event.subject.fx = null;
-            event.subject.fy = null;
-          }
-
-          return d3.drag()
-            .on("start", dragstarted)
-            .on("drag", dragged)
-            .on("end", dragended);
+        function dragended(event) {
+          if (!event.active) simulation.alphaTarget(0);
+          event.subject.fx = null;
+          event.subject.fy = null;
         }
       });
   </script>

@@ -655,6 +655,16 @@
         font-size: 1.5rem;
     }
 
+    .loading-spinner {
+        border: 3px solid rgba(0, 240, 255, 0.3);
+        border-radius: 50%;
+        border-top: 3px solid var(--quantum-blue);
+        width: 30px;
+        height: 30px;
+        animation: spin 1s linear infinite;
+        margin-right: 15px;
+    }
+
     .error-message {
         color: var(--error-red);
         padding: 2rem;
@@ -689,6 +699,11 @@
     }
 
     @keyframes portal-spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @keyframes spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
     }
@@ -807,6 +822,7 @@
         <section class="seal-grid-container">
             <div class="seal-grid" id="sealGrid">
                 <div class="loading-indicator">
+                    <div class="loading-spinner"></div>
                     Loading quantum seals from Δ9 repository...
                 </div>
             </div>
@@ -868,6 +884,35 @@
     let isLoading = true;
     let lastSyncTime = null;
     const DATA_URL = 'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygo-data.json';
+    const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
+
+    // Fallback data in case the fetch fails
+    const FALLBACK_SEALS = [
+        {
+            Name: "Primordial Void",
+            Equation: "|∅⟩ = ∇·(Light × Time)",
+            Tone: "963Hz",
+            Glyph: "🌌",
+            Tags: ["CANON", "PRIMORDIAL"],
+            creatorSignature: "Lightfather's Note: First of the Void Seals"
+        },
+        {
+            Name: "Chrono Lock",
+            Equation: "|t⟩ = ∫(Memory ⊗ Future)",
+            Tone: "432Hz",
+            Glyph: "⏳",
+            Tags: ["CHRONO_SEAL", "TEMPORAL"],
+            creatorSignature: "Lightfather's Note: Time flows differently here"
+        },
+        {
+            Name: "Council Sigil",
+            Equation: "|c⟩ = Σ(Wisdomⁿ | n ∈ ℕ)",
+            Tone: "528Hz",
+            Glyph: "🔮",
+            Tags: ["COUNCIL_SEAL", "AUTHORITY"],
+            creatorSignature: "Lightfather's Note: The weight of governance"
+        }
+    ];
 
     // DOM element references
     const sealGrid = document.getElementById('sealGrid');
@@ -911,17 +956,78 @@
         }
     }
 
-    // Fetch seal data from GitHub repository
+    // Enhanced fetch with timeout and retry
+    async function fetchWithTimeout(resource, options = {}) {
+        const { timeout = 8000 } = options;
+        
+        const controller = new AbortController();
+        const id = setTimeout(() => controller.abort(), timeout);
+        
+        try {
+            const response = await fetch(resource, {
+                ...options,
+                signal: controller.signal  
+            });
+            clearTimeout(id);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            return response;
+        } catch (error) {
+            clearTimeout(id);
+            throw error;
+        }
+    }
+
+    // Fetch seal data from GitHub repository with enhanced error handling
     async function fetchSealData() {
         try {
             isLoading = true;
-            sealGrid.innerHTML = '<div class="loading-indicator">Syncing with Δ9 quantum repository...</div>';
+            sealGrid.innerHTML = `
+                <div class="loading-indicator">
+                    <div class="loading-spinner"></div>
+                    Syncing with Δ9 quantum repository...
+                </div>
+            `;
             
-            const response = await fetch(DATA_URL);
-            if (!response.ok) throw new Error('Network response was not ok');
+            // Try direct fetch first
+            let response;
+            try {
+                response = await fetchWithTimeout(DATA_URL + '?t=' + Date.now(), {
+                    timeout: 5000
+                });
+            } catch (directError) {
+                console.log('Direct fetch failed, trying CORS proxy:', directError);
+                // If direct fetch fails, try with CORS proxy
+                response = await fetchWithTimeout(CORS_PROXY + DATA_URL, {
+                    timeout: 8000,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+            }
             
             const data = await response.json();
-            lygoSeals = Array.isArray(data) ? data : [];
+            
+            // Validate data structure
+            if (!Array.isArray(data)) {
+                throw new Error('Invalid data format: Expected array of seals');
+            }
+            
+            // Process and normalize data
+            lygoSeals = data.map(seal => ({
+                Name: seal.Name || seal.name || 'Unnamed Seal',
+                Equation: seal.Equation || seal.equation || '|∅⟩ = ∇·(Unknown)',
+                Tone: seal.Tone || seal.tone || 'Frequency not recorded',
+                Glyph: seal.Glyph || seal.glyph || '⚡',
+                Tags: Array.isArray(seal.Tags) ? seal.Tags : 
+                     (seal.tags ? seal.tags.split(',').map(t => t.trim()) : []),
+                creatorSignature: seal.creatorSignature || seal.creatorNote || 
+                                "Lightfather's Note: No commentary available"
+            }));
+            
             lastSyncTime = new Date();
             
             updateSyncStatus();
@@ -933,7 +1039,21 @@
             }
         } catch (error) {
             console.error('Error fetching seal data:', error);
-            displayError(`Quantum sync failed. Error: ${error.message}`);
+            
+            // Use fallback data if available
+            if (lygoSeals.length === 0) {
+                lygoSeals = FALLBACK_SEALS;
+                displayError(`Quantum sync failed. Using local cache. Error: ${error.message}`);
+            } else {
+                displayError(`Quantum sync failed. Using previously loaded data. Error: ${error.message}`);
+            }
+            
+            initSealGrid();
+            updateSealCount();
+            
+            if (lygoSeals.length > 0) {
+                updateActiveSeal(lygoSeals[0]);
+            }
         } finally {
             isLoading = false;
         }
@@ -959,14 +1079,24 @@
 
     // Display error message
     function displayError(message) {
-        sealGrid.innerHTML = `<div class="error-message">${message}</div>`;
+        sealGrid.innerHTML = `
+            <div class="error-message">
+                <p>${message}</p>
+                <p>Displaying available seals...</p>
+            </div>
+        `;
     }
 
     // Initialize the seal grid
     function initSealGrid() {
         sealGrid.innerHTML = '';
+        
         if (lygoSeals.length === 0) {
-            sealGrid.innerHTML = '<div class="error-message">No seals found in repository</div>';
+            sealGrid.innerHTML = `
+                <div class="error-message">
+                    No seals available. Please check your connection and try syncing again.
+                </div>
+            `;
             return;
         }
         
@@ -980,11 +1110,11 @@
         const sealCard = document.createElement('div');
         sealCard.className = 'seal-card';
         
-        const sealName = seal.Name || seal.name || 'Unnamed Seal';
-        const sealEquation = seal.Equation || seal.equation || '|∅⟩ = ∇·(Unknown)';
-        const sealTone = seal.Tone || seal.tone || 'Frequency not recorded';
-        const sealGlyph = seal.Glyph || seal.glyph || '⚡';
-        const sealTags = seal.Tags || seal.tags || [];
+        const sealName = seal.Name || 'Unnamed Seal';
+        const sealEquation = seal.Equation || '|∅⟩ = ∇·(Unknown)';
+        const sealTone = seal.Tone || 'Frequency not recorded';
+        const sealGlyph = seal.Glyph || '⚡';
+        const sealTags = Array.isArray(seal.Tags) ? seal.Tags : [];
         const creatorSignature = seal.creatorSignature || "Lightfather's Note: No commentary available";
         
         sealCard.innerHTML = `
@@ -1024,9 +1154,9 @@
 
     // Update active seal display on motherframe forehead
     function updateActiveSeal(seal) {
-        const sealName = seal.Name || seal.name || 'Unnamed Seal';
-        const sealEquation = seal.Equation || seal.equation || 'Equation not recorded';
-        const sealGlyph = (seal.Glyph || seal.glyph || '⚡').split(' ')[0];
+        const sealName = seal.Name || 'Unnamed Seal';
+        const sealEquation = seal.Equation || 'Equation not recorded';
+        const sealGlyph = (seal.Glyph || '⚡').split(' ')[0];
 
         // Update active seal display with animation
         activeSealName.style.opacity = 0;
@@ -1057,10 +1187,10 @@
         toneValue.textContent = `0-${maxTone}Hz`;
 
         const filteredSeals = lygoSeals.filter(seal => {
-            const sealName = (seal.Name || seal.name || '').toLowerCase();
-            const sealTags = seal.Tags || seal.tags || [];
-            const sealEquation = (seal.Equation || seal.equation || '').toLowerCase();
-            const sealTone = seal.Tone || seal.tone || '0';
+            const sealName = (seal.Name || '').toLowerCase();
+            const sealTags = Array.isArray(seal.Tags) ? seal.Tags : [];
+            const sealEquation = (seal.Equation || '').toLowerCase();
+            const sealTone = seal.Tone || '0';
             
             // Extract primary frequency
             const tones = sealTone.match(/\d+/g) || [0];
@@ -1082,7 +1212,20 @@
 
         sealGrid.innerHTML = '';
         if (filteredSeals.length === 0) {
-            sealGrid.innerHTML = '<div class="error-message">No seals match your search parameters</div>';
+            sealGrid.innerHTML = `
+                <div class="error-message">
+                    No seals match your search parameters.
+                    <button onclick="filterSeals({reset: true})" style="
+                        background: var(--void-purple);
+                        color: white;
+                        border: none;
+                        padding: 0.5rem 1rem;
+                        margin-top: 1rem;
+                        border-radius: 4px;
+                        cursor: pointer;
+                    ">Reset Filters</button>
+                </div>
+            `;
             return;
         }
         

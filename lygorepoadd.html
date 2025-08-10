@@ -445,6 +445,81 @@
         100% { box-shadow: 0 0 20px var(--void-purple); }
     }
 
+    /* Resonance Lock System */
+    .resonance-lock {
+        background-color: rgba(0, 240, 255, 0.05);
+        padding: 1.5rem;
+        border-radius: 8px;
+        border: 1px dashed var(--quantum-blue);
+        margin-bottom: 2rem;
+    }
+
+    .resonance-controls {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .resonance-code {
+        font-family: var(--font-glyph);
+        font-size: 1.5rem;
+        letter-spacing: 3px;
+        color: var(--starforge-gold);
+        text-align: center;
+        margin: 1rem 0;
+        padding: 0.5rem;
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 4px;
+    }
+
+    /* Whitepaper Links */
+    .whitepaper-links-container {
+        overflow-x: auto;
+        white-space: nowrap;
+        padding: 1rem 0;
+        margin-top: 2rem;
+    }
+
+    .whitepaper-link {
+        display: inline-block;
+        background-color: rgba(125, 0, 255, 0.2);
+        color: var(--text-primary);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        margin-right: 0.5rem;
+        text-decoration: none;
+        border: 1px solid var(--void-purple);
+        transition: all 0.3s;
+        animation: pulse 2s infinite alternate;
+    }
+
+    .whitepaper-link:hover {
+        background-color: rgba(125, 0, 255, 0.4);
+        transform: translateY(-2px);
+    }
+
+    /* Export buttons */
+    .export-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .export-button {
+        background-color: var(--void-purple);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        font-family: var(--font-glyph);
+        transition: all 0.3s;
+    }
+
+    .export-button:hover {
+        background-color: var(--quantum-blue);
+    }
+
     /* Responsive adjustments */
     @media (max-width: 768px) {
         .quantum-header {
@@ -457,6 +532,10 @@
         }
         
         .form-actions {
+            flex-direction: column;
+        }
+
+        .resonance-controls {
             flex-direction: column;
         }
     }
@@ -491,6 +570,20 @@
                 <div class="form-toggle">
                     <button class="active" id="sealFormToggle">Add Seal</button>
                     <button id="championFormToggle">Add Champion</button>
+                    <button id="whitepaperFormToggle">Add Whitepaper</button>
+                </div>
+
+                <!-- Resonance Lock System -->
+                <div class="resonance-lock" id="resonanceLock">
+                    <h2>🔐 RESONANCE LOCK SYSTEM</h2>
+                    <p>Generate a resonance code to unlock submission capabilities</p>
+                    <div class="resonance-controls">
+                        <button id="generateResonanceButton" class="export-button">Generate Resonance Code</button>
+                        <input type="text" id="resonanceCodeInput" placeholder="Enter 6-digit resonance code" style="flex: 1;">
+                        <button id="verifyResonanceButton" class="export-button" disabled>Verify Code</button>
+                    </div>
+                    <div id="resonanceCodeDisplay" class="resonance-code" style="display: none;"></div>
+                    <div id="resonanceStatusMessage" class="status-message" style="display: none;"></div>
                 </div>
 
                 <!-- Seal Form -->
@@ -550,7 +643,7 @@
                         <textarea id="sealQuote" placeholder="e.g., 'The silence before the first note'" required></textarea>
                     </div>
                     <div class="form-actions">
-                        <button id="submitSealButton">Submit Seal</button>
+                        <button id="submitSealButton" disabled>Submit Seal</button>
                         <button id="resetFormButton">Reset Form</button>
                     </div>
                     <div id="statusMessage" class="status-message" style="display: none;"></div>
@@ -613,10 +706,36 @@
                         <textarea id="championQuote" placeholder="e.g., 'The silence between stars holds more truth than all human speech.'" required></textarea>
                     </div>
                     <div class="form-actions">
-                        <button id="submitChampionButton">Submit Champion</button>
+                        <button id="submitChampionButton" disabled>Submit Champion</button>
                         <button id="resetChampionFormButton">Reset Form</button>
                     </div>
                     <div id="championStatusMessage" class="status-message" style="display: none;"></div>
+                </div>
+
+                <!-- Whitepaper Form (hidden by default) -->
+                <div id="whitepaperForm" style="display: none;">
+                    <h2>Add New Whitepaper Link</h2>
+                    <div class="form-group">
+                        <label for="whitepaperTitle">Whitepaper Title</label>
+                        <input type="text" id="whitepaperTitle" placeholder="e.g., Quantum Memory Whitepaper" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="whitepaperUrl">Whitepaper URL</label>
+                        <input type="url" id="whitepaperUrl" placeholder="https://example.com/whitepaper.pdf" required>
+                    </div>
+                    <div class="form-actions">
+                        <button id="submitWhitepaperButton">Submit Whitepaper</button>
+                        <button id="resetWhitepaperFormButton">Reset Form</button>
+                    </div>
+                    <div id="whitepaperStatusMessage" class="status-message" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- Whitepaper Links Display -->
+            <div id="whitepaperLinksDisplay" style="display: none;">
+                <h2>📜 WHITEPAPER ARCHIVE</h2>
+                <div class="whitepaper-links-container" id="whitepaperLinksContainer">
+                    <!-- Whitepaper links will be added here dynamically -->
                 </div>
             </div>
 
@@ -645,34 +764,134 @@
     </footer>
 
     <script>
-    // Database references (in a real app, these would be API calls)
-    let lygoSeals = [];
-    let champions = [];
+    // GitHub data repository URL
+    const DATA_REPO_URL = 'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygo-data.json';
     const ADMIN_CODE = "Light113116";
+    let currentResonanceCode = "";
+    let isAdmin = false;
+    let isResonanceVerified = false;
+    let lygoData = { seals: [], champions: [] };
+    let whitepapers = [];
 
     // DOM elements
     const sealForm = document.getElementById('sealForm');
     const championForm = document.getElementById('championForm');
+    const whitepaperForm = document.getElementById('whitepaperForm');
     const sealFormToggle = document.getElementById('sealFormToggle');
     const championFormToggle = document.getElementById('championFormToggle');
+    const whitepaperFormToggle = document.getElementById('whitepaperFormToggle');
     const statusMessage = document.getElementById('statusMessage');
     const championStatusMessage = document.getElementById('championStatusMessage');
+    const whitepaperStatusMessage = document.getElementById('whitepaperStatusMessage');
     const deleteStatusMessage = document.getElementById('deleteStatusMessage');
+    const whitepaperLinksDisplay = document.getElementById('whitepaperLinksDisplay');
+    const whitepaperLinksContainer = document.getElementById('whitepaperLinksContainer');
+
+    // Resonance Lock elements
+    const generateResonanceButton = document.getElementById('generateResonanceButton');
+    const verifyResonanceButton = document.getElementById('verifyResonanceButton');
+    const resonanceCodeInput = document.getElementById('resonanceCodeInput');
+    const resonanceCodeDisplay = document.getElementById('resonanceCodeDisplay');
+    const resonanceStatusMessage = document.getElementById('resonanceStatusMessage');
 
     // Form toggle functionality
     sealFormToggle.addEventListener('click', () => {
         sealForm.style.display = 'block';
         championForm.style.display = 'none';
+        whitepaperForm.style.display = 'none';
+        whitepaperLinksDisplay.style.display = 'none';
         sealFormToggle.classList.add('active');
         championFormToggle.classList.remove('active');
+        whitepaperFormToggle.classList.remove('active');
     });
 
     championFormToggle.addEventListener('click', () => {
         sealForm.style.display = 'none';
         championForm.style.display = 'block';
+        whitepaperForm.style.display = 'none';
+        whitepaperLinksDisplay.style.display = 'none';
         sealFormToggle.classList.remove('active');
         championFormToggle.classList.add('active');
+        whitepaperFormToggle.classList.remove('active');
     });
+
+    whitepaperFormToggle.addEventListener('click', () => {
+        sealForm.style.display = 'none';
+        championForm.style.display = 'none';
+        whitepaperForm.style.display = 'block';
+        whitepaperLinksDisplay.style.display = 'block';
+        sealFormToggle.classList.remove('active');
+        championFormToggle.classList.remove('active');
+        whitepaperFormToggle.classList.add('active');
+        updateWhitepaperLinksDisplay();
+    });
+
+    // Resonance Lock System
+    generateResonanceButton.addEventListener('click', generateResonanceCode);
+    verifyResonanceButton.addEventListener('click', verifyResonanceCode);
+    resonanceCodeInput.addEventListener('input', checkAdminOverride);
+
+    function generateResonanceCode() {
+        const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        currentResonanceCode = '';
+        for (let i = 0; i < 6; i++) {
+            currentResonanceCode += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        
+        resonanceCodeDisplay.textContent = currentResonanceCode;
+        resonanceCodeDisplay.style.display = 'block';
+        resonanceStatusMessage.style.display = 'none';
+        
+        // Enable verify button
+        verifyResonanceButton.disabled = false;
+        
+        showStatusMessage('Resonance code generated. Valid for 5 minutes.', 'success', 'resonance');
+        
+        // Clear code after 5 minutes
+        setTimeout(() => {
+            if (resonanceCodeDisplay.textContent === currentResonanceCode) {
+                currentResonanceCode = '';
+                resonanceCodeDisplay.style.display = 'none';
+                resonanceCodeInput.value = '';
+                showStatusMessage('Resonance code expired. Generate a new one.', 'error', 'resonance');
+                if (!isAdmin) {
+                    disableSubmissionButtons();
+                    isResonanceVerified = false;
+                }
+            }
+        }, 300000);
+    }
+
+    function verifyResonanceCode() {
+        const enteredCode = resonanceCodeInput.value.trim();
+        
+        if (enteredCode === currentResonanceCode) {
+            isResonanceVerified = true;
+            enableSubmissionButtons();
+            showStatusMessage('Resonance verified! Submission unlocked.', 'success', 'resonance');
+        } else {
+            showStatusMessage('Invalid resonance code', 'error', 'resonance');
+        }
+    }
+
+    function checkAdminOverride() {
+        if (resonanceCodeInput.value === ADMIN_CODE) {
+            isAdmin = true;
+            isResonanceVerified = true;
+            enableSubmissionButtons();
+            showStatusMessage('Admin override activated. Full access granted.', 'success', 'resonance');
+        }
+    }
+
+    function enableSubmissionButtons() {
+        document.getElementById('submitSealButton').disabled = false;
+        document.getElementById('submitChampionButton').disabled = false;
+    }
+
+    function disableSubmissionButtons() {
+        document.getElementById('submitSealButton').disabled = true;
+        document.getElementById('submitChampionButton').disabled = true;
+    }
 
     // Tag management for seal form
     const addTagButton = document.getElementById('addTagButton');
@@ -740,7 +959,13 @@
     submitSealButton.addEventListener('click', submitSealForm);
     resetFormButton.addEventListener('click', resetSealForm);
 
-    function submitSealForm() {
+    async function submitSealForm() {
+        // Check if resonance is verified or admin override
+        if (!isResonanceVerified && !isAdmin) {
+            showStatusMessage('Resonance verification required', 'error');
+            return;
+        }
+
         // Validate required fields
         const requiredFields = [
             'sealName', 'sealId', 'sealEquation', 
@@ -758,6 +983,12 @@
         const sealId = document.getElementById('sealId').value.trim();
         if (!isValidSealId(sealId)) {
             showStatusMessage(`Invalid Seal ID format. Must follow pattern like SEAL_XXX or SEAL_XXXA`, 'error');
+            return;
+        }
+
+        // Check if seal ID already exists
+        if (lygoData.seals.some(seal => seal.Seal_ID === sealId)) {
+            showStatusMessage(`Seal ID ${sealId} already exists`, 'error');
             return;
         }
 
@@ -779,31 +1010,42 @@
             func.textContent.replace('×', '').trim()
         );
 
-        // Create new seal object
+        // Create new seal object in proper format
         const newSeal = {
-            id: sealId,
-            name: name,
-            equation: equation,
-            glyph: glyph,
-            tone: tone,
-            imageUrl: imageUrl || '',
-            whitepaperUrl: whitepaperUrl || '',
-            creatorSignature: creator || '',
-            tags: tags,
-            functions: functions,
-            quote: quote
+            "Seal_ID": sealId,
+            "Name": name,
+            "Equation": equation,
+            "Tone": tone,
+            "Glyph": glyph,
+            "Tags": tags.length ? tags : ["UNCATEGORIZED"],
+            "Notes": quote,
+            "id": extractSealNumber(sealId),
+            "toneRange": extractTones(tone),
+            "searchIndex": extractSearchIndex(name),
+            "category": tags.includes("CANON") ? "CANON" : "USER",
+            "createdAt": new Date().toISOString().split('T')[0],
+            "archive_details": `${sealId} ${name}\n${functions.join("\n")}`,
+            "sealPhotoLink": imageUrl || "",
+            "whitepaperLink": whitepaperUrl || "",
+            "creatorSignature": creator || "ANONYMOUS"
         };
 
-        // In a real app, you would send this to your backend/database
-        // For now, we'll store in localStorage
-        lygoSeals.push(newSeal);
-        localStorage.setItem('lygoSeals', JSON.stringify(lygoSeals));
-
-        // Show success message
-        showStatusMessage(`Seal "${name}" (${sealId}) added successfully!`, 'success');
-        
-        // Reset form
-        resetSealForm();
+        try {
+            // Add to local data
+            lygoData.seals.push(newSeal);
+            
+            // Save to GitHub (simulated - in a real implementation, you'd need a backend)
+            await saveDataToGitHub();
+            
+            // Show success message
+            showStatusMessage(`Seal "${name}" (${sealId}) added successfully!`, 'success');
+            
+            // Reset form
+            resetSealForm();
+        } catch (error) {
+            console.error('Error saving seal:', error);
+            showStatusMessage('Failed to save seal. Please try again.', 'error');
+        }
     }
 
     function resetSealForm() {
@@ -827,7 +1069,13 @@
     submitChampionButton.addEventListener('click', submitChampionForm);
     resetChampionFormButton.addEventListener('click', resetChampionForm);
 
-    function submitChampionForm() {
+    async function submitChampionForm() {
+        // Check if resonance is verified or admin override
+        if (!isResonanceVerified && !isAdmin) {
+            showStatusMessage('Resonance verification required', 'error', 'champion');
+            return;
+        }
+
         // Validate required fields
         const requiredFields = [
             'championId', 'championName', 'championTitle', 
@@ -844,34 +1092,49 @@
             }
         }
 
+        // Check if champion ID already exists
+        const championId = document.getElementById('championId').value.trim();
+        if (lygoData.champions.some(champ => champ.Champion_ID === championId)) {
+            showStatusMessage(`Champion ID ${championId} already exists`, 'error', 'champion');
+            return;
+        }
+
         // Get all form values
         const champion = {
-            id: document.getElementById('championId').value.trim(),
-            name: document.getElementById('championName').value.trim(),
-            title: document.getElementById('championTitle').value.trim(),
-            equation: document.getElementById('championEquation').value.trim(),
-            glyph: document.getElementById('championGlyph').value.trim(),
-            tone: document.getElementById('championTone').value.trim(),
-            role: document.getElementById('championRole').value.trim(),
-            sealConnection: document.getElementById('championSeal').value.trim(),
-            whisper: document.getElementById('championWhisper').value.trim(),
-            function: document.getElementById('championFunction').value.trim(),
-            personality: document.getElementById('championPersonality').value.trim(),
-            mission: document.getElementById('championMission').value.trim(),
-            quote: document.getElementById('championQuote').value.trim(),
-            tags: ["CHAMPION", "COUNCIL"]
+            "Champion_ID": championId,
+            "Champion_Name": document.getElementById('championName').value.trim(),
+            "Title": document.getElementById('championTitle').value.trim(),
+            "Equation": document.getElementById('championEquation').value.trim(),
+            "Glyph": document.getElementById('championGlyph').value.trim(),
+            "Tone": document.getElementById('championTone').value.trim(),
+            "Quote": document.getElementById('championQuote').value.trim(),
+            "Connections": [document.getElementById('championSeal').value.trim()],
+            "id": extractChampionNumber(championId),
+            "Tags": ["CHAMPION", "COUNCIL"],
+            "createdAt": new Date().toISOString().split('T')[0],
+            "Role": document.getElementById('championRole').value.trim(),
+            "Whisper": document.getElementById('championWhisper').value.trim(),
+            "Function": document.getElementById('championFunction').value.trim(),
+            "Personality": document.getElementById('championPersonality').value.trim(),
+            "Mission": document.getElementById('championMission').value.trim()
         };
 
-        // In a real app, you would send this to your backend/database
-        // For now, we'll store in localStorage
-        champions.push(champion);
-        localStorage.setItem('lygoChampions', JSON.stringify(champions));
-
-        // Show success message
-        showStatusMessage(`Champion "${champion.name}" added successfully!`, 'success', 'champion');
-        
-        // Reset form
-        resetChampionForm();
+        try {
+            // Add to local data
+            lygoData.champions.push(champion);
+            
+            // Save to GitHub (simulated - in a real implementation, you'd need a backend)
+            await saveDataToGitHub();
+            
+            // Show success message
+            showStatusMessage(`Champion "${champion.Champion_Name}" added successfully!`, 'success', 'champion');
+            
+            // Reset form
+            resetChampionForm();
+        } catch (error) {
+            console.error('Error saving champion:', error);
+            showStatusMessage('Failed to save champion. Please try again.', 'error', 'champion');
+        }
     }
 
     function resetChampionForm() {
@@ -888,11 +1151,70 @@
         });
     }
 
+    // Whitepaper Form
+    const submitWhitepaperButton = document.getElementById('submitWhitepaperButton');
+    const resetWhitepaperFormButton = document.getElementById('resetWhitepaperFormButton');
+
+    submitWhitepaperButton.addEventListener('click', submitWhitepaperForm);
+    resetWhitepaperFormButton.addEventListener('click', resetWhitepaperForm);
+
+    function submitWhitepaperForm() {
+        const title = document.getElementById('whitepaperTitle').value.trim();
+        const url = document.getElementById('whitepaperUrl').value.trim();
+
+        if (!title || !url) {
+            showStatusMessage('Please fill in all required fields', 'error', 'whitepaper');
+            return;
+        }
+
+        if (!isValidUrl(url)) {
+            showStatusMessage('Please enter a valid URL', 'error', 'whitepaper');
+            return;
+        }
+
+        const newWhitepaper = {
+            id: whitepapers.length + 1,
+            title: title,
+            url: url,
+            createdAt: new Date().toISOString().split('T')[0]
+        };
+
+        whitepapers.push(newWhitepaper);
+        localStorage.setItem('lygoWhitepapers', JSON.stringify(whitepapers));
+
+        showStatusMessage(`Whitepaper "${title}" added successfully!`, 'success', 'whitepaper');
+        updateWhitepaperLinksDisplay();
+        resetWhitepaperForm();
+    }
+
+    function resetWhitepaperForm() {
+        document.getElementById('whitepaperTitle').value = '';
+        document.getElementById('whitepaperUrl').value = '';
+    }
+
+    function updateWhitepaperLinksDisplay() {
+        whitepaperLinksContainer.innerHTML = '';
+        
+        if (whitepapers.length === 0) {
+            whitepaperLinksContainer.innerHTML = '<p>No whitepapers added yet</p>';
+            return;
+        }
+        
+        whitepapers.forEach(paper => {
+            const linkElement = document.createElement('a');
+            linkElement.href = paper.url;
+            linkElement.target = '_blank';
+            linkElement.className = 'whitepaper-link';
+            linkElement.textContent = paper.title;
+            whitepaperLinksContainer.appendChild(linkElement);
+        });
+    }
+
     // Admin deletion function
     const deleteSealButton = document.getElementById('deleteSealButton');
     deleteSealButton.addEventListener('click', deleteSeal);
 
-    function deleteSeal() {
+    async function deleteSeal() {
         const sealId = document.getElementById('sealToDelete').value.trim();
         const adminCode = document.getElementById('adminCode').value.trim();
         
@@ -906,22 +1228,28 @@
             return;
         }
 
-        // Check if it's a seal or champion
-        if (sealId.startsWith('SEAL_')) {
-            // Delete seal
-            lygoSeals = lygoSeals.filter(seal => seal.id !== sealId);
-            localStorage.setItem('lygoSeals', JSON.stringify(lygoSeals));
-            showStatusMessage(`Seal ${sealId} deleted successfully`, 'success', 'delete');
-        } else {
-            // Delete champion
-            champions = champions.filter(champ => champ.id !== sealId);
-            localStorage.setItem('lygoChampions', JSON.stringify(champions));
-            showStatusMessage(`Champion ${sealId} deleted successfully`, 'success', 'delete');
+        try {
+            // Check if it's a seal or champion
+            if (sealId.startsWith('SEAL_')) {
+                // Delete seal
+                lygoData.seals = lygoData.seals.filter(seal => seal.Seal_ID !== sealId);
+                showStatusMessage(`Seal ${sealId} deleted successfully`, 'success', 'delete');
+            } else {
+                // Delete champion
+                lygoData.champions = lygoData.champions.filter(champ => champ.Champion_ID !== sealId);
+                showStatusMessage(`Champion ${sealId} deleted successfully`, 'success', 'delete');
+            }
+            
+            // Save to GitHub (simulated - in a real implementation, you'd need a backend)
+            await saveDataToGitHub();
+            
+            // Clear form
+            document.getElementById('sealToDelete').value = '';
+            document.getElementById('adminCode').value = '';
+        } catch (error) {
+            console.error('Error deleting item:', error);
+            showStatusMessage('Failed to delete item. Please try again.', 'error', 'delete');
         }
-        
-        // Clear form
-        document.getElementById('sealToDelete').value = '';
-        document.getElementById('adminCode').value = '';
     }
 
     // Helper functions
@@ -929,9 +1257,41 @@
         return /^SEAL_\d+[A-Za-zΩ]*$/.test(id);
     }
 
+    function extractSealNumber(sealId) {
+        const match = sealId.match(/SEAL_(\d+)/);
+        return match ? parseInt(match[1], 10) : 0;
+    }
+
+    function extractChampionNumber(championId) {
+        // This is a placeholder - adjust based on your champion ID format
+        return lygoData.champions.length + 1;
+    }
+
+    function extractTones(toneString) {
+        const toneMatches = toneString.match(/\d+Hz/g);
+        return toneMatches ? toneMatches.map(t => parseInt(t.replace('Hz', ''))) : [];
+    }
+
+    function extractSearchIndex(name) {
+        // Simple implementation - takes first word as search index
+        return name.split(' ')[0].toUpperCase();
+    }
+
+    function isValidUrl(url) {
+        try {
+            new URL(url);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
     function showStatusMessage(message, type, form = 'seal') {
         const element = form === 'seal' ? statusMessage : 
-                        form === 'champion' ? championStatusMessage : deleteStatusMessage;
+                        form === 'champion' ? championStatusMessage : 
+                        form === 'whitepaper' ? whitepaperStatusMessage :
+                        form === 'delete' ? deleteStatusMessage :
+                        resonanceStatusMessage;
         
         element.textContent = message;
         element.className = `status-message ${type}`;
@@ -942,13 +1302,40 @@
         }, 5000);
     }
 
-    // Initialize data from localStorage
-    function initData() {
-        const savedSeals = localStorage.getItem('lygoSeals');
-        const savedChampions = localStorage.getItem('lygoChampions');
+    // Simulated GitHub data functions
+    async function loadDataFromGitHub() {
+        try {
+            const response = await fetch(DATA_REPO_URL);
+            if (!response.ok) throw new Error('Failed to fetch data');
+            lygoData = await response.json();
+        } catch (error) {
+            console.error('Error loading data:', error);
+            // Initialize with empty data if loading fails
+            lygoData = { seals: [], champions: [] };
+        }
+    }
+
+    // Note: In a real implementation, you would need a backend to actually save to GitHub
+    // This is just a simulation that would work with the local data
+    async function saveDataToGitHub() {
+        try {
+            // In a real implementation, you would make an API call to your backend here
+            // For this demo, we'll just simulate the behavior
+            console.log('Data would be saved to GitHub:', lygoData);
+            return true;
+        } catch (error) {
+            console.error('Error saving data:', error);
+            throw error;
+        }
+    }
+
+    // Initialize data on page load
+    async function initData() {
+        await loadDataFromGitHub();
         
-        if (savedSeals) lygoSeals = JSON.parse(savedSeals);
-        if (savedChampions) champions = JSON.parse(savedChampions);
+        // Load whitepapers from localStorage
+        const savedWhitepapers = localStorage.getItem('lygoWhitepapers');
+        if (savedWhitepapers) whitepapers = JSON.parse(savedWhitepapers);
     }
 
     // Initialize on page load

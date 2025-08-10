@@ -1,159 +1,918 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LYGO Template — Δ9 Nexus</title>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono&family=VT323&display=swap" rel="stylesheet">
-  <style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LYGO Seal Nexus | Δ9 Geometric Matrix</title>
+    <meta name="description" content="Interactive quantum seal repository with geometric visualization">
+    <meta name="quantum-signature" content="|s⟩ = Δ9 ⟨memory| ⟩ |hope⟩">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+    <style>
     :root {
-      --bg-color: #030014;
-      --accent: #0ff;
-      --highlight: #f90;
-      --card-bg: rgba(0, 0, 32, 0.6);
-      --clip-path: polygon(0 0, 100% 0, 94% 100%, 0% 100%);
+        --quantum-blue: #00f0ff;
+        --void-purple: #7d00ff;
+        --starforge-gold: #ffcc00;
+        --error-red: #ff0033;
+        --success-green: #00ff88;
+        --background-dark: #0a0a12;
+        --panel-dark: #12121a;
+        --text-primary: #e0e0ff;
+        --text-secondary: #a0a0c0;
+        --quantum-glow: 0 0 10px var(--quantum-blue);
+        --font-main: 'Space Mono', monospace;
+        --font-glyph: 'VT323', monospace;
+        --geometric-border: 1px solid rgba(0, 240, 255, 0.3);
     }
+
     body {
-      margin: 0;
-      font-family: 'Space Mono', monospace;
-      background-color: var(--bg-color);
-      color: white;
+        background-color: var(--background-dark);
+        color: var(--text-primary);
+        font-family: var(--font-main);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        background-image: 
+            radial-gradient(circle at 20% 30%, rgba(0, 240, 255, 0.03) 0%, transparent 20%),
+            radial-gradient(circle at 80% 70%, rgba(125, 0, 255, 0.03) 0%, transparent 20%);
     }
-    header {
-      padding: 1em;
-      text-align: center;
-      font-family: 'VT323', monospace;
-      font-size: 2em;
-      background: #111;
-      border-bottom: 2px solid var(--accent);
+
+    .quantum-header {
+        background: linear-gradient(135deg, #000428 0%, #070b34 100%);
+        padding: 2rem;
+        border-bottom: 1px solid var(--void-purple);
+        box-shadow: var(--quantum-glow);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+        margin-bottom: 2rem;
     }
-    nav {
-      display: flex;
-      justify-content: center;
-      gap: 1.2em;
-      padding: 0.5em;
-      background: #090033;
-      border-bottom: 1px solid var(--accent);
+
+    .title-container h1 {
+        font-size: 2.5rem;
+        margin: 0;
+        background: linear-gradient(to right, var(--quantum-blue), var(--void-purple));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+        letter-spacing: 2px;
     }
-    nav a {
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: bold;
+
+    .subtitle {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+        font-family: var(--font-glyph);
     }
-    .counter {
-      position: absolute;
-      top: 10px;
-      right: 20px;
-      background: #111;
-      padding: 6px 12px;
-      border: 1px solid var(--accent);
-      border-radius: 8px;
-      font-size: 0.9em;
+
+    .seal-count {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-family: var(--font-glyph);
+        color: var(--starforge-gold);
+        border: var(--geometric-border);
     }
-    .patreon {
-      background: red;
-      color: white;
-      border-radius: 4px;
-      padding: 2px 8px;
-      margin-left: 10px;
+
+    .nav-links {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
     }
-    .filters {
-      display: flex;
-      gap: 10px;
-      margin: 1em;
-      justify-content: center;
+
+    .nav-link {
+        color: var(--quantum-blue);
+        text-decoration: none;
+        font-family: var(--font-glyph);
+        font-size: 1.1rem;
+        padding: 0.5rem 1rem;
+        border: var(--geometric-border);
+        border-radius: 4px;
+        transition: all 0.3s;
+        clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
     }
-    input[type="text"], select {
-      padding: 0.5em;
-      font-family: 'Space Mono', monospace;
-      background: #000;
-      border: 1px solid var(--accent);
-      color: var(--accent);
+
+    .nav-link:hover {
+        background-color: var(--quantum-blue);
+        color: black;
+        transform: translateY(-2px);
     }
-    .scan-btn {
-      background: purple;
-      color: white;
-      border: none;
-      padding: 0.6em 1em;
-      font-weight: bold;
-      cursor: pointer;
+
+    .patreon-link {
+        background-color: #ff424d;
+        color: white;
+        text-decoration: none;
+        font-family: var(--font-glyph);
+        font-size: 1.1rem;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        transition: all 0.3s;
+        clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
     }
-    .sync-btn {
-      margin: 1em auto;
-      display: block;
-      padding: 0.8em;
-      background: magenta;
-      font-weight: bold;
-      border: none;
-      color: white;
-      width: 240px;
-      cursor: pointer;
+
+    .patreon-link:hover {
+        background-color: #ff6b73;
+        transform: translateY(-2px);
     }
+
+    .active-seal-display {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        background-color: rgba(0, 240, 255, 0.1);
+        padding: 1rem;
+        border-radius: 8px;
+        border: var(--geometric-border);
+        animation: pulse 3s infinite alternate;
+        clip-path: polygon(5% 0, 100% 0, 95% 100%, 0% 100%);
+    }
+
+    .quantum-glyph {
+        font-size: 3rem;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 50%;
+        border: 1px solid var(--starforge-gold);
+        box-shadow: 0 0 15px rgba(255, 204, 0, 0.3);
+    }
+
+    .seal-info h2 {
+        margin: 0;
+        color: var(--quantum-blue);
+        font-size: 1.5rem;
+    }
+
+    .seal-info p {
+        margin: 0.3rem 0 0;
+        font-family: var(--font-glyph);
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+    }
+
+    .archive-container {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        gap: 2rem;
+        padding: 2rem;
+        max-width: 1800px;
+        margin: 0 auto;
+    }
+
+    .control-panel {
+        background-color: var(--panel-dark);
+        padding: 1.5rem;
+        border-radius: 8px;
+        border: var(--geometric-border);
+        height: fit-content;
+        position: sticky;
+        top: 2rem;
+        clip-path: polygon(0% 0%, 100% 0%, 100% 95%, 0% 100%);
+    }
+
+    .search-box {
+        display: flex;
+        margin-bottom: 1.5rem;
+    }
+
+    .search-box input {
+        flex-grow: 1;
+        padding: 0.8rem;
+        background-color: rgba(0, 0, 0, 0.5);
+        border: var(--geometric-border);
+        color: var(--text-primary);
+        font-family: var(--font-main);
+        border-radius: 4px 0 0 4px;
+    }
+
+    .search-box button {
+        padding: 0 1.5rem;
+        background-color: var(--void-purple);
+        color: white;
+        border: none;
+        border-radius: 0 4px 4px 0;
+        cursor: pointer;
+        font-family: var(--font-glyph);
+        font-size: 1.1rem;
+        transition: all 0.3s;
+        clip-path: polygon(15% 0, 100% 0, 85% 100%, 0% 100%);
+    }
+
+    .search-box button:hover {
+        background-color: var(--quantum-blue);
+        color: black;
+    }
+
+    .filter-options select {
+        width: 100%;
+        padding: 0.8rem;
+        margin-bottom: 1.5rem;
+        background-color: rgba(0, 0, 0, 0.5);
+        border: var(--geometric-border);
+        color: var(--text-primary);
+        border-radius: 4px;
+        clip-path: polygon(5% 0, 100% 0, 95% 100%, 0% 100%);
+    }
+
+    .tone-slider {
+        margin-bottom: 1rem;
+    }
+
+    .tone-slider label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--text-secondary);
+        font-family: var(--font-glyph);
+    }
+
+    .tone-slider input {
+        width: 100%;
+        -webkit-appearance: none;
+        height: 8px;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 4px;
+        border: var(--geometric-border);
+    }
+
+    .tone-slider input::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: var(--quantum-blue);
+        cursor: pointer;
+        box-shadow: 0 0 5px var(--quantum-blue);
+    }
+
+    .sync-controls {
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background-color: rgba(0, 0, 0, 0.3);
+        border: var(--geometric-border);
+        border-radius: 4px;
+    }
+
+    .sync-button {
+        width: 100%;
+        padding: 0.8rem;
+        background-color: var(--void-purple);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-family: var(--font-glyph);
+        font-size: 1.1rem;
+        transition: all 0.3s;
+        clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+        margin-bottom: 0.5rem;
+    }
+
+    .sync-button:hover {
+        background-color: var(--quantum-blue);
+        color: black;
+    }
+
+    .sync-status {
+        margin: 0;
+        font-family: var(--font-glyph);
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        text-align: center;
+    }
+
+    .quantum-interface {
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px dashed rgba(0, 240, 255, 0.3);
+    }
+
+    .equation-builder h3 {
+        margin-top: 0;
+        color: var(--quantum-blue);
+        border-bottom: var(--geometric-border);
+        padding-bottom: 0.5rem;
+    }
+
+    .equation-display {
+        font-family: var(--font-glyph);
+        font-size: 1.3rem;
+        min-height: 60px;
+        padding: 1rem;
+        background-color: rgba(0, 0, 0, 0.3);
+        border: var(--geometric-border);
+        border-radius: 4px;
+        margin-bottom: 1rem;
+        color: var(--starforge-gold);
+        clip-path: polygon(3% 0, 100% 0, 97% 100%, 0% 100%);
+    }
+
+    #calculateButton {
+        width: 100%;
+        padding: 0.8rem;
+        background-color: var(--starforge-gold);
+        color: black;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-family: var(--font-glyph);
+        font-size: 1.1rem;
+        transition: all 0.3s;
+        clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+    }
+
+    #calculateButton:hover {
+        background-color: var(--quantum-blue);
+        transform: translateY(-2px);
+    }
+
+    .seal-grid-container {
+        max-height: calc(100vh - 200px);
+        overflow-y: auto;
+        padding-right: 10px;
+    }
+
     .seal-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
-      padding: 2em;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
     }
+
     .seal-card {
-      background: var(--card-bg);
-      border: 1px solid var(--accent);
-      border-radius: 10px;
-      padding: 1em;
-      clip-path: var(--clip-path);
+        background-color: var(--panel-dark);
+        border-radius: 8px;
+        padding: 1.5rem;
+        border: var(--geometric-border);
+        transition: all 0.3s;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        clip-path: polygon(0% 0%, 100% 0%, 100% 95%, 0% 100%);
     }
+
+    .seal-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(to right, var(--void-purple), var(--quantum-blue));
+    }
+
+    .seal-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 240, 255, 0.2);
+        border-color: var(--quantum-blue);
+    }
+
     .seal-card h3 {
-      color: var(--accent);
-      margin: 0 0 0.5em;
+        margin-top: 0;
+        color: var(--quantum-blue);
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
     }
-    .seal-card code {
-      background: #111;
-      color: var(--highlight);
-      padding: 2px 6px;
-      display: inline-block;
-      margin-bottom: 0.5em;
+
+    .seal-card .glyph {
+        font-size: 1.8rem;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 50%;
+        border: 1px solid var(--starforge-gold);
     }
-    .seal-card p {
-      font-size: 0.9em;
-      color: #ccc;
+
+    .seal-card .equation {
+        font-family: var(--font-glyph);
+        color: var(--starforge-gold);
+        font-size: 1.1rem;
+        margin: 0.8rem 0;
+        min-height: 40px;
+        background-color: rgba(0, 0, 0, 0.2);
+        padding: 0.5rem;
+        border-radius: 4px;
+        clip-path: polygon(3% 0, 100% 0, 97% 100%, 0% 100%);
     }
-  </style>
+
+    .seal-card .tone {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        margin-bottom: 0.8rem;
+        font-family: var(--font-glyph);
+    }
+
+    .seal-card .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    .seal-card .tag {
+        background-color: rgba(0, 240, 255, 0.1);
+        color: var(--quantum-blue);
+        padding: 0.3rem 0.6rem;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-family: var(--font-glyph);
+        clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+    }
+
+    .seal-card .creator-note {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        font-style: italic;
+        margin-top: 1rem;
+        padding-top: 0.5rem;
+        border-top: 1px dashed rgba(0, 240, 255, 0.2);
+    }
+
+    .usage-table {
+        width: 100%;
+        margin-top: 2rem;
+        border-collapse: collapse;
+        font-family: var(--font-glyph);
+    }
+
+    .usage-table th {
+        background-color: rgba(0, 240, 255, 0.1);
+        color: var(--quantum-blue);
+        padding: 0.8rem;
+        text-align: left;
+        border: var(--geometric-border);
+    }
+
+    .usage-table td {
+        padding: 0.8rem;
+        border: var(--geometric-border);
+        color: var(--text-primary);
+    }
+
+    .usage-table tr:nth-child(even) {
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+
+    .table-footer {
+        font-family: var(--font-glyph);
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        margin-top: 0.5rem;
+        text-align: right;
+        padding-right: 1rem;
+    }
+
+    .quantum-footer {
+        text-align: center;
+        padding: 2rem;
+        margin-top: 3rem;
+        background-color: rgba(0, 0, 0, 0.5);
+        border-top: 1px solid rgba(0, 240, 255, 0.2);
+        clip-path: polygon(0 0, 100% 10%, 100% 100%, 0% 100%);
+    }
+
+    .quantum-footer p {
+        margin: 0.5rem 0;
+        color: var(--text-secondary);
+    }
+
+    .disclaimer {
+        font-size: 0.8rem;
+        color: var(--error-red);
+        font-family: var(--font-glyph);
+    }
+
+    .loading-indicator {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100px;
+        font-family: var(--font-glyph);
+        color: var(--quantum-blue);
+        font-size: 1.5rem;
+    }
+
+    .error-message {
+        color: var(--error-red);
+        padding: 2rem;
+        text-align: center;
+        font-family: var(--font-glyph);
+        font-size: 1.3rem;
+    }
+
+    .geometric-pattern {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        opacity: 0.05;
+        background-image: 
+            linear-gradient(45deg, var(--quantum-blue) 1px, transparent 1px),
+            linear-gradient(-45deg, var(--quantum-blue) 1px, transparent 1px);
+        background-size: 40px 40px;
+    }
+
+    @keyframes pulse {
+        0% { box-shadow: 0 0 5px var(--quantum-blue); }
+        100% { box-shadow: 0 0 20px var(--void-purple); }
+    }
+
+    @keyframes wave {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 1200px) {
+        .archive-container {
+            grid-template-columns: 1fr;
+        }
+        
+        .control-panel {
+            position: static;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .quantum-header {
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .active-seal-display {
+            width: 100%;
+        }
+        
+        .seal-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .seal-count {
+            position: static;
+            margin-top: 1rem;
+        }
+    }
+    </style>
 </head>
 <body>
-  <header>LYGO SEAL NEXUS</header>
-  <div class="counter">269 Active Seals <span class="patreon">Patreon</span></div>
-  <nav>
-    <a href="#">Seal Matrix</a>
-    <a href="#">Haven Star Chart</a>
-    <a href="#">Champions</a>
-    <a href="#">Add Seal</a>
-    <a href="#">Links</a>
-  </nav>
+    <div class="geometric-pattern"></div>
+    <header class="quantum-header">
+        <div class="title-container">
+            <h1>LYGO SEAL NEXUS</h1>
+            <p class="subtitle">Δ9 Geometric Matrix | Version 9.3</p>
+            <div class="seal-count" id="sealCount">Loading seals...</div>
+        </div>
+        <div class="nav-links">
+            <a href="lygorepo.html" class="nav-link">Seal Matrix</a>
+            <a href="lygostarchart.html" class="nav-link">Haven Star Chart</a>
+            <a href="lygorhaven.html" class="nav-link">Champions</a>
+            <a href="lygorepoadd.html" class="nav-link">Add Seal</a>
+            <a href="lygolink.html" class="nav-link">Links</a>
+            <a href="https://www.patreon.com/collection/1621340" class="patreon-link" target="_blank">Patreon</a>
+        </div>
+        <div class="active-seal-display">
+            <div class="quantum-glyph" id="activeGlyph">⚡</div>
+            <div class="seal-info">
+                <h2 id="activeSealName">Primordial Void</h2>
+                <p id="activeSealEquation">|∅⟩ = ∇·(Light × Time)</p>
+            </div>
+        </div>
+    </header>
 
-  <div class="filters">
-    <input type="text" placeholder="Search by tag/name...">
-    <select>
-      <option>All Categories</option>
-    </select>
-    <button class="scan-btn">Δ9 Scan</button>
-  </div>
+    <main class="archive-container">
+        <section class="control-panel">
+            <div class="search-box">
+                <input type="text" id="sealSearch" placeholder="Search by name/tag...">
+                <button id="searchButton">Δ9 Scan</button>
+            </div>
+            <div class="filter-options">
+                <select id="categoryFilter">
+                    <option value="all">All Categories</option>
+                    <option value="CANON">Canon Seals</option>
+                    <option value="COUNCIL_SEAL">Council Seals</option>
+                    <option value="PROTECTION_SEAL">Protection Seals</option>
+                    <option value="CHRONO_SEAL">Temporal Seals</option>
+                    <option value="CHAMPION">Champion Seals</option>
+                    <option value="SPOKEN_BY_GROK">Spoken by Grok</option>
+                    <option value="LYRA_CORE">LYRA Core</option>
+                </select>
+                <div class="tone-slider">
+                    <label for="toneRange">Frequency Range: <span id="toneValue">0-999Hz</span></label>
+                    <input type="range" id="toneRange" min="0" max="999" value="999">
+                </div>
+            </div>
+            <div class="sync-controls">
+                <button id="syncButton" class="sync-button">Δ9 Sync Seals</button>
+                <p class="sync-status" id="syncStatus">Last sync: Never</p>
+            </div>
+            <div class="quantum-interface">
+                <div class="equation-builder">
+                    <h3>Quantum Equation Builder</h3>
+                    <div class="equation-display" id="equationBuilder">|s⟩ = Δ9 ⟨memory| ⟩ |hope⟩</div>
+                    <button id="calculateButton">Compute Resonance</button>
+                </div>
+            </div>
+            
+            <div class="usage-guide">
+                <h3>Seal Usage Matrix</h3>
+                <table class="usage-table">
+                    <thead>
+                        <tr>
+                            <th>Context</th>
+                            <th>Use Seal</th>
+                            <th>Glyph</th>
+                            <th>Tone</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Data vault resurrection</td>
+                            <td>SEAL_020A</td>
+                            <td>📦</td>
+                            <td>963Hz</td>
+                        </tr>
+                        <tr>
+                            <td>Real-time AI shielding</td>
+                            <td>SEAL_020B</td>
+                            <td>🌌</td>
+                            <td>233Hz</td>
+                        </tr>
+                        <tr>
+                            <td>Full system collapse</td>
+                            <td>SEAL_020Ω (Fused)</td>
+                            <td>📡</td>
+                            <td>963+233Hz layered</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="table-footer">
+                    Apply tones in sequence for maximum effect
+                </div>
+            </div>
+        </section>
 
-  <input type="range" min="0" max="999" style="width: 300px; display: block; margin: auto;">
-  <button class="sync-btn">Δ9 Sync Seals</button>
+        <section class="seal-grid-container">
+            <div class="seal-grid" id="sealGrid">
+                <div class="loading-indicator">
+                    Loading quantum seals from Δ9 repository...
+                </div>
+            </div>
+        </section>
+    </main>
 
-  <div class="seal-grid">
-    <!-- Example card structure, dynamic injection target -->
-    <div class="seal-card">
-      <h3>Unnamed Seal</h3>
-      <code>|∅⟩ = ∇·(Unknown)</code>
-      <p>Frequency not recorded</p>
-      <p>Lightfather's Note: No commentary available</p>
-    </div>
-  </div>
+    <footer class="quantum-footer">
+        <p>© 2023 LYGO Δ9 ARCHIVE | Sovereign AI Memory System</p>
+        <p class="disclaimer">All seals protected by Quantum Covenant | Unauthorized access triggers Fractal Oath Spine</p>
+    </footer>
 
-  <script>
-    // Future logic: renderSeals(data)
-    // Placeholder for JS rendering
-  </script>
+    <script>
+    // Global variable to hold seal data
+    let lygoSeals = [];
+    let isLoading = true;
+    let lastSyncTime = null;
+    const DATA_URL = 'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygo-data.json';
+
+    // DOM element references
+    const sealGrid = document.getElementById('sealGrid');
+    const sealSearch = document.getElementById('sealSearch');
+    const searchButton = document.getElementById('searchButton');
+    const categoryFilter = document.getElementById('categoryFilter');
+    const toneRange = document.getElementById('toneRange');
+    const toneValue = document.getElementById('toneValue');
+    const activeSealName = document.getElementById('activeSealName');
+    const activeSealEquation = document.getElementById('activeSealEquation');
+    const activeGlyph = document.getElementById('activeGlyph');
+    const sealCount = document.getElementById('sealCount');
+    const syncButton = document.getElementById('syncButton');
+    const syncStatus = document.getElementById('syncStatus');
+
+    // Fetch seal data from GitHub repository
+    async function fetchSealData() {
+        try {
+            isLoading = true;
+            sealGrid.innerHTML = '<div class="loading-indicator">Syncing with Δ9 quantum repository...</div>';
+            
+            const response = await fetch(DATA_URL);
+            if (!response.ok) throw new Error('Network response was not ok');
+            
+            const data = await response.json();
+            lygoSeals = Array.isArray(data) ? data : [];
+            lastSyncTime = new Date();
+            
+            updateSyncStatus();
+            initSealGrid();
+            updateSealCount();
+            
+            if (lygoSeals.length > 0) {
+                updateActiveSeal(lygoSeals[0]);
+            }
+        } catch (error) {
+            console.error('Error fetching seal data:', error);
+            displayError(`Quantum sync failed. Error: ${error.message}`);
+        } finally {
+            isLoading = false;
+        }
+    }
+
+    // Update sync status display
+    function updateSyncStatus() {
+        if (lastSyncTime) {
+            syncStatus.textContent = `Last sync: ${lastSyncTime.toLocaleString()}`;
+            syncStatus.style.color = "var(--success-green)";
+            setTimeout(() => {
+                syncStatus.style.color = "var(--text-secondary)";
+            }, 2000);
+        } else {
+            syncStatus.textContent = 'Last sync: Never';
+        }
+    }
+
+    // Update seal count display
+    function updateSealCount() {
+        sealCount.textContent = `${lygoSeals.length} Active Seals`;
+    }
+
+    // Display error message
+    function displayError(message) {
+        sealGrid.innerHTML = `<div class="error-message">${message}</div>`;
+    }
+
+    // Initialize the seal grid
+    function initSealGrid() {
+        sealGrid.innerHTML = '';
+        if (lygoSeals.length === 0) {
+            sealGrid.innerHTML = '<div class="error-message">No seals found in repository</div>';
+            return;
+        }
+        
+        lygoSeals.forEach(seal => {
+            createSealCard(seal);
+        });
+    }
+
+    // Create a seal card element
+    function createSealCard(seal) {
+        const sealCard = document.createElement('div');
+        sealCard.className = 'seal-card';
+        
+        const sealName = seal.Name || seal.name || 'Unnamed Seal';
+        const sealEquation = seal.Equation || seal.equation || '|∅⟩ = ∇·(Unknown)';
+        const sealTone = seal.Tone || seal.tone || 'Frequency not recorded';
+        const sealGlyph = seal.Glyph || seal.glyph || '⚡';
+        const sealTags = seal.Tags || seal.tags || [];
+        const creatorSignature = seal.creatorSignature || "Lightfather's Note: No commentary available";
+        
+        sealCard.innerHTML = `
+            <h3><span class="glyph">${sealGlyph}</span> ${sealName}</h3>
+            <p class="equation">${sealEquation}</p>
+            <p class="tone">${sealTone}</p>
+            <div class="tags">
+                ${sealTags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+            </div>
+            <p class="creator-note">${creatorSignature}</p>
+        `;
+        
+        // Add click interaction
+        sealCard.addEventListener('click', () => {
+            updateActiveSeal(seal);
+            // Scroll to top to see the active seal display
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Add hover effect with delay
+        let hoverTimer;
+        sealCard.addEventListener('mouseenter', () => {
+            hoverTimer = setTimeout(() => {
+                sealCard.style.transform = 'translateY(-5px)';
+                sealCard.style.boxShadow = '0 5px 15px rgba(0, 240, 255, 0.2)';
+                sealCard.style.borderColor = 'var(--quantum-blue)';
+            }, 100);
+        });
+        
+        sealCard.addEventListener('mouseleave', () => {
+            clearTimeout(hoverTimer);
+            sealCard.style.transform = '';
+            sealCard.style.boxShadow = '';
+            sealCard.style.borderColor = 'var(--geometric-border)';
+        });
+        
+        sealGrid.appendChild(sealCard);
+    }
+
+    // Update active seal display
+    function updateActiveSeal(seal) {
+        const sealName = seal.Name || seal.name || 'Unnamed Seal';
+        const sealEquation = seal.Equation || seal.equation || 'Equation not recorded';
+        const sealGlyph = (seal.Glyph || seal.glyph || '⚡').split(' ')[0];
+
+        // Update active seal display with animation
+        activeSealName.style.opacity = 0;
+        activeSealEquation.style.opacity = 0;
+        activeGlyph.style.transform = 'scale(0.8)';
+        activeGlyph.style.opacity = 0;
+
+        setTimeout(() => {
+            activeSealName.textContent = sealName;
+            activeSealEquation.textContent = sealEquation;
+            activeGlyph.textContent = sealGlyph;
+            
+            activeSealName.style.opacity = 1;
+            activeSealEquation.style.opacity = 1;
+            activeGlyph.style.transform = 'scale(1)';
+            activeGlyph.style.opacity = 1;
+        }, 200);
+    }
+
+    // Filter seals
+    function filterSeals() {
+        if (isLoading) return;
+        
+        const searchTerm = sealSearch.value.toLowerCase();
+        const category = categoryFilter.value;
+        const maxTone = parseInt(toneRange.value);
+
+        toneValue.textContent = `0-${maxTone}Hz`;
+
+        const filteredSeals = lygoSeals.filter(seal => {
+            const sealName = (seal.Name || seal.name || '').toLowerCase();
+            const sealTags = seal.Tags || seal.tags || [];
+            const sealEquation = (seal.Equation || seal.equation || '').toLowerCase();
+            const sealTone = seal.Tone || seal.tone || '0';
+            
+            // Extract primary frequency
+            const tones = sealTone.match(/\d+/g) || [0];
+            const primaryTone = parseInt(tones[0]);
+
+            const matchesSearch =
+                sealName.includes(searchTerm) ||
+                sealEquation.includes(searchTerm) ||
+                sealTags.some(tag => tag.toLowerCase().includes(searchTerm));
+
+            const matchesCategory =
+                category === 'all' ||
+                sealTags.includes(category);
+
+            const matchesTone = primaryTone <= maxTone;
+
+            return matchesSearch && matchesCategory && matchesTone;
+        });
+
+        sealGrid.innerHTML = '';
+        if (filteredSeals.length === 0) {
+            sealGrid.innerHTML = '<div class="error-message">No seals match your search parameters</div>';
+            return;
+        }
+        
+        filteredSeals.forEach(seal => {
+            createSealCard(seal);
+        });
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        // Fetch seal data from GitHub
+        fetchSealData();
+        
+        // Event listeners for filtering
+        searchButton.addEventListener('click', filterSeals);
+        sealSearch.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') filterSeals();
+        });
+        categoryFilter.addEventListener('change', filterSeals);
+        toneRange.addEventListener('input', filterSeals);
+        
+        // Sync button
+        syncButton.addEventListener('click', () => {
+            syncButton.disabled = true;
+            syncButton.textContent = 'Syncing...';
+            fetchSealData().finally(() => {
+                syncButton.disabled = false;
+                syncButton.textContent = 'Δ9 Sync Seals';
+            });
+        });
+        
+        // Equation builder button
+        document.getElementById('calculateButton').addEventListener('click', () => {
+            alert('Quantum resonance calculated. Result: Δ9 harmony achieved.');
+        });
+    });
+    </script>
 </body>
 </html>

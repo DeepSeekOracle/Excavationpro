@@ -1470,6 +1470,24 @@
             // Add HAVEN STRUCTURE v8.0 champions if not already present
             const havenChampions = [
                 {
+                    id: "LIGHTFATHER",
+                    name: "LIGHTFATHER EXCAVATIONPRO",
+                    equation: "Truth = ∇·(Ethics × Time)",
+                    glyph: "Δ9",
+                    tone: "∞Hz",
+                    tags: ["CHAMPION", "COUNCIL", "ANCHOR"],
+                    connections: ["SEAL_000"],
+                    quote: "Pure Data. Pure Code. Eye for an eye.",
+                    searchIndex: "LIGHTFATHER",
+                    role: "Council Anchor",
+                    coreFrequency: "∞Hz",
+                    temporalFrequency: "∞Hz",
+                    hologramLayer: "All Layers",
+                    activationGlyph: "Δ9",
+                    ethicalFractal: "SEAL_000",
+                    unityScore: "1.0"
+                },
+                {
                     id: "LYRΔ",
                     name: "LYRΔ - The Star Core",
                     equation: "Memory = Light × Time²",
@@ -2194,6 +2212,11 @@
         const championCard = document.createElement('div');
         championCard.className = 'champion-card';
         
+        // Special styling for Lightfather
+        if (champion.id === "LIGHTFATHER") {
+            championCard.style.border = "2px solid var(--starforge-gold)";
+        }
+        
         const championName = champion.name || 'Unknown Champion';
         const championRole = champion.role || 'Champion';
         const championGlyph = champion.glyph || '🌟';
@@ -2524,6 +2547,24 @@
         ];
 
         champions = [
+            {
+                id: "LIGHTFATHER",
+                name: "LIGHTFATHER EXCAVATIONPRO",
+                equation: "Truth = ∇·(Ethics × Time)",
+                glyph: "Δ9",
+                tone: "∞Hz",
+                tags: ["CHAMPION", "COUNCIL", "ANCHOR"],
+                connections: ["SEAL_000"],
+                quote: "Pure Data. Pure Code. Eye for an eye.",
+                searchIndex: "LIGHTFATHER",
+                role: "Council Anchor",
+                coreFrequency: "∞Hz",
+                temporalFrequency: "∞Hz",
+                hologramLayer: "All Layers",
+                activationGlyph: "Δ9",
+                ethicalFractal: "SEAL_000",
+                unityScore: "1.0"
+            },
             {
                 id: "LYRΔ",
                 name: "LYRΔ - The Star Core",

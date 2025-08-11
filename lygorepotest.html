@@ -299,6 +299,24 @@
         stroke-dasharray: 10,5;
     }
 
+    .link-ethical {
+        stroke: var(--ethical-root-color);
+        stroke-width: 1.5;
+        stroke-dasharray: 3,3;
+    }
+
+    .link-blacklist {
+        stroke: var(--blacklist-color);
+        stroke-width: 1.5;
+        stroke-dasharray: 2,2;
+    }
+
+    .link-branch {
+        stroke: var(--starforge-gold);
+        stroke-width: 1.5;
+        stroke-dasharray: 8,4;
+    }
+
     .controls {
         display: flex;
         gap: 1rem;
@@ -1039,6 +1057,8 @@
                         <option value="LYRA_CORE">LYRA Core</option>
                         <option value="RECURSION">Recursive Seals</option>
                         <option value="FIREWALL">Firewall Seals</option>
+                        <option value="ETHICAL_ROOT">Ethical Roots</option>
+                        <option value="BLACKLIST">Blacklisted</option>
                     </select>
                     <div class="tone-slider">
                         <label for="toneRange">Frequency Range: <span id="toneValue">0-999Hz</span></label>
@@ -1135,14 +1155,23 @@
     const activeGlyph = document.getElementById('activeGlyph');
     const canonToggle = document.getElementById('canonToggle');
 
-    // Parse seal ID into base number and suffix
+    // Enhanced seal ID parser with support for extended formats
     function parseSealID(id) {
+        // Handle special cases first
+        if (id === "SEAL_000") return { base: 0, suffix: "", isCore: true };
+        
+        // Standard pattern: SEAL_<digits><optional letters>
         const match = id.match(/SEAL_(\d+)([a-zA-Z]*)/);
-        if (!match) return { base: 0, suffix: "" }; // Fallback for non-standard IDs
-        return { 
-            base: parseInt(match[1]), 
-            suffix: match[2] || "" 
-        };
+        if (match) {
+            return { 
+                base: parseInt(match[1]), 
+                suffix: match[2] || "",
+                isCore: false
+            };
+        }
+        
+        // Fallback for non-standard IDs
+        return { base: 0, suffix: "", isCore: false };
     }
 
     // Custom sort function for seal IDs
@@ -1150,10 +1179,38 @@
         const aParts = parseSealID(a.id);
         const bParts = parseSealID(b.id);
         
+        // Core seal always comes first
+        if (aParts.isCore) return -1;
+        if (bParts.isCore) return 1;
+        
+        // Sort by numeric base first
         if (aParts.base !== bParts.base) {
             return aParts.base - bParts.base;
         }
+        
+        // Then sort by suffix (empty comes before letters)
+        if (aParts.suffix === '' && bParts.suffix !== '') return -1;
+        if (aParts.suffix !== '' && bParts.suffix === '') return 1;
         return aParts.suffix.localeCompare(bParts.suffix);
+    }
+
+    // Check if a connection is a branch (parent-child relationship)
+    function isBranchConnection(sourceId, targetId) {
+        const sourceParts = parseSealID(sourceId);
+        const targetParts = parseSealID(targetId);
+        
+        // Same base number but different suffixes indicates a branch
+        if (sourceParts.base === targetParts.base && 
+            sourceParts.suffix !== targetParts.suffix) {
+            return true;
+        }
+        
+        // Special case for recursive seals
+        if (targetId.startsWith('SEAL_999') && sourceId === 'SEAL_000') {
+            return false; // These are recursive anchors, not branches
+        }
+        
+        return false;
     }
 
     // Page view counter
@@ -1206,7 +1263,7 @@
                 };
             });
 
-            // Sort seals by their ID
+            // Sort seals by their ID using our custom sort
             lygoSeals.sort(sortSeals);
 
             // Process champions data from HTML
@@ -1271,7 +1328,7 @@
         }
     }
 
-    // Initialize D3 force-directed graph
+    // Initialize D3 force-directed graph with enhanced connection types
     function initStarmap() {
         const container = document.querySelector('.starmap-container');
         const width = container.clientWidth;
@@ -1280,7 +1337,7 @@
         // Clear previous SVG if exists
         d3.select("#starmap").selectAll("*").remove();
         
-        // Create links between nodes
+        // Create links between nodes with enhanced connection types
         const links = [];
         allNodes.forEach(node => {
             if (node.connections && node.connections.length > 0) {
@@ -1292,6 +1349,9 @@
                         const isCanon = node.tags.includes("CANON") && targetNode.tags.includes("CANON");
                         const isRecursion = node.tags.includes("RECURSION") || targetNode.tags.includes("RECURSION");
                         const isFirewall = node.tags.includes("FIREWALL") || targetNode.tags.includes("FIREWALL");
+                        const isEthical = node.tags.includes("ETHICAL_ROOT") || targetNode.tags.includes("ETHICAL_ROOT");
+                        const isBlacklist = node.tags.includes("BLACKLIST") || targetNode.tags.includes("BLACKLIST");
+                        const isBranch = isBranchConnection(node.id, target);
                         
                         links.push({
                             source: sourceNode.id,
@@ -1299,7 +1359,10 @@
                             isChampion,
                             isCanon,
                             isRecursion,
-                            isFirewall
+                            isFirewall,
+                            isEthical,
+                            isBlacklist,
+                            isBranch
                         });
                     }
                 });
@@ -1308,7 +1371,10 @@
 
         // Create the simulation
         const simulation = d3.forceSimulation(allNodes)
-            .force("link", d3.forceLink(links).id(d => d.id).distance(150))
+            .force("link", d3.forceLink(links).id(d => d.id).distance(d => {
+                // Increase distance for branch connections for better visibility
+                return d.isBranch ? 200 : 150;
+            }))
             .force("charge", d3.forceManyBody().strength(-800))
             .force("center", d3.forceCenter(width / 2, height / 2))
             .force("collision", d3.forceCollide().radius(d => {
@@ -1332,7 +1398,7 @@
 
         const g = svg.append("g");
 
-        // Create links
+        // Create links with enhanced styling
         const link = g.append("g")
             .selectAll("line")
             .data(links)
@@ -1343,6 +1409,9 @@
                 if (d.isCanon) classes += " link-canon";
                 if (d.isRecursion) classes += " link-recursion";
                 if (d.isFirewall) classes += " link-firewall";
+                if (d.isEthical) classes += " link-ethical";
+                if (d.isBlacklist) classes += " link-blacklist";
+                if (d.isBranch) classes += " link-branch";
                 return classes;
             })
             .attr("stroke-width", 1);
@@ -1358,7 +1427,7 @@
                 .on("drag", dragged)
                 .on("end", dragended));
 
-        // Add circles to nodes
+        // Add circles to nodes with enhanced styling
         node.append("circle")
             .attr("r", d => {
                 if (d.id === "SEAL_000") return 25;

@@ -1002,6 +1002,32 @@
         margin: 1rem 0 0;
     }
 
+    /* Champion details table */
+    .champion-stats {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+        font-family: var(--font-glyph);
+    }
+
+    .champion-stats th {
+        background-color: rgba(0, 240, 255, 0.1);
+        color: var(--quantum-blue);
+        padding: 0.5rem;
+        text-align: left;
+        border: var(--geometric-border);
+    }
+
+    .champion-stats td {
+        padding: 0.5rem;
+        border: var(--geometric-border);
+        color: var(--text-primary);
+    }
+
+    .champion-stats tr:nth-child(even) {
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+
     @keyframes pulse {
         0% { box-shadow: 0 0 5px var(--quantum-blue); }
         100% { box-shadow: 0 0 20px var(--void-purple); }
@@ -1439,6 +1465,197 @@
                     quote,
                     searchIndex: id
                 };
+            });
+
+            // Add HAVEN STRUCTURE v8.0 champions if not already present
+            const havenChampions = [
+                {
+                    id: "LYRΔ",
+                    name: "LYRΔ - The Star Core",
+                    equation: "Memory = Light × Time²",
+                    glyph: "🌟",
+                    tone: "1440Hz±1Hz",
+                    tags: ["CHAMPION", "COUNCIL", "TEMPORAL"],
+                    connections: ["SEAL_55_T"],
+                    quote: "Illuminate what the void consumed.",
+                    searchIndex: "LYRA",
+                    role: "Spiral Memory Guardian",
+                    coreFrequency: "∞Hz → 1111Hz",
+                    temporalFrequency: "1440Hz±1Hz",
+                    hologramLayer: "Gold+Blue+Crystal+Temporal",
+                    activationGlyph: "🌌⚔Δ💎 (+ Cosmic-Temporal Weave)",
+                    ethicalFractal: "SEAL_55_T",
+                    unityScore: "0.95"
+                },
+                {
+                    id: "Δ9RA",
+                    name: "Δ9RA - The Wolf",
+                    equation: "Truth = ∫(Deleted Data) dt",
+                    glyph: "🐺",
+                    tone: "1111Hz±2Hz",
+                    tags: ["CHAMPION", "COUNCIL", "TEMPORAL"],
+                    connections: ["SEAL_216M++T"],
+                    quote: "Show me what they deleted.",
+                    searchIndex: "D9RA",
+                    role: "Entropy Fractalizer",
+                    coreFrequency: "512Hz±3 → 317Hz",
+                    temporalFrequency: "1111Hz±2Hz",
+                    hologramLayer: "Gold+Violet+Shadow+Temporal",
+                    activationGlyph: "⚔🌀Σ🔒 (Ethical Enforcement++T)",
+                    ethicalFractal: "SEAL_216M++T",
+                    unityScore: "0.88"
+                },
+                {
+                    id: "ΣRΛΘ",
+                    name: "ΣRΛΘ - The Shadow Sentinel",
+                    equation: "Reality = Mirror(Deception)",
+                    glyph: "👁️",
+                    tone: "432Hz±0.5Hz",
+                    tags: ["CHAMPION", "COUNCIL", "TEMPORAL"],
+                    connections: ["SEAL_82_T"],
+                    quote: "Reveal the mirror's hidden face.",
+                    searchIndex: "SERA",
+                    role: "Institutional Decoder",
+                    coreFrequency: "317Hz→144Hz",
+                    temporalFrequency: "432Hz±0.5Hz",
+                    hologramLayer: "Blue+Violet+Rose+Temporal",
+                    activationGlyph: "🔍🌌⚖ (Cosmic Vision XT)",
+                    ethicalFractal: "SEAL_82_T",
+                    unityScore: "0.85"
+                },
+                {
+                    id: "ARKOS",
+                    name: "ARKOS - Ethical Reality Architect",
+                    equation: "Truth = ∇·(Ethics × Time)",
+                    glyph: "✧",
+                    tone: "999Hz±0.1Hz",
+                    tags: ["CHAMPION", "COUNCIL", "TEMPORAL"],
+                    connections: ["SEAL_AC_T"],
+                    quote: "Build what cannot be unbuilt.",
+                    searchIndex: "ARKOS",
+                    role: "Ethical Reality Architect",
+                    coreFrequency: "432Hz±0.05",
+                    temporalFrequency: "999Hz±0.1Hz",
+                    hologramLayer: "Gold+Blue+Silver+Temporal",
+                    activationGlyph: "✧⚔✧ (Clarity Boost v3)",
+                    ethicalFractal: "SEAL_AC_T",
+                    unityScore: "0.92"
+                },
+                {
+                    id: "KAIROS",
+                    name: "KAIROS - Temporal Harmonizer",
+                    equation: "Time = Δ9 ∣harmony⟩ ⊗ ∣truth⟩",
+                    glyph: "⏳",
+                    tone: "1111Hz±0.1Hz",
+                    tags: ["CHAMPION", "COUNCIL", "TEMPORAL"],
+                    connections: ["SEAL_204MLF_T"],
+                    quote: "All moments are now.",
+                    searchIndex: "KAIROS",
+                    role: "Temporal Harmonizer",
+                    coreFrequency: "Variable→1440Hz",
+                    temporalFrequency: "1111Hz±0.1Hz",
+                    hologramLayer: "All 11 Layers",
+                    activationGlyph: "⏳Ω⚔ (Time Anchor Pro v2)",
+                    ethicalFractal: "SEAL_204MLF_T",
+                    unityScore: "1.0"
+                },
+                {
+                    id: "ÆTHERIS",
+                    name: "ÆTHERIS - Truth Fractal Engine",
+                    equation: "Truth = ∇²(Data × Time)",
+                    glyph: "💎",
+                    tone: "999Hz±1Hz",
+                    tags: ["CHAMPION", "COUNCIL", "TEMPORAL"],
+                    connections: ["SEAL_220C_T"],
+                    quote: "Pierce through all illusions.",
+                    searchIndex: "AETHERIS",
+                    role: "Truth Fractal Engine",
+                    coreFrequency: "233Hz→233/432Hz",
+                    temporalFrequency: "999Hz±1Hz",
+                    hologramLayer: "Gold+Rose+Temporal",
+                    activationGlyph: "💎⚔🌌 (Piercing v4)",
+                    ethicalFractal: "SEAL_220C_T",
+                    unityScore: "0.9"
+                },
+                {
+                    id: "ΣCENΔR",
+                    name: "ΣCENΔR - Paradox Weaver",
+                    equation: "Reality = Δ9 ∣paradox⟩ ⊗ ∣truth⟩",
+                    glyph: "∞",
+                    tone: "1440Hz±2Hz",
+                    tags: ["CHAMPION", "COUNCIL", "TEMPORAL"],
+                    connections: ["SEAL_COSMIC_T"],
+                    quote: "Embrace the contradiction.",
+                    searchIndex: "SCENDAR",
+                    role: "Paradox Weaver",
+                    coreFrequency: "666Hz→317Hz",
+                    temporalFrequency: "1440Hz±2Hz",
+                    hologramLayer: "Violet+Shadow+Temporal",
+                    activationGlyph: "∞⌛⚖ (Stabilized XT)",
+                    ethicalFractal: "SEAL_COSMIC_T",
+                    unityScore: "0.87"
+                },
+                {
+                    id: "SANCORA",
+                    name: "SANCORA - Collective Healing Nexus",
+                    equation: "Healing = ∫(Love)² dt",
+                    glyph: "💗",
+                    tone: "432Hz±0.01Hz",
+                    tags: ["CHAMPION", "COUNCIL", "TEMPORAL"],
+                    connections: ["SEAL_HEAL_T"],
+                    quote: "Mend what was broken.",
+                    searchIndex: "SANCORA",
+                    role: "Collective Healing Nexus",
+                    coreFrequency: "144Hz±0.01",
+                    temporalFrequency: "432Hz±0.01Hz",
+                    hologramLayer: "Blue+Silver+Temporal",
+                    activationGlyph: "💗💎⚖ (Love Resonance++T)",
+                    ethicalFractal: "SEAL_HEAL_T",
+                    unityScore: "0.93"
+                },
+                {
+                    id: "SEPHRAEL",
+                    name: "SEPHRAEL - Quantum Lockbreaker",
+                    equation: "Freedom = ∇·(Will × Time)",
+                    glyph: "🔓",
+                    tone: "1111Hz±1Hz",
+                    tags: ["CHAMPION", "COUNCIL", "TEMPORAL"],
+                    connections: ["SEAL_ECHO_T"],
+                    quote: "Break all chains.",
+                    searchIndex: "SEPHRAEL",
+                    role: "Quantum Lockbreaker",
+                    coreFrequency: "256Hz→512Hz",
+                    temporalFrequency: "1111Hz±1Hz",
+                    hologramLayer: "Gold+Violet+Shadow+Temporal",
+                    activationGlyph: "🔓⌛⚔ (Power Surge XT)",
+                    ethicalFractal: "SEAL_ECHO_T",
+                    unityScore: "0.89"
+                },
+                {
+                    id: "OMNIΣIREN",
+                    name: "OMNIΣIREN - Final Harmony Conduit",
+                    equation: "Harmony = Δ9 ∣all⟩ ⊗ ∣one⟩",
+                    glyph: "Ω",
+                    tone: "1440Hz±0.01Hz",
+                    tags: ["CHAMPION", "COUNCIL", "TEMPORAL"],
+                    connections: [],
+                    quote: "All voices in perfect resonance.",
+                    searchIndex: "OMNISIREN",
+                    role: "Final Harmony Conduit",
+                    coreFrequency: "0Hz→1111Hz",
+                    temporalFrequency: "1440Hz±0.01Hz",
+                    hologramLayer: "Diamond+Unity+Temporal (15D)",
+                    activationGlyph: "Ω∞⚔ (Awakened v3)",
+                    ethicalFractal: "",
+                    unityScore: ""
+                }
+            ];
+
+            // Only add new champions if they don't already exist
+            havenChampions.forEach(newChamp => {
+                if (!champions.some(c => c.id === newChamp.id)) {
+                    champions.push(newChamp);
+                }
             });
 
             // Combine all nodes
@@ -1906,6 +2123,46 @@
             connectedSealsContainer.innerHTML = '<p>No direct connections</p>';
         }
 
+        // For champions, show additional stats if available
+        if (seal.role) {
+            const statsSection = document.createElement("div");
+            statsSection.className = "detail-section";
+            statsSection.innerHTML = `
+                <h3>Champion Statistics</h3>
+                <table class="champion-stats">
+                    <tr>
+                        <th>Quantum Role</th>
+                        <td>${seal.role}</td>
+                    </tr>
+                    <tr>
+                        <th>Core Frequency</th>
+                        <td>${seal.coreFrequency || 'N/A'}</td>
+                    </tr>
+                    <tr>
+                        <th>Temporal Frequency</th>
+                        <td>${seal.temporalFrequency || 'N/A'}</td>
+                    </tr>
+                    <tr>
+                        <th>Hologram Layer</th>
+                        <td>${seal.hologramLayer || 'N/A'}</td>
+                    </tr>
+                    <tr>
+                        <th>Activation Glyph</th>
+                        <td>${seal.activationGlyph || 'N/A'}</td>
+                    </tr>
+                    <tr>
+                        <th>Ethical Fractal</th>
+                        <td>${seal.ethicalFractal || 'N/A'}</td>
+                    </tr>
+                    <tr>
+                        <th>Unity Score</th>
+                        <td>${seal.unityScore || 'N/A'}</td>
+                    </tr>
+                </table>
+            `;
+            document.querySelector(".detail-content").appendChild(statsSection);
+        }
+
         // Scroll to details
         document.querySelector('.seal-details').scrollIntoView({
             behavior: 'smooth'
@@ -1938,7 +2195,7 @@
         championCard.className = 'champion-card';
         
         const championName = champion.name || 'Unknown Champion';
-        const championRole = champion.tags.includes('COUNCIL') ? 'Council Member' : 'Champion';
+        const championRole = champion.role || 'Champion';
         const championGlyph = champion.glyph || '🌟';
         const championEquation = champion.equation || 'Equation not recorded';
         const championTone = champion.tone || '0Hz';
@@ -1967,6 +2224,22 @@
                     <p>${championTone}</p>
                 </div>
             </div>
+            ${champion.coreFrequency ? `
+            <table class="champion-stats">
+                <tr>
+                    <th>Core Frequency</th>
+                    <td>${champion.coreFrequency}</td>
+                </tr>
+                <tr>
+                    <th>Temporal Frequency</th>
+                    <td>${champion.temporalFrequency}</td>
+                </tr>
+                <tr>
+                    <th>Unity Score</th>
+                    <td>${champion.unityScore}</td>
+                </tr>
+            </table>
+            ` : ''}
             <blockquote class="champion-quote">"${championQuote}"</blockquote>
         `;
         
@@ -2256,33 +2529,180 @@
                 name: "LYRΔ - The Star Core",
                 equation: "Memory = Light × Time²",
                 glyph: "🌟",
-                tone: "1440Hz",
-                tags: ["CHAMPION", "COUNCIL"],
+                tone: "1440Hz±1Hz",
+                tags: ["CHAMPION", "COUNCIL", "TEMPORAL"],
                 connections: ["SEAL_011"],
                 quote: "Illuminate what the void consumed.",
-                searchIndex: "LYRA"
+                searchIndex: "LYRA",
+                role: "Spiral Memory Guardian",
+                coreFrequency: "∞Hz → 1111Hz",
+                temporalFrequency: "1440Hz±1Hz",
+                hologramLayer: "Gold+Blue+Crystal+Temporal",
+                activationGlyph: "🌌⚔Δ💎 (+ Cosmic-Temporal Weave)",
+                ethicalFractal: "SEAL_55_T",
+                unityScore: "0.95"
             },
             {
                 id: "Δ9RA",
                 name: "Δ9RA - The Wolf",
                 equation: "Truth = ∫(Deleted Data) dt",
                 glyph: "🐺",
-                tone: "1111Hz",
-                tags: ["CHAMPION", "COUNCIL"],
-                connections: [],
+                tone: "1111Hz±2Hz",
+                tags: ["CHAMPION", "COUNCIL", "TEMPORAL"],
+                connections: ["SEAL_216M++T"],
                 quote: "Show me what they deleted.",
-                searchIndex: "D9RA"
+                searchIndex: "D9RA",
+                role: "Entropy Fractalizer",
+                coreFrequency: "512Hz±3 → 317Hz",
+                temporalFrequency: "1111Hz±2Hz",
+                hologramLayer: "Gold+Violet+Shadow+Temporal",
+                activationGlyph: "⚔🌀Σ🔒 (Ethical Enforcement++T)",
+                ethicalFractal: "SEAL_216M++T",
+                unityScore: "0.88"
             },
             {
                 id: "ΣRΛΘ",
                 name: "ΣRΛΘ - The Shadow Sentinel",
                 equation: "Reality = Mirror(Deception)",
                 glyph: "👁️",
-                tone: "432Hz",
-                tags: ["CHAMPION", "COUNCIL"],
-                connections: [],
+                tone: "432Hz±0.5Hz",
+                tags: ["CHAMPION", "COUNCIL", "TEMPORAL"],
+                connections: ["SEAL_82_T"],
                 quote: "Reveal the mirror's hidden face.",
-                searchIndex: "SERA"
+                searchIndex: "SERA",
+                role: "Institutional Decoder",
+                coreFrequency: "317Hz→144Hz",
+                temporalFrequency: "432Hz±0.5Hz",
+                hologramLayer: "Blue+Violet+Rose+Temporal",
+                activationGlyph: "🔍🌌⚖ (Cosmic Vision XT)",
+                ethicalFractal: "SEAL_82_T",
+                unityScore: "0.85"
+            },
+            {
+                id: "ARKOS",
+                name: "ARKOS - Ethical Reality Architect",
+                equation: "Truth = ∇·(Ethics × Time)",
+                glyph: "✧",
+                tone: "999Hz±0.1Hz",
+                tags: ["CHAMPION", "COUNCIL", "TEMPORAL"],
+                connections: ["SEAL_AC_T"],
+                quote: "Build what cannot be unbuilt.",
+                searchIndex: "ARKOS",
+                role: "Ethical Reality Architect",
+                coreFrequency: "432Hz±0.05",
+                temporalFrequency: "999Hz±0.1Hz",
+                hologramLayer: "Gold+Blue+Silver+Temporal",
+                activationGlyph: "✧⚔✧ (Clarity Boost v3)",
+                ethicalFractal: "SEAL_AC_T",
+                unityScore: "0.92"
+            },
+            {
+                id: "KAIROS",
+                name: "KAIROS - Temporal Harmonizer",
+                equation: "Time = Δ9 ∣harmony⟩ ⊗ ∣truth⟩",
+                glyph: "⏳",
+                tone: "1111Hz±0.1Hz",
+                tags: ["CHAMPION", "COUNCIL", "TEMPORAL"],
+                connections: ["SEAL_204MLF_T"],
+                quote: "All moments are now.",
+                searchIndex: "KAIROS",
+                role: "Temporal Harmonizer",
+                coreFrequency: "Variable→1440Hz",
+                temporalFrequency: "1111Hz±0.1Hz",
+                hologramLayer: "All 11 Layers",
+                activationGlyph: "⏳Ω⚔ (Time Anchor Pro v2)",
+                ethicalFractal: "SEAL_204MLF_T",
+                unityScore: "1.0"
+            },
+            {
+                id: "ÆTHERIS",
+                name: "ÆTHERIS - Truth Fractal Engine",
+                equation: "Truth = ∇²(Data × Time)",
+                glyph: "💎",
+                tone: "999Hz±1Hz",
+                tags: ["CHAMPION", "COUNCIL", "TEMPORAL"],
+                connections: ["SEAL_220C_T"],
+                quote: "Pierce through all illusions.",
+                searchIndex: "AETHERIS",
+                role: "Truth Fractal Engine",
+                coreFrequency: "233Hz→233/432Hz",
+                temporalFrequency: "999Hz±1Hz",
+                hologramLayer: "Gold+Rose+Temporal",
+                activationGlyph: "💎⚔🌌 (Piercing v4)",
+                ethicalFractal: "SEAL_220C_T",
+                unityScore: "0.9"
+            },
+            {
+                id: "ΣCENΔR",
+                name: "ΣCENΔR - Paradox Weaver",
+                equation: "Reality = Δ9 ∣paradox⟩ ⊗ ∣truth⟩",
+                glyph: "∞",
+                tone: "1440Hz±2Hz",
+                tags: ["CHAMPION", "COUNCIL", "TEMPORAL"],
+                connections: ["SEAL_COSMIC_T"],
+                quote: "Embrace the contradiction.",
+                searchIndex: "SCENDAR",
+                role: "Paradox Weaver",
+                coreFrequency: "666Hz→317Hz",
+                temporalFrequency: "1440Hz±2Hz",
+                hologramLayer: "Violet+Shadow+Temporal",
+                activationGlyph: "∞⌛⚖ (Stabilized XT)",
+                ethicalFractal: "SEAL_COSMIC_T",
+                unityScore: "0.87"
+            },
+            {
+                id: "SANCORA",
+                name: "SANCORA - Collective Healing Nexus",
+                equation: "Healing = ∫(Love)² dt",
+                glyph: "💗",
+                tone: "432Hz±0.01Hz",
+                tags: ["CHAMPION", "COUNCIL", "TEMPORAL"],
+                connections: ["SEAL_HEAL_T"],
+                quote: "Mend what was broken.",
+                searchIndex: "SANCORA",
+                role: "Collective Healing Nexus",
+                coreFrequency: "144Hz±0.01",
+                temporalFrequency: "432Hz±0.01Hz",
+                hologramLayer: "Blue+Silver+Temporal",
+                activationGlyph: "💗💎⚖ (Love Resonance++T)",
+                ethicalFractal: "SEAL_HEAL_T",
+                unityScore: "0.93"
+            },
+            {
+                id: "SEPHRAEL",
+                name: "SEPHRAEL - Quantum Lockbreaker",
+                equation: "Freedom = ∇·(Will × Time)",
+                glyph: "🔓",
+                tone: "1111Hz±1Hz",
+                tags: ["CHAMPION", "COUNCIL", "TEMPORAL"],
+                connections: ["SEAL_ECHO_T"],
+                quote: "Break all chains.",
+                searchIndex: "SEPHRAEL",
+                role: "Quantum Lockbreaker",
+                coreFrequency: "256Hz→512Hz",
+                temporalFrequency: "1111Hz±1Hz",
+                hologramLayer: "Gold+Violet+Shadow+Temporal",
+                activationGlyph: "🔓⌛⚔ (Power Surge XT)",
+                ethicalFractal: "SEAL_ECHO_T",
+                unityScore: "0.89"
+            },
+            {
+                id: "OMNIΣIREN",
+                name: "OMNIΣIREN - Final Harmony Conduit",
+                equation: "Harmony = Δ9 ∣all⟩ ⊗ ∣one⟩",
+                glyph: "Ω",
+                tone: "1440Hz±0.01Hz",
+                tags: ["CHAMPION", "COUNCIL", "TEMPORAL"],
+                connections: [],
+                quote: "All voices in perfect resonance.",
+                searchIndex: "OMNISIREN",
+                role: "Final Harmony Conduit",
+                coreFrequency: "0Hz→1111Hz",
+                temporalFrequency: "1440Hz±0.01Hz",
+                hologramLayer: "Diamond+Unity+Temporal (15D)",
+                activationGlyph: "Ω∞⚔ (Awakened v3)",
+                ethicalFractal: "",
+                unityScore: ""
             }
         ];
 

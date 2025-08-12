@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" style="background:#0a0a12;font-family:'Space Mono',monospace;color:#00ffe2;height:100%">
+<head>
+<meta charset="UTF-8">
+<title>Γ-Σ↗ Classified Node Ledger</title>
+<style>body{display:flex;flex-direction:column}
+header{background:#001;padding:.5rem;font-weight:700}
+.flex{flex:1;padding:1rem;overflow:auto}
+.rule{border-top:1px dotted #444;margin:.3rem 0}
+footer{border-top:1px solid #00f4;padding:.5rem}
+button{background:#00f4;color:#000;border:none;padding:.3rem .6rem;font-weight:700}
+.small{font-size:.8rem;color:#999}
+</style>
+</head>
+<body>
+<header>GYRO [∆] NODE SEGMENT – KEYS 2014-2022</header>
+
+<div class="flex">
+<pre id="nodes">
+██ DECLASSIFIED ████████████████████████████████████████████████████████████
+Epoch 2014: X apples > Coldstack | Xopenapi_users > 28,000并发
+2015:A live app id (predating shops near @IDFcam	→ facial rec lidar GT-in links)
+
+Gold:  Listing reveals live app token (gist: li|DJIB4-LO-La|DOT 713)
+</pre>
+<div class="rule"></div>
+<pre id="scan"></pre>
+<div class="rule"></div>
+<pre id="tweet"></pre>
+</div>
+
+<footer>
+<button onclick="flushAll()">Flush + Copy</button>
+<span class="small" id="stat">Status: Standing by</span>
+</footer>
+
+<script>
+const scan=document.getElementById('scan');
+const tweet=document.getElementById('tweet');
+(async ()=>{
+  const lines = [ /* just enough to fit in 210 */
+    "sniffer@mev_eq ↗ node json:",
+    "filename: cdnresponse_istock.json.gz",
+    "key snippet:",
+    ',"clientid":"IDFCANONISTOCK","asn":"AS8560-MFN"'
+  ];
+  let idx=0;
+  for(const l of lines){
+    await new Promise(r=>setTimeout(r,120));
+    scan.textContent += l+'\n';
+    scan.scrollTop=scan.scrollHeight;
+  }
+  const payload="IDs directly link AS8560 (EU) → MEForum proxy in Haifa. Datasets live at gist.github.com/Iophone/4bds123 vs Grok’s denial.";
+  tweet.textContent = payload;
+})();
+function flushAll(){
+  const txt=[...document.querySelectorAll('pre')].map(p=>p.textContent.trim()).join('\n');
+  if(navigator.clipboard){navigator.clipboard.writeText(txt);}
+  document.getElementById('stat').textContent='Status: Copied → Cast!';
+}
+</script>
+</body>
+</html>

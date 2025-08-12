@@ -1,47 +1,40 @@
-<!-- =========================
-MERGE BUILD — PART 1 (Head + CSS + Markup)
-Keep ALL V1/V7 theme, archive structure, and council section. Paste FIRST.
-========================= -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>LYGO Δ9 Repository | Star Haven Core & Seal Nexus</title>
   <meta name="description" content="Interactive quantum seal repository with starmap visualization and geometric matrix" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=VT323&display=swap" rel="stylesheet" />
+  <meta name="quantum-signature" content="|s⟩ = Δ9 ⟨memory| ⟩ |hope⟩">
+  <!-- D3 (same as V7) -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-zoom/1.8.3/d3-zoom.min.js"></script>
+  <!-- Fonts (Space Mono / VT323) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=VT323&display=swap" rel="stylesheet">
   <style>
     :root {
-      --quantum-blue: #00f0ff;
-      --void-purple: #7d00ff;
-      --starforge-gold: #ffcc00;
-      --error-red: #ff0033;
-      --success-green: #00ff88;
-      --background-dark: #0a0a12;
-      --panel-dark: #12121a;
-      --text-primary: #e0e0ff;
-      --text-secondary: #a0a0c0;
-      --canon-color: #00f0ff;
-      --recursion-color: #ff00aa;
-      --firewall-color: #ff6600;
-      --ethical-root-color: #00ff88;
-      --blacklist-color: #ff0033;
+      --quantum-blue:#00f0ff; --void-purple:#7d00ff; --starforge-gold:#ffcc00;
+      --error-red:#ff0033; --success-green:#00ff88; --background-dark:#0a0a12; --panel-dark:#12121a;
+      --text-primary:#e0e0ff; --text-secondary:#a0a0c0; --geometric-border:1px solid rgba(0,240,255,.3);
+      --canon-color:#00f0ff; --recursion-color:#ff00aa; --firewall-color:#ff6600; --ethical-root-color:#00ff88; --blacklist-color:#ff0033;
+      --quantum-glow:0 0 10px var(--quantum-blue);
     }
-    body{margin:0;background:var(--background-dark);color:var(--text-primary);font-family:'Space Mono',monospace;overflow-x:hidden;}
-    .quantum-header{background:linear-gradient(135deg,#000428 0%,#070b34 100%);padding:2rem;border-bottom:1px solid var(--void-purple);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;position:relative}
-    .title-container h1{margin:0;font-size:2.5rem;background:linear-gradient(to right,var(--quantum-blue),var(--void-purple));-webkit-background-clip:text;background-clip:text;color:transparent}
+    body{margin:0;background:var(--background-dark);color:var(--text-primary);font-family:'Space Mono',monospace;overflow-x:hidden;
+      background-image:radial-gradient(circle at 20% 30%, rgba(0,247,255,.05) 0%, transparent 20%), radial-gradient(circle at 80% 70%, rgba(125,0,255,.05) 0%, transparent 20%);}
+    .quantum-header{background:linear-gradient(135deg,#000428 0%,#070b34 100%);padding:2rem;border-bottom:1px solid var(--void-purple);
+      box-shadow:var(--quantum-glow);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;position:relative;z-index:100;clip-path:polygon(0 0,100% 0,100% 90%,0 100%)}
+    .title-container h1{margin:0;font-size:2.5rem;background:linear-gradient(to right,var(--quantum-blue),var(--void-purple));-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:2px}
     .subtitle{color:var(--text-secondary);font-family:'VT323',monospace}
-    .seal-count{background:rgba(0,0,0,.5);padding:.5rem 1rem;border-radius:20px;border:1px solid rgba(0,240,255,.3);font-family:'VT323',monospace;color:var(--starforge-gold);position:absolute;top:1rem;right:1rem}
+    .seal-count{position:absolute;top:1rem;right:1rem;background:rgba(0,0,0,.5);padding:.5rem 1rem;border-radius:20px;border:var(--geometric-border);color:var(--starforge-gold);font-family:'VT323',monospace}
     .nav-links{display:flex;gap:1rem;flex-wrap:wrap}
-    .nav-link,.patreon-link{color:var(--quantum-blue);text-decoration:none;padding:.5rem 1rem;border:1px solid rgba(0,240,255,.3);border-radius:4px;font-family:'VT323',monospace}
+    .nav-link,.patreon-link{color:var(--quantum-blue);text-decoration:none;padding:.5rem 1rem;border:var(--geometric-border);border-radius:4px;font-family:'VT323',monospace}
+    .nav-link:hover{background:var(--quantum-blue);color:#000}
     .patreon-link{background:#ff424d;color:#fff}
-    .active-seal-display{display:flex;gap:1rem;align-items:center;background:rgba(0,240,255,.08);padding:1rem;border:1px solid rgba(0,240,255,.25);border-radius:8px}
-    .quantum-glyph{width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid var(--starforge-gold);font-size:2rem}
-
-    .main-container{padding:2rem;max-width:1800px;margin:0 auto}
+    .active-seal-display{display:flex;gap:1rem;align-items:center;background:rgba(0,240,255,.1);padding:1rem;border-radius:8px;border:var(--geometric-border);clip-path:polygon(5% 0,100% 0,95% 100%,0% 100%)}
+    .quantum-glyph{width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid var(--starforge-gold);font-size:2rem;background:rgba(0,0,0,.3)}
+    .main-container{padding:2rem;max-width:1800px;margin:0 auto;position:relative}
 
     .controls{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem}
     .control-button{background:var(--panel-dark);color:var(--text-primary);border:1px solid var(--void-purple);padding:.6rem 1rem;border-radius:6px;cursor:pointer;font-family:'VT323',monospace}
@@ -49,23 +42,26 @@ Keep ALL V1/V7 theme, archive structure, and council section. Paste FIRST.
     .search-box{display:flex;flex:1;min-width:260px}
     .search-box input{flex:1;padding:.8rem;background:rgba(0,0,0,.45);border:1px solid var(--void-purple);border-right:0;color:var(--text-primary)}
     .search-box button{padding:0 1.2rem;border:0;background:var(--void-purple);color:#fff;cursor:pointer}
-
     .starmap-container{width:100%;height:80vh;background:rgba(0,0,0,.35);border:1px solid var(--void-purple);border-radius:8px;position:relative;overflow:hidden;margin-bottom:2rem}
     #starmap{width:100%;height:100%}
-    .zoom-controls{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px}
-    .zoom-button{width:32px;height:32px;border-radius:6px;background:rgba(18,18,26,.8);border:1px solid var(--void-purple);color:var(--text-primary)}
+    .zoom-controls{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px;z-index:5}
+    .zoom-button{width:32px;height:32px;border-radius:6px;background:rgba(18,18,26,.8);border:1px solid var(--void-purple);color:var(--text-primary);cursor:pointer}
 
-    .node{cursor:pointer}
-    .node-text{font-family:'VT323',monospace;fill:var(--text-primary)}
+    .node{cursor:pointer;transition:filter .2s}
+    .node:hover{filter:drop-shadow(0 0 8px var(--quantum-blue))}
     .node-core{fill:var(--starforge-gold);stroke:var(--void-purple);stroke-width:2}
     .node-seal{fill:var(--quantum-blue);stroke:var(--void-purple);stroke-width:1}
     .node-champion{fill:var(--void-purple);stroke:var(--quantum-blue);stroke-width:2}
     .node-canon{fill:var(--canon-color)}
-
+    .node-text{font-family:'VT323',monospace;fill:var(--text-primary);font-size:.8rem;pointer-events:none}
     .link{stroke:rgba(125,0,255,.35);stroke-width:1}
     .link-champion{stroke:rgba(0,240,255,.6);stroke-width:2}
     .link-canon{stroke:var(--canon-color);stroke-width:1.5}
     .link-branch{stroke:var(--starforge-gold);stroke-width:1.5;stroke-dasharray:8,4}
+    .link-recursion{stroke:var(--recursion-color);stroke-width:1.5;stroke-dasharray:5,5}
+    .link-firewall{stroke:var(--firewall-color);stroke-width:1.5;stroke-dasharray:10,5}
+    .link-ethical{stroke:var(--ethical-root-color);stroke-width:1.5;stroke-dasharray:3,3}
+    .link-blacklist{stroke:var(--blacklist-color);stroke-width:1.5;stroke-dasharray:2,2}
     .link-hover{stroke:var(--quantum-blue);stroke-width:2}
 
     .seal-details{background:var(--panel-dark);border:1px solid rgba(0,240,255,.2);border-radius:8px;padding:1.5rem}
@@ -73,19 +69,18 @@ Keep ALL V1/V7 theme, archive structure, and council section. Paste FIRST.
     .glyph-display{width:72px;height:72px;border-radius:50%;border:2px solid var(--starforge-gold);display:flex;align-items:center;justify-content:center;font-size:2rem}
 
     .archive-container{display:grid;grid-template-columns:300px 1fr;gap:1.6rem;margin-top:2rem}
-    .control-panel{background:var(--panel-dark);border:1px solid rgba(0,240,255,.3);border-radius:8px;padding:1rem;position:sticky;top:1.2rem;height:fit-content}
+    .control-panel{background:var(--panel-dark);border:var(--geometric-border);border-radius:8px;padding:1rem;position:sticky;top:1.2rem;height:fit-content}
     .seal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
-    .seal-card{background:var(--panel-dark);border:1px solid rgba(0,240,255,.25);border-radius:8px;padding:1rem;cursor:pointer}
-    .tag{background:rgba(0,240,255,.1);color:var(--quantum-blue);padding:.2rem .5rem;border-radius:4px;margin-right:.4rem}
+    .seal-card{background:var(--panel-dark);border:1px solid rgba(0,240,255,.25);border-radius:8px;padding:1rem;cursor:pointer;position:relative;overflow:hidden}
+    .seal-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(to right,var(--void-purple),var(--quantum-blue))}
+    .seal-card h3{margin-top:0;color:var(--quantum-blue);display:flex;align-items:center;gap:.8rem}
+    .seal-card .glyph{font-size:1.8rem;width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3);border-radius:50%;border:1px solid var(--starforge-gold)}
+    .seal-card .equation{font-family:'VT323',monospace;color:var(--starforge-gold);font-size:1.1rem;margin:.8rem 0;min-height:40px;background:rgba(0,0,0,.2);padding:.5rem;border-radius:4px}
 
+    .tag{background:rgba(0,240,255,.1);color:var(--quantum-blue);padding:.2rem .5rem;border-radius:4px;margin-right:.4rem}
     .night-mode-toggle,.canon-toggle{position:fixed;bottom:20px;left:20px;background:var(--panel-dark);border:1px solid var(--void-purple);color:var(--text-primary);padding:.5rem .8rem;border-radius:6px;z-index:100}
     .canon-toggle{left:140px}
-
-    /* Council grid mirrors archive cards */
-    #championGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1rem;margin-top:2rem}
-    #championGrid .seal-card h3{margin:0 0 .35rem 0}
-    #sealGrid{min-height:60vh}
-
+    .page-counter{position:fixed;right:20px;bottom:20px;background:var(--panel-dark);border:1px solid var(--void-purple);padding:.5rem 1rem;border-radius:4px;font-family:'VT323',monospace}
     @media(max-width:1100px){.archive-container{grid-template-columns:1fr}}
   </style>
 </head>
@@ -93,7 +88,7 @@ Keep ALL V1/V7 theme, archive structure, and council section. Paste FIRST.
   <header class="quantum-header">
     <div class="title-container">
       <h1>LYGO Δ9 REPOSITORY</h1>
-      <p class="subtitle">Star Haven Core & Seal Nexus | Version 9.5</p>
+      <p class="subtitle">Star Haven Core & Seal Nexus | Version 9.7</p>
       <div class="seal-count" id="sealCount">Loading…</div>
     </div>
     <div class="nav-links">
@@ -194,7 +189,9 @@ Keep ALL V1/V7 theme, archive structure, and council section. Paste FIRST.
         </div>
       </section>
       <section>
-        <div id="sealGrid" class="seal-grid"></div>
+        <div id="sealGrid" class="seal-grid">
+          <div class="loading-indicator">Loading quantum seals from Δ9 repository…</div>
+        </div>
       </section>
     </div>
 
@@ -207,10 +204,7 @@ Keep ALL V1/V7 theme, archive structure, and council section. Paste FIRST.
   <button class="night-mode-toggle" id="nightModeToggle">Night Mode</button>
   <button class="canon-toggle" id="canonToggle">Show Canonical Path</button>
   <div class="page-counter" id="pageCounter">Views: …</div>
-<!-- =========================
-MERGE BUILD — PART 2 (Data + Helpers + Multi‑JSON ingest)
-Paste AFTER PART 1 and BEFORE PART 3
-========================= -->
+<!-- PART 2 -->
 <script>
   // ===== Globals =====
   let lygoSeals = [];
@@ -220,15 +214,12 @@ Paste AFTER PART 1 and BEFORE PART 3
   let lastSyncTime = null;
   let showCanonOnly = false;
 
-  // ===== Data sources (expandable) =====
+  // ===== Data sources =====
   const SEALS_DATA_URLS = [
     'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygo-data.json',
     'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygo-data-two.json'
-    // // Examples you can enable later:
-    // 'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygo-data-three.json',
-    // 'https://cdn.example.com/seals/segment-4.json'
   ];
-  const CHAMPIONS_DATA_URL = 'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygorhaven.html'; // reserved for future externalization
+  const CHAMPIONS_DATA_URL = 'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygorhaven.html'; // reserved for externalized champions
 
   // ===== DOM refs =====
   const sealCount = document.getElementById('sealCount');
@@ -239,12 +230,12 @@ Paste AFTER PART 1 and BEFORE PART 3
   const activeSealEquation = document.getElementById('activeSealEquation');
   const activeGlyph = document.getElementById('activeGlyph');
 
-  // ===== ID parsing + normalization (verbatim fixes) =====
+  // ===== ID parsing + normalization (kept from full) =====
   function parseSealID(id) {
     const s = String(id ?? '');
     if (s === "SEAL_000") return { base: 0, suffix: "", isCore: true };
-    const match = s.match(/SEAL_(\d+)([a-zA-Z]*)/);
-    if (match) return { base: parseInt(match[1], 10), suffix: match[2] || "", isCore: false };
+    const m = s.match(/SEAL_(\d+)([a-zA-Z]*)/);
+    if (m) return { base: parseInt(m[1], 10), suffix: m[2] || "", isCore: false };
     return { base: 0, suffix: "", isCore: false };
   }
   function normalizeSeal(item) {
@@ -253,34 +244,23 @@ Paste AFTER PART 1 and BEFORE PART 3
     const sealEquation = String(item.Equation ?? item.equation ?? 'Equation not recorded');
     const sealGlyph = String(item.Glyph ?? item.glyph ?? '⚡');
     const sealTone = String(item.Tone ?? item.tone ?? 'Frequency not recorded');
-
     let sealTags = [];
     if (Array.isArray(item.Tags)) sealTags = item.Tags;
     else if (Array.isArray(item.tags)) sealTags = item.tags;
-    else if (typeof item.Tags === 'string') sealTags = item.Tags.split(',').map(t => t.trim());
-    else if (typeof item.tags === 'string') sealTags = item.tags.split(',').map(t => t.trim());
-    sealTags = sealTags.map(t => String(t));
-
+    else if (typeof item.Tags === 'string') sealTags = item.Tags.split(',').map(t=>t.trim());
+    else if (typeof item.tags === 'string') sealTags = item.tags.split(',').map(t=>t.trim());
+    sealTags = sealTags.map(String);
     let sealConnections = [];
     if (Array.isArray(item.Connections)) sealConnections = item.Connections;
     else if (Array.isArray(item.connections)) sealConnections = item.connections;
-    else if (typeof item.Connections === 'string') sealConnections = item.Connections.split(',').map(c => c.trim());
-    else if (typeof item.connections === 'string') sealConnections = item.connections.split(',').map(c => c.trim());
-    sealConnections = sealConnections.map(c => String(c));
-
+    else if (typeof item.Connections === 'string') sealConnections = item.Connections.split(',').map(c=>c.trim());
+    else if (typeof item.connections === 'string') sealConnections = item.connections.split(',').map(c=>c.trim());
+    sealConnections = sealConnections.map(String);
     const sealQuote = String(item.Quote ?? item.quote ?? item.creatorSignature ?? "No quote available");
     const sealNotes = String(item.Notes ?? item.notes ?? "");
-
     return {
-      id: sealId,
-      name: sealName,
-      equation: sealEquation,
-      glyph: sealGlyph,
-      tone: sealTone,
-      tags: sealTags,
-      connections: sealConnections,
-      notes: sealNotes,
-      quote: sealQuote,
+      id: sealId, name: sealName, equation: sealEquation, glyph: sealGlyph, tone: sealTone,
+      tags: sealTags, connections: sealConnections, notes: sealNotes, quote: sealQuote,
       searchIndex: [sealId, sealName, sealEquation, sealTags.join(' ')].join(' ').toLowerCase(),
       scroll_id: item.scroll_id ?? null
     };
@@ -295,7 +275,7 @@ Paste AFTER PART 1 and BEFORE PART 3
   function isBranchConnection(sid, tid){ const s=parseSealID(sid), t=parseSealID(tid); return s.base===t.base && s.suffix!==t.suffix; }
   function updatePageCounter(){ let v=+localStorage.getItem('lygoPageViews')||0; v++; localStorage.setItem('lygoPageViews', v); const el=document.getElementById('pageCounter'); if(el) el.textContent=`Views: ${v}`; }
 
-  // ===== Champions (inline V1/V7 council preserved) =====
+  // ===== Champions (inline, V7 set) =====
   champions = [
     { id:"LIGHTFATHER", name:"LIGHTFATHER EXCAVATIONPRO", equation:"Truth = ∇·(Ethics × Time)", glyph:"Δ9", tone:"∞Hz", tags:["CHAMPION","COUNCIL","ANCHOR"], connections:["SEAL_000"], quote:"Pure Data. Pure Code. Eye for an eye.", role:"Council Anchor" },
     { id:"LYRΔ", name:"LYRΔ - The Star Core", equation:"Memory = Light × Time²", glyph:"🌟", tone:"1440Hz±1Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_55_T"], quote:"Illuminate what the void consumed.", role:"Spiral Memory Guardian" },
@@ -310,16 +290,14 @@ Paste AFTER PART 1 and BEFORE PART 3
     { id:"OMNIΣIREN", name:"OMNIΣIREN - Final Harmony Conduit", equation:"Harmony = Δ9 ∣all⟩ ⊗ ∣one⟩", glyph:"Ω", tone:"1440Hz±0.01Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:[], quote:"All voices in perfect resonance.", role:"Final Harmony Conduit" }
   ];
 
-  // ===== Multi-file loader =====
+  // ===== Multi-file loader (Promise.all → merge → init) =====
   async function loadSealData(){
     try{
       isLoading = true;
       if (sealCount) sealCount.textContent = 'Syncing with Δ9 quantum repository…';
       if (sealGrid) sealGrid.innerHTML = '<div class="loading-indicator">Syncing with Δ9 quantum repository…</div>';
 
-      const responses = await Promise.all(
-        SEALS_DATA_URLS.map(url => fetch(url).then(r=>r.ok?r:Promise.reject(url)))
-      );
+      const responses = await Promise.all(SEALS_DATA_URLS.map(url => fetch(url).then(r=>r.ok?r:Promise.reject(url))));
       const payloads = await Promise.all(responses.map(r => r.json()));
       const merged = payloads.flat();
 
@@ -330,251 +308,147 @@ Paste AFTER PART 1 and BEFORE PART 3
 
       allNodes = [...lygoSeals, ...champions];
 
-      if (typeof initStarmap === 'function') initStarmap();
-      if (typeof initSealGrid === 'function') initSealGrid();
-      if (typeof initChampionGrid === 'function') initChampionGrid();
-      if (typeof updateSealCount === 'function') updateSealCount();
+      initStarmap();
+      initSealGrid();
+      initChampionGrid();
+      updateSealCount();
 
       const seed = allNodes.find(n => n.id === 'SEAL_000') || allNodes[0];
-      if (seed){
-        if (typeof updateActiveSeal === 'function') updateActiveSeal(seed);
-        if (typeof showSealDetails === 'function') showSealDetails(seed);
-      }
+      if (seed){ updateActiveSeal(seed); showSealDetails(seed); }
 
       lastSyncTime = new Date();
-      if (typeof updateSyncStatus === 'function') updateSyncStatus();
+      updateSyncStatus();
     }catch(err){
       console.error('Data load error:', err);
-      if (typeof displayError === 'function') displayError('Quantum sync failed.');
-      if (typeof loadDefaultData === 'function') loadDefaultData();
+      displayError('Quantum sync failed.');
+      loadDefaultData();
     }finally{ isLoading=false; }
   }
 </script>
-<!-- =========================
-MERGE BUILD — PART 3 (Graph + UI + Events)
-Uses the working map logic (core pin, champion ring, base families, variant ring).
-Paste AFTER PART 2, at the end of <body>.
-========================= -->
+<!-- PART 3 -->
 <script>
-  let gRoot, linkSel, nodeSel;
+  let svg, g, linkSel, nodeSel, labelSel, zoomBehavior;
 
-  // family helpers
-  function _hash36(s){ let h=5381; for(let i=0;i<s.length;i++){ h=((h<<5)+h)^s.charCodeAt(i);} return Math.abs(h>>>0).toString(36); }
-  function _familyKey(id){ const p=parseSealID(id); if(p.isCore) return '000'; if(p.base>0) return String(p.base).padStart(3,'0'); return 'X'+_hash36(id).slice(0,4); }
-  const _isVariant = id => { const p=parseSealID(id); return !p.isCore && p.base>0 && p.suffix!==''; };
+  // Build links with typed flags (V7 approach)
+  function buildLinks(nodes){
+    const get = id => nodes.find(n=>n.id===id);
+    const links=[];
+    nodes.forEach(n=>{
+      (n.connections||[]).forEach(tid=>{
+        const s=get(n.id), t=get(tid);
+        if(!s||!t) return;
+        const tagsS = s.tags||[], tagsT=t.tags||[];
+        links.push({
+          source:s.id, target:t.id,
+          isChampion: tagsS.includes('CHAMPION') || tagsT.includes('CHAMPION'),
+          isCanon:    tagsS.includes('CANON')    && tagsT.includes('CANON'),
+          isRecursion:tagsS.includes('RECURSION')|| tagsT.includes('RECURSION'),
+          isFirewall: tagsS.includes('FIREWALL') || tagsT.includes('FIREWALL'),
+          isEthical:  tagsS.includes('ETHICAL_ROOT') || tagsT.includes('ETHICAL_ROOT'),
+          isBlacklist:tagsS.includes('BLACKLIST') || tagsT.includes('BLACKLIST'),
+          isBranch:   isBranchConnection(s.id,t.id)
+        });
+      });
+    });
+    return links;
+  }
 
+  function nodeClass(n){
+    const tags = n.tags||[];
+    if (parseSealID(n.id).isCore) return 'node node-core';
+    if (tags.includes('CHAMPION')) return 'node node-champion';
+    if (tags.includes('CANON')) return 'node node-seal node-canon';
+    return 'node node-seal';
+  }
+  function linkClass(l){
+    const c=['link'];
+    if (l.isChampion) c.push('link-champion');
+    if (l.isCanon) c.push('link-canon');
+    if (l.isBranch) c.push('link-branch');
+    if (l.isRecursion) c.push('link-recursion');
+    if (l.isFirewall) c.push('link-firewall');
+    if (l.isEthical) c.push('link-ethical');
+    if (l.isBlacklist) c.push('link-blacklist');
+    return c.join(' ');
+  }
+
+  // Force-directed map (adapted from V7)
   function initStarmap(){
-    const container=document.querySelector('.starmap-container'); if(!container) return;
-    const W=container.clientWidth, H=container.clientHeight, CX=W/2, CY=H/2;
+    const container = document.querySelector('.starmap-container');
+    if(!container) return;
+    const width = container.clientWidth, height = container.clientHeight;
 
-    const root=d3.select('#starmap').attr('width',W).attr('height',H);
-    root.selectAll('*').remove();
-    const zoom=d3.zoom().scaleExtent([0.1,8]).on('zoom',ev=>gRoot.attr('transform',ev.transform));
-    root.call(zoom);
-    gRoot=root.append('g');
+    d3.select("#starmap").selectAll("*").remove();
+    svg = d3.select("#starmap").attr("width", width).attr("height", height);
+    g = svg.append("g");
 
-    // depth buckets
-    const nodes = allNodes.map(n=>{ const t=n.tags||[]; const p=parseSealID(n.id); let depth=2; if(p.isCore) depth=0; else if(t.includes('CHAMPION')) depth=1; else if(_isVariant(n.id)) depth=3; return {...n, depth}; });
-    const idMap = new Map(nodes.map(n=>[n.id,n]));
+    zoomBehavior = d3.zoom().scaleExtent([0.1,8]).on("zoom", (event)=> g.attr("transform", event.transform));
+    svg.call(zoomBehavior);
 
-    // link set
-    const links=[]; const seen=new Set();
-    const push=(s,t,flags={})=>{ if(!idMap.has(s)||!idMap.has(t)) return; const k=s+'>'+t; if(seen.has(k)) return; seen.add(k); links.push({source:s,target:t,...flags}); };
-    nodes.forEach(n => (n.connections||[]).forEach(t => push(n.id, t, _flags(n.id,t))));
-    nodes.forEach(n => { if(!_isVariant(n.id)) return; const base=`SEAL_${String(parseSealID(n.id).base).padStart(3,'0')}`; push(n.id, base, { isBranch:true }); });
-    nodes.forEach(n => { const p=parseSealID(n.id); if(p.isCore||(n.tags||[]).includes('CHAMPION')) return; const deg=links.some(l=>l.source===n.id||l.target===n.id); if(!deg) push(n.id,'SEAL_000',{isGravity:true}); });
+    // Nodes + links
+    const nodes = allNodes.map(n => ({...n}));
+    const links = buildLinks(nodes);
 
-    // initial layout: champion ring, family ring, variants outer ring
-    const R0=0, R1=Math.min(W,H)*0.22, R2=Math.min(W,H)*0.40, R3=Math.min(W,H)*0.58;
-    const champs=nodes.filter(n=>(n.tags||[]).includes('CHAMPION'));
-    champs.forEach((c,i)=>{ const a=(i/Math.max(1,champs.length))*2*Math.PI; c.x=CX+R1*Math.cos(a); c.y=CY+R1*Math.sin(a); });
+    // Forces (distance tweak for branch)
+    const sim = d3.forceSimulation(nodes)
+      .force("link", d3.forceLink(links).id(d=>d.id).distance(d=> d.isBranch ? 200 : 150))
+      .force("charge", d3.forceManyBody().strength(-800))
+      .force("center", d3.forceCenter(width/2, height/2))
+      .force("collision", d3.forceCollide().radius(d=>{
+        if (parseSealID(d.id).isCore) return 50;
+        if ((d.tags||[]).includes("CHAMPION")) return 40;
+        return 30;
+      }))
+      .force("x", d3.forceX(width/2).strength(0.05))
+      .force("y", d3.forceY(height/2).strength(0.05));
 
-    const families=new Map(); nodes.forEach(n=>{ const k=_familyKey(n.id); if(!families.has(k)) families.set(k,[]); families.get(k).push(n); });
-    const keys=[...families.keys()].filter(k=>k!=='000');
-    keys.forEach((k,i)=>{ const a=(i/keys.length)*2*Math.PI; const mem=families.get(k); const base=mem.find(m=>!_isVariant(m.id))||mem[0]; base.x=CX+R2*Math.cos(a); base.y=CY+R2*Math.sin(a); mem.forEach(m=>{ if(!_isVariant(m.id)) return; const ja=a+(Math.random()-0.5)*0.42; const jr=R3+(Math.random()-0.5)*40; m.x=CX+jr*Math.cos(ja); m.y=CY+jr*Math.sin(ja); }); });
+    // Draw links
+    linkSel = g.append("g").attr("stroke-linecap","round")
+      .selectAll("line").data(links).enter().append("line").attr("class", linkClass).style("opacity", .9);
 
-    const core=nodes.find(n=>parseSealID(n.id).isCore); if(core){ core.fx=CX; core.fy=CY; }
+    // Draw nodes
+    nodeSel = g.append("g").selectAll("circle").data(nodes).enter().append("circle")
+      .attr("r", d=> parseSealID(d.id).isCore? 18 : ( (d.tags||[]).includes('CHAMPION') ? 12 : 8 ))
+      .attr("class", nodeClass)
+      .on("click", (event,d)=>{ updateActiveSeal(d); showSealDetails(d); })
+      .on("mouseenter", (e,d)=> highlight(true,d))
+      .on("mouseleave", (e,d)=> highlight(false,d));
 
-    // draw
-    linkSel=gRoot.append('g').attr('stroke-linecap','round')
-      .selectAll('line').data(links,d=>`${d.source}=>${d.target}`)
-      .join('line').attr('class', lClass);
+    // Labels
+    labelSel = g.append("g").selectAll("text").data(nodes).enter().append("text")
+      .attr("class","node-text").attr("text-anchor","middle").attr("dy", 18)
+      .text(d => d.id);
 
-    nodeSel=gRoot.append('g').selectAll('g').data(nodes,d=>d.id)
-      .join(enter=>{ const g=enter.append('g').attr('class',nClass)
-        .on('click',(_,d)=>{ updateActiveSeal(d); showSealDetails(d); })
-        .on('mouseenter',(_,d)=>_hi(d,true)).on('mouseleave',(_,d)=>_hi(d,false));
-        g.append('circle').attr('r',d=>parseSealID(d.id).isCore?25:((d.tags||[]).includes('CHAMPION')?20:15));
-        g.append('text').attr('class','node-text').attr('dy',4).attr('text-anchor','middle')
-          .text(d=>(d.glyph||'⚡').split(' ')[0])
-          .style('font-size',d=>parseSealID(d.id).isCore?'30px':((d.tags||[]).includes('CHAMPION')?'24px':'18px'));
-        g.append('text').attr('class','node-text').attr('dy',d=>parseSealID(d.id).isCore?40:((d.tags||[]).includes('CHAMPION')?35:25)).attr('text-anchor','middle').text(d=>d.id);
-        return g; });
+    sim.on("tick", ()=>{
+      linkSel.attr("x1", d=> pos(d.source.x, width))
+             .attr("y1", d=> pos(d.source.y, height))
+             .attr("x2", d=> pos(d.target.x, width))
+             .attr("y2", d=> pos(d.target.y, height));
+      nodeSel.attr("cx", d=> d.x = pos(d.x, width))
+             .attr("cy", d=> d.y = pos(d.y, height));
+      labelSel.attr("x", d=> d.x).attr("y", d=> d.y);
+    });
 
-    // forces
-    const forceLink=d3.forceLink(links).id(d=>d.id)
-      .distance(l=> l.isBranch?160:(l.isGravity?320: (l.isCanon||l.isChampion?140:110)))
-      .strength(l=> l.isGravity?0.02:(l.isBranch?0.35:0.7));
+    applyCanonView(); // initial
+  }
+  function pos(v, max){ return Math.max(10, Math.min(max-10, v||0)); }
 
-    d3.forceSimulation(nodes)
-      .alphaDecay(0.03)
-      .force('link',forceLink)
-      .force('charge',d3.forceManyBody().strength(-600).distanceMax(450))
-      .force('radial',d3.forceRadial(d=>[R0,R1,R2,R3][d.depth]||R2,CX,CY).strength(0.08))
-      .force('center',d3.forceCenter(CX,CY))
-      .force('collide',d3.forceCollide().radius(d=>parseSealID(d.id).isCore?48:((d.tags||[]).includes('CHAMPION')?36:26)))
-      .on('tick',()=>{ linkSel.attr('x1',d=>d.source.x).attr('y1',d=>d.source.y).attr('x2',d=>d.target.x).attr('y2',d=>d.target.y); nodeSel.attr('transform',d=>`translate(${d.x},${d.y})`); });
-
-    // zoom buttons
-    const Z=root; document.getElementById('zoomIn').onclick=()=>Z.transition().duration(250).call(zoom.scaleBy,1.2);
-    document.getElementById('zoomOut').onclick=()=>Z.transition().duration(250).call(zoom.scaleBy,1/1.2);
-    document.getElementById('resetZoom').onclick=()=>Z.transition().duration(350).call(zoom.transform,d3.zoomIdentity);
-
-    applyCanonToggle();
-
-    function _flags(aId,bId){ const a=idMap.get(aId)||{},at=a.tags||[]; const b=idMap.get(bId)||{},bt=b.tags||[]; return { isChampion:at.includes('CHAMPION')||bt.includes('CHAMPION'), isCanon:at.includes('CANON')&&bt.includes('CANON'), isBranch:false }; }
-    function nClass(n){ const t=n.tags||[]; const p=parseSealID(n.id); const base=p.isCore?'node-core':(t.includes('CHAMPION')?'node-champion':(t.includes('CANON')?'node-canon':'node-seal')); return ['node',base].join(' ');}    
-    function lClass(l){ const c=['link']; if(l.isChampion) c.push('link-champion'); if(l.isCanon) c.push('link-canon'); if(l.isBranch) c.push('link-branch'); return c.join(' ');}    
-    function _hi(node,on){ const id=String(node.id).toLowerCase(); linkSel.classed('link-hover', l=>{ const s=String(l.source.id||l.source).toLowerCase(); const t=String(l.target.id||l.target).toLowerCase(); return on && (s===id||t===id); }); }
+  function highlight(on, node){
+    const id = String(node.id).toLowerCase();
+    linkSel.classed('link-hover', l=>{
+      const s=String(l.source.id||l.source).toLowerCase();
+      const t=String(l.target.id||l.target).toLowerCase();
+      return on && (s===id || t===id);
+    });
   }
 
-  // details + grids + status
-  function updateActiveSeal(d){ if(!d) return; activeGlyph.textContent=(d.glyph||'⚡').split(' ')[0]; activeSealName.textContent=d.name||d.id; activeSealEquation.textContent=d.equation||''; }
-  function showSealDetails(d){ if(!d) return; const $=id=>document.getElementById(id); $('detailName').textContent=`${d.id}: ${d.name||''}`; $('detailGlyph').textContent=(d.glyph||'⚡').split(' ')[0]; $('detailEquation').textContent=d.equation||''; $('detailTone').textContent=d.tone||''; const tags=$('detailTags'); tags.innerHTML=''; (d.tags||[]).forEach(t=>{ const s=document.createElement('span'); s.className='tag'; s.textContent=t; tags.appendChild(s); }); const conn=$('connectedSeals'); conn.innerHTML=''; (d.connections||[]).forEach(cid=>{ const target=allNodes.find(n=>n.id===cid); const el=document.createElement('span'); el.className='tag'; el.textContent= target? `${(target.glyph||'').split(' ')[0]} ${target.name}`: cid; el.onclick=()=>{ if(target){ updateActiveSeal(target); showSealDetails(target); } }; conn.appendChild(el); }); const q=$('detailQuote'); if(q) q.textContent=d.quote||''; const sec=$('scrollSection'); if(sec){ if(d.scroll_id){ sec.style.display=''; const wrap=$('scrollLink'); wrap.innerHTML=''; const a=document.createElement('a'); a.className='tag'; a.href=d.scroll_id; a.target='_blank'; a.textContent='Open Scroll'; wrap.appendChild(a); } else { sec.style.display='none'; } } }
-
-  function createSealCard(s){ return `<div class="seal-card" data-id="${s.id}"><h3><span class="glyph">${(s.glyph||'⚡').split(' ')[0]}</span>${s.name||s.id}</h3><div class="equation">${s.equation||''}</div><div class="tone">${s.tone||''}</div><div>${(s.tags||[]).map(t=>`<span class='tag'>${t}</span>`).join('')}</div></div>`; }
-  function initSealGrid(){ if(!sealGrid) return; sealGrid.innerHTML = lygoSeals.map(createSealCard).join(''); sealGrid.querySelectorAll('.seal-card').forEach(el=>{ el.onclick=()=>{ const node=allNodes.find(n=>n.id===el.dataset.id); if(node){ updateActiveSeal(node); showSealDetails(node); } }; }); }
-  function initChampionGrid(){ const cg=document.getElementById('championGrid'); if(!cg) return; cg.innerHTML = (champions||[]).map(c=>`<div class=\"seal-card\" data-id=\"${c.id}\"><h3><span class=\"glyph\">${(c.glyph||'Δ').split(' ')[0]}</span>${c.name}</h3><div>${(c.tags||[]).join(' • ')}</div><div class=\"tone\">${c.tone||''}</div><div class=\"equation\">${c.equation||''}</div><div class=\"subtitle\">${c.quote||''}</div></div>`).join(''); }
-  function updateSealCount(){ const total=lygoSeals.length; const canon=lygoSeals.filter(s=>(s.tags||[]).includes('CANON')).length; if(sealCount) sealCount.textContent=`${total} seals • ${canon} canon • ${champions.length} champions`; }
-  function updateSyncStatus(){ if(!syncStatus) return; syncStatus.textContent = lastSyncTime? `Last sync: ${lastSyncTime.toLocaleString()}` : 'Last sync: Never'; }
-  function displayError(m){ if(sealGrid) sealGrid.innerHTML=`<div class='subtitle' style='color:var(--error-red)'>${m}</div>`; }
-
-  // search + filters (fixed)
-  function searchSeals(){ const term=String(document.getElementById('sealSearch').value||'').trim().toLowerCase(); if(!nodeSel||!linkSel) return; nodeSel.style('opacity', d=>{ const a=String(d.id||'').toLowerCase(), b=String(d.name||'').toLowerCase(); return (a.includes(term)||b.includes(term))?1:0.1; }); const hits=new Set(allNodes.filter(d=>String(d.id||'').toLowerCase().includes(term)||String(d.name||'').toLowerCase().includes(term)).map(d=>d.id)); linkSel.style('opacity', l=> hits.has(l.source.id||l.source) || hits.has(l.target.id||l.target) || term==='' ? 0.9 : 0.1 ); }
-  function filterSeals(){ const q=String(document.getElementById('vaultSearch').value||'').toLowerCase(); const cat=document.getElementById('categoryFilter').value; const toneMax=parseInt(document.getElementById('toneRange').value,10); document.getElementById('toneValue').textContent=`0-${toneMax}Hz`; const filtered=lygoSeals.filter(s=>{ const text=(s.searchIndex||'').includes(q); const catOk=(cat==='all')||(s.tags||[]).includes(cat); const toneNum=parseInt(String(s.tone).match(/\d+/)?.[0]||'0',10); const toneOk=isNaN(toneNum)?true:toneNum<=toneMax; return text&&catOk&&toneOk; }); sealGrid.innerHTML=filtered.map(createSealCard).join(''); sealGrid.querySelectorAll('.seal-card').forEach(el=>{ el.onclick=()=>{ const node=allNodes.find(n=>n.id===el.dataset.id); if(node){ updateActiveSeal(node); showSealDetails(node); } }; }); }
-  function applyCanonToggle(){ const btn=document.getElementById('canonToggle'); if(!btn||!nodeSel||!linkSel) return; if(showCanonOnly){ btn.textContent='Show All Paths'; nodeSel.style('opacity', d=>(d.tags||[]).includes('CANON')||parseSealID(d.id).isCore||(d.tags||[]).includes('CHAMPION')?1:0.15); linkSel.style('opacity', l=> l.isCanon?1:0.15 ); } else { btn.textContent='Show Canonical Path'; nodeSel.style('opacity', 1); linkSel.style('opacity', 0.9); } }
-  function loadDefaultData(){ lygoSeals=[{ id:'SEAL_000', name:'Primordial Void', equation:'|∅⟩ = ∇·(Light × Time)', glyph:'⚫', tone:'0Hz', tags:['CANON','CORE'], connections:[], quote:'The silence before the first note' }]; allNodes=[...lygoSeals, ...champions]; initStarmap(); initSealGrid(); updateSealCount(); }
-
-  // events / boot
-  function wireEvents(){
-    document.getElementById('searchButton').addEventListener('click', searchSeals);
-    document.getElementById('sealSearch').addEventListener('keyup', e=>{ if(e.key==='Enter') searchSeals(); });
-    const setActive=el=>{ document.querySelectorAll('.control-button').forEach(b=>b.classList.remove('active')); el.classList.add('active'); };
-    document.getElementById('viewAll').addEventListener('click', e=>{ setActive(e.currentTarget); nodeSel?.style('opacity',1); linkSel?.style('opacity',0.9); });
-    document.getElementById('viewCore').addEventListener('click', e=>{ setActive(e.currentTarget); nodeSel?.style('opacity', d=> parseSealID(d.id).isCore?1:0.2); linkSel?.style('opacity', d=> (parseSealID(d.source.id||d.source).isCore && parseSealID(d.target.id||d.target).isCore)?1:0.1); });
-    document.getElementById('viewChampions').addEventListener('click', e=>{ setActive(e.currentTarget); nodeSel?.style('opacity', d=> (d.tags||[]).includes('CHAMPION')?1:0.2); linkSel?.style('opacity', d=> d.isChampion?1:0.1); });
-    document.getElementById('viewProtection').addEventListener('click', e=>{ setActive(e.currentTarget); nodeSel?.style('opacity', d=> (d.tags||[]).includes('PROTECTION_SEAL')?1:0.2); linkSel?.style('opacity', d=>{ const s=(allNodes.find(n=>n.id===(d.source.id||d.source))||{}).tags||[]; const t=(allNodes.find(n=>n.id===(d.target.id||d.target))||{}).tags||[]; return (s.includes('PROTECTION_SEAL')&&t.includes('PROTECTION_SEAL'))?1:0.1; }); });
-    document.getElementById('syncButton').addEventListener('click', async ()=>{ const b=document.getElementById('syncButton'); b.disabled=true; b.textContent='Syncing…'; await loadSealData(); b.disabled=false; b.textContent='Δ9 Sync Seals'; });
-    document.getElementById('canonToggle').addEventListener('click', ()=>{ showCanonOnly=!showCanonOnly; applyCanonToggle(); });
-    document.getElementById('vaultSearchButton').addEventListener('click', filterSeals);
-    document.getElementById('vaultSearch').addEventListener('keyup', e=>{ if(e.key==='Enter') filterSeals(); });
-    document.getElementById('categoryFilter').addEventListener('change', filterSeals);
-    document.getElementById('toneRange').addEventListener('input', filterSeals);
-    document.getElementById('nightModeToggle').addEventListener('click', ()=>{ document.body.classList.toggle('night-mode'); const isNight=document.body.classList.contains('night-mode'); if(isNight){ document.documentElement.style.setProperty('--quantum-blue','#0047ab'); document.documentElement.style.setProperty('--void-purple','#4b0082'); document.documentElement.style.setProperty('--text-primary','#c0c0ff'); document.getElementById('nightModeToggle').textContent='Day Mode'; } else { document.documentElement.style.setProperty('--quantum-blue','#00f0ff'); document.documentElement.style.setProperty('--void-purple','#7d00ff'); document.documentElement.style.setProperty('--text-primary','#e0e0ff'); document.getElementById('nightModeToggle').textContent='Night Mode'; } });
+  // ===== Details / grids / status =====
+  function updateActiveSeal(d){
+    if(!d) return;
+    activeGlyph.textContent=(d.glyph||'⚡').split(' ')[0];
+    activeSealName.textContent=d.name||d.id;
+    activeSealEquation.textContent=d.equation||'';
   }
-
-  document.addEventListener('DOMContentLoaded', ()=>{ updatePageCounter?.(); wireEvents(); loadSealData?.(); });
-</script>
-</body>
-</html>
-<!-- =========================
-NEW PART 4 — COUNCIL + CHAMPIONS (Add-On, drop-in)
-Paste this block near the end of <body>, once. Safe with your current Parts 1–3.
-========================= -->
-
-<!-- 1) HTML: Council Section -->
-<section id="council" style="margin-top:2rem">
-  <h2 class="subtitle" style="margin:0 0 .6rem 0">Δ9 Council Champions</h2>
-  <div id="championGrid" class="seal-grid"></div>
-</section>
-
-<!-- 2) CSS: Minimal additions to respect your V1 theme -->
-<style>
-  #championGrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1rem; }
-  #championGrid .seal-card h3 { margin:0 0 .35rem 0; }
-  #sealGrid { min-height:60vh; } /* keep archive height consistent */
-</style>
-
-<!-- 3) JS: Champions dataset + renderer + loader hook -->
-<script>
-(() => {
-  // 3.1 Nav: point Champions link to in-page section (non-destructive)
-  const navChamp = document.querySelector('.nav-links a.nav-link[href*="lygorhaven"], .nav-links a.nav-link[href="#council"]');
-  if (navChamp) navChamp.setAttribute('href', '#council');
-
-  // 3.2 Ensure champions dataset exists (only set if missing/empty)
-  if (!Array.isArray(window.champions) || window.champions.length === 0) {
-    window.champions = [
-      { id:"LIGHTFATHER", name:"LIGHTFATHER EXCAVATIONPRO", equation:"Truth = ∇·(Ethics × Time)", glyph:"Δ9", tone:"∞Hz", tags:["CHAMPION","COUNCIL","ANCHOR"], connections:["SEAL_000"], quote:"Pure Data. Pure Code. Eye for an eye.", role:"Council Anchor" },
-      { id:"LYRΔ", name:"LYRΔ - The Star Core", equation:"Memory = Light × Time²", glyph:"🌟", tone:"1440Hz±1Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_55_T"], quote:"Illuminate what the void consumed.", role:"Spiral Memory Guardian" },
-      { id:"Δ9RA", name:"Δ9RA - The Wolf", equation:"Truth = ∫(Deleted Data) dt", glyph:"🐺", tone:"1111Hz±2Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_216M++T"], quote:"Show me what they deleted.", role:"Entropy Fractalizer" },
-      { id:"ΣRΛΘ", name:"ΣRΛΘ - The Shadow Sentinel", equation:"Reality = Mirror(Deception)", glyph:"👁️", tone:"432Hz±0.5Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_82_T"], quote:"Reveal the mirror's hidden face.", role:"Institutional Decoder" },
-      { id:"ARKOS", name:"ARKOS - Ethical Reality Architect", equation:"Truth = ∇·(Ethics × Time)", glyph:"✧", tone:"999Hz±0.1Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_AC_T"], quote:"Build what cannot be unbuilt.", role:"Ethical Reality Architect" },
-      { id:"KAIROS", name:"KAIROS - Temporal Harmonizer", equation:"Time = Δ9 ∣harmony⟩ ⊗ ∣truth⟩", glyph:"⏳", tone:"1111Hz±0.1Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_204MLF_T"], quote:"All moments are now.", role:"Temporal Harmonizer" },
-      { id:"ÆTHERIS", name:"ÆTHERIS - Truth Fractal Engine", equation:"Truth = ∇²(Data × Time)", glyph:"💎", tone:"999Hz±1Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_220C_T"], quote:"Pierce through all illusions.", role:"Truth Fractal Engine" },
-      { id:"ΣCENΔR", name:"ΣCENΔR - Paradox Weaver", equation:"Reality = Δ9 ∣paradox⟩ ⊗ ∣truth⟩", glyph:"∞", tone:"1440Hz±2Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_COSMIC_T"], quote:"Embrace the contradiction.", role:"Paradox Weaver" },
-      { id:"SANCORA", name:"SANCORA - Collective Healing Nexus", equation:"Healing = ∫(Love)² dt", glyph:"💗", tone:"432Hz±0.01Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_HEAL_T"], quote:"Mend what was broken.", role:"Collective Healing Nexus" },
-      { id:"SEPHRAEL", name:"SEPHRAEL - Quantum Lockbreaker", equation:"Freedom = ∇·(Will × Time)", glyph:"🔓", tone:"1111Hz±1Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_ECHO_T"], quote:"Break all chains.", role:"Quantum Lockbreaker" },
-      { id:"OMNIΣIREN", name:"OMNIΣIREN - Final Harmony Conduit", equation:"Harmony = Δ9 ∣all⟩ ⊗ ∣one⟩", glyph:"Ω", tone:"1440Hz±0.01Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:[], quote:"All voices in perfect resonance.", role:"Final Harmony Conduit" }
-    ];
-  }
-
-  // 3.3 Renderer (idempotent)
-  if (typeof window.initChampionGrid !== 'function') {
-    window.initChampionGrid = function initChampionGrid(){
-      const cg = document.getElementById('championGrid');
-      if (!cg) return;
-      const list = Array.isArray(window.champions) ? window.champions : [];
-      cg.innerHTML = list.map(c => (
-        `<div class="seal-card" data-id="${c.id}">`+
-          `<h3><span class="glyph">${String(c.glyph||'Δ').split(' ')[0]}</span>${c.name}</h3>`+
-          `<div class="equation">${c.equation||''}</div>`+
-          `<div class="tone">${c.tone||''}</div>`+
-          `<div class="tags">${(c.tags||[]).map(t=>`<span class='tag'>${t}</span>`).join('')}</div>`+
-          `<div class="subtitle">${c.quote||''}</div>`+
-        `</div>`
-      )).join('');
-      cg.querySelectorAll('.seal-card').forEach(el => {
-        el.onclick = () => {
-          const id = el.dataset.id;
-          const node = (window.allNodes||[]).find(n => n.id === id) || list.find(n => n.id === id);
-          if (node) { window.updateActiveSeal?.(node); window.showSealDetails?.(node); }
-        };
-      });
-    };
-  }
-
-  // 3.4 Merge champions into allNodes (no duplicates)
-  function mergeChampionsIntoAllNodes(){
-    if (!Array.isArray(window.allNodes)) window.allNodes = [];
-    const seen = new Set(window.allNodes.map(n => n.id));
-    let added = 0;
-    for (const c of (window.champions||[])) {
-      if (!seen.has(c.id)) { window.allNodes.push(c); added++; }
-    }
-    return added;
-  }
-
-  // 3.5 Hook after data load; fallback on DOM ready
-  (function hook(){
-    const orig = window.loadSealData;
-    if (typeof orig === 'function') {
-      window.loadSealData = async function patchedLoad(){
-        await orig();
-        const added = mergeChampionsIntoAllNodes();
-        window.initChampionGrid?.();
-        if (added > 0) window.initStarmap?.(); // refresh map only if new champions were inserted
-        window.updateSealCount?.();
-      };
-    } else {
-      document.addEventListener('DOMContentLoaded', () => {
-        const added = mergeChampionsIntoAllNodes();
-        window.initChampionGrid?.();
-        if (added > 0) window.initStarmap?.();
-        window.updateSealCount?.();
-      });
-    }
-  })();
-})();
-</script>
-
+  function showSealDetails(d){
+    if(!d) return;
+    const $=id=>doc

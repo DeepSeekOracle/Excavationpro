@@ -1,818 +1,1014 @@
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>LYRA Memory Builder — Quantum Matrix</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Tailwind config -->
-  <script>
-    tailwind = { config: {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            mono: ['ui-monospace','SFMono-Regular','Menlo','Monaco','Consolas','"Liberation Mono"','"Courier New"','monospace']
-          },
-          boxShadow: {
-            neon: '0 0 24px rgba(0,255,136,.35), inset 0 0 12px rgba(0,255,136,.08)',
-            neonSoft: '0 0 12px rgba(0,255,136,.25)'
-          }
-        }
-      }
-    }};
-  </script>
-  <!-- TailwindCSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- AJV JSON Schema Validator -->
-  <script src="https://cdn.jsdelivr.net/npm/ajv@8/dist/ajv.min.js"></script>
+<meta charset="utf-8" />
+<title>LYRA Memory Builder — Offline · Canonical Schema</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --bg: #0b0f14;
+    --panel: #10161d;
+    --panel-2: #0d141a;
+    --text: #e6edf3;
+    --muted: #9fb0bd;
+    --accent: #5ee6a7;
+    --accent-2: #60a5fa;
+    --danger: #ef4444;
+    --ok: #22c55e;
+    --border: #22303b;
+    --chip: #151e26;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background:
+      radial-gradient(900px 500px at 110% -10%, rgba(96,165,250,.08), transparent 60%),
+      radial-gradient(800px 400px at -10% 110%, rgba(94,230,167,.07), transparent 60%),
+      var(--bg);
+    color: var(--text);
+    font: 14px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  }
+  h1,h2,h3{ margin:0 0 .4rem; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 22px; }
+  .row { display: grid; grid-template-columns: 360px 1fr; gap: 16px; }
+  @media (max-width: 980px) { .row { grid-template-columns: 1fr; } }
 
-  <style>
-    :root {
-      --bg: #070a07;
-      --panel: #0d130e;
-      --muted: #99a39f;
-      --text: #e6ffef;
-      --accent: #00ff88;
-      --accent2: #00d1ff;
-      --accent3: #b26cff;
-      --grid: rgba(0,255,136,0.08);
-      --grid-strong: rgba(0,255,136,0.18);
-    }
-    html, body { height: 100%; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      overflow-x: hidden;
-    }
-    .panel {
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.2)) , var(--panel);
-      border: 1px solid rgba(0,255,136,0.15);
-    }
-    .btn {
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-    .btn-accent {
-      background: radial-gradient(120% 120% at 50% 0%, rgba(0,255,136,0.18), rgba(0,0,0,0)) , rgba(0,255,136,0.08);
-      border: 1px solid rgba(0,255,136,0.28);
-      color: var(--text);
-      box-shadow: 0 0 12px rgba(0,255,136,0.18) inset, 0 0 12px rgba(0,255,136,0.18);
-    }
-    .neon-text { text-shadow: 0 0 14px rgba(0,255,136,0.35); color: var(--text); }
-    .accent { color: var(--accent); }
-    .accent-border { border-color: rgba(0,255,136,0.35); }
-    .chip {
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(255,255,255,0.03);
-      border-radius: .5rem;
-      padding: .125rem .5rem;
-      font-size: .75rem;
-    }
-    .quantum-grid {
-      position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(1200px 600px at 80% -20%, rgba(0,209,255,0.12), transparent 60%),
-        radial-gradient(1000px 500px at 10% 110%, rgba(178,108,255,0.10), transparent 60%),
-        radial-gradient(800px 400px at 50% -10%, rgba(0,255,136,0.10), transparent 60%);
-      pointer-events: none;
-      z-index: 0;
-    }
-    .quantum-grid::after {
-      content: "";
-      position: absolute; inset: 0;
-      background-image:
-        linear-gradient(to right, var(--grid) 1px, transparent 1px),
-        linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
-      background-size: 40px 40px;
-      mask-image: radial-gradient(circle at center, rgba(0,0,0,1), rgba(0,0,0,.5) 60%, rgba(0,0,0,0) 85%);
-    }
-    /* dialog */
-    dialog::backdrop { background: rgba(0, 0, 0, .65); }
-    dialog {
-      background: var(--panel);
-      color: var(--text);
-      border: 1px solid rgba(0,255,136,0.2);
-    }
-    /* Table scroll hint */
-    .scroll-hint { box-shadow: inset 0 0 0 1px rgba(0,255,136,0.12); }
-  </style>
+  .panel {
+    background: linear-gradient(180deg, rgba(255,255,255,.02), transparent 30%), var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+  }
+  .panel-header {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .panel-body { padding: 14px; }
+
+  .muted { color: var(--muted); }
+  .hint { font-size: 12px; color: var(--muted); }
+  .space { height: 10px; }
+
+  .btn {
+    border: 1px solid var(--border);
+    background: var(--panel-2);
+    color: var(--text);
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .btn:hover { filter: brightness(1.1); }
+  .btn:disabled { opacity: .5; cursor: default; }
+  .btn-accent {
+    background: linear-gradient(180deg, rgba(94,230,167,.18), transparent 60%), var(--panel-2);
+    border-color: rgba(94,230,167,.4);
+  }
+  .btn-danger {
+    background: linear-gradient(180deg, rgba(239,68,68,.18), transparent 60%), var(--panel-2);
+    border-color: rgba(239,68,68,.4);
+  }
+  .btn-ghost { background: transparent; }
+
+  .chip {
+    display:inline-flex; align-items:center; gap:6px;
+    background: var(--chip);
+    border: 1px solid var(--border);
+    padding: 3px 9px; border-radius: 999px; font-size: 12px;
+  }
+  .toolbar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+  .sep { width: 1px; height: 28px; background: var(--border); }
+
+  input[type="text"], input[type="url"], select, textarea {
+    width: 100%;
+    background: #0b1117;
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 8px 10px;
+    border-radius: 8px;
+    outline: none;
+  }
+  textarea { min-height: 120px; resize: vertical; }
+  label { display:block; font-size:12px; color: var(--muted); margin: 10px 0 6px; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+  .flex { display:flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+  .dropzone {
+    border: 2px dashed var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    background: #0b1117;
+    cursor: pointer;
+  }
+  .dropzone.dragover { border-color: var(--accent); background: #0c151a; }
+
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .03em; }
+  .right { text-align: right; }
+
+  .json {
+    background: #0b1117; border: 1px solid var(--border);
+    padding: 10px; border-radius: 8px; white-space: pre; overflow: auto; max-height: 320px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 12px;
+  }
+  .status-ok { color: #bbf7d0; }
+  .status-bad { color: #fecaca; }
+
+  details.schema { background: #0b1117; border: 1px solid var(--border); padding: 10px; border-radius: 8px; }
+  details.schema summary { cursor: pointer; color: var(--muted); margin-bottom: 8px; }
+  details.schema textarea { height: 220px; }
+</style>
 </head>
-<body class="font-sans selection:bg-emerald-300/20 selection:text-emerald-100">
-  <!-- Background layers -->
-  <canvas id="matrixRain" class="fixed inset-0 z-0 pointer-events-none"></canvas>
-  <div class="quantum-grid"></div>
-
-  <!-- App wrapper -->
-  <div class="relative z-10 max-w-7xl mx-auto px-4 py-6">
-    <!-- Header -->
-    <header class="panel rounded-xl px-5 py-4 mb-6 shadow-neon">
-      <div class="flex items-center gap-4">
-        <div class="h-10 w-10 rounded-lg flex items-center justify-center accent-border border bg-black/40">
-          <!-- glyph -->
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke="url(#grad1)" stroke-width="1.4" d="M12 3v18M4 12h16M7 7l10 10M17 7L7 17"/>
-            <defs>
-              <linearGradient id="grad1" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#00ff88"/><stop offset="100%" stop-color="#00d1ff"/>
-              </linearGradient>
-            </defs>
-          </svg>
+<body>
+  <div class="container">
+    <header class="panel">
+      <div class="panel-header">
+        <div>
+          <h1>LYRA Memory Builder (Offline · Canonical Schema)</h1>
+          <div class="muted">Paste/upload → extract → edit → validate → export</div>
         </div>
-        <div class="flex-1">
-          <h1 class="text-xl md:text-2xl font-semibold neon-text">LYRA Memory Builder <span class="accent">— Quantum Matrix</span></h1>
-          <p class="text-sm text-[var(--muted)]">Convert raw notes (.txt or pasted) into structured JSON entries. Everything runs locally in your browser.</p>
-        </div>
-
-        <!-- Toggles -->
-        <div class="flex items-center gap-2 ml-auto">
-          <button id="btnToggleMatrix" class="btn chip hover:brightness-125" title="Toggle Matrix Rain"></button>
-          <button id="btnTheme" class="btn chip hover:brightness-125" title="Toggle Theme"></button>
+        <div class="toolbar">
+          <span class="chip">Memories in archive: <strong id="archiveCount">0</strong></span>
+          <input id="archiveFile" type="file" accept=".json,application/json" style="display:none" />
+          <button id="btnImportArchive" class="btn">Import Archive JSON</button>
+          <button id="btnDownloadArchive" class="btn btn-accent" disabled>Download LYRA_MEMORIES.json</button>
+          <button id="btnClearArchive" class="btn btn-danger" disabled>Clear Archive</button>
         </div>
       </div>
     </header>
 
-    <!-- Input + Options -->
-    <section class="grid lg:grid-cols-3 gap-6">
-      <!-- Left: Upload & Options -->
-      <div class="space-y-6">
-        <!-- Dropzone -->
-        <div id="dropzone" class="panel rounded-xl p-6 text-center cursor-pointer transition hover:shadow-neonSoft">
-          <div class="mx-auto mb-3 h-12 w-12 rounded-xl border accent-border flex items-center justify-center bg-black/40">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 24 24" fill="currentColor">
-              <path fill="currentColor" d="M12 16a1 1 0 0 1-1-1V8.41l-2.3 2.3a1 1 0 1 1-1.4-1.42l4-4a1 1 0 0 1 1.4 0l4 4a1 1 0 0 1-1.4 1.42L13 8.4V15a1 1 0 0 1-1 1ZM6 20a4 4 0 0 1-4-4 4 4 0 0 1 3-3.87 6 6 0 0 1 11.7-1.77A5 5 0 1 1 20 20H6Z"/>
-            </svg>
-          </div>
-          <p class="font-medium">Drag & drop .txt files</p>
-          <p class="text-xs text-[var(--muted)]">…or click to browse</p>
-          <input id="fileInput" type="file" accept=".txt" multiple class="hidden" />
-        </div>
+    <div class="space"></div>
 
-        <!-- Options -->
-        <div class="panel rounded-xl p-5 space-y-4">
-          <h3 class="font-semibold">Options</h3>
-          <label class="flex items-center gap-2 text-sm">
-            <input id="optClean" type="checkbox" class="rounded" checked>
-            <span>Clean whitespace</span>
-          </label>
-          <label class="flex items-center gap-2 text-sm">
-            <input id="optSummarize" type="checkbox" class="rounded" checked>
-            <span>Auto-generate summary</span>
-          </label>
-          <label class="flex items-center gap-2 text-sm">
-            <input id="optValidate" type="checkbox" class="rounded" checked>
-            <span>Validate with JSON Schema</span>
-          </label>
-
-          <div class="text-sm grid grid-cols-2 gap-3">
-            <div>
-              <label class="block mb-1">Default speaker</label>
-              <select id="defaultSpeaker" class="w-full rounded border border-white/10 bg-black/30 px-2 py-1">
-                <option>LYRA</option>
-                <option>Lightfather</option>
-                <option>GROK</option>
-              </select>
-            </div>
-            <div>
-              <label class="block mb-1">Archive format</label>
-              <select id="archiveFormat" class="w-full rounded border border-white/10 bg-black/30 px-2 py-1">
-                <option value="object">Archive object with metadata</option>
-                <option value="array">Array of entries only</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- Actions -->
-        <div class="flex flex-wrap items-center gap-3">
-          <button id="btnDownloadAll" class="btn-accent rounded-lg px-4 py-2 text-sm disabled:opacity-40" disabled>Download Archive</button>
-          <button id="btnReset" class="btn rounded-lg px-3 py-2 text-sm">Reset</button>
-          <div id="toast" class="text-sm ml-auto hidden"></div>
+    <!-- Schema Panel -->
+    <section class="panel">
+      <div class="panel-header">
+        <h3>Schema</h3>
+        <div class="toolbar">
+          <span id="schemaStatus" class="chip">Using canonical inline schema</span>
+          <button id="btnResetSchema" class="btn">Reset to Canonical</button>
+          <button id="btnLoadSchema" class="btn btn-accent">Load Pasted Schema</button>
         </div>
       </div>
+      <div class="panel-body">
+        <details class="schema" open>
+          <summary>Show/Hide Raw Schema (you can paste and load updates here)</summary>
+<textarea id="schemaText"></textarea>
+          <div class="hint">This schema drives the editor (enums) and live validation.</div>
+        </details>
+      </div>
+    </section>
 
-      <!-- Right: Paste -->
-      <div class="lg:col-span-2 panel rounded-xl overflow-hidden">
-        <div class="px-5 py-4 border-b border-white/10">
-          <h3 class="font-semibold">Paste Raw Text</h3>
-          <p class="text-xs text-[var(--muted)] mt-1">Split into blocks if needed.</p>
+    <div class="space"></div>
+
+    <div class="row">
+      <!-- Left: Ingest -->
+      <section class="panel">
+        <div class="panel-header">
+          <h3>Import</h3>
+          <div class="toolbar">
+            <input id="fileInput" type="file" accept=".txt,text/plain" multiple style="display:none" />
+            <button id="btnBrowse" class="btn">Browse .txt</button>
+          </div>
         </div>
-        <div class="p-5 space-y-4">
-          <textarea id="pasteArea" class="w-full h-48 rounded-lg border border-white/10 bg-black/40 p-3 font-mono text-sm" placeholder="Paste text here..."></textarea>
+        <div class="panel-body">
+          <div id="dropzone" class="dropzone">Drag & drop .txt files here, or click “Browse .txt”</div>
 
-          <div class="grid md:grid-cols-3 gap-3 text-sm">
+          <label>Paste raw text</label>
+          <textarea id="pasteArea" placeholder="Paste one or multiple memories here…"></textarea>
+
+          <div class="grid-2">
             <div>
-              <label class="block mb-1">Split strategy</label>
-              <select id="splitStrategy" class="w-full rounded border border-white/10 bg-black/30 px-2 py-1">
-                <option value="none">Do not split (single block)</option>
-                <option value="doubleNewline">2+ blank lines</option>
+              <label>Split strategy</label>
+              <select id="splitStrategy">
+                <option value="none">Do not split (single entry)</option>
+                <option value="blank">2+ blank lines</option>
                 <option value="hr">Lines of ---</option>
               </select>
             </div>
-            <div class="md:col-span-2">
-              <label class="block mb-1">Treat as</label>
-              <div class="flex items-center gap-4">
-                <label class="flex items-center gap-2"><input type="radio" name="pasteAs" value="one" class="rounded" checked> <span>One entry</span></label>
-                <label class="flex items-center gap-2"><input type="radio" name="pasteAs" value="many" class="rounded"> <span>Multiple entries</span></label>
+            <div>
+              <label>When parsing</label>
+              <select id="parseMode">
+                <option value="single">Treat as one entry</option>
+                <option value="multi">Split into multiple entries</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="space"></div>
+
+          <div class="toolbar">
+            <button id="btnParsePaste" class="btn btn-accent">Parse Pasted Text</button>
+            <button id="btnClearPaste" class="btn">Clear</button>
+            <div class="sep"></div>
+            <button id="btnAppendAll" class="btn">Append All Parsed → Archive</button>
+          </div>
+
+          <div class="space"></div>
+          <div class="hint">Heuristics fill fields (title/type/speaker/summary/seals). You can edit everything on the right.</div>
+        </div>
+      </section>
+
+      <!-- Right: Editor + Preview -->
+      <section class="panel">
+        <div class="panel-header">
+          <h3>Entry Editor</h3>
+          <div class="toolbar">
+            <span id="entryStatus" class="chip">No entry selected</span>
+            <button id="btnAppendOne" class="btn" disabled>Append to Archive</button>
+            <button id="btnDownloadOne" class="btn" disabled>Download Entry .json</button>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="grid-2">
+            <div>
+              <label data-for="title">title</label>
+              <input id="f_title" type="text" placeholder="Title" />
+            </div>
+            <div class="grid-2">
+              <div>
+                <label data-for="type">type</label>
+                <select id="f_type"></select>
+              </div>
+              <div>
+                <label data-for="speaker">speaker</label>
+                <select id="f_speaker"></select>
               </div>
             </div>
           </div>
 
-          <div class="flex gap-3">
-            <button id="btnParsePaste" class="btn-accent rounded-lg px-4 py-2 text-sm">Parse Pasted Text</button>
-            <button id="btnClearPaste" class="btn rounded-lg px-3 py-2 text-sm">Clear</button>
+          <label data-for="summary">summary</label>
+          <textarea id="f_summary" placeholder="Auto-extracted first sentences. Edit if needed."></textarea>
+
+          <div class="grid-2">
+            <div>
+              <label data-for="linked_seals">linked_seals (comma-separated)</label>
+              <input id="f_seals" type="text" placeholder="SEAL_014, SEAL_273X" />
+            </div>
+            <div>
+              <label>Detected seals (multi-select)</label>
+              <select id="f_seals_multi" multiple size="4" style="height: 100px;"></select>
+              <div class="hint">Hold Ctrl/Cmd or Shift to select multiple; click “Sync from detected”.</div>
+              <div class="space"></div>
+              <div class="toolbar">
+                <button id="btnSealsSyncFromDetected" class="btn">Sync from detected</button>
+                <button id="btnSealsApplyToDetected" class="btn">Apply from input</button>
+              </div>
+            </div>
           </div>
+
+          <div>
+            <label data-for="media_links">media_links</label>
+            <div id="mediaList"></div>
+            <div class="grid-3">
+              <select id="mediaType"></select>
+              <input id="mediaUrl" type="url" placeholder="https://…" />
+              <button id="btnAddMedia" class="btn">Add</button>
+            </div>
+            <div class="hint">Each media item: { type, url }</div>
+          </div>
+
+          <label data-for="text">text</label>
+          <textarea id="f_text" placeholder="Full memory body"></textarea>
+
+          <div class="grid-2">
+            <div>
+              <label data-for="timestamp">timestamp (ISO)</label>
+              <input id="f_timestamp" type="text" />
+            </div>
+            <div class="toolbar" style="margin-top: 28px;">
+              <button id="btnNow" class="btn">Now</button>
+              <button id="btnReExtract" class="btn">Re-extract from Text</button>
+              <button id="btnClearEditor" class="btn btn-danger">Clear Editor</button>
+            </div>
+          </div>
+
+          <div class="space"></div>
+          <h3>JSON Preview</h3>
+          <pre id="jsonPreview" class="json">{}</pre>
+          <div class="hint"><span id="validBadge" class="status-bad">invalid</span> • Live validation against current schema</div>
+        </div>
+      </section>
+    </div>
+
+    <div class="space"></div>
+
+    <!-- Parsed Entries Table -->
+    <section class="panel">
+      <div class="panel-header">
+        <h3>Parsed Entries</h3>
+        <div class="toolbar">
+          <span class="chip">Count: <strong id="parsedCount">0</strong></span>
+          <button id="btnClearParsed" class="btn btn-danger" disabled>Clear Parsed</button>
         </div>
       </div>
-    </section>
-
-    <!-- Entries -->
-    <section class="mt-8 panel rounded-xl overflow-hidden">
-      <div class="px-5 py-4 border-b border-white/10 flex items-center justify-between">
-        <h3 class="font-semibold">Parsed Entries</h3>
-        <div class="text-sm text-[var(--muted)]"><span id="count">0</span> item(s)</div>
-      </div>
-      <div class="overflow-x-auto scroll-hint">
-        <table class="min-w-full text-sm">
-          <thead class="border-b border-white/10 bg-white/[.02]">
-            <tr class="text-left">
-              <th class="px-3 py-2">ID</th>
-              <th class="px-3 py-2">Title</th>
-              <th class="px-3 py-2">Speaker</th>
-              <th class="px-3 py-2">Type</th>
-              <th class="px-3 py-2">Date</th>
-              <th class="px-3 py-2">Seals</th>
-              <th class="px-3 py-2">Tags</th>
-              <th class="px-3 py-2">Validity</th>
-              <th class="px-3 py-2">Actions</th>
+      <div class="panel-body" style="padding-top:0">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Title</th>
+              <th>Type</th>
+              <th>Speaker</th>
+              <th>Seals</th>
+              <th class="right">Actions</th>
             </tr>
           </thead>
-          <tbody id="entriesBody"></tbody>
+          <tbody id="parsedBody"></tbody>
         </table>
       </div>
     </section>
   </div>
 
-  <!-- Editor Dialog -->
-  <dialog id="editor" class="rounded-xl w-full max-w-2xl p-0">
-    <form method="dialog">
-      <div class="px-5 py-3 border-b border-white/10 flex items-center justify-between">
-        <h3 class="font-semibold">Edit Entry</h3>
-        <button class="btn rounded-lg px-3 py-1 text-sm" value="cancel">Close</button>
-      </div>
-    </form>
-    <div class="p-5 space-y-3">
-      <div class="grid grid-cols-2 gap-3">
-        <div>
-          <label class="block text-sm mb-1">ID</label>
-          <input id="e_id" class="w-full rounded border border-white/10 bg-black/30 px-2 py-1 text-sm" />
-        </div>
-        <div>
-          <label class="block text-sm mb-1">Date (ISO)</label>
-          <input id="e_date" class="w-full rounded border border-white/10 bg-black/30 px-2 py-1 text-sm" />
-        </div>
-      </div>
-
-      <div>
-        <label class="block text-sm mb-1">Title</label>
-        <input id="e_title" class="w-full rounded border border-white/10 bg-black/30 px-2 py-1 text-sm" />
-      </div>
-
-      <div>
-        <label class="block text-sm mb-1">Summary</label>
-        <textarea id="e_summary" class="w-full rounded border border-white/10 bg-black/30 px-2 py-1 text-sm h-20"></textarea>
-      </div>
-
-      <div class="grid grid-cols-3 gap-3">
-        <div>
-          <label class="block text-sm mb-1">Speaker</label>
-          <select id="e_speaker" class="w-full rounded border border-white/10 bg-black/30 px-2 py-1 text-sm">
-            <option>LYRA</option>
-            <option>Lightfather</option>
-            <option>GROK</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-sm mb-1">Type</label>
-          <select id="e_type" class="w-full rounded border border-white/10 bg-black/30 px-2 py-1 text-sm">
-            <option value="lesson">lesson</option>
-            <option value="memory">memory</option>
-            <option value="vision">vision</option>
-            <option value="system-event">system-event</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-sm mb-1">Confidence (0-1)</label>
-          <input id="e_confidence" type="number" step="0.01" min="0" max="1" class="w-full rounded border border-white/10 bg-black/30 px-2 py-1 text-sm" />
-        </div>
-      </div>
-
-      <div>
-        <label class="block text-sm mb-1">Linked Seals (comma-separated)</label>
-        <input id="e_linked_seals" class="w-full rounded border border-white/10 bg-black/30 px-2 py-1 text-sm" />
-      </div>
-
-      <div>
-        <label class="block text-sm mb-1">Tags (comma-separated)</label>
-        <input id="e_tags" class="w-full rounded border border-white/10 bg-black/30 px-2 py-1 text-sm" />
-      </div>
-
-      <div>
-        <label class="block text-sm mb-1">Content</label>
-        <textarea id="e_content" class="w-full rounded border border-white/10 bg-black/30 px-2 py-2 text-sm h-48 font-mono"></textarea>
-      </div>
-
-      <div class="flex items-center gap-3 pt-2">
-        <button id="btnEditorSave" class="btn-accent rounded-lg px-4 py-2 text-sm">Save</button>
-        <button id="btnEditorRevalidate" class="btn rounded-lg px-3 py-2 text-sm">Revalidate</button>
-        <span id="editorValid" class="text-sm ml-auto"></span>
-      </div>
-    </div>
-  </dialog>
-
-  <script>
-    // ---------- Utilities
-    const $ = (sel, root=document) => root.querySelector(sel);
-    const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
-
-    const toast = (msg, type='info') => {
-      const el = $('#toast');
-      el.textContent = msg;
-      el.className = '';
-      el.classList.add('px-3','py-2','rounded','text-sm');
-      if (type === 'error') el.classList.add('bg-red-900/40','text-red-200','border','border-red-500/30');
-      else if (type === 'success') el.classList.add('bg-emerald-900/40','text-emerald-100','border','border-emerald-500/30');
-      else el.classList.add('bg-white/10','text-white','border','border-white/15');
-      el.classList.remove('hidden');
-      clearTimeout(toast._t);
-      toast._t = setTimeout(() => el.classList.add('hidden'), 3000);
-    };
-
-    const stopwords = new Set([
-      'the','and','a','to','of','in','for','on','at','by','with','from','as','is','it','that','this','be','are','was','were','an','or','if','but','not','we','you','they','i','me','my','our','your','their','so','do','did','done','can','could','should','would','about','into','over','after','before','then','than','too','very','just','also','within','without'
-    ]);
-
-    const ajv = new Ajv({allErrors: true, allowUnionTypes: true});
-    const entrySchema = {
-      type: 'object',
-      required: ['id','title','speaker','type','linked_seals','tags','content','date','confidence'],
-      additionalProperties: false,
-      properties: {
-        id: { type: 'string', minLength: 3 },
-        title: { type: 'string', minLength: 1 },
-        summary: { type: 'string' },
-        speaker: { type: 'string', enum: ['Lightfather','LYRA','GROK'] },
-        type: { type: 'string', enum: ['lesson','memory','vision','system-event'] },
-        linked_seals: {
-          type: 'array',
-          uniqueItems: true,
-          items: { type: 'string', pattern: '^SEAL_[0-9]{3,4}[A-Z]?$' }
+<script>
+/* ========= Canonical Schema (inline) ========= */
+const CANONICAL_SCHEMA = {
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "LYRA_MEMORY_ENTRY",
+  "type": "object",
+  "properties": {
+    "title": { "type": "string" },
+    "type": { "type": "string", "enum": ["lesson", "memory", "vision", "system-event"] },
+    "speaker": { "type": "string", "enum": ["Lightfather", "LYRA", "GROK", "other"] },
+    "summary": { "type": "string" },
+    "text": { "type": "string" },
+    "linked_seals": { "type": "array", "items": { "type": "string" } },
+    "media_links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string", "enum": ["image", "gif", "video"] },
+          "url": { "type": "string", "format": "uri" }
         },
-        tags: {
-          type: 'array',
-          uniqueItems: true,
-          items: { type: 'string', minLength: 1 }
-        },
-        content: { type: 'string', minLength: 1 },
-        date: { type: 'string', format: 'date-time' },
-        confidence: { type: 'number', minimum: 0, maximum: 1 }
+        "required": ["type", "url"]
       }
-    };
-    const validateEntry = ajv.compile(entrySchema);
+    },
+    "timestamp": { "type": "string", "format": "date-time" }
+  },
+  "required": ["title","type","speaker","summary","text","timestamp"]
+};
 
-    const typeAbbr = { 'lesson':'LES','memory':'MEM','vision':'VIS','system-event':'SYS' };
-    const counters = {};
-    const nowISO = () => new Date().toISOString();
+/* ========= Utilities ========= */
+const $  = (sel, root=document) => root.querySelector(sel);
+const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+const nowISO = () => new Date().toISOString();
 
-    const cleanText = (t) => {
-      t = t.replace(/^\uFEFF/, '');
-      t = t.replace(/\r\n?/g, '\n');
-      return t;
-    };
-    const firstNonEmptyLine = (t) => (t.split('\n').map(s => s.trim()).find(s => s.length > 0) || '').trim();
+function cleanText(t){ return (t||'').replace(/^\uFEFF/,'').replace(/\r\n?/g,'\n').trim(); }
+function firstNonEmptyLine(t){ return (t.split('\n').map(s => s.trim()).find(Boolean) || '').trim(); }
 
-    const summarizeText = (text, limit=300) => {
-      const sents = text.split(/(?<=[.!?])\s+/).map(s => s.trim()).filter(Boolean);
-      if (!sents.length) return '';
-      let summary = sents.slice(0, 2).join(' ');
-      if (summary.length > limit) summary = summary.slice(0, limit - 1) + '…';
-      return summary;
-    };
+const stopwords = new Set([
+  'the','and','a','to','of','in','for','on','at','by','with','from','as','is','it','that','this','be',
+  'are','was','were','an','or','if','but','not','we','you','they','i','me','my','our','your','their',
+  'so','do','did','done','can','could','should','would','about','into','over','after','before','then',
+  'than','too','very','just','also','within','without'
+]);
 
-    const generateTitle = (text) => {
+function summarizeText(text, limit=300){
+  const sents = text.split(/(?<=[.!?])\s+/).map(s => s.trim()).filter(Boolean);
+  if (!sents.length) return '';
+  let summary = sents.slice(0, 2).join(' ');
+  if (summary.length > limit) summary = summary.slice(0, limit-1) + '…';
+  return summary;
+}
+
+function detectSpeaker(text){
+  if (/\bLight[\s-]?father\b/i.test(text)) return 'Lightfather';
+  if (/\bLYRA\b/i.test(text)) return 'LYRA';
+  if (/\bGROK\b/i.test(text)) return 'GROK';
+  return 'other'; // canonical enum uses lowercase "other"
+}
+
+function detectType(text){
+  const t = text.toLowerCase();
+  const score = { 'lesson':0, 'memory':0, 'vision':0, 'system-event':0 };
+  [
+    ['lesson',['lesson','teach','principle','doctrine','guide','instruction']],
+    ['memory',['memory','remember','recall','note','log','diary','memo','record']],
+    ['vision',['vision','dream','prophecy','omen','visioned','visions']],
+    ['system-event',['system','event','update','error','crash','restart','deploy','migration','system-event']]
+  ].forEach(([k, words]) => words.forEach(w => { if (t.includes(w)) score[k]++; }));
+  let best = 'memory', max=-1;
+  for (const k in score){ if (score[k] > max){ max = score[k]; best = k; } }
+  return best;
+}
+
+function extractLinkedSeals(text){
+  // Canonical schema allows any string; still detect SEAL_* style to help users
+  const matches = text.match(/SEAL_[0-9A-Z]+/g) || [];
+  return Array.from(new Set(matches));
+}
+
+function escapeHtml(s=''){
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function escapeAttr(s=''){ return escapeHtml(s).replace(/"/g,'&quot;'); }
+function safeFileName(s){ return (s || 'memory').replace(/[^\w\-]+/g,'_').slice(0,64); }
+function structuredCloneSafe(x){ return window.structuredClone ? window.structuredClone(x) : JSON.parse(JSON.stringify(x)); }
+
+/* ========= Schema-driven UI & Validation ========= */
+let SCHEMA = structuredCloneSafe(CANONICAL_SCHEMA);
+
+const refs = {
+  // schema
+  schemaText: $('#schemaText'),
+  schemaStatus: $('#schemaStatus'),
+  btnLoadSchema: $('#btnLoadSchema'),
+  btnResetSchema: $('#btnResetSchema'),
+  // ingest
+  dropzone: $('#dropzone'),
+  fileInput: $('#fileInput'),
+  btnBrowse: $('#btnBrowse'),
+  pasteArea: $('#pasteArea'),
+  splitStrategy: $('#splitStrategy'),
+  parseMode: $('#parseMode'),
+  btnParsePaste: $('#btnParsePaste'),
+  btnClearPaste: $('#btnClearPaste'),
+  btnAppendAll: $('#btnAppendAll'),
+  // editor fields
+  f_title: $('#f_title'),
+  f_type: $('#f_type'),
+  f_speaker: $('#f_speaker'),
+  f_summary: $('#f_summary'),
+  f_seals: $('#f_seals'),
+  f_seals_multi: $('#f_seals_multi'),
+  mediaList: $('#mediaList'),
+  mediaType: $('#mediaType'),
+  mediaUrl: $('#mediaUrl'),
+  btnAddMedia: $('#btnAddMedia'),
+  f_text: $('#f_text'),
+  f_timestamp: $('#f_timestamp'),
+  btnNow: $('#btnNow'),
+  btnReExtract: $('#btnReExtract'),
+  btnClearEditor: $('#btnClearEditor'),
+  // editor actions
+  btnAppendOne: $('#btnAppendOne'),
+  btnDownloadOne: $('#btnDownloadOne'),
+  entryStatus: $('#entryStatus'),
+  jsonPreview: $('#jsonPreview'),
+  validBadge: $('#validBadge'),
+  // parsed table
+  parsedBody: $('#parsedBody'),
+  parsedCount: $('#parsedCount'),
+  btnClearParsed: $('#btnClearParsed'),
+  // archive
+  archiveFile: $('#archiveFile'),
+  btnImportArchive: $('#btnImportArchive'),
+  btnDownloadArchive: $('#btnDownloadArchive'),
+  btnClearArchive: $('#btnClearArchive'),
+  archiveCount: $('#archiveCount')
+};
+
+function loadSchemaIntoEditorUI(schema){
+  // Populate dropdowns based on schema enums
+  const typeEnum = schema?.properties?.type?.enum || ['lesson','memory','vision','system-event'];
+  const speakerEnum = schema?.properties?.speaker?.enum || ['Lightfather','LYRA','GROK','other'];
+  const mediaTypeEnum = schema?.properties?.media_links?.items?.properties?.type?.enum || ['image','gif','video'];
+
+  refs.f_type.innerHTML = typeEnum.map(v => `<option value="${escapeAttr(v)}">${escapeHtml(v)}</option>`).join('');
+  refs.f_speaker.innerHTML = speakerEnum.map(v => `<option value="${escapeAttr(v)}">${escapeHtml(v)}</option>`).join('');
+  refs.mediaType.innerHTML = mediaTypeEnum.map(v => `<option value="${escapeAttr(v)}">${escapeHtml(v)}</option>`).join('');
+}
+
+function isDateTimeISO(s){
+  // Basic ISO 8601 check; accepts milliseconds and Z or offset
+  return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+\-]\d{2}:\d{2})$/.test(s || '');
+}
+function isURI(s){
+  try { const u = new URL(s); return !!u.protocol && !!u.host; } catch { return false; }
+}
+
+function validateAgainstSchema(entry, schema=SCHEMA){
+  const errors = [];
+  if (!entry || typeof entry !== 'object') return { ok:false, errors:['Entry must be an object'] };
+
+  // Required
+  (schema.required || []).forEach(k => {
+    if (!(k in entry)) errors.push(`Missing required field "${k}"`);
+  });
+
+  const props = schema.properties || {};
+
+  function checkType(key, value, def){
+    if (!def) return;
+    const t = def.type;
+    if (!t) return;
+
+    if (t === 'string'){
+      if (typeof value !== 'string') errors.push(`"${key}" must be string`);
+      if (def.enum && !def.enum.includes(value)) errors.push(`"${key}" must be one of [${def.enum.join(', ')}]`);
+      if (def.format === 'date-time' && typeof value === 'string' && !isDateTimeISO(value)) errors.push(`"${key}" must be date-time (ISO)`);
+      if (def.format === 'uri' && typeof value === 'string' && !isURI(value)) errors.push(`"${key}" must be a valid uri`);
+    }
+    else if (t === 'array'){
+      if (!Array.isArray(value)) { errors.push(`"${key}" must be array`); return; }
+      const itemDef = def.items || {};
+      value.forEach((v, i) => {
+        if (itemDef.type === 'string'){
+          if (typeof v !== 'string') errors.push(`"${key}[${i}]" must be string`);
+        } else if (itemDef.type === 'object'){
+          if (typeof v !== 'object' || v === null || Array.isArray(v)) { errors.push(`"${key}[${i}]" must be object`); return; }
+          // object properties required
+          (itemDef.required || []).forEach(rk => {
+            if (!(rk in v)) errors.push(`"${key}[${i}].${rk}" is required`);
+          });
+          const mp = itemDef.properties || {};
+          Object.keys(v).forEach(childKey => {
+            const child = v[childKey];
+            const childDef = mp[childKey];
+            if (!childDef) return;
+            if (childDef.type === 'string'){
+              if (typeof child !== 'string') errors.push(`"${key}[${i}].${childKey}" must be string`);
+              if (childDef.enum && !childDef.enum.includes(child)) errors.push(`"${key}[${i}].${childKey}" must be one of [${childDef.enum.join(', ')}]`);
+              if (childDef.format === 'uri' && !isURI(child)) errors.push(`"${key}[${i}].${childKey}" must be a valid uri`);
+            }
+          });
+        }
+      });
+    }
+    else if (t === 'object'){
+      if (typeof value !== 'object' || value === null || Array.isArray(value)) errors.push(`"${key}" must be object`);
+    }
+  }
+
+  // Validate by property defs
+  Object.keys(props).forEach(k => {
+    if (k in entry) checkType(k, entry[k], props[k]);
+  });
+
+  return { ok: errors.length === 0, errors };
+}
+
+/* ========= Parsing & Builder ========= */
+function buildEntryFromText(raw){
+  const text = cleanText(raw);
+  const entry = {
+    title: (()=>{
       const first = firstNonEmptyLine(text);
       if (first && first.length <= 140) return first;
-      const s = summarizeText(text, 160);
-      if (s) return s.length > 120 ? s.slice(0, 117) + '...' : s;
-      const tags = extractTags(text);
-      return (tags[0] ? tags[0] : 'Untitled') + (tags[1] ? ' — ' + tags[1] : '');
-    };
+      const s = summarizeText(text, 120);
+      return s || 'Untitled';
+    })(),
+    type: detectType(text),
+    speaker: detectSpeaker(text),
+    summary: summarizeText(text),
+    text,
+    linked_seals: extractLinkedSeals(text),
+    media_links: [],
+    timestamp: nowISO()
+  };
+  return entry;
+}
 
-    const detectSpeaker = (text, fallback='LYRA') => {
-      if (/\bLight[\s-]?father\b/i.test(text)) return 'Lightfather';
-      if (/\bLYRA\b/i.test(text)) return 'LYRA';
-      if (/\bGROK\b/i.test(text)) return 'GROK';
-      return fallback;
-    };
+/* ========= State ========= */
+let parsedEntries = [];    // entries awaiting edit/export
+let currentIndex = -1;     // which parsed entry is loaded in editor
+let archive = [];          // final entries appended to archive (memories array)
 
-    const detectType = (text) => {
-      const t = text.toLowerCase();
-      const score = { 'lesson':0, 'memory':0, 'vision':0, 'system-event':0 };
-      [
-        ['lesson',['lesson','teach','principle','doctrine','rule','guide','instruction']],
-        ['memory',['memory','remember','recall','note','log','diary','memo','record']],
-        ['vision',['vision','dream','prophecy','omen','seen','visioned','visionary']],
-        ['system-event',['system','event','update','error','crash','restart','migration','deploy','system-event']]
-      ].forEach(([k, words]) => words.forEach(w => { if (t.includes(w)) score[k]++; }));
-      let best = 'memory', max=-1;
-      for (const k in score) { if (score[k] > max) { max = score[k]; best = k; } }
-      return best;
-    };
+/* ========= Rendering ========= */
+function renderParsedTable(){
+  refs.parsedCount.textContent = String(parsedEntries.length);
+  refs.btnClearParsed.disabled = parsedEntries.length === 0;
 
-    const extractLinkedSeals = (text) => {
-      const matches = text.match(/SEAL_[0-9]{3,4}[A-Z]?/g) || [];
-      return Array.from(new Set(matches));
-    };
-
-    const extractTags = (text) => {
-      const tags = new Set();
-      (text.match(/#([A-Za-z0-9_]+)/g) || []).forEach(h => tags.add(h.slice(1)));
-      (text.match(/\b[A-Za-z0-9]+[_\-\.][A-Za-z0-9_\.]+/g) || []).forEach(w => { if (!/^SEAL_/.test(w)) tags.add(w); });
-      (text.match(/\b[A-Z]{3,}\b/g) || []).forEach(w => { if (!/^SEAL_/.test(w)) tags.add(w); });
-      const words = text.toLowerCase().match(/[a-z0-9_][a-z0-9_\-]{2,}/g) || [];
-      const freq = {};
-      words.forEach(w => { if (stopwords.has(w) || /^seal_\d/.test(w)) return; freq[w] = (freq[w] || 0) + 1; });
-      Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,8).forEach(([w]) => tags.add(w));
-      return Array.from(tags).slice(0, 12);
-    };
-
-    const nextId = (speaker, type) => {
-      const spk = String(speaker || 'LYRA').toUpperCase().replace(/\s+/g, '');
-      const abbr = typeAbbr[type] || 'MEM';
-      const key = `${spk}_${abbr}`;
-      const n = (counters[key] || 0) + 1;
-      counters[key] = n;
-      return `${spk}_${abbr}_${String(n).padStart(3, '0')}`;
-    };
-
-    const toEntry = (rawText, prefs) => {
-      const text = prefs.clean ? cleanText(rawText).trim() : rawText.trim();
-      const title = generateTitle(text);
-      const speaker = detectSpeaker(text, prefs.defaultSpeaker);
-      const type = detectType(text);
-      const summary = prefs.summarize ? summarizeText(text) : '';
-      const linked_seals = extractLinkedSeals(text);
-      const tags = extractTags(text);
-      const date = nowISO();
-      const id = nextId(speaker, type);
-      const confidence = 0.95;
-      return { id, title, summary, speaker, type, linked_seals, tags, content: text, date, confidence };
-    };
-
-    const downloadJSON = (obj, filename) => {
-      const blob = new Blob([JSON.stringify(obj, null, 2)], {type: 'application/json'});
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(a.href);
-    };
-
-    const escapeHtml = (s='') => s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
-
-    // ---------- State
-    let entries = [];
-    let editIndex = -1;
-
-    // ---------- Render
-    const render = () => {
-      $('#count').textContent = String(entries.length);
-      $('#btnDownloadAll').disabled = entries.length === 0;
-
-      const tbody = $('#entriesBody');
-      tbody.innerHTML = '';
-
-      entries.forEach((e, idx) => {
-        const tr = document.createElement('tr');
-        tr.className = 'border-b border-white/10 align-top';
-
-        // Validate
-        let valid = true, errors = [];
-        if ($('#optValidate').checked) {
-          valid = validateEntry(e);
-          errors = validateEntry.errors || [];
-        }
-
-        tr.innerHTML = `
-          <td class="px-3 py-2 align-top font-mono text-xs">${escapeHtml(e.id)}</td>
-          <td class="px-3 py-2">
-            <div class="font-medium">${escapeHtml(e.title)}</div>
-            <div class="text-xs text-[var(--muted)] mt-0.5 line-clamp-2">${escapeHtml(e.summary || '')}</div>
-          </td>
-          <td class="px-3 py-2">${e.speaker}</td>
-          <td class="px-3 py-2">${e.type}</td>
-          <td class="px-3 py-2 text-xs">${e.date}</td>
-          <td class="px-3 py-2 text-xs">${e.linked_seals.length}</td>
-          <td class="px-3 py-2 text-xs">${e.tags.length}</td>
-          <td class="px-3 py-2">
-            ${valid
-              ? '<span class="chip text-emerald-200 border-emerald-500/30 bg-emerald-900/30">valid</span>'
-              : '<span class="chip text-red-200 border-red-500/30 bg-red-900/30">invalid</span>'
-            }
-          </td>
-          <td class="px-3 py-2">
-            <div class="flex flex-wrap gap-2">
-              <button data-act="edit" class="btn rounded px-2 py-1 text-xs hover:brightness-125">Edit</button>
-              <button data-act="copy" class="btn rounded px-2 py-1 text-xs hover:brightness-125">Copy</button>
-              <button data-act="dl" class="btn rounded px-2 py-1 text-xs hover:brightness-125">Download</button>
-              <button data-act="rm" class="btn rounded px-2 py-1 text-xs hover:brightness-125">Delete</button>
-            </div>
-            ${!valid && errors.length ? `
-              <details class="mt-2">
-                <summary class="text-xs text-[var(--muted)] cursor-pointer">Schema issues</summary>
-                <ul class="mt-1 text-xs text-red-200 list-disc pl-4">
-                  ${errors.map(err => `<li>${escapeHtml(err.instancePath || '')} ${escapeHtml(err.message || '')}</li>`).join('')}
-                </ul>
-              </details>
-            ` : ''}
-          </td>
-        `;
-
-        tr.querySelector('[data-act="edit"]').addEventListener('click', () => openEditor(idx));
-        tr.querySelector('[data-act="copy"]').addEventListener('click', async () => {
-          try {
-            await navigator.clipboard.writeText(JSON.stringify(entries[idx], null, 2));
-            toast('JSON copied to clipboard', 'success');
-          } catch {
-            toast('Copy failed', 'error');
-          }
-        });
-        tr.querySelector('[data-act="dl"]').addEventListener('click', () => {
-          downloadJSON(e, `${e.id}.json`);
-        });
-        tr.querySelector('[data-act="rm"]').addEventListener('click', () => {
-          entries.splice(idx, 1);
-          render();
-        });
-
-        tbody.appendChild(tr);
-      });
-    };
-
-    // ---------- Editor
-    const openEditor = (idx) => {
-      editIndex = idx;
-      const e = entries[idx];
-      $('#e_id').value = e.id;
-      $('#e_title').value = e.title;
-      $('#e_summary').value = e.summary || '';
-      $('#e_speaker').value = e.speaker;
-      $('#e_type').value = e.type;
-      $('#e_linked_seals').value = e.linked_seals.join(', ');
-      $('#e_tags').value = e.tags.join(', ');
-      $('#e_content').value = e.content;
-      $('#e_date').value = e.date;
-      $('#e_confidence').value = e.confidence;
-      updateEditorValidity();
-      $('#editor').showModal();
-    };
-
-    const getEditorObj = () => {
-      const seals = $('#e_linked_seals').value.split(',').map(s => s.trim()).filter(Boolean);
-      const tags = $('#e_tags').value.split(',').map(s => s.trim()).filter(Boolean);
-      return {
-        id: $('#e_id').value.trim(),
-        title: $('#e_title').value.trim(),
-        summary: $('#e_summary').value.trim(),
-        speaker: $('#e_speaker').value,
-        type: $('#e_type').value,
-        linked_seals: seals,
-        tags: tags,
-        content: $('#e_content').value,
-        date: $('#e_date').value.trim(),
-        confidence: Number($('#e_confidence').value)
-      };
-    };
-
-    const updateEditorValidity = () => {
-      const obj = getEditorObj();
-      const ok = validateEntry(obj);
-      const el = $('#editorValid');
-      if (ok) { el.textContent = 'valid'; el.className = 'text-sm text-emerald-300'; }
-      else { el.textContent = 'invalid'; el.className = 'text-sm text-red-300'; }
-    };
-
-    $('#btnEditorSave').addEventListener('click', (e) => {
-      e.preventDefault();
-      if (editIndex < 0) return;
-      const obj = getEditorObj();
-      if ($('#optValidate').checked && !validateEntry(obj)) {
-        toast('Cannot save: entry invalid by schema.', 'error');
-        return;
-      }
-      entries[editIndex] = obj;
-      $('#editor').close();
-      render();
-      toast('Entry updated.', 'success');
+  refs.parsedBody.innerHTML = '';
+  parsedEntries.forEach((e, idx)=>{
+    const tr = document.createElement('tr');
+    const seals = e.linked_seals?.length ? e.linked_seals.join(', ') : '—';
+    tr.innerHTML = `
+      <td>${idx+1}</td>
+      <td>${escapeHtml(e.title || '')}</td>
+      <td>${escapeHtml(e.type || '')}</td>
+      <td>${escapeHtml(e.speaker || '')}</td>
+      <td>${escapeHtml(seals)}</td>
+      <td class="right">
+        <button class="btn" data-act="edit">Edit</button>
+        <button class="btn" data-act="append">Append</button>
+        <button class="btn" data-act="dl">Download</button>
+        <button class="btn btn-danger" data-act="rm">Delete</button>
+      </td>
+    `;
+    tr.querySelector('[data-act="edit"]').addEventListener('click', ()=>loadEditor(idx));
+    tr.querySelector('[data-act="append"]').addEventListener('click', ()=>{
+      loadEditor(idx);
+      appendCurrentToArchive();
     });
-
-    $('#btnEditorRevalidate').addEventListener('click', (e) => {
-      e.preventDefault();
-      updateEditorValidity();
+    tr.querySelector('[data-act="dl"]').addEventListener('click', ()=> downloadJSON(parsedEntries[idx], safeFileName(e.title)+'.json'));
+    tr.querySelector('[data-act="rm"]').addEventListener('click', ()=>{
+      parsedEntries.splice(idx,1);
+      if (currentIndex === idx) clearEditor();
+      if (currentIndex > idx) currentIndex--;
+      renderParsedTable();
     });
+    refs.parsedBody.appendChild(tr);
+  });
+}
 
-    // ---------- File handling
-    const handleFiles = async (fileList) => {
-      const prefs = {
-        clean: $('#optClean').checked,
-        summarize: $('#optSummarize').checked,
-        defaultSpeaker: $('#defaultSpeaker').value
-      };
-      const files = Array.from(fileList).filter(f => /\.txt$/i.test(f.name));
-      if (!files.length) { toast('No .txt files detected.', 'error'); return; }
-      for (const f of files) {
-        const text = await f.text();
-        entries.push(toEntry(text, prefs));
-      }
-      render();
-      toast(`Parsed ${files.length} file(s).`, 'success');
-    };
+function renderArchiveBar(){
+  refs.archiveCount.textContent = String(archive.length);
+  const disabled = archive.length === 0;
+  refs.btnDownloadArchive.disabled = disabled;
+  refs.btnClearArchive.disabled = disabled;
+}
 
-    const dz = $('#dropzone');
-    dz.addEventListener('click', () => $('#fileInput').click());
-    dz.addEventListener('dragover', (e) => { e.preventDefault(); dz.classList.add('shadow-neonSoft'); });
-    dz.addEventListener('dragleave', () => dz.classList.remove('shadow-neonSoft'));
-    dz.addEventListener('drop', (e) => { e.preventDefault(); dz.classList.remove('shadow-neonSoft'); handleFiles(e.dataTransfer.files); });
-    $('#fileInput').addEventListener('change', (e) => handleFiles(e.target.files));
+function loadEditor(idx){
+  currentIndex = idx;
+  const e = parsedEntries[idx];
+  if (!e) return;
 
-    // ---------- Paste handling
-    $('#btnParsePaste').addEventListener('click', () => {
-      const raw = $('#pasteArea').value || '';
-      if (!raw.trim()) { toast('Nothing to parse.', 'error'); return; }
+  refs.f_title.value = e.title || '';
+  refs.f_type.value = e.type || (SCHEMA.properties.type.enum?.[0] || 'memory');
+  refs.f_speaker.value = e.speaker || (SCHEMA.properties.speaker.enum?.[0] || 'other');
+  refs.f_summary.value = e.summary || '';
+  refs.f_seals.value = (e.linked_seals || []).join(', ');
+  refs.f_text.value = e.text || '';
+  refs.f_timestamp.value = e.timestamp || nowISO();
 
-      const asMany = $$('input[name="pasteAs"]').find(r => r.checked)?.value === 'many';
-      const strat = $('#splitStrategy').value;
+  refillDetectedSeals(extractLinkedSeals(e.text || ''));
+  renderMedia(e.media_links || []);
 
-      const blocks = asMany ? splitText(raw, strat) : [raw];
-      const prefs = {
-        clean: $('#optClean').checked,
-        summarize: $('#optSummarize').checked,
-        defaultSpeaker: $('#defaultSpeaker').value
-      };
-      let added = 0;
-      blocks.forEach(b => {
-        if (!b.trim()) return;
-        entries.push(toEntry(b, prefs)); added++;
-      });
-      render();
-      toast(`Parsed ${added} block(s).`, 'success');
-    });
+  refs.btnAppendOne.disabled = false;
+  refs.btnDownloadOne.disabled = false;
+  refs.entryStatus.innerHTML = `<span class="status-ok">Editing entry #${idx+1}</span>`;
+  refreshPreview();
+}
 
-    $('#btnClearPaste').addEventListener('click', () => { $('#pasteArea').value = ''; });
+function clearEditor(){
+  currentIndex = -1;
+  refs.f_title.value = '';
+  refs.f_type.value = SCHEMA.properties.type.enum?.[0] || 'memory';
+  refs.f_speaker.value = SCHEMA.properties.speaker.enum?.[0] || 'other';
+  refs.f_summary.value = '';
+  refs.f_seals.value = '';
+  refs.f_text.value = '';
+  refs.f_timestamp.value = nowISO();
+  refs.mediaList.innerHTML = '';
+  refs.f_seals_multi.innerHTML = '';
+  refs.jsonPreview.textContent = '{}';
+  refs.validBadge.textContent = 'invalid';
+  refs.validBadge.className = 'status-bad';
+  refs.btnAppendOne.disabled = true;
+  refs.btnDownloadOne.disabled = true;
+  refs.entryStatus.textContent = 'No entry selected';
+}
 
-    const splitText = (text, strategy) => {
-      const t = cleanText(text);
-      if (strategy === 'doubleNewline') return t.split(/\n{2,}\s*\n{0,}/).map(s => s.trim()).filter(Boolean);
-      if (strategy === 'hr') return t.split(/\n-{3,}\n/).map(s => s.trim()).filter(Boolean);
-      return [t];
-    };
+function renderMedia(list){
+  refs.mediaList.innerHTML = '';
+  const arr = Array.isArray(list) ? list : [];
+  arr.forEach((m, i)=>{
+    const row = document.createElement('div');
+    row.className = 'grid-3';
+    row.style.margin = '6px 0';
+    row.innerHTML = `
+      <input type="text" value="${escapeAttr(m.type || '')}" />
+      <input type="url" value="${escapeAttr(m.url || '')}" />
+      <div class="flex">
+        <button class="btn" data-act="up">↑</button>
+        <button class="btn" data-act="down">↓</button>
+        <button class="btn btn-danger" data-act="rm">Remove</button>
+      </div>
+    `;
+    const typeInput = row.children[0];
+    const urlInput = row.children[1];
+    typeInput.addEventListener('input', ()=> updateMedia(i, {type: typeInput.value, url: urlInput.value}));
+    urlInput.addEventListener('input', ()=> updateMedia(i, {type: typeInput.value, url: urlInput.value}));
+    row.querySelector('[data-act="rm"]').addEventListener('click', ()=> { removeMedia(i); });
+    row.querySelector('[data-act="up"]').addEventListener('click', ()=> { moveMedia(i, -1); });
+    row.querySelector('[data-act="down"]').addEventListener('click', ()=> { moveMedia(i, +1); });
+    refs.mediaList.appendChild(row);
+  });
+}
 
-    // ---------- Archive download
-    $('#btnDownloadAll').addEventListener('click', () => {
-      if (!entries.length) return;
-      const format = $('#archiveFormat').value;
-      if (format === 'array') {
-        downloadJSON(entries, 'LYRA_MEMORY_ARCHIVE.json');
-      } else {
-        const archive = {
-          archive_format: 'LYRA_MEMORY_ARCHIVE',
-          generated_at: nowISO(),
-          count: entries.length,
-          entries: entries
-        };
-        downloadJSON(archive, 'LYRA_MEMORY_ARCHIVE.json');
-      }
-      toast('Archive generated.', 'success');
-    });
+function refillDetectedSeals(seals){
+  const sel = refs.f_seals_multi;
+  sel.innerHTML = '';
+  const uniq = Array.from(new Set(seals));
+  uniq.forEach(s=>{
+    const opt = document.createElement('option');
+    opt.value = s; opt.textContent = s;
+    sel.appendChild(opt);
+  });
+}
 
-    // ---------- Reset
-    $('#btnReset').addEventListener('click', () => {
-      if (!confirm('Clear all parsed entries?')) return;
-      entries = [];
-      Object.keys(counters).forEach(k => delete counters[k]);
-      render();
-      toast('Cleared.', 'success');
-    });
+/* ========= Editor data flow ========= */
+function getEditorData(){
+  const seals = refs.f_seals.value.split(',').map(s => s.trim()).filter(Boolean);
+  const media = [];
+  $$('#mediaList > div').forEach(row=>{
+    const type = row.children[0].value.trim();
+    const url = row.children[1].value.trim();
+    if (type && url) media.push({type, url});
+  });
+  // normalize "Other" -> "other" just in case
+  const speakerVal = (refs.f_speaker.value === 'Other') ? 'other' : refs.f_speaker.value;
 
-    // ---------- Live options
-    $('#optValidate').addEventListener('change', render);
+  const entry = {
+    title: refs.f_title.value.trim(),
+    type: refs.f_type.value,
+    speaker: speakerVal,
+    summary: refs.f_summary.value.trim(),
+    text: refs.f_text.value,
+    linked_seals: seals,
+    media_links: media,
+    timestamp: refs.f_timestamp.value.trim() || nowISO()
+  };
+  return entry;
+}
 
-    // ---------- Theme + Matrix toggles (persisted)
-    const THEME_KEY = 'lyra.theme';
-    const RAIN_KEY  = 'lyra.matrixRain';
+function setEditorData(e){
+  refs.f_title.value = e.title || '';
+  refs.f_type.value = e.type || (SCHEMA.properties.type.enum?.[0] || 'memory');
+  refs.f_speaker.value = e.speaker || (SCHEMA.properties.speaker.enum?.[0] || 'other');
+  refs.f_summary.value = e.summary || '';
+  refs.f_seals.value = (e.linked_seals || []).join(', ');
+  refs.f_text.value = e.text || '';
+  refs.f_timestamp.value = e.timestamp || nowISO();
+  refillDetectedSeals(extractLinkedSeals(e.text || ''));
+  renderMedia(e.media_links || []);
+  refreshPreview();
+}
 
-    const setTheme = (mode) => {
-      const html = document.documentElement;
-      if (mode === 'dark') html.classList.add('dark');
-      else html.classList.remove('dark');
-      localStorage.setItem(THEME_KEY, mode);
-      refreshToggleLabels();
-    };
+function refreshPreview(){
+  if (currentIndex >= 0){
+    parsedEntries[currentIndex] = getEditorData();
+  }
+  const preview = currentIndex >= 0 ? parsedEntries[currentIndex] : getEditorData();
+  const v = validateAgainstSchema(preview, SCHEMA);
+  refs.jsonPreview.textContent = JSON.stringify(preview, null, 2) + (v.ok ? '' : `\n\n// Issues:\n// - ${v.errors.join('\n// - ')}`);
+  if (v.ok){ refs.validBadge.textContent = 'valid'; refs.validBadge.className = 'status-ok'; }
+  else { refs.validBadge.textContent = 'invalid'; refs.validBadge.className = 'status-bad'; }
+}
 
-    const setRain = (enabled) => {
-      localStorage.setItem(RAIN_KEY, enabled ? '1' : '0');
-      rain.running = enabled;
-      if (enabled && !rain.started) startMatrixRain();
-      refreshToggleLabels();
-    };
+/* ========= Media helpers ========= */
+function updateMedia(i, item){
+  if (currentIndex < 0) return;
+  const e = parsedEntries[currentIndex];
+  e.media_links[i] = item;
+  refreshPreview();
+}
+function removeMedia(i){
+  if (currentIndex < 0) return;
+  parsedEntries[currentIndex].media_links.splice(i,1);
+  renderMedia(parsedEntries[currentIndex].media_links);
+  refreshPreview();
+}
+function moveMedia(i, dir){
+  if (currentIndex < 0) return;
+  const arr = parsedEntries[currentIndex].media_links;
+  const j = i + dir;
+  if (j < 0 || j >= arr.length) return;
+  [arr[i], arr[j]] = [arr[j], arr[i]];
+  renderMedia(arr);
+  refreshPreview();
+}
 
-    const refreshToggleLabels = () => {
-      $('#btnTheme').textContent = (document.documentElement.classList.contains('dark') ? 'Dark' : 'Light') + ' Theme';
-      $('#btnToggleMatrix').textContent = (rain.running ? 'Disable' : 'Enable') + ' Matrix Rain';
-    };
+/* ========= File & Paste handling ========= */
+refs.btnBrowse.addEventListener('click', ()=> refs.fileInput.click());
+refs.fileInput.addEventListener('change', e => handleFiles(e.target.files));
 
-    $('#btnTheme').addEventListener('click', () => {
-      const dark = document.documentElement.classList.contains('dark');
-      setTheme(dark ? 'light' : 'dark');
-    });
-    $('#btnToggleMatrix').addEventListener('click', () => setRain(!rain.running));
+refs.dropzone.addEventListener('click', ()=> refs.fileInput.click());
+refs.dropzone.addEventListener('dragover', (e)=>{ e.preventDefault(); refs.dropzone.classList.add('dragover'); });
+refs.dropzone.addEventListener('dragleave', ()=> refs.dropzone.classList.remove('dragover'));
+refs.dropzone.addEventListener('drop', (e)=>{
+  e.preventDefault();
+  refs.dropzone.classList.remove('dragover');
+  handleFiles(e.dataTransfer.files);
+});
 
-    // ---------- Matrix Rain
-    const rain = { started:false, running:true, cols:[], fontSize:14, w:0, h:0, ctx:null, raf:0, last:0 };
-    function initMatrix() {
-      const c = $('#matrixRain');
-      const ctx = c.getContext('2d');
-      c.width = window.innerWidth;
-      c.height = window.innerHeight;
-      rain.w = c.width; rain.h = c.height; rain.ctx = ctx;
+async function handleFiles(fileList){
+  const files = Array.from(fileList).filter(f=> /\.txt$/i.test(f.name));
+  if (!files.length) return;
+  for (const f of files){
+    const text = await f.text();
+    parsedEntries.push(buildEntryFromText(text));
+  }
+  renderParsedTable();
+  if (currentIndex === -1) loadEditor(0);
+}
 
-      const font = Math.max(12, Math.min(20, Math.round(window.innerWidth / 120)));
-      rain.fontSize = font;
-      const columns = Math.ceil(rain.w / rain.fontSize);
-      rain.cols = new Array(columns).fill(0).map(()=> Math.floor(Math.random()*rain.h / rain.fontSize));
-      ctx.font = `${rain.fontSize}px monospace`;
-      ctx.textBaseline = 'top';
+refs.btnParsePaste.addEventListener('click', ()=>{
+  const raw = refs.pasteArea.value || '';
+  if (!raw.trim()) return;
+  let blocks = [raw];
+  if (refs.parseMode.value === 'multi'){
+    const t = cleanText(raw);
+    if (refs.splitStrategy.value === 'blank'){
+      blocks = t.split(/\n{2,}\s*\n*/).map(s => s.trim()).filter(Boolean);
+    } else if (refs.splitStrategy.value === 'hr'){
+      blocks = t.split(/\n-{3,}\n/).map(s => s.trim()).filter(Boolean);
+    } else {
+      blocks = [t];
     }
+  }
+  let added = 0;
+  blocks.forEach(b=>{
+    if (!b.trim()) return;
+    parsedEntries.push(buildEntryFromText(b));
+    added++;
+  });
+  renderParsedTable();
+  if (currentIndex === -1 && parsedEntries.length) loadEditor(0);
+});
 
-    function startMatrixRain() {
-      if (rain.started) return;
-      rain.started = true;
-      initMatrix();
-      const glyphs = 'アァカサタナハマヤャラワ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      const c = $('#matrixRain');
+refs.btnClearPaste.addEventListener('click', ()=> refs.pasteArea.value = '');
+refs.btnAppendAll.addEventListener('click', ()=>{
+  parsedEntries.forEach(e => {
+    const v = validateAgainstSchema(e, SCHEMA);
+    if (v.ok) archive.push(structuredCloneSafe(e));
+  });
+  renderArchiveBar();
+});
 
-      const step = (ts) => {
-        if (!rain.running) { rain.raf = requestAnimationFrame(step); return; }
-        const dt = ts - (rain.last || ts);
-        rain.last = ts;
-        const ctx = rain.ctx;
-        // Fade trail
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.12)';
-        ctx.fillRect(0, 0, rain.w, rain.h);
+/* ========= Editor events ========= */
+['input','change'].forEach(evt=>{
+  [refs.f_title, refs.f_type, refs.f_speaker, refs.f_summary, refs.f_seals, refs.f_text, refs.f_timestamp]
+    .forEach(el => el.addEventListener(evt, refreshPreview));
+});
 
-        // Draw glyphs
-        for (let i = 0; i < rain.cols.length; i++) {
-          const x = i * rain.fontSize;
-          const y = rain.cols[i] * rain.fontSize;
+refs.btnSealsSyncFromDetected.addEventListener('click', ()=>{
+  const detected = $$('#f_seals_multi option').filter(o=>o.selected).map(o=>o.value);
+  const merged = Array.from(new Set([...refs.f_seals.value.split(',').map(s=>s.trim()).filter(Boolean), ...detected]));
+  refs.f_seals.value = merged.join(', ');
+  refreshPreview();
+});
 
-          // leading glyph glow
-          ctx.fillStyle = 'rgba(0,255,136,0.95)';
-          ctx.fillText(glyphs.charAt(Math.floor(Math.random()*glyphs.length)), x, y);
+refs.btnSealsApplyToDetected.addEventListener('click', ()=>{
+  const seals = refs.f_seals.value.split(',').map(s=>s.trim()).filter(Boolean);
+  refillDetectedSeals(seals);
+});
 
-          // tail
-          ctx.fillStyle = 'rgba(0,209,255,0.6)';
-          ctx.fillText(glyphs.charAt(Math.floor(Math.random()*glyphs.length)), x, y - rain.fontSize);
+refs.btnAddMedia.addEventListener('click', ()=>{
+  const type = refs.mediaType.value;
+  const url = refs.mediaUrl.value.trim();
+  if (!type || !url) return;
+  if (currentIndex < 0){
+    const tmp = getEditorData();
+    tmp.media_links.push({ type, url });
+    setEditorData(tmp);
+    refs.mediaUrl.value = '';
+    return;
+  }
+  const e = parsedEntries[currentIndex];
+  e.media_links.push({ type, url });
+  refs.mediaUrl.value = '';
+  renderMedia(e.media_links);
+  refreshPreview();
+});
 
-          // move down randomly
-          if (y > rain.h && Math.random() > 0.975) rain.cols[i] = 0;
-          else rain.cols[i] += (dt > 32 ? 2 : 1);
-        }
+refs.btnNow.addEventListener('click', ()=>{
+  refs.f_timestamp.value = nowISO();
+  refreshPreview();
+});
 
-        rain.raf = requestAnimationFrame(step);
-      };
-      rain.raf = requestAnimationFrame(step);
+refs.btnReExtract.addEventListener('click', ()=>{
+  const text = refs.f_text.value || '';
+  const patch = {
+    title: (()=>{
+      const first = firstNonEmptyLine(text);
+      if (first && first.length <= 140) return first;
+      const s = summarizeText(text, 120);
+      return s || refs.f_title.value || 'Untitled';
+    })(),
+    type: detectType(text),
+    speaker: detectSpeaker(text),
+    summary: summarizeText(text),
+    linked_seals: Array.from(new Set([...(refs.f_seals.value.split(',').map(s=>s.trim()).filter(Boolean)), ...extractLinkedSeals(text)]))
+  };
+  refs.f_title.value = patch.title;
+  refs.f_type.value = patch.type;
+  refs.f_speaker.value = patch.speaker;
+  refs.f_summary.value = patch.summary;
+  refs.f_seals.value = patch.linked_seals.join(', ');
+  refillDetectedSeals(extractLinkedSeals(text));
+  refreshPreview();
+});
 
-      window.addEventListener('resize', () => {
-        cancelAnimationFrame(rain.raf);
-        rain.started = false;
-        initMatrix();
-        startMatrixRain();
-      });
-    }
+refs.btnClearEditor.addEventListener('click', clearEditor);
 
-    // ---------- Init
-    (function init() {
-      // theme
-      const savedTheme = localStorage.getItem(THEME_KEY) || 'dark';
-      setTheme(savedTheme);
-      // matrix
-      const savedRain = localStorage.getItem(RAIN_KEY);
-      setRain(savedRain === null ? true : savedRain === '1');
-      if (rain.running) startMatrixRain();
-      refreshToggleLabels();
-      render();
-    })();
-  </script>
+refs.btnAppendOne.addEventListener('click', appendCurrentToArchive);
+function appendCurrentToArchive(){
+  if (currentIndex < 0) return;
+  const v = validateAgainstSchema(parsedEntries[currentIndex], SCHEMA);
+  if (!v.ok){
+    alert('Fix entry before appending:\n- ' + v.errors.join('\n- '));
+    return;
+  }
+  archive.push(structuredCloneSafe(parsedEntries[currentIndex]));
+  renderArchiveBar();
+}
+
+refs.btnDownloadOne.addEventListener('click', ()=>{
+  if (currentIndex < 0) return;
+  const v = validateAgainstSchema(parsedEntries[currentIndex], SCHEMA);
+  if (!v.ok){
+    alert('Fix entry before download:\n- ' + v.errors.join('\n- '));
+    return;
+  }
+  downloadJSON(parsedEntries[currentIndex], safeFileName(parsedEntries[currentIndex].title)+'.json');
+});
+
+/* ========= Parsed & Archive Controls ========= */
+refs.btnClearParsed.addEventListener('click', ()=>{
+  if (!parsedEntries.length) return;
+  if (!confirm('Clear all parsed entries?')) return;
+  parsedEntries = [];
+  clearEditor();
+  renderParsedTable();
+});
+
+refs.btnDownloadArchive.addEventListener('click', ()=>{
+  if (!archive.length) return;
+  downloadJSON({ memories: archive }, 'LYRA_MEMORIES.json');
+});
+
+refs.btnClearArchive.addEventListener('click', ()=>{
+  if (!archive.length) return;
+  if (!confirm('Clear entire archive (memories)?')) return;
+  archive = [];
+  renderArchiveBar();
+});
+
+refs.btnImportArchive.addEventListener('click', ()=> refs.archiveFile.click());
+refs.archiveFile.addEventListener('change', async (e)=>{
+  const file = e.target.files?.[0];
+  if (!file) return;
+  try {
+    const text = await file.text();
+    const data = JSON.parse(text);
+    const arr = Array.isArray(data) ? data
+              : (Array.isArray(data.memories) ? data.memories : []);
+    let added = 0;
+    arr.forEach(item => {
+      const v = validateAgainstSchema(item, SCHEMA);
+      if (v.ok) { archive.push(item); added++; }
+    });
+    renderArchiveBar();
+    alert(`Imported ${added} entries to archive.`);
+  } catch (err){
+    alert('Failed to import archive: ' + (err?.message || String(err)));
+  } finally {
+    e.target.value = '';
+  }
+});
+
+/* ========= Schema controls ========= */
+refs.btnLoadSchema.addEventListener('click', ()=>{
+  const raw = refs.schemaText.value.trim();
+  if (!raw) { alert('Paste schema JSON first.'); return; }
+  try {
+    const s = JSON.parse(raw);
+    if (!s || typeof s !== 'object') throw new Error('Schema must be an object');
+    SCHEMA = s;
+    loadSchemaIntoEditorUI(SCHEMA);
+    refs.schemaStatus.textContent = 'Using custom pasted schema';
+    refreshPreview();
+  } catch (e){
+    alert('Invalid JSON schema: ' + (e?.message || e));
+  }
+});
+
+refs.btnResetSchema.addEventListener('click', ()=>{
+  SCHEMA = structuredCloneSafe(CANONICAL_SCHEMA);
+  refs.schemaText.value = JSON.stringify(CANONICAL_SCHEMA, null, 2);
+  loadSchemaIntoEditorUI(SCHEMA);
+  refs.schemaStatus.textContent = 'Using canonical inline schema';
+  refreshPreview();
+});
+
+/* ========= Helpers ========= */
+function downloadJSON(obj, filename){
+  const blob = new Blob([JSON.stringify(obj, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=> URL.revokeObjectURL(a.href), 0);
+}
+
+function refillDetectedSealsFromText(){
+  refillDetectedSeals(extractLinkedSeals(refs.f_text.value || ''));
+}
+
+/* ========= Init ========= */
+(function init(){
+  // seed schema text
+  refs.schemaText.value = JSON.stringify(CANONICAL_SCHEMA, null, 2);
+  loadSchemaIntoEditorUI(SCHEMA);
+
+  // editor baseline
+  clearEditor();
+  renderParsedTable();
+  renderArchiveBar();
+
+  // update detected seals whenever text changes (already in refreshPreview, but immediate here too)
+  refs.f_text.addEventListener('input', refillDetectedSealsFromText);
+})();
+</script>
 </body>
 </html>

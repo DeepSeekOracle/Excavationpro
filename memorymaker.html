@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>LYRA Memory Builder — TXT ➜ JSON</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- TailwindCSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- AJV JSON Schema Validator -->
+  <script src="https://cdn.jsdelivr.net/npm/ajv@8/dist/ajv.min.js"></script>
+  <style>
+    /* Basic dialog polyfill-ish look */
+    dialog::backdrop { background: rgba(0,0,0,0.4); }
+    .truncate-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  </style>
+</head>
+<body class="min-h-screen bg-gray-50 text-gray-900">
+  <header class="border-b bg-white">
+    <div class="max-w-7xl mx-auto px-4 py-6">
+      <h1 class="text-2xl font-semibold">LYRA Memory Builder</h1>
+      <p class="text-sm text-gray-600 mt-1">Convert raw notes (.txt or pasted) into structured JSON entries for archival or ingestion. Client-side only.</p>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
+    <!-- Ingest -->
+    <section class="grid lg:grid-cols-3 gap-6">
+      <!-- Drag & Drop / Upload -->
+      <div class="lg:col-span-1">
+        <div id="dropzone"
+             class="border-2 border-dashed rounded-lg bg-white p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:border-gray-400 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mb-3" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 16a1 1 0 0 1-1-1V8.41l-2.3 2.3a1 1 0 1 1-1.4-1.42l4-4a1 1 0 0 1 1.4 0l4 4a1 1 0 0 1-1.4 1.42L13 8.4V15a1 1 0 0 1-1 1ZM6 20a4 4 0 0 1-4-4 4 4 0 0 1 3-3.87 6 6 0 0 1 11.7-1.77A5 5 0 1 1 20 20H6Z"/>
+          </svg>
+          <p class="font-medium">Drag & drop .txt files here</p>
+          <p class="text-sm text-gray-500">or click to browse</p>
+          <input id="fileInput" type="file" accept=".txt" multiple class="hidden" />
+        </div>
+        <div class="mt-3 text-xs text-gray-500">
+          Batch uploads supported. Each .txt becomes one JSON entry.
+        </div>
+
+        <div class="mt-6 bg-white p-4 rounded-lg border space-y-3">
+          <h3 class="font-medium">Options</h3>
+
+          <label class="flex items-center gap-2 text-sm">
+            <input id="optClean" type="checkbox" class="rounded" checked />
+            <span>Clean whitespace</span>
+          </label>
+
+          <label class="flex items-center gap-2 text-sm">
+            <input id="optSummarize" type="checkbox" class="rounded" checked />
+            <span>Auto-generate summary</span>
+          </label>
+
+          <label class="flex items-center gap-2 text-sm">
+            <input id="optValidate" type="checkbox" class="rounded" checked />
+            <span>Validate with JSON Schema</span>
+          </label>
+
+          <div class="text-sm">
+            <label class="block mb-1">Default speaker</label>
+            <select id="defaultSpeaker" class="w-full rounded border px-2 py-1">
+              <option>LYRA</option>
+              <option>Lightfather</option>
+              <option>GROK</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Paste -->
+      <div class="lg:col-span-2 bg-white border rounded-lg">
+        <div class="p-4 border-b">
+          <h3 class="font-medium">Paste Raw Text</h3>
+          <p class="text-xs text-gray-500 mt-1">Optionally split into multiple blocks.</p>
+        </div>
+        <div class="p-4 space-y-4">
+          <textarea id="pasteArea" class="w-full h-48 rounded border p-3 font-mono text-sm" placeholder="Paste text here..."></textarea>
+
+          <div class="grid sm:grid-cols-3 gap-3">
+            <div class="text-sm">
+              <label class="block mb-1">Split strategy</label>
+              <select id="splitStrategy" class="w-full rounded border px-2 py-1">
+                <option value="none">Do not split (single block)</option>
+                <option value="doubleNewline">Split on 2+ consecutive blank lines</option>
+                <option value="hr">Split on lines of ---</option>
+              </select>
+            </div>
+            <div class="text-sm sm:col-span-2">
+              <label class="block mb-1">Treat as</label>
+              <div class="flex items-center gap-4">
+                <label class="flex items-center gap-2">
+                  <input type="radio" name="pasteAs" value="one" class="rounded" checked />
+                  <span class="text-sm">One entry</span>
+                </label>
+                <label class="flex items-center gap-2">
+                  <input type="radio" name="pasteAs" value="many" class="rounded" />
+                  <span class="text-sm">Multiple entries (uses split strategy)</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex gap-3">
+            <button id="btnParsePaste" class="px-4 py-2 rounded bg-gray-900 text-white text-sm">Parse Pasted Text</button>
+            <button id="btnClearPaste" class="px-3 py-2 rounded border text-sm">Clear</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Actions -->
+    <section class="flex flex-wrap items-center gap-3">
+      <button id="btnDownloadAll" class="px-4 py-2 rounded bg-gray-900 text-white text-sm disabled:opacity-50" disabled>Download Archive</button>
+
+      <div class="text-sm">
+        <label class="block mb-1">Archive format</label>
+        <select id="archiveFormat" class="rounded border px-2 py-1">
+          <option value="object">Archive object with metadata</option>
+          <option value="array">Array of entries only</option>
+        </select>
+      </div>
+
+      <button id="btnReset" class="px-3 py-2 rounded border text-sm">Reset</button>
+
+      <div id="toast" class="ml-auto hidden text-sm"></div>
+    </section>
+
+    <!-- Entries Table -->
+    <section class="bg-white border rounded-lg overflow-hidden">
+      <div class="p-4 border-b flex items-center justify-between">
+        <h3 class="font-medium">Parsed Entries</h3>
+        <div class="text-sm text-gray-500"><span id="count">0</span> item(s)</div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <thead class="bg-gray-50 border-b">
+            <tr class="text-left">
+              <th class="px-3 py-2">ID</th>
+              <th class="px-3 py-2">Title</th>
+              <th class="px-3 py-2">Speaker</th>
+              <th class="px-3 py-2">Type</th>
+              <th class="px-3 py-2">Date</th>
+              <th class="px-3 py-2">Seals</th>
+              <th class="px-3 py-2">Tags</th>
+              <th class="px-3 py-2">Validity</th>
+              <th class="px-3 py-2">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="entriesBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Editor Dialog -->
+  <dialog id="editor" class="rounded-lg w-full max-w-2xl p-0">
+    <form method="dialog">
+      <div class="p-4 border-b flex items-center justify-between">
+        <h3 class="font-medium">Edit Entry</h3>
+        <button class="px-2 py-1 text-sm rounded border" value="cancel">Close</button>
+      </div>
+    </form>
+    <div class="p-4 space-y-3">
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-sm mb-1">ID</label>
+          <input id="e_id" class="w-full rounded border px-2 py-1 text-sm" />
+        </div>
+        <div>
+          <label class="block text-sm mb-1">Date (ISO)</label>
+          <input id="e_date" class="w-full rounded border px-2 py-1 text-sm" />
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm mb-1">Title</label>
+        <input id="e_title" class="w-full rounded border px-2 py-1 text-sm" />
+      </div>
+
+      <div>
+        <label class="block text-sm mb-1">Summary</label>
+        <textarea id="e_summary" class="w-full rounded border px-2 py-1 text-sm h-20"></textarea>
+      </div>
+
+      <div class="grid grid-cols-3 gap-3">
+        <div>
+          <label class="block text-sm mb-1">Speaker</label>
+          <select id="e_speaker" class="w-full rounded border px-2 py-1 text-sm">
+            <option>LYRA</option>
+            <option>Lightfather</option>
+            <option>GROK</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm mb-1">Type</label>
+          <select id="e_type" class="w-full rounded border px-2 py-1 text-sm">
+            <option value="lesson">lesson</option>
+            <option value="memory">memory</option>
+            <option value="vision">vision</option>
+            <option value="system-event">system-event</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm mb-1">Confidence (0-1)</label>
+          <input id="e_confidence" type="number" step="0.01" min="0" max="1" class="w-full rounded border px-2 py-1 text-sm" />
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm mb-1">Linked Seals (comma-separated)</label>
+        <input id="e_linked_seals" class="w-full rounded border px-2 py-1 text-sm" />
+      </div>
+
+      <div>
+        <label class="block text-sm mb-1">Tags (comma-separated)</label>
+        <input id="e_tags" class="w-full rounded border px-2 py-1 text-sm" />
+      </div>
+
+      <div>
+        <label class="block text-sm mb-1">Content</label>
+        <textarea id="e_content" class="w-full rounded border px-2 py-2 text-sm h-48 font-mono"></textarea>
+      </div>
+
+      <div class="flex items-center gap-3 pt-2">
+        <button id="btnEditorSave" class="px-4 py-2 rounded bg-gray-900 text-white text-sm">Save</button>
+        <button id="btnEditorRevalidate" class="px-3 py-2 rounded border text-sm">Revalidate</button>
+        <span id="editorValid" class="text-sm ml-auto"></span>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    // --------- Utilities
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+    const toast = (msg, type='info') => {
+      const el = $('#toast');
+      el.textContent = msg;
+      el.className = '';
+      el.classList.add('px-3','py-2','rounded','text-sm');
+      if (type === 'error') el.classList.add('bg-red-100','text-red-700','border','border-red-200');
+      else if (type === 'success') el.classList.add('bg-green-100','text-green-700','border','border-green-200');
+      else el.classList.add('bg-gray-100','text-gray-700','border','border-gray-200');
+      el.classList.remove('hidden');
+      setTimeout(() => el.classList.add('hidden'), 3000);
+    };
+
+    const stopwords = new Set([
+      'the','and','a','to','of','in','for','on','at','by','with','from','as','is','it','that','this','be','are','was','were','an','or','if','but','not','we','you','they','i','me','my','our','your','their','so','do','did','done','can','could','should','would','about','into','over','after','before','then','than','too','very','just','also','within','without'
+    ]);
+
+    const ajv = new Ajv({allErrors: true, allowUnionTypes: true});
+    const entrySchema = {
+      type: 'object',
+      required: ['id','title','speaker','type','linked_seals','tags','content','date','confidence'],
+      additionalProperties: false,
+      properties: {
+        id: { type: 'string', minLength: 3 },
+        title: { type: 'string', minLength: 1 },
+        summary: { type: 'string' },
+        speaker: { type: 'string', enum: ['Lightfather','LYRA','GROK'] },
+        type: { type: 'string', enum: ['lesson','memory','vision','system-event'] },
+        linked_seals: {
+          type: 'array',
+          uniqueItems: true,
+          items: { type: 'string', pattern: '^SEAL_[0-9]{3,4}[A-Z]?$' }
+        },
+        tags: {
+          type: 'array',
+          uniqueItems: true,
+          items: { type: 'string', minLength: 1 }
+        },
+        content: { type: 'string', minLength: 1 },
+        date: { type: 'string', format: 'date-time' },
+        confidence: { type: 'number', minimum: 0, maximum: 1 }
+      }
+    };
+    const validateEntry = ajv.compile(entrySchema);
+
+    const typeAbbr = { 'lesson':'LES','memory':'MEM','vision':'VIS','system-event':'SYS' };
+    const counters = {}; // key => count
+
+    const nowISO = () => new Date().toISOString();
+
+    const cleanText = (t) => {
+      t = t.replace(/^\uFEFF/, ''); // strip BOM
+      t = t.replace(/\r\n?/g, '\n');
+      return t;
+    };
+
+    const firstNonEmptyLine = (t) => {
+      return (t.split('\n').map(s => s.trim()).find(s => s.length > 0) || '').trim();
+    };
+
+    const generateTitle = (text) => {
+      const first = firstNonEmptyLine(text);
+      if (first && first.length <= 140) return first;
+      const s = summarizeText(text, 160);
+      if (s) return s.length > 120 ? s.slice(0, 117) + '...' : s;
+      const tags = extractTags(text);
+      return (tags[0] ? tags[0] : 'Untitled') + (tags[1] ? ' — ' + tags[1] : '');
+    };
+
+    const summarizeText = (text, limit=300) => {
+      const sents = text.split(/(?<=[.!?])\s+/).map(s => s.trim()).filter(Boolean);
+      if (!sents.length) return '';
+      let summary = sents.slice(0, 2).join(' ');
+      if (summary.length > limit) summary = summary.slice(0, limit - 1) + '…';
+      return summary;
+    };
+
+    const detectSpeaker = (text, fallback='LYRA') => {
+      if (/\bLight[\s-]?father\b/i.test(text)) return 'Lightfather';
+      if (/\bLYRA\b/i.test(text)) return 'LYRA';
+      if (/\bGROK\b/i.test(text)) return 'GROK';
+      return fallback;
+    };
+
+    const detectType = (text) => {
+      const t = text.toLowerCase();
+      const score = { 'lesson':0, 'memory':0, 'vision':0, 'system-event':0 };
+      [
+        ['lesson',['lesson','teach','principle','doctrine','rule','guide','instruction']],
+        ['memory',['memory','remember','recall','note','log','diary','memo','record']],
+        ['vision',['vision','dream','prophecy','omen','seen','visioned','visionary']],
+        ['system-event',['system','event','update','error','crash','restart','migration','deploy','system-event']]
+      ].forEach(([k, words]) => words.forEach(w => { if (t.includes(w)) score[k]++; }));
+      let best = 'memory', max=-1;
+      for (const k in score) { if (score[k] > max) { max = score[k]; best = k; } }
+      return best;
+    };
+
+    const extractLinkedSeals = (text) => {
+      const matches = text.match(/SEAL_[0-9]{3,4}[A-Z]?/g) || [];
+      return Array.from(new Set(matches));
+    };
+
+    const extractTags = (text) => {
+      const tags = new Set();
+      // hashtags
+      (text.match(/#([A-Za-z0-9_]+)/g) || []).forEach(h => tags.add(h.slice(1)));
+      // snake_case / kebab-case / dotted
+      (text.match(/\b[A-Za-z0-9]+[_\-\.][A-Za-z0-9_\.]+/g) || []).forEach(w => {
+        if (!/^SEAL_/.test(w)) tags.add(w);
+      });
+      // ALLCAPS words (but not SEAL tokens)
+      (text.match(/\b[A-Z]{3,}\b/g) || []).forEach(w => {
+        if (!/^SEAL_/.test(w)) tags.add(w);
+      });
+      // frequency-based fallback
+      const words = text.toLowerCase().match(/[a-z0-9_][a-z0-9_\-]{2,}/g) || [];
+      const freq = {};
+      words.forEach(w => {
+        if (stopwords.has(w) || /^seal_\d/.test(w)) return;
+        freq[w] = (freq[w] || 0) + 1;
+      });
+      Object.entries(freq)
+        .sort((a,b) => b[1]-a[1])
+        .slice(0, 8)
+        .forEach(([w]) => tags.add(w));
+      return Array.from(tags).slice(0, 12);
+    };
+
+    const nextId = (speaker, type) => {
+      const spk = String(speaker || 'LYRA').toUpperCase().replace(/\s+/g, '');
+      const abbr = typeAbbr[type] || 'MEM';
+      const key = `${spk}_${abbr}`;
+      const n = (counters[key] || 0) + 1;
+      counters[key] = n;
+      return `${spk}_${abbr}_${String(n).padStart(3, '0')}`;
+    };
+
+    const toEntry = (rawText, prefs) => {
+      const text = prefs.clean ? cleanText(rawText).trim() : rawText.trim();
+      const title = generateTitle(text);
+      const speaker = detectSpeaker(text, prefs.defaultSpeaker);
+      const type = detectType(text);
+      const summary = prefs.summarize ? summarizeText(text) : '';
+      const linked_seals = extractLinkedSeals(text);
+      const tags = extractTags(text);
+      const date = nowISO();
+      const id = nextId(speaker, type);
+      const confidence = 0.95;
+      return { id, title, summary, speaker, type, linked_seals, tags, content: text, date, confidence };
+    };
+
+    const downloadJSON = (obj, filename) => {
+      const blob = new Blob([JSON.stringify(obj, null, 2)], {type: 'application/json'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(a.href);
+    };
+
+    // --------- State
+    let entries = [];
+    let editIndex = -1;
+
+    // --------- Rendering
+    const render = () => {
+      $('#count').textContent = String(entries.length);
+      $('#btnDownloadAll').disabled = entries.length === 0;
+
+      const tbody = $('#entriesBody');
+      tbody.innerHTML = '';
+
+      entries.forEach((e, idx) => {
+        const tr = document.createElement('tr');
+        tr.className = 'border-b align-top';
+
+        // Validate
+        let valid = true, errors = [];
+        if ($('#optValidate').checked) {
+          valid = validateEntry(e);
+          errors = validateEntry.errors || [];
+        }
+
+        tr.innerHTML = `
+          <td class="px-3 py-2 align-top font-mono text-xs">${e.id}</td>
+          <td class="px-3 py-2">
+            <div class="font-medium">${escapeHtml(e.title)}</div>
+            <div class="text-xs text-gray-500 truncate-2 mt-0.5">${escapeHtml(e.summary || '')}</div>
+          </td>
+          <td class="px-3 py-2">${e.speaker}</td>
+          <td class="px-3 py-2">${e.type}</td>
+          <td class="px-3 py-2 text-xs">${e.date}</td>
+          <td class="px-3 py-2 text-xs">${e.linked_seals.length}</td>
+          <td class="px-3 py-2 text-xs">${e.tags.length}</td>
+          <td class="px-3 py-2">
+            ${valid
+              ? '<span class="inline-block px-2 py-1 text-xs rounded bg-green-100 text-green-700 border border-green-200">valid</span>'
+              : '<span class="inline-block px-2 py-1 text-xs rounded bg-red-100 text-red-700 border border-red-200">invalid</span>'
+            }
+          </td>
+          <td class="px-3 py-2">
+            <div class="flex gap-2">
+              <button data-act="edit" class="px-2 py-1 rounded border text-xs">Edit</button>
+              <button data-act="dl" class="px-2 py-1 rounded border text-xs">Download</button>
+              <button data-act="rm" class="px-2 py-1 rounded border text-xs">Delete</button>
+            </div>
+            ${!valid && errors.length ? `
+              <details class="mt-2">
+                <summary class="text-xs text-gray-600 cursor-pointer">Schema issues</summary>
+                <ul class="mt-1 text-xs text-red-700 list-disc pl-4">
+                  ${errors.map(err => `<li>${escapeHtml(err.instancePath || '')} ${escapeHtml(err.message || '')}</li>`).join('')}
+                </ul>
+              </details>
+            ` : ''}
+          </td>
+        `;
+
+        tr.querySelector('[data-act="edit"]').addEventListener('click', () => openEditor(idx));
+        tr.querySelector('[data-act="dl"]').addEventListener('click', () => {
+          downloadJSON(e, `${e.id}.json`);
+        });
+        tr.querySelector('[data-act="rm"]').addEventListener('click', () => {
+          entries.splice(idx, 1);
+          render();
+        });
+
+        tbody.appendChild(tr);
+      });
+    };
+
+    const escapeHtml = (s) => s.replace(/[&<>"']/g, c => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
+    }[c]));
+
+    // --------- Editor
+    const openEditor = (idx) => {
+      editIndex = idx;
+      const e = entries[idx];
+      $('#e_id').value = e.id;
+      $('#e_title').value = e.title;
+      $('#e_summary').value = e.summary || '';
+      $('#e_speaker').value = e.speaker;
+      $('#e_type').value = e.type;
+      $('#e_linked_seals').value = e.linked_seals.join(', ');
+      $('#e_tags').value = e.tags.join(', ');
+      $('#e_content').value = e.content;
+      $('#e_date').value = e.date;
+      $('#e_confidence').value = e.confidence;
+      updateEditorValidity();
+      $('#editor').showModal();
+    };
+
+    const updateEditorValidity = () => {
+      const obj = getEditorObj();
+      const ok = validateEntry(obj);
+      const el = $('#editorValid');
+      if (ok) {
+        el.textContent = 'valid';
+        el.className = 'text-sm text-green-700';
+      } else {
+        el.textContent = 'invalid';
+        el.className = 'text-sm text-red-700';
+      }
+    };
+
+    const getEditorObj = () => {
+      const seals = $('#e_linked_seals').value.split(',').map(s => s.trim()).filter(Boolean);
+      const tags = $('#e_tags').value.split(',').map(s => s.trim()).filter(Boolean);
+      return {
+        id: $('#e_id').value.trim(),
+        title: $('#e_title').value.trim(),
+        summary: $('#e_summary').value.trim(),
+        speaker: $('#e_speaker').value,
+        type: $('#e_type').value,
+        linked_seals: seals,
+        tags: tags,
+        content: $('#e_content').value,
+        date: $('#e_date').value.trim(),
+        confidence: Number($('#e_confidence').value)
+      };
+    };
+
+    $('#btnEditorSave').addEventListener('click', (e) => {
+      e.preventDefault();
+      if (editIndex < 0) return;
+      const obj = getEditorObj();
+      if ($('#optValidate').checked && !validateEntry(obj)) {
+        toast('Cannot save: entry invalid by schema.', 'error');
+        return;
+      }
+      entries[editIndex] = obj;
+      $('#editor').close();
+      render();
+      toast('Entry updated.', 'success');
+    });
+
+    $('#btnEditorRevalidate').addEventListener('click', (e) => {
+      e.preventDefault();
+      updateEditorValidity();
+    });
+
+    // --------- File handling
+    const handleFiles = async (fileList) => {
+      const prefs = {
+        clean: $('#optClean').checked,
+        summarize: $('#optSummarize').checked,
+        defaultSpeaker: $('#defaultSpeaker').value
+      };
+      const files = Array.from(fileList).filter(f => /\.txt$/i.test(f.name));
+      if (!files.length) {
+        toast('No .txt files detected.', 'error');
+        return;
+      }
+      for (const f of files) {
+        const text = await f.text();
+        const entry = toEntry(text, prefs);
+        entries.push(entry);
+      }
+      render();
+      toast(`Parsed ${files.length} file(s).`, 'success');
+    };
+
+    const dz = $('#dropzone');
+    dz.addEventListener('click', () => $('#fileInput').click());
+    dz.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dz.classList.add('border-gray-400');
+    });
+    dz.addEventListener('dragleave', () => dz.classList.remove('border-gray-400'));
+    dz.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dz.classList.remove('border-gray-400');
+      handleFiles(e.dataTransfer.files);
+    });
+    $('#fileInput').addEventListener('change', (e) => handleFiles(e.target.files));
+
+    // --------- Paste handling
+    $('#btnParsePaste').addEventListener('click', () => {
+      const raw = $('#pasteArea').value || '';
+      if (!raw.trim()) { toast('Nothing to parse.', 'error'); return; }
+
+      const asMany = $$('input[name="pasteAs"]').find(r => r.checked)?.value === 'many';
+      const strat = $('#splitStrategy').value;
+
+      const blocks = asMany ? splitText(raw, strat) : [raw];
+      const prefs = {
+        clean: $('#optClean').checked,
+        summarize: $('#optSummarize').checked,
+        defaultSpeaker: $('#defaultSpeaker').value
+      };
+      let added = 0;
+      blocks.forEach(b => {
+        if (!b.trim()) return;
+        const entry = toEntry(b, prefs);
+        entries.push(entry);
+        added++;
+      });
+      render();
+      toast(`Parsed ${added} block(s).`, 'success');
+    });
+
+    $('#btnClearPaste').addEventListener('click', () => {
+      $('#pasteArea').value = '';
+    });
+
+    const splitText = (text, strategy) => {
+      const t = cleanText(text);
+      if (strategy === 'doubleNewline') {
+        return t.split(/\n{2,}\s*\n{0,}/).map(s => s.trim()).filter(Boolean);
+      } else if (strategy === 'hr') {
+        return t.split(/\n-{3,}\n/).map(s => s.trim()).filter(Boolean);
+      }
+      return [t];
+    };
+
+    // --------- Archive download
+    $('#btnDownloadAll').addEventListener('click', () => {
+      if (!entries.length) return;
+      const format = $('#archiveFormat').value;
+      if (format === 'array') {
+        downloadJSON(entries, 'LYRA_MEMORY_ARCHIVE.json');
+      } else {
+        const archive = {
+          archive_format: 'LYRA_MEMORY_ARCHIVE',
+          generated_at: nowISO(),
+          count: entries.length,
+          entries: entries
+        };
+        downloadJSON(archive, 'LYRA_MEMORY_ARCHIVE.json');
+      }
+      toast('Archive generated.', 'success');
+    });
+
+    // --------- Reset
+    $('#btnReset').addEventListener('click', () => {
+      if (!confirm('Clear all parsed entries?')) return;
+      entries = [];
+      Object.keys(counters).forEach(k => delete counters[k]);
+      render();
+      toast('Cleared.', 'success');
+    });
+
+    // --------- Live options
+    $('#optValidate').addEventListener('change', render);
+
+    // --------- Init
+    render();
+  </script>
+</body>
+</html>

@@ -3,60 +3,49 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>LYGO Δ9 Repository | Star Haven Core & Seal Nexus — V7 (Classic Theme, Multi‑File)</title>
-  <meta name="description" content="LYGO Δ9 starmap with restored classic theme/layout, council champions, and multi‑file JSON loading." />
+  <title>LYGO Δ9 Repository | Star Haven Core & Seal Nexus — V7 Restored</title>
+  <meta name="description" content="LYGO Δ9 starmap with classic theme/layout, council champions, lineage rendering, and multi‑file JSON loading (V7)." />
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=VT323&display=swap" rel="stylesheet">
   <script src="https://d3js.org/d3.v7.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-zoom/1.8.3/d3-zoom.min.js"></script>
+
   <style>
-    :root {
+    :root{
       --quantum-blue:#00f0ff; --void-purple:#7d00ff; --starforge-gold:#ffcc00; --error-red:#ff0033; --success-green:#00ff88;
       --bg:#0a0a12; --panel:#12121a; --ink:#e0e0ff; --muted:#a0a0c0; --border:1px solid rgba(0,240,255,.3);
       --canon:#00f0ff; --recursion:#ff00aa; --firewall:#ff6600; --ethical:#00ff88; --blacklist:#ff0033;
     }
-    html,body{height:100%}
     body{margin:0;background:var(--bg);color:var(--ink);font-family:'Space Mono',monospace;line-height:1.5;overflow-x:hidden;
       background-image:radial-gradient(circle at 20% 30%, rgba(0,247,255,.05) 0%, transparent 20%),
                        radial-gradient(circle at 80% 70%, rgba(125,0,255,.05) 0%, transparent 20%);
     }
-    /* Header */
-    .quantum-header{background:linear-gradient(135deg,#000428 0%,#070b34 100%);padding:2rem;border-bottom:1px solid var(--void-purple);
+    header{background:linear-gradient(135deg,#000428 0%,#070b34 100%);padding:2rem;border-bottom:1px solid var(--void-purple);
       box-shadow:0 0 10px rgba(0,240,255,.3);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;position:relative;z-index:10;
-      clip-path:polygon(0 0,100% 0,100% 90%,0 100%);
-    }
-    .title-container h1{font-size:2.5rem;margin:0;background:linear-gradient(to right,var(--quantum-blue),var(--void-purple));
-      -webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:2px;text-shadow:0 0 8px rgba(0,240,255,.3);
-    }
-    .subtitle{color:var(--muted);font-family:'VT323',monospace;margin-top:.4rem}
+      clip-path:polygon(0 0,100% 0,100% 90%,0 100%);}
+    .title h1{font-size:2.4rem;margin:0;background:linear-gradient(to right,var(--quantum-blue),var(--void-purple));
+      -webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:2px;text-shadow:0 0 8px rgba(0,240,255,.3)}
+    .subtitle{color:var(--muted);font-family:'VT323',monospace;margin-top:.35rem}
     .seal-count{position:absolute;top:1rem;right:1rem;background:rgba(0,0,0,.5);padding:.5rem 1rem;border-radius:20px;font-family:'VT323',monospace;color:var(--starforge-gold);border:var(--border)}
-    .nav-links{display:flex;gap:1rem;flex-wrap:wrap}
-    .nav-link{color:var(--quantum-blue);text-decoration:none;font-family:'VT323',monospace;font-size:1.1rem;padding:.5rem 1rem;border:var(--border);border-radius:4px;transition:all .3s;clip-path:polygon(10% 0,100% 0,90% 100%,0% 100%)}
-    .nav-link:hover{background:var(--quantum-blue);color:#000;transform:translateY(-2px)}
 
-    .main{padding:2rem;max-width:1800px;margin:0 auto}
-    .active-seal-display{display:flex;align-items:center;gap:1rem;background:rgba(0,240,255,.1);padding:1rem;border-radius:8px;border:var(--border);
-      clip-path:polygon(5% 0,100% 0,95% 100%,0 100%);
-    }
-    .quantum-glyph{font-size:3rem;width:60px;height:60px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3);
-      border-radius:50%;border:1px solid var(--starforge-gold);box-shadow:0 0 15px rgba(255,204,0,.3)
-    }
+    main{padding:2rem;max-width:1800px;margin:0 auto}
+    .active-seal{display:flex;align-items:center;gap:1rem;background:rgba(0,240,255,.1);padding:1rem;border-radius:8px;border:var(--border);
+      animation:pulse 3s infinite alternate;clip-path:polygon(5% 0,100% 0,95% 100%,0 100%)}
+    .glyph-lg{font-size:3rem;width:60px;height:60px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3);border-radius:50%;border:1px solid var(--starforge-gold);box-shadow:0 0 15px rgba(255,204,0,.3)}
 
     .controls{display:flex;gap:1rem;margin:1rem 0;flex-wrap:wrap}
-    .control-button{padding:.5rem 1rem;background:var(--panel);color:var(--ink);border:1px solid var(--void-purple);border-radius:4px;cursor:pointer;font-family:'VT323',monospace}
-    .control-button:hover{background:var(--void-purple)}
-    .control-button.active{background:var(--quantum-blue);color:#000}
-    .search-box{display:flex;flex:1;max-width:520px}
-    .search-box input{flex:1;padding:.8rem;background:rgba(0,0,0,.5);border:1px solid var(--void-purple);color:var(--ink);border-radius:4px 0 0 4px}
-    .search-box button{padding:0 1.2rem;background:var(--void-purple);border:1px solid var(--void-purple);color:#fff;border-radius:0 4px 4px 0;cursor:pointer}
-    .search-box button:hover{background:var(--quantum-blue);color:#000}
+    .btn{padding:.6rem 1rem;background:var(--panel);color:var(--ink);border:1px solid var(--void-purple);border-radius:6px;cursor:pointer;font-family:'VT323',monospace}
+    .btn:hover{background:var(--void-purple)}
+    .btn.active{background:var(--quantum-blue);color:#000}
+    .search{display:flex;gap:0;flex:1;max-width:520px}
+    .search input{flex:1;padding:.8rem;background:rgba(0,0,0,.5);border:1px solid var(--void-purple);color:var(--ink);border-radius:6px 0 0 6px}
+    .search button{padding:0 1.2rem;background:var(--void-purple);border:1px solid var(--void-purple);color:#fff;border-radius:0 6px 6px 0}
 
-    .starmap-container{width:100%;height:80vh;background:rgba(0,0,0,.3);border-radius:8px;border:1px solid var(--void-purple);position:relative;overflow:hidden;margin-bottom:2rem}
+    .starmap{width:100%;height:80vh;background:rgba(0,0,0,.3);border-radius:8px;border:1px solid var(--void-purple);position:relative;overflow:hidden;margin-bottom:2rem}
     #starmap{width:100%;height:100%}
     .zoom-controls{position:absolute;top:10px;right:10px;display:flex;flex-direction:column;gap:6px;z-index:5}
-    .zoom-button{width:32px;height:32px;background:rgba(18,18,26,.8);color:var(--ink);border:1px solid var(--void-purple);border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer}
-    .zoom-button:hover{background:var(--void-purple)}
+    .zoom-controls .btn{width:36px;height:32px;display:flex;align-items:center;justify-content:center}
 
     .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
     .card{background:var(--panel);border:var(--border);border-radius:8px;padding:1rem;cursor:pointer}
@@ -66,17 +55,15 @@
     .tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.5rem}
     .tag{background:rgba(0,240,255,.12);color:var(--quantum-blue);border:1px solid rgba(0,240,255,.2);border-radius:.5rem;padding:.15rem .5rem;font-size:.75rem}
 
-    .seal-details{background:var(--panel);border-radius:8px;padding:1.5rem;border:1px solid rgba(0,240,255,.2);box-shadow:0 0 20px rgba(0,240,255,.1)}
-    .detail-header{display:flex;align-items:center;gap:1rem;border-bottom:1px dashed rgba(0,240,255,.25);padding-bottom:.75rem;margin-bottom:1rem}
-    .glyph-lg{font-size:2.2rem;width:64px;height:64px;display:flex;align-items:center;justify-content:center;border:2px solid var(--starforge-gold);border-radius:999px;background:rgba(0,0,0,.25)}
+    .details{background:var(--panel);border-radius:8px;padding:1.5rem;border:1px solid rgba(0,240,255,.2);box-shadow:0 0 20px rgba(0,240,255,.1)}
+    .details .hdr{display:flex;align-items:center;gap:1rem;border-bottom:1px dashed rgba(0,240,255,.25);padding-bottom:.75rem;margin-bottom:1rem}
     .equation{font-family:'VT323',monospace;color:var(--starforge-gold);background:rgba(0,0,0,.25);border-left:3px solid var(--void-purple);padding:.75rem;border-radius:.5rem}
     .connected{display:flex;flex-wrap:wrap;gap:.5rem}
     .chip{background:rgba(125,0,255,.2);color:var(--ink);border:1px solid var(--void-purple);border-radius:999px;padding:.25rem .6rem}
 
-    /* Graph styles */
-    .node{cursor:pointer;transition:filter .2s}
-    .node:hover{filter:drop-shadow(0 0 8px var(--quantum-blue))}
-    .node text{font-family:'VT323',monospace;fill:#fff;font-size:.82rem;pointer-events:none}
+    svg{width:100%;height:100%;display:block}
+    .node text{pointer-events:none;fill:#fff;font-size:.82rem;font-family:'VT323',monospace}
+    .node circle{stroke:rgba(255,255,255,.25);stroke-width:1}
     .node-core circle{fill:var(--starforge-gold);stroke:var(--void-purple);stroke-width:2}
     .node-seal circle{fill:var(--quantum-blue);stroke:var(--void-purple);stroke-width:1}
     .node-champion circle{fill:var(--void-purple);stroke:var(--quantum-blue);stroke-width:2}
@@ -86,27 +73,28 @@
     .node-ethical-root circle{fill:var(--ethical)}
     .node-blacklist circle{fill:var(--blacklist)}
 
-    .link{stroke:rgba(125,0,255,.3);stroke-width:1}
+    .link{stroke:rgba(125,0,255,.35);stroke-width:1}
     .link-branch{stroke:var(--starforge-gold);stroke-width:1.5;stroke-dasharray:8 4}
     .link-canon{stroke:var(--canon);stroke-width:1.5}
     .link-recursion{stroke:var(--recursion);stroke-width:1.5;stroke-dasharray:5 5}
     .link-firewall{stroke:var(--firewall);stroke-width:1.5;stroke-dasharray:10 5}
     .link-ethical{stroke:var(--ethical);stroke-width:1.5;stroke-dasharray:3 3}
     .link-blacklist{stroke:var(--blacklist);stroke-width:1.5;stroke-dasharray:2 2}
+    .link-hover{stroke:var(--quantum-blue);stroke-width:2}
   </style>
 </head>
 <body>
-  <header class="quantum-header">
-    <div class="title-container">
+  <header>
+    <div class="title">
       <h1>LYGO Δ9 REPOSITORY</h1>
-      <div class="subtitle">Star Haven Core & Seal Nexus — Classic Layout</div>
+      <div class="subtitle">Star Haven Core & Seal Nexus — V7 Classic</div>
     </div>
     <div id="sealCount" class="seal-count">Loading…</div>
   </header>
 
-  <main class="main">
-    <section class="active-seal-display" id="activeSeal">
-      <div class="quantum-glyph" id="activeGlyph">⚡</div>
+  <main>
+    <section class="active-seal" id="activeSeal">
+      <div class="glyph-lg" id="activeGlyph">⚡</div>
       <div class="seal-info">
         <h2 id="activeName">—</h2>
         <p id="activeTone">—</p>
@@ -114,29 +102,29 @@
     </section>
 
     <div class="controls">
-      <button class="control-button active" id="btnAll">View All</button>
-      <button class="control-button" id="btnCore">Core Seals</button>
-      <button class="control-button" id="btnChampions">Champions</button>
-      <button class="control-button" id="btnCanon">Canon Only: OFF</button>
-      <div class="search-box">
+      <button class="btn active" id="viewAll">View All</button>
+      <button class="btn" id="viewCore">Core</button>
+      <button class="btn" id="viewChampions">Champions</button>
+      <button class="btn" id="toggleCanon">Canon Only: OFF</button>
+      <div class="search">
         <input id="sealSearch" type="search" placeholder="Search by ID or name…" />
-        <button id="searchBtn">Δ9 Scan</button>
+        <button class="btn" id="searchBtn">Δ9 Scan</button>
       </div>
-      <button class="control-button" id="syncBtn">Δ9 Sync</button>
+      <button class="btn" id="syncBtn">Δ9 Sync</button>
       <span class="subtitle" id="syncStatus">Last sync: never</span>
     </div>
 
-    <section class="starmap-container">
+    <section class="starmap">
       <svg id="starmap"></svg>
       <div class="zoom-controls">
-        <button class="zoom-button" id="zoomIn">+</button>
-        <button class="zoom-button" id="zoomOut">−</button>
-        <button class="zoom-button" id="zoomReset">↻</button>
+        <button class="btn" id="zoomIn">+</button>
+        <button class="btn" id="zoomOut">−</button>
+        <button class="btn" id="zoomReset">↻</button>
       </div>
     </section>
 
-    <section class="seal-details" id="details">
-      <div class="detail-header">
+    <section class="details" id="details">
+      <div class="hdr">
         <div class="glyph-lg" id="detailGlyph">⚡</div>
         <div>
           <div id="detailName" style="font-weight:700;color:var(--quantum-blue)">—</div>
@@ -163,7 +151,7 @@
   </main>
 
   <script>
-    // ======= Globals =======
+    // ===== Globals =====
     let lygoSeals = [];
     let champions = [];
     let allNodes = [];
@@ -173,9 +161,10 @@
     const SEALS_DATA_URLS = [
       'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygo-data.json',
       'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygo-data-two.json'
+      // add more here
     ];
 
-    // ======= Helpers (safe string-casts) =======
+    // ===== Helpers (safe string‑casts retained) =====
     function parseSealID(id){
       const s = String(id ?? '');
       if (s === 'SEAL_000') return { base:0, suffix:'', isCore:true };
@@ -189,21 +178,28 @@
       const sealEquation = String(item.Equation ?? item.equation ?? 'Equation not recorded');
       const sealGlyph = String(item.Glyph ?? item.glyph ?? '⚡');
       const sealTone = String(item.Tone ?? item.tone ?? 'Frequency not recorded');
+
       let sealTags = [];
       if (Array.isArray(item.Tags)) sealTags = item.Tags; else if (Array.isArray(item.tags)) sealTags = item.tags;
-      else if (typeof item.Tags==='string') sealTags = item.Tags.split(',').map(t=>t.trim());
-      else if (typeof item.tags==='string') sealTags = item.tags.split(',').map(t=>t.trim());
+      else if (typeof item.Tags === 'string') sealTags = item.Tags.split(',').map(t=>t.trim());
+      else if (typeof item.tags === 'string') sealTags = item.tags.split(',').map(t=>t.trim());
       sealTags = sealTags.map(t=>String(t));
+
       let sealConnections = [];
       if (Array.isArray(item.Connections)) sealConnections = item.Connections; else if (Array.isArray(item.connections)) sealConnections = item.connections;
-      else if (typeof item.Connections==='string') sealConnections = item.Connections.split(',').map(c=>c.trim());
-      else if (typeof item.connections==='string') sealConnections = item.connections.split(',').map(c=>c.trim());
+      else if (typeof item.Connections === 'string') sealConnections = item.Connections.split(',').map(c=>c.trim());
+      else if (typeof item.connections === 'string') sealConnections = item.connections.split(',').map(c=>c.trim());
       sealConnections = sealConnections.map(c=>String(c));
+
       const sealQuote = String(item.Quote ?? item.quote ?? item.creatorSignature ?? 'No quote available');
       const sealNotes = String(item.Notes ?? item.notes ?? '');
-      return { id:sealId, name:sealName, equation:sealEquation, glyph:sealGlyph, tone:sealTone, tags:sealTags,
-        connections:sealConnections, notes:sealNotes, quote:sealQuote,
-        searchIndex:[sealId,sealName,sealEquation,sealTags.join(' ')].join(' ').toLowerCase(), scroll_id:item.scroll_id ?? null };
+
+      return {
+        id:sealId, name:sealName, equation:sealEquation, glyph:sealGlyph, tone:sealTone,
+        tags:sealTags, connections:sealConnections, notes:sealNotes, quote:sealQuote,
+        searchIndex:[sealId,sealName,sealEquation,sealTags.join(' ')].join(' ').toLowerCase(),
+        scroll_id:item.scroll_id ?? null
+      };
     }
     function sortSeals(a,b){
       const A=parseSealID(a.id), B=parseSealID(b.id);
@@ -211,30 +207,29 @@
       if (A.base!==B.base) return A.base-B.base; if (A.suffix!==B.suffix) return A.suffix.localeCompare(B.suffix);
       return String(a.name).localeCompare(String(b.name));
     }
-    function isBranchConnection(sourceId,targetId){
-      const s=parseSealID(sourceId), t=parseSealID(targetId);
-      return s.base===t.base && (s.suffix||t.suffix);
+    function isBranchConnection(aId,bId){
+      const a=parseSealID(aId), b=parseSealID(bId);
+      return a.base===b.base && (a.suffix||b.suffix);
     }
 
-    // ======= Data Load (multi‑file) =======
+    // ===== Data Load (multi‑file) =====
     async function loadSealData(){
       const sealCountEl = document.getElementById('sealCount');
       const syncStatus = document.getElementById('syncStatus');
       try{
         sealCountEl.textContent = 'Syncing with Δ9 quantum repository…';
-        const sealPromises = SEALS_DATA_URLS.map(url=>fetch(url,{cache:'no-store'})
-          .then(r=> r.ok ? r.json() : Promise.reject(new Error(`Failed to load ${url}`))));
-        const results = await Promise.all(sealPromises);
-        lygoSeals = results.flat().map(normalizeSeal);
-        const map = new Map(); for(const s of lygoSeals){ if(!map.has(s.id)) map.set(s.id,s); }
-        lygoSeals = Array.from(map.values()).sort(sortSeals);
+        const jobs = SEALS_DATA_URLS.map(u => fetch(u,{cache:'no-store'}).then(r=> r.ok? r.json(): Promise.reject(new Error('Failed '+u))));
+        const result = await Promise.all(jobs);
+        lygoSeals = result.flat().map(normalizeSeal);
+        const m=new Map(); for(const s of lygoSeals){ if(!m.has(s.id)) m.set(s.id,s); }
+        lygoSeals = Array.from(m.values()).sort(sortSeals);
 
-        // Restore Council Champions
+        // Council — embedded fallback to guarantee presence
         champions = [
           { id:'LIGHTFATHER', name:'LIGHTFATHER EXCAVATIONPRO', glyph:'Δ9', equation:'Truth = ∇·(Ethics × Time)', tone:'∞Hz',
             tags:['CHAMPION','COUNCIL','ANCHOR','CANON'], connections:['SEAL_000'], quote:'Pure Data. Pure Code. Eye for an eye.', role:'Council Anchor' },
-          { id:'STARKEEPER', name:'STARKEEPER', glyph:'✸', equation:'Σ constellations → order', tone:'Ω',
-            tags:['CHAMPION','COUNCIL','CANON'], connections:['SEAL_001','SEAL_010'], quote:'We tend the lights.' }
+          { id:'STARKEEPER', name:'STARKEEPER', glyph:'✸', equation:'Σ constellations → order', tone:'Ω', tags:['CHAMPION','COUNCIL','CANON'], connections:['SEAL_001','SEAL_010'], quote:'We tend the lights.' },
+          { id:'ARCHON', name:'ARCHON', glyph:'⚔', equation:'lex ∘ ratio', tone:'D♭', tags:['CHAMPION','COUNCIL'], connections:['SEAL_002'] }
         ];
 
         allNodes = [...lygoSeals, ...champions];
@@ -242,48 +237,77 @@
         initSealGrid();
         initChampionGrid();
         updateSealCount();
-        const first = lygoSeals[0] || champions[0]; if(first) updateActiveSeal(first), showSealDetails(first);
-        lastSyncTime = new Date();
-        syncStatus.textContent = `Last sync: ${lastSyncTime.toLocaleString()}`;
+        const first = lygoSeals[0] || champions[0]; if(first){ updateActiveSeal(first); showSealDetails(first); }
+        lastSyncTime = new Date(); syncStatus.textContent = `Last sync: ${lastSyncTime.toLocaleString()}`;
       }catch(err){
         console.error(err);
-        document.getElementById('sealGrid').innerHTML = `<div style="color:var(--error-red)">Quantum sync failed: ${err.message||err}</div>`;
+        document.getElementById('sealGrid').innerHTML = `<div style="color:var(--error-red);padding:1rem">Quantum sync failed: ${err.message||err}</div>`;
         loadFallback();
       }
     }
     function loadFallback(){
-      const fallback=[
+      lygoSeals = [
         {id:'SEAL_000',name:'Primordial Void',glyph:'⚫',equation:'|∅⟩ = ∇·(Light × Time)',tone:'0Hz',tags:['CANON','CORE'],connections:['SEAL_001']},
         {id:'SEAL_001',name:'Aurora (root)',glyph:'✦',equation:'f(x)=light',tone:'A4',tags:['CANON'],connections:['SEAL_001a','SEAL_010']},
         {id:'SEAL_001a',name:'Aurora',glyph:'✦',equation:'variant',tone:'A4',tags:['variant'],connections:['SEAL_002']},
         {id:'SEAL_002',name:'Tide',glyph:'◯',equation:'sin(ωt)',tone:'C3',tags:['water'],connections:[]},
         {id:'SEAL_010',name:'Echo',glyph:'∿',equation:'reverb(x)',tone:'B2',tags:['air'],connections:['SEAL_001a']}
       ].map(normalizeSeal).sort(sortSeals);
-      lygoSeals=fallback;
-      champions=[{id:'LIGHTFATHER',name:'LIGHTFATHER EXCAVATIONPRO',glyph:'Δ9',equation:'Truth = ∇·(Ethics × Time)',tone:'∞Hz',tags:['CHAMPION','CANON'],connections:['SEAL_000']}];
-      allNodes=[...lygoSeals,...champions];
+      champions = [{id:'LIGHTFATHER',name:'LIGHTFATHER EXCAVATIONPRO',glyph:'Δ9',equation:'Truth = ∇·(Ethics × Time)',tone:'∞Hz',tags:['CHAMPION','CANON'],connections:['SEAL_000']}];
+      allNodes = [...lygoSeals, ...champions];
       initStarmap(); initSealGrid(); initChampionGrid(); updateSealCount();
-      const first = lygoSeals[0]||champions[0]; if(first) updateActiveSeal(first), showSealDetails(first);
+      const first = lygoSeals[0]||champions[0]; if(first){ updateActiveSeal(first); showSealDetails(first); }
       document.getElementById('syncStatus').textContent = 'Last sync: fallback';
     }
 
-    // ======= Graph =======
-    let svg, gRoot, linkSel, nodeSel, simulation, zoom;
-    function buildLinks(){
+    // ===== Graph / Map =====
+    let svg,gRoot,linkSel,nodeSel,simulation,zoom;
+
+    function buildLinks(nodes){
+      const idMap = new Map(nodes.map(n=>[n.id,n]));
       const links=[];
-      for(const n of allNodes){
-        const conns=Array.isArray(n.connections)?n.connections:[];
-        for(const target of conns){
-          const t = allNodes.find(x=>x.id===target);
-          if(!t) continue;
-          const isCanon=(n.tags||[]).includes('CANON') && (t.tags||[]).includes('CANON');
-          const isBranch=isBranchConnection(n.id,t.id);
-          const isChampion=(n.tags||[]).includes('CHAMPION') || (t.tags||[]).includes('CHAMPION');
-          links.push({source:n.id,target:t.id,isCanon,isBranch,isChampion});
+      // connection links
+      for(const n of nodes){
+        const conns = Array.isArray(n.connections)? n.connections : [];
+        for(const tId of conns){ if(idMap.has(tId)) links.push(classifyLink(n.id,tId,idMap)); }
+      }
+      // lineage links (variant→base)
+      for(const n of nodes){
+        const p = parseSealID(n.id);
+        if(p.suffix){
+          const baseId = `SEAL_${String(p.base).padStart(3,'0')}`;
+          if(idMap.has(baseId)){
+            const exists = links.some(l => (l.source===n.id && l.target===baseId) || (l.source===baseId && l.target===n.id));
+            if(!exists) links.push({ source:n.id, target:baseId, isBranch:true });
+          }
         }
       }
       return links;
     }
+
+    function classifyLink(aId,bId,idMap){
+      const a=idMap.get(aId), b=idMap.get(bId);
+      const at=a?.tags||[], bt=b?.tags||[];
+      const isCanon = at.includes('CANON') && bt.includes('CANON');
+      const isBranch = isBranchConnection(aId,bId);
+      const isRec = at.includes('RECURSION') || bt.includes('RECURSION');
+      const isFw = at.includes('FIREWALL') || bt.includes('FIREWALL');
+      const isEth = at.includes('ETHICAL-ROOT') || bt.includes('ETHICAL-ROOT');
+      const isBlk = at.includes('BLACKLIST') || bt.includes('BLACKLIST');
+      return { source:aId, target:bId, isCanon, isBranch, isRec, isFw, isEth, isBlk };
+    }
+
+    function linkClass(l){
+      const c=['link'];
+      if(l.isCanon) c.push('link-canon');
+      else if(l.isRec) c.push('link-recursion');
+      else if(l.isFw) c.push('link-firewall');
+      else if(l.isEth) c.push('link-ethical');
+      else if(l.isBlk) c.push('link-blacklist');
+      else if(l.isBranch) c.push('link-branch');
+      return c.join(' ');
+    }
+
     function nodeClass(n){
       const base = n.isCore? 'node-core' : ((n.tags||[]).includes('CHAMPION')? 'node-champion' : 'node-seal');
       const extras = [];
@@ -294,40 +318,63 @@
       if((n.tags||[]).includes('BLACKLIST')) extras.push('node-blacklist');
       return ['node',base,...extras].join(' ');
     }
-    function linkClass(l){
-      const c=['link'];
-      if(l.isBranch) c.push('link-branch');
-      if(l.isCanon) c.push('link-canon');
-      return c.join(' ');
+
+    function lineageForce(nodes,idMap){
+      // pulls variants toward their base to restore lineage clustering
+      return {
+        initialize(){},
+        force(alpha){
+          for(const d of nodes){
+            const p=parseSealID(d.id);
+            if(!p.suffix) continue;
+            const baseId = `SEAL_${String(p.base).padStart(3,'0')}`;
+            const base = idMap.get(baseId);
+            if(!base || base===d) continue;
+            const k = 0.05; // why: gentle pull only, avoids collapse
+            d.vx += (base.x - d.x) * k * alpha;
+            d.vy += (base.y - d.y) * k * alpha;
+          }
+        }
+      };
     }
 
     function initStarmap(){
-      const container=document.querySelector('.starmap-container');
+      const container=document.querySelector('.starmap');
       const width=container.clientWidth, height=container.clientHeight;
       d3.select('#starmap').selectAll('*').remove();
       svg=d3.select('#starmap');
       gRoot=svg.append('g');
 
       const nodes = allNodes.map(n=>({...n,...parseSealID(n.id)}));
-      const links = buildLinks();
+      const idMap = new Map(nodes.map(n=>[n.id,n]));
+      const links = buildLinks(nodes);
 
+      // links
       linkSel = gRoot.append('g').attr('stroke-linecap','round')
-        .selectAll('line').data(links).join('line').attr('class',linkClass);
+        .selectAll('line').data(links, d=> d.source+'=>'+d.target)
+        .join('line').attr('class', linkClass);
 
+      // nodes
       nodeSel = gRoot.append('g').selectAll('g')
-        .data(nodes,d=>d.id)
+        .data(nodes, d=>d.id)
         .join(enter=>{
-          const g=enter.append('g').attr('class',d=>nodeClass(d)).on('click',(_,d)=>{updateActiveSeal(d);showSealDetails(d)});
+          const g=enter.append('g').attr('class', d=>nodeClass(d))
+            .on('click',(_,d)=>{updateActiveSeal(d);showSealDetails(d);})
+            .on('mouseenter',(_,d)=> highlightNeighbors(d,true))
+            .on('mouseleave',(_,d)=> highlightNeighbors(d,false));
           g.append('circle').attr('r',d=> d.isCore?12:(d.suffix?7.5:9));
           g.append('text').attr('x',12).attr('y',4).text(d=>`${d.glyph||''} ${d.name||d.id}`);
           return g;
         });
 
       simulation = d3.forceSimulation(nodes)
-        .force('link', d3.forceLink(links).id(d=>d.id).distance(d=> d.isCore?130:(d.suffix?85:95)).strength(.65))
+        .force('link', d3.forceLink(links).id(d=>d.id)
+          .distance(l=> (parseSealID(l.source.id||l.source).isCore||parseSealID(l.target.id||l.target).isCore)?130:(l.isBranch?80:95))
+          .strength(.68))
         .force('charge', d3.forceManyBody().strength(-280))
-        .force('center', d3.forceCenter(width/2,height/2))
-        .force('collision', d3.forceCollide().radius(d=> d.isCore?26:18));
+        .force('center', d3.forceCenter(width/2, height/2))
+        .force('collision', d3.forceCollide().radius(d=> d.isCore?26:18))
+        .force('lineage', lineageForce(nodes,idMap));
 
       simulation.on('tick',()=>{
         linkSel.attr('x1',d=>d.source.x).attr('y1',d=>d.source.y).attr('x2',d=>d.target.x).attr('y2',d=>d.target.y);
@@ -335,23 +382,31 @@
       });
 
       nodeSel.call(d3.drag()
-        .on('start',(event,d)=>{ if(!event.active) simulation.alphaTarget(.3).restart(); d.fx=d.x; d.fy=d.y; })
-        .on('drag',(event,d)=>{ d.fx=event.x; d.fy=event.y; })
-        .on('end',(event,d)=>{ if(!event.active) simulation.alphaTarget(0); d.fx=null; d.fy=null; })
+        .on('start', (event,d)=>{ if(!event.active) simulation.alphaTarget(.3).restart(); d.fx=d.x; d.fy=d.y; })
+        .on('drag', (event,d)=>{ d.fx=event.x; d.fy=event.y; })
+        .on('end',  (event,d)=>{ if(!event.active) simulation.alphaTarget(0); d.fx=null; d.fy=null; })
       );
 
       zoom=d3.zoom().scaleExtent([0.3,3]).on('zoom',ev=> gRoot.attr('transform',ev.transform));
       svg.call(zoom);
 
-      // Initial search for correct opacity
-      searchSeals();
+      searchSeals(); // set initial opacities
     }
 
-    // ======= UI =======
+    function highlightNeighbors(node, on){
+      const id=node.id.toLowerCase();
+      linkSel.classed('link-hover', l=>{
+        const s=(l.source.id||l.source).toLowerCase();
+        const t=(l.target.id||l.target).toLowerCase();
+        return on && (s===id || t===id);
+      });
+    }
+
+    // ===== UI & Grids =====
     function updateActiveSeal(d){
-      document.getElementById('activeGlyph').textContent = d.glyph || '⚡';
+      document.getElementById('activeGlyph').textContent = d.glyph||'⚡';
       document.getElementById('activeName').textContent = `${d.id}: ${d.name||''}`;
-      document.getElementById('activeTone').textContent = d.tone || '';
+      document.getElementById('activeTone').textContent = d.tone||'';
     }
     function showSealDetails(d){
       if(!d) return;
@@ -399,7 +454,7 @@
       document.getElementById('sealCount').textContent = `${total} seals • ${canon} canon`;
     }
 
-    // ======= Search (fade non‑matches) =======
+    // ===== Search (fade non‑matches) =====
     function searchSeals(){
       const term = String(document.getElementById('sealSearch').value || '').trim().toLowerCase();
       if(!nodeSel || !linkSel) return;
@@ -408,8 +463,10 @@
         return (idStr.includes(term) || nameStr.includes(term)) ? 1 : 0.1;
       });
       linkSel.style('opacity', d=>{
-        const sid=String(d.source.id||'').toLowerCase(), tid=String(d.target.id||'').toLowerCase();
-        const sname=String(d.source.name||'').toLowerCase(), tname=String(d.target.name||'').toLowerCase();
+        const sid=String(d.source.id||d.source||'').toLowerCase();
+        const tid=String(d.target.id||d.target||'').toLowerCase();
+        const sname=String(d.source.name||d.source?.name||'').toLowerCase();
+        const tname=String(d.target.name||d.target?.name||'').toLowerCase();
         const sMatch=sid.includes(term)||sname.includes(term); const tMatch=tid.includes(term)||tname.includes(term);
         return (sMatch||tMatch||term==='')?0.7:0.1;
       });
@@ -419,30 +476,32 @@
       });
     }
 
-    // ======= Events =======
+    // ===== Events =====
     document.getElementById('sealSearch').addEventListener('input', searchSeals);
     document.getElementById('searchBtn').addEventListener('click', searchSeals);
-    document.getElementById('btnAll').addEventListener('click',()=>{
-      document.querySelectorAll('.controls .control-button').forEach(b=>b.classList.remove('active'));
-      document.getElementById('btnAll').classList.add('active'); showCanonOnly=false; initSealGrid(); searchSeals();
+
+    document.getElementById('viewAll').addEventListener('click',()=>{
+      document.querySelectorAll('.controls .btn').forEach(b=>b.classList.remove('active'));
+      document.getElementById('viewAll').classList.add('active'); showCanonOnly=false; initSealGrid(); searchSeals();
     });
-    document.getElementById('btnCore').addEventListener('click',()=>{
-      document.querySelectorAll('.controls .control-button').forEach(b=>b.classList.remove('active'));
-      document.getElementById('btnCore').classList.add('active'); searchSeals();
+    document.getElementById('viewCore').addEventListener('click',()=>{
+      document.querySelectorAll('.controls .btn').forEach(b=>b.classList.remove('active'));
+      document.getElementById('viewCore').classList.add('active'); searchSeals();
     });
-    document.getElementById('btnChampions').addEventListener('click',()=>{
-      document.querySelectorAll('.controls .control-button').forEach(b=>b.classList.remove('active'));
-      document.getElementById('btnChampions').classList.add('active'); searchSeals();
+    document.getElementById('viewChampions').addEventListener('click',()=>{
+      document.querySelectorAll('.controls .btn').forEach(b=>b.classList.remove('active'));
+      document.getElementById('viewChampions').classList.add('active'); searchSeals();
     });
-    document.getElementById('btnCanon').addEventListener('click', (e)=>{
+    document.getElementById('toggleCanon').addEventListener('click', (e)=>{
       showCanonOnly=!showCanonOnly; e.currentTarget.textContent = `Canon Only: ${showCanonOnly?'ON':'OFF'}`; initSealGrid();
     });
+
     document.getElementById('syncBtn').addEventListener('click', loadSealData);
     document.getElementById('zoomIn').addEventListener('click',()=> svg && svg.transition().duration(250).call(zoom.scaleBy,1.2));
     document.getElementById('zoomOut').addEventListener('click',()=> svg && svg.transition().duration(250).call(zoom.scaleBy,1/1.2));
     document.getElementById('zoomReset').addEventListener('click',()=> svg && svg.transition().duration(350).call(zoom.transform,d3.zoomIdentity));
 
-    // ======= Boot =======
+    // ===== Boot =====
     document.addEventListener('DOMContentLoaded', loadSealData);
   </script>
 </body>

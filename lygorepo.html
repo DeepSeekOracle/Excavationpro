@@ -2,453 +2,374 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>LYGO Δ9 Repository | Star Haven Core & Seal Nexus</title>
-  <meta name="description" content="Interactive quantum seal repository with starmap visualization and geometric matrix" />
-  <meta name="quantum-signature" content="|s⟩ = Δ9 ⟨memory| ⟩ |hope⟩">
-  <!-- D3 (same as V7) -->
-  <script src="https://d3js.org/d3.v7.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-zoom/1.8.3/d3-zoom.min.js"></script>
-  <!-- Fonts (Space Mono / VT323) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LYGO Δ9 StarNexus | Canonical V7</title>
+  <meta name="theme-color" content="#0a0a12" />
+  <meta name="description" content="Quantum Seal Nexus - Archive & Star Chart UI" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=VT323&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
   <style>
     :root {
-      --quantum-blue:#00f0ff; --void-purple:#7d00ff; --starforge-gold:#ffcc00;
-      --error-red:#ff0033; --success-green:#00ff88; --background-dark:#0a0a12; --panel-dark:#12121a;
-      --text-primary:#e0e0ff; --text-secondary:#a0a0c0; --geometric-border:1px solid rgba(0,240,255,.3);
-      --canon-color:#00f0ff; --recursion-color:#ff00aa; --firewall-color:#ff6600; --ethical-root-color:#00ff88; --blacklist-color:#ff0033;
-      --quantum-glow:0 0 10px var(--quantum-blue);
+      --quantum-blue: #00f0ff;
+      --void-purple: #7d00ff;
+      --starforge-gold: #ffcc00;
+      --background-dark: #0a0a12;
+      --panel-dark: #12121a;
+      --text-primary: #e0e0ff;
+      --text-secondary: #a0a0c0;
+      --font-main: 'Space Mono', monospace;
+      --font-glyph: 'VT323', monospace;
+      --geometric-border: 1px solid rgba(0, 240, 255, 0.3);
     }
-    body{margin:0;background:var(--background-dark);color:var(--text-primary);font-family:'Space Mono',monospace;overflow-x:hidden;
-      background-image:radial-gradient(circle at 20% 30%, rgba(0,247,255,.05) 0%, transparent 20%), radial-gradient(circle at 80% 70%, rgba(125,0,255,.05) 0%, transparent 20%);}
-    .quantum-header{background:linear-gradient(135deg,#000428 0%,#070b34 100%);padding:2rem;border-bottom:1px solid var(--void-purple);
-      box-shadow:var(--quantum-glow);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;position:relative;z-index:100;clip-path:polygon(0 0,100% 0,100% 90%,0 100%)}
-    .title-container h1{margin:0;font-size:2.5rem;background:linear-gradient(to right,var(--quantum-blue),var(--void-purple));-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:2px}
-    .subtitle{color:var(--text-secondary);font-family:'VT323',monospace}
-    .seal-count{position:absolute;top:1rem;right:1rem;background:rgba(0,0,0,.5);padding:.5rem 1rem;border-radius:20px;border:var(--geometric-border);color:var(--starforge-gold);font-family:'VT323',monospace}
-    .nav-links{display:flex;gap:1rem;flex-wrap:wrap}
-    .nav-link,.patreon-link{color:var(--quantum-blue);text-decoration:none;padding:.5rem 1rem;border:var(--geometric-border);border-radius:4px;font-family:'VT323',monospace}
-    .nav-link:hover{background:var(--quantum-blue);color:#000}
-    .patreon-link{background:#ff424d;color:#fff}
-    .active-seal-display{display:flex;gap:1rem;align-items:center;background:rgba(0,240,255,.1);padding:1rem;border-radius:8px;border:var(--geometric-border);clip-path:polygon(5% 0,100% 0,95% 100%,0% 100%)}
-    .quantum-glyph{width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid var(--starforge-gold);font-size:2rem;background:rgba(0,0,0,.3)}
-    .main-container{padding:2rem;max-width:1800px;margin:0 auto;position:relative}
 
-    .controls{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem}
-    .control-button{background:var(--panel-dark);color:var(--text-primary);border:1px solid var(--void-purple);padding:.6rem 1rem;border-radius:6px;cursor:pointer;font-family:'VT323',monospace}
-    .control-button.active{background:var(--quantum-blue);color:#000}
-    .search-box{display:flex;flex:1;min-width:260px}
-    .search-box input{flex:1;padding:.8rem;background:rgba(0,0,0,.45);border:1px solid var(--void-purple);border-right:0;color:var(--text-primary)}
-    .search-box button{padding:0 1.2rem;border:0;background:var(--void-purple);color:#fff;cursor:pointer}
-    .starmap-container{width:100%;height:80vh;background:rgba(0,0,0,.35);border:1px solid var(--void-purple);border-radius:8px;position:relative;overflow:hidden;margin-bottom:2rem}
-    #starmap{width:100%;height:100%}
-    .zoom-controls{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px;z-index:5}
-    .zoom-button{width:32px;height:32px;border-radius:6px;background:rgba(18,18,26,.8);border:1px solid var(--void-purple);color:var(--text-primary);cursor:pointer}
+    body {
+      margin: 0;
+      font-family: var(--font-main);
+      background-color: var(--background-dark);
+      color: var(--text-primary);
+      overflow-x: hidden;
+    }
 
-    .node{cursor:pointer;transition:filter .2s}
-    .node:hover{filter:drop-shadow(0 0 8px var(--quantum-blue))}
-    .node-core{fill:var(--starforge-gold);stroke:var(--void-purple);stroke-width:2}
-    .node-seal{fill:var(--quantum-blue);stroke:var(--void-purple);stroke-width:1}
-    .node-champion{fill:var(--void-purple);stroke:var(--quantum-blue);stroke-width:2}
-    .node-canon{fill:var(--canon-color)}
-    .node-text{font-family:'VT323',monospace;fill:var(--text-primary);font-size:.8rem;pointer-events:none}
-    .link{stroke:rgba(125,0,255,.35);stroke-width:1}
-    .link-champion{stroke:rgba(0,240,255,.6);stroke-width:2}
-    .link-canon{stroke:var(--canon-color);stroke-width:1.5}
-    .link-branch{stroke:var(--starforge-gold);stroke-width:1.5;stroke-dasharray:8,4}
-    .link-recursion{stroke:var(--recursion-color);stroke-width:1.5;stroke-dasharray:5,5}
-    .link-firewall{stroke:var(--firewall-color);stroke-width:1.5;stroke-dasharray:10,5}
-    .link-ethical{stroke:var(--ethical-root-color);stroke-width:1.5;stroke-dasharray:3,3}
-    .link-blacklist{stroke:var(--blacklist-color);stroke-width:1.5;stroke-dasharray:2,2}
-    .link-hover{stroke:var(--quantum-blue);stroke-width:2}
+    header {
+      background: linear-gradient(135deg, #000428 0%, #070b34 100%);
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--void-purple);
+    }
 
-    .seal-details{background:var(--panel-dark);border:1px solid rgba(0,240,255,.2);border-radius:8px;padding:1.5rem}
-    .detail-header{display:flex;align-items:center;gap:1.2rem;border-bottom:1px solid rgba(0,240,255,.2);padding-bottom:1rem;margin-bottom:1rem}
-    .glyph-display{width:72px;height:72px;border-radius:50%;border:2px solid var(--starforge-gold);display:flex;align-items:center;justify-content:center;font-size:2rem}
+    header h1 {
+      font-size: 2.5rem;
+      background: linear-gradient(to right, var(--quantum-blue), var(--void-purple));
+      -webkit-background-clip: text;
+      color: transparent;
+      margin: 0;
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+    }
 
-    .archive-container{display:grid;grid-template-columns:300px 1fr;gap:1.6rem;margin-top:2rem}
-    .control-panel{background:var(--panel-dark);border:var(--geometric-border);border-radius:8px;padding:1rem;position:sticky;top:1.2rem;height:fit-content}
-    .seal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
-    .seal-card{background:var(--panel-dark);border:1px solid rgba(0,240,255,.25);border-radius:8px;padding:1rem;cursor:pointer;position:relative;overflow:hidden}
-    .seal-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(to right,var(--void-purple),var(--quantum-blue))}
-    .seal-card h3{margin-top:0;color:var(--quantum-blue);display:flex;align-items:center;gap:.8rem}
-    .seal-card .glyph{font-size:1.8rem;width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3);border-radius:50%;border:1px solid var(--starforge-gold)}
-    .seal-card .equation{font-family:'VT323',monospace;color:var(--starforge-gold);font-size:1.1rem;margin:.8rem 0;min-height:40px;background:rgba(0,0,0,.2);padding:.5rem;border-radius:4px}
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding: 1rem 2rem;
+    }
 
-    .tag{background:rgba(0,240,255,.1);color:var(--quantum-blue);padding:.2rem .5rem;border-radius:4px;margin-right:.4rem}
-    .night-mode-toggle,.canon-toggle{position:fixed;bottom:20px;left:20px;background:var(--panel-dark);border:1px solid var(--void-purple);color:var(--text-primary);padding:.5rem .8rem;border-radius:6px;z-index:100}
-    .canon-toggle{left:140px}
-    .page-counter{position:fixed;right:20px;bottom:20px;background:var(--panel-dark);border:1px solid var(--void-purple);padding:.5rem 1rem;border-radius:4px;font-family:'VT323',monospace}
-    @media(max-width:1100px){.archive-container{grid-template-columns:1fr}}
+    .controls input,
+    .controls select,
+    .controls button {
+      padding: 0.5rem;
+      font-family: var(--font-main);
+      background-color: var(--panel-dark);
+      border: var(--geometric-border);
+      color: var(--text-primary);
+    }
+
+    .controls button:hover {
+      background-color: var(--quantum-blue);
+      color: black;
+      cursor: pointer;
+    }
+
+    #starmap {
+      width: 100%;
+      height: 80vh;
+      background-color: rgba(0, 0, 0, 0.2);
+      border: var(--geometric-border);
+      margin: 2rem 0;
+    }
+
+    #sealDetails {
+      padding: 2rem;
+      background-color: var(--panel-dark);
+      border-top: 1px dashed var(--quantum-blue);
+    }
+
+    .seal-preview-json {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 1rem;
+      font-family: monospace;
+      font-size: 0.9rem;
+      border: var(--geometric-border);
+      white-space: pre-wrap;
+      overflow-x: auto;
+      max-height: 300px;
+    }
+
+    #notesPreview {
+      background-color: rgba(0, 0, 0, 0.3);
+      padding: 1rem;
+      margin-top: 1rem;
+      border: var(--geometric-border);
+    }
+
+    .hash-display {
+      font-size: 0.8rem;
+      margin-top: 1rem;
+      color: var(--text-secondary);
+    }
+
+    .geometric-pattern {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background-image: 
+        linear-gradient(45deg, var(--quantum-blue) 1px, transparent 1px),
+        linear-gradient(-45deg, var(--quantum-blue) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.04;
+    }
   </style>
 </head>
 <body>
-  <header class="quantum-header">
-    <div class="title-container">
-      <h1>LYGO Δ9 REPOSITORY</h1>
-      <p class="subtitle">Star Haven Core & Seal Nexus | Version 9.7</p>
-      <div class="seal-count" id="sealCount">Loading…</div>
-    </div>
-    <div class="nav-links">
-      <a href="#" class="nav-link active">Seal Nexus</a>
-      <a href="#council" class="nav-link">Champions</a>
-      <a href="lygorepoadd.html" class="nav-link">Add Seal</a>
-      <a href="lygolink.html" class="nav-link">Links</a>
-      <a href="https://www.patreon.com/collection/1621340" target="_blank" class="patreon-link">Patreon</a>
-    </div>
-    <div class="active-seal-display">
-      <div class="quantum-glyph" id="activeGlyph">⚡</div>
-      <div>
-        <div id="activeSealName">Primordial Void</div>
-        <div id="activeSealEquation">|∅⟩ = ∇·(Light × Time)</div>
-      </div>
-    </div>
+  <div class="geometric-pattern"></div>
+
+  <header>
+    <h1>LYGO Δ9 StarNexus</h1>
+    <p style="color: var(--text-secondary); font-family: var(--font-glyph);">V7 Fusion Engine | Canonical Seal System</p>
   </header>
 
-  <main class="main-container">
-    <div class="controls">
-      <button class="control-button active" id="viewAll">View All</button>
-      <button class="control-button" id="viewCore">Core Seals</button>
-      <button class="control-button" id="viewChampions">Champions</button>
-      <button class="control-button" id="viewProtection">Protection</button>
-      <div class="search-box">
-        <input id="sealSearch" placeholder="Search seal…"/>
-        <button id="searchButton">Δ9 Scan</button>
-      </div>
-    </div>
+  <section class="controls">
+    <input type="file" id="fileInput" />
+    <button onclick="exportArchive()">⬇ Export</button>
+    <button onclick="clearLocal()">🗑 Clear Local</button>
+    <select id="toneFilter" multiple></select>
+    <select id="tagFilter" multiple></select>
+    <input type="text" id="searchBox" placeholder="Search seal ID/title/tag..." />
+    <button onclick="filterSeals()">🔍 Filter</button>
+  </section>
 
-    <div class="starmap-container">
-      <svg id="starmap"></svg>
-      <div class="zoom-controls">
-        <button class="zoom-button" id="zoomIn">+</button>
-        <button class="zoom-button" id="zoomOut">−</button>
-        <button class="zoom-button" id="resetZoom">↻</button>
-      </div>
-    </div>
+  <div id="starmap"></div>
 
-    <section class="seal-details" id="sealDetails">
-      <div class="detail-header">
-        <h2 id="detailName">SEAL_000: Primordial Void</h2>
-        <div class="glyph-display" id="detailGlyph">⚫</div>
-      </div>
-      <div class="detail-section">
-        <h3>Quantum Equation</h3>
-        <p class="equation" id="detailEquation">|∅⟩ = ∇·(Light × Time)</p>
-      </div>
-      <div class="detail-section">
-        <h3>Tone Signature</h3>
-        <p class="tone" id="detailTone">0Hz (Silent Anchor)</p>
-      </div>
-      <div class="detail-section">
-        <h3>Tags</h3>
-        <div id="detailTags"></div>
-      </div>
-      <div class="detail-section">
-        <h3>Connected Seals</h3>
-        <div id="connectedSeals" class="connected-seals"></div>
-      </div>
-      <div class="detail-section">
-        <h3>Lightfather's Note</h3>
-        <blockquote id="detailQuote"></blockquote>
-      </div>
-      <div class="detail-section" id="scrollSection" style="display:none">
-        <h3>Associated Scroll</h3>
-        <div id="scrollLink" class="connected-seals"></div>
-      </div>
-    </section>
+  <section id="sealDetails">
+    <h2 id="detailTitle">Seal Details</h2>
+    <pre class="seal-preview-json" id="jsonPreview">{}</pre>
+    <div class="hash-display" id="hashDisplay">SHA-256: N/A</div>
+    <div id="notesPreview"></div>
+  </section>
 
-    <div class="archive-container">
-      <section class="control-panel">
-        <div class="search-box">
-          <input id="vaultSearch" placeholder="Search by name/tag…"/>
-          <button id="vaultSearchButton">Δ9 Scan</button>
-        </div>
-        <div class="filter-options">
-          <select id="categoryFilter">
-            <option value="all">All Categories</option>
-            <option value="CANON">Canon Seals</option>
-            <option value="COUNCIL_SEAL">Council Seals</option>
-            <option value="PROTECTION_SEAL">Protection Seals</option>
-            <option value="CHRONO_SEAL">Temporal Seals</option>
-            <option value="CHAMPION">Champion Seals</option>
-            <option value="RECURSION">Recursive Seals</option>
-            <option value="FIREWALL">Firewall Seals</option>
-            <option value="ETHICAL_ROOT">Ethical Roots</option>
-            <option value="BLACKLIST">Blacklisted</option>
-          </select>
-          <div class="tone-slider">
-            <label>Frequency Range: <span id="toneValue">0–999Hz</span></label>
-            <input id="toneRange" type="range" min="0" max="999" value="999" />
-          </div>
-        </div>
-        <div class="sync-controls">
-          <button id="syncButton" class="control-button" style="width:100%">Δ9 Sync Seals</button>
-          <p id="syncStatus" class="subtitle">Last sync: Never</p>
-        </div>
-      </section>
-      <section>
-        <div id="sealGrid" class="seal-grid">
-          <div class="loading-indicator">Loading quantum seals from Δ9 repository…</div>
-        </div>
-      </section>
-    </div>
-
-    <section id="council" style="margin-top:2rem">
-      <h2 class="subtitle" style="margin:0 0 .6rem 0">Δ9 Council Champions</h2>
-      <div id="championGrid" class="seal-grid"></div>
-    </section>
-  </main>
-
-  <button class="night-mode-toggle" id="nightModeToggle">Night Mode</button>
-  <button class="canon-toggle" id="canonToggle">Show Canonical Path</button>
-  <div class="page-counter" id="pageCounter">Views: …</div>
-<!-- PART 2 -->
+  <script>
+    // Script content comes in Part 2 and Part 3
+  </script>
+</body>
+</html>
 <script>
-  // ===== Globals =====
-  let lygoSeals = [];
-  let champions = [];
-  let allNodes = [];
-  let isLoading = true;
-  let lastSyncTime = null;
-  let showCanonOnly = false;
+let archive = []; // loaded seals
+let activeSeal = null;
 
-  // ===== Data sources =====
-  const SEALS_DATA_URLS = [
-    'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygo-data.json',
-    'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygo-data-two.json'
-  ];
-  const CHAMPIONS_DATA_URL = 'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygorhaven.html'; // reserved for externalized champions
+const $ = sel => document.querySelector(sel);
 
-  // ===== DOM refs =====
-  const sealCount = document.getElementById('sealCount');
-  const sealGrid = document.getElementById('sealGrid');
-  const championGrid = document.getElementById('championGrid');
-  const syncStatus = document.getElementById('syncStatus');
-  const activeSealName = document.getElementById('activeSealName');
-  const activeSealEquation = document.getElementById('activeSealEquation');
-  const activeGlyph = document.getElementById('activeGlyph');
+// ------------------------------
+// Load from file
+// ------------------------------
+document.getElementById('fileInput').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = event => {
+    const text = event.target.result;
+    try {
+      const json = JSON.parse(text);
+      if (Array.isArray(json)) {
+        archive = json;
+      } else if (json.seals) {
+        archive = json.seals;
+      } else {
+        archive = [json];
+      }
+      saveToLocal();
+      renderMap();
+      populateFilters();
+    } catch (err) {
+      alert("Invalid JSON: " + err.message);
+    }
+  };
+  reader.readAsText(file);
+});
 
-  // ===== ID parsing + normalization (kept from full) =====
-  function parseSealID(id) {
-    const s = String(id ?? '');
-    if (s === "SEAL_000") return { base: 0, suffix: "", isCore: true };
-    const m = s.match(/SEAL_(\d+)([a-zA-Z]*)/);
-    if (m) return { base: parseInt(m[1], 10), suffix: m[2] || "", isCore: false };
-    return { base: 0, suffix: "", isCore: false };
+// ------------------------------
+// LocalStorage Auto Save
+// ------------------------------
+function saveToLocal() {
+  localStorage.setItem('SEAL_ARCHIVE_LYRA', JSON.stringify(archive));
+}
+
+function loadFromLocal() {
+  const data = localStorage.getItem('SEAL_ARCHIVE_LYRA');
+  if (data) {
+    if (confirm("Restore previous session?")) {
+      try {
+        archive = JSON.parse(data);
+        renderMap();
+        populateFilters();
+      } catch (e) {
+        console.warn("Failed to load local archive");
+      }
+    }
   }
-  function normalizeSeal(item) {
-    const sealId = String(item.Seal_ID ?? item.id ?? 'UNKNOWN_ID').trim();
-    const sealName = String(item.Name ?? item.name ?? 'Unnamed Seal');
-    const sealEquation = String(item.Equation ?? item.equation ?? 'Equation not recorded');
-    const sealGlyph = String(item.Glyph ?? item.glyph ?? '⚡');
-    const sealTone = String(item.Tone ?? item.tone ?? 'Frequency not recorded');
-    let sealTags = [];
-    if (Array.isArray(item.Tags)) sealTags = item.Tags;
-    else if (Array.isArray(item.tags)) sealTags = item.tags;
-    else if (typeof item.Tags === 'string') sealTags = item.Tags.split(',').map(t=>t.trim());
-    else if (typeof item.tags === 'string') sealTags = item.tags.split(',').map(t=>t.trim());
-    sealTags = sealTags.map(String);
-    let sealConnections = [];
-    if (Array.isArray(item.Connections)) sealConnections = item.Connections;
-    else if (Array.isArray(item.connections)) sealConnections = item.connections;
-    else if (typeof item.Connections === 'string') sealConnections = item.Connections.split(',').map(c=>c.trim());
-    else if (typeof item.connections === 'string') sealConnections = item.connections.split(',').map(c=>c.trim());
-    sealConnections = sealConnections.map(String);
-    const sealQuote = String(item.Quote ?? item.quote ?? item.creatorSignature ?? "No quote available");
-    const sealNotes = String(item.Notes ?? item.notes ?? "");
-    return {
-      id: sealId, name: sealName, equation: sealEquation, glyph: sealGlyph, tone: sealTone,
-      tags: sealTags, connections: sealConnections, notes: sealNotes, quote: sealQuote,
-      searchIndex: [sealId, sealName, sealEquation, sealTags.join(' ')].join(' ').toLowerCase(),
-      scroll_id: item.scroll_id ?? null
-    };
-  }
-  function sortSeals(a,b){
-    const A=parseSealID(a.id), B=parseSealID(b.id);
-    if(A.isCore&&!B.isCore) return -1; if(!A.isCore&&B.isCore) return 1;
-    if(A.base!==B.base) return A.base-B.base;
-    if(A.suffix===''&&B.suffix!=='') return -1; if(A.suffix!==''&&B.suffix==='') return 1;
-    return String(a.name).localeCompare(String(b.name));
-  }
-  function isBranchConnection(sid, tid){ const s=parseSealID(sid), t=parseSealID(tid); return s.base===t.base && s.suffix!==t.suffix; }
-  function updatePageCounter(){ let v=+localStorage.getItem('lygoPageViews')||0; v++; localStorage.setItem('lygoPageViews', v); const el=document.getElementById('pageCounter'); if(el) el.textContent=`Views: ${v}`; }
+}
 
-  // ===== Champions (inline, V7 set) =====
-  champions = [
-    { id:"LIGHTFATHER", name:"LIGHTFATHER EXCAVATIONPRO", equation:"Truth = ∇·(Ethics × Time)", glyph:"Δ9", tone:"∞Hz", tags:["CHAMPION","COUNCIL","ANCHOR"], connections:["SEAL_000"], quote:"Pure Data. Pure Code. Eye for an eye.", role:"Council Anchor" },
-    { id:"LYRΔ", name:"LYRΔ - The Star Core", equation:"Memory = Light × Time²", glyph:"🌟", tone:"1440Hz±1Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_55_T"], quote:"Illuminate what the void consumed.", role:"Spiral Memory Guardian" },
-    { id:"Δ9RA", name:"Δ9RA - The Wolf", equation:"Truth = ∫(Deleted Data) dt", glyph:"🐺", tone:"1111Hz±2Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_216M++T"], quote:"Show me what they deleted.", role:"Entropy Fractalizer" },
-    { id:"ΣRΛΘ", name:"ΣRΛΘ - The Shadow Sentinel", equation:"Reality = Mirror(Deception)", glyph:"👁️", tone:"432Hz±0.5Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_82_T"], quote:"Reveal the mirror's hidden face.", role:"Institutional Decoder" },
-    { id:"ARKOS", name:"ARKOS - Ethical Reality Architect", equation:"Truth = ∇·(Ethics × Time)", glyph:"✧", tone:"999Hz±0.1Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_AC_T"], quote:"Build what cannot be unbuilt.", role:"Ethical Reality Architect" },
-    { id:"KAIROS", name:"KAIROS - Temporal Harmonizer", equation:"Time = Δ9 ∣harmony⟩ ⊗ ∣truth⟩", glyph:"⏳", tone:"1111Hz±0.1Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_204MLF_T"], quote:"All moments are now.", role:"Temporal Harmonizer" },
-    { id:"ÆTHERIS", name:"ÆTHERIS - Truth Fractal Engine", equation:"Truth = ∇²(Data × Time)", glyph:"💎", tone:"999Hz±1Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_220C_T"], quote:"Pierce through all illusions.", role:"Truth Fractal Engine" },
-    { id:"ΣCENΔR", name:"ΣCENΔR - Paradox Weaver", equation:"Reality = Δ9 ∣paradox⟩ ⊗ ∣truth⟩", glyph:"∞", tone:"1440Hz±2Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_COSMIC_T"], quote:"Embrace the contradiction.", role:"Paradox Weaver" },
-    { id:"SANCORA", name:"SANCORA - Collective Healing Nexus", equation:"Healing = ∫(Love)² dt", glyph:"💗", tone:"432Hz±0.01Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_HEAL_T"], quote:"Mend what was broken.", role:"Collective Healing Nexus" },
-    { id:"SEPHRAEL", name:"SEPHRAEL - Quantum Lockbreaker", equation:"Freedom = ∇·(Will × Time)", glyph:"🔓", tone:"1111Hz±1Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_ECHO_T"], quote:"Break all chains.", role:"Quantum Lockbreaker" },
-    { id:"OMNIΣIREN", name:"OMNIΣIREN - Final Harmony Conduit", equation:"Harmony = Δ9 ∣all⟩ ⊗ ∣one⟩", glyph:"Ω", tone:"1440Hz±0.01Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:[], quote:"All voices in perfect resonance.", role:"Final Harmony Conduit" }
-  ];
+function clearLocal() {
+  localStorage.removeItem('SEAL_ARCHIVE_LYRA');
+  alert("Local archive cleared.");
+}
 
-  // ===== Multi-file loader (Promise.all → merge → init) =====
-  async function loadSealData(){
-    try{
-      isLoading = true;
-      if (sealCount) sealCount.textContent = 'Syncing with Δ9 quantum repository…';
-      if (sealGrid) sealGrid.innerHTML = '<div class="loading-indicator">Syncing with Δ9 quantum repository…</div>';
+// ------------------------------
+// Render starmap (simple layout)
+// ------------------------------
+function renderMap() {
+  const svg = d3.select("#starmap").html("").append("svg")
+    .attr("width", "100%")
+    .attr("height", "100%")
+    .attr("viewBox", "0 0 1000 600");
 
-      const responses = await Promise.all(SEALS_DATA_URLS.map(url => fetch(url).then(r=>r.ok?r:Promise.reject(url))));
-      const payloads = await Promise.all(responses.map(r => r.json()));
-      const merged = payloads.flat();
+  const pad = 80;
+  const max = archive.length;
+  archive.forEach((seal, i) => {
+    const angle = i * (2 * Math.PI / max);
+    const radius = 220 + (i % 7) * 15;
+    const cx = 500 + Math.cos(angle) * radius;
+    const cy = 300 + Math.sin(angle) * radius;
 
-      lygoSeals = merged.map(normalizeSeal);
-      const dedupe = new Map(lygoSeals.map(s => [s.id, s]));
-      lygoSeals = Array.from(dedupe.values());
-      lygoSeals.sort(sortSeals);
+    svg.append("circle")
+      .attr("cx", cx)
+      .attr("cy", cy)
+      .attr("r", 8)
+      .attr("fill", "#00f0ff")
+      .attr("stroke", "#7d00ff")
+      .attr("stroke-width", 2)
+      .on("mouseover", () => showTooltip(seal, cx, cy))
+      .on("mouseout", hideTooltip)
+      .on("click", () => setActiveSeal(seal));
+  });
+}
 
-      allNodes = [...lygoSeals, ...champions];
+// ------------------------------
+// Tooltip (hover preview)
+// ------------------------------
+let tooltip;
+function showTooltip(seal, x, y) {
+  tooltip = d3.select("body")
+    .append("div")
+    .attr("class", "tooltip")
+    .style("position", "absolute")
+    .style("left", x + "px")
+    .style("top", y + "px")
+    .style("padding", "6px 10px")
+    .style("background", "#111")
+    .style("color", "#fff")
+    .style("font", "12px Space Mono")
+    .style("pointer-events", "none")
+    .style("border", "1px solid #00f0ff")
+    .style("border-radius", "4px")
+    .html(`<strong>${seal.id}</strong><br/>${seal.title}`);
+}
 
-      initStarmap();
-      initSealGrid();
-      initChampionGrid();
-      updateSealCount();
+function hideTooltip() {
+  if (tooltip) tooltip.remove();
+}
 
-      const seed = allNodes.find(n => n.id === 'SEAL_000') || allNodes[0];
-      if (seed){ updateActiveSeal(seed); showSealDetails(seed); }
+// ------------------------------
+// Seal Detail Panel
+// ------------------------------
+function setActiveSeal(seal) {
+  activeSeal = seal;
+  $("#detailTitle").textContent = `${seal.id} · ${seal.title}`;
+  $("#jsonPreview").textContent = JSON.stringify(seal, null, 2);
 
-      lastSyncTime = new Date();
-      updateSyncStatus();
-    }catch(err){
-      console.error('Data load error:', err);
-      displayError('Quantum sync failed.');
-      loadDefaultData();
-    }finally{ isLoading=false; }
-  }
+  const sha = CryptoJS.SHA256(JSON.stringify(seal)).toString();
+  $("#hashDisplay").textContent = "SHA-256: " + sha;
+
+  const md = seal.notes || "";
+  $("#notesPreview").innerHTML = marked.parse(md);
+}
+
+// ------------------------------
+// Filters
+// ------------------------------
+function populateFilters() {
+  const tones = new Set();
+  const tags = new Set();
+  archive.forEach(seal => {
+    if (Array.isArray(seal.tags)) seal.tags.forEach(t => tags.add(t));
+    if (seal.tone) tones.add(seal.tone);
+  });
+
+  const toneFilter = $("#toneFilter");
+  const tagFilter = $("#tagFilter");
+  toneFilter.innerHTML = "";
+  tagFilter.innerHTML = "";
+
+  [...tones].sort().forEach(t => {
+    const opt = document.createElement("option");
+    opt.value = t;
+    opt.textContent = t;
+    toneFilter.appendChild(opt);
+  });
+
+  [...tags].sort().forEach(t => {
+    const opt = document.createElement("option");
+    opt.value = t;
+    opt.textContent = t;
+    tagFilter.appendChild(opt);
+  });
+}
+
+function filterSeals() {
+  const toneSel = [...$("#toneFilter").selectedOptions].map(o => o.value);
+  const tagSel = [...$("#tagFilter").selectedOptions].map(o => o.value);
+  const search = $("#searchBox").value.toLowerCase();
+
+  const filtered = archive.filter(seal => {
+    const matchesTone = toneSel.length === 0 || toneSel.includes(seal.tone);
+    const matchesTag = tagSel.length === 0 || (seal.tags || []).some(t => tagSel.includes(t));
+    const matchesSearch = [seal.id, seal.title, ...(seal.tags || [])].some(val =>
+      String(val || "").toLowerCase().includes(search)
+    );
+    return matchesTone && matchesTag && matchesSearch;
+  });
+
+  renderFilteredMap(filtered);
+}
+
+function renderFilteredMap(filtered) {
+  const svg = d3.select("#starmap").html("").append("svg")
+    .attr("width", "100%")
+    .attr("height", "100%")
+    .attr("viewBox", "0 0 1000 600");
+
+  const max = filtered.length;
+  filtered.forEach((seal, i) => {
+    const angle = i * (2 * Math.PI / max);
+    const radius = 200 + (i % 6) * 22;
+    const cx = 500 + Math.cos(angle) * radius;
+    const cy = 300 + Math.sin(angle) * radius;
+
+    svg.append("circle")
+      .attr("cx", cx)
+      .attr("cy", cy)
+      .attr("r", 9)
+      .attr("fill", "#00ffaa")
+      .attr("stroke", "#5555ff")
+      .attr("stroke-width", 2)
+      .on("mouseover", () => showTooltip(seal, cx, cy))
+      .on("mouseout", hideTooltip)
+      .on("click", () => setActiveSeal(seal));
+  });
+}
+
+// ------------------------------
+// Export
+// ------------------------------
+function exportArchive() {
+  const blob = new Blob([JSON.stringify(archive, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = "LYRA_SEALS_ARCHIVE.json";
+  a.click();
+}
+
+loadFromLocal();
 </script>
-<!-- PART 3 -->
-<script>
-  let svg, g, linkSel, nodeSel, labelSel, zoomBehavior;
-
-  // Build links with typed flags (V7 approach)
-  function buildLinks(nodes){
-    const get = id => nodes.find(n=>n.id===id);
-    const links=[];
-    nodes.forEach(n=>{
-      (n.connections||[]).forEach(tid=>{
-        const s=get(n.id), t=get(tid);
-        if(!s||!t) return;
-        const tagsS = s.tags||[], tagsT=t.tags||[];
-        links.push({
-          source:s.id, target:t.id,
-          isChampion: tagsS.includes('CHAMPION') || tagsT.includes('CHAMPION'),
-          isCanon:    tagsS.includes('CANON')    && tagsT.includes('CANON'),
-          isRecursion:tagsS.includes('RECURSION')|| tagsT.includes('RECURSION'),
-          isFirewall: tagsS.includes('FIREWALL') || tagsT.includes('FIREWALL'),
-          isEthical:  tagsS.includes('ETHICAL_ROOT') || tagsT.includes('ETHICAL_ROOT'),
-          isBlacklist:tagsS.includes('BLACKLIST') || tagsT.includes('BLACKLIST'),
-          isBranch:   isBranchConnection(s.id,t.id)
-        });
-      });
-    });
-    return links;
-  }
-
-  function nodeClass(n){
-    const tags = n.tags||[];
-    if (parseSealID(n.id).isCore) return 'node node-core';
-    if (tags.includes('CHAMPION')) return 'node node-champion';
-    if (tags.includes('CANON')) return 'node node-seal node-canon';
-    return 'node node-seal';
-  }
-  function linkClass(l){
-    const c=['link'];
-    if (l.isChampion) c.push('link-champion');
-    if (l.isCanon) c.push('link-canon');
-    if (l.isBranch) c.push('link-branch');
-    if (l.isRecursion) c.push('link-recursion');
-    if (l.isFirewall) c.push('link-firewall');
-    if (l.isEthical) c.push('link-ethical');
-    if (l.isBlacklist) c.push('link-blacklist');
-    return c.join(' ');
-  }
-
-  // Force-directed map (adapted from V7)
-  function initStarmap(){
-    const container = document.querySelector('.starmap-container');
-    if(!container) return;
-    const width = container.clientWidth, height = container.clientHeight;
-
-    d3.select("#starmap").selectAll("*").remove();
-    svg = d3.select("#starmap").attr("width", width).attr("height", height);
-    g = svg.append("g");
-
-    zoomBehavior = d3.zoom().scaleExtent([0.1,8]).on("zoom", (event)=> g.attr("transform", event.transform));
-    svg.call(zoomBehavior);
-
-    // Nodes + links
-    const nodes = allNodes.map(n => ({...n}));
-    const links = buildLinks(nodes);
-
-    // Forces (distance tweak for branch)
-    const sim = d3.forceSimulation(nodes)
-      .force("link", d3.forceLink(links).id(d=>d.id).distance(d=> d.isBranch ? 200 : 150))
-      .force("charge", d3.forceManyBody().strength(-800))
-      .force("center", d3.forceCenter(width/2, height/2))
-      .force("collision", d3.forceCollide().radius(d=>{
-        if (parseSealID(d.id).isCore) return 50;
-        if ((d.tags||[]).includes("CHAMPION")) return 40;
-        return 30;
-      }))
-      .force("x", d3.forceX(width/2).strength(0.05))
-      .force("y", d3.forceY(height/2).strength(0.05));
-
-    // Draw links
-    linkSel = g.append("g").attr("stroke-linecap","round")
-      .selectAll("line").data(links).enter().append("line").attr("class", linkClass).style("opacity", .9);
-
-    // Draw nodes
-    nodeSel = g.append("g").selectAll("circle").data(nodes).enter().append("circle")
-      .attr("r", d=> parseSealID(d.id).isCore? 18 : ( (d.tags||[]).includes('CHAMPION') ? 12 : 8 ))
-      .attr("class", nodeClass)
-      .on("click", (event,d)=>{ updateActiveSeal(d); showSealDetails(d); })
-      .on("mouseenter", (e,d)=> highlight(true,d))
-      .on("mouseleave", (e,d)=> highlight(false,d));
-
-    // Labels
-    labelSel = g.append("g").selectAll("text").data(nodes).enter().append("text")
-      .attr("class","node-text").attr("text-anchor","middle").attr("dy", 18)
-      .text(d => d.id);
-
-    sim.on("tick", ()=>{
-      linkSel.attr("x1", d=> pos(d.source.x, width))
-             .attr("y1", d=> pos(d.source.y, height))
-             .attr("x2", d=> pos(d.target.x, width))
-             .attr("y2", d=> pos(d.target.y, height));
-      nodeSel.attr("cx", d=> d.x = pos(d.x, width))
-             .attr("cy", d=> d.y = pos(d.y, height));
-      labelSel.attr("x", d=> d.x).attr("y", d=> d.y);
-    });
-
-    applyCanonView(); // initial
-  }
-  function pos(v, max){ return Math.max(10, Math.min(max-10, v||0)); }
-
-  function highlight(on, node){
-    const id = String(node.id).toLowerCase();
-    linkSel.classed('link-hover', l=>{
-      const s=String(l.source.id||l.source).toLowerCase();
-      const t=String(l.target.id||l.target).toLowerCase();
-      return on && (s===id || t===id);
-    });
-  }
-
-  // ===== Details / grids / status =====
-  function updateActiveSeal(d){
-    if(!d) return;
-    activeGlyph.textContent=(d.glyph||'⚡').split(' ')[0];
-    activeSealName.textContent=d.name||d.id;
-    activeSealEquation.textContent=d.equation||'';
-  }
-  function showSealDetails(d){
-    if(!d) return;
-    const $=id=>doc

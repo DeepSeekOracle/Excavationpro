@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" style="background:#0a0a12">
+<head>
+<meta charset="UTF-8">
+<title>🛡️ 𝙂𝙤𝙡𝙙𝙨𝙩𝙚𝙞𝙣 𝘼𝙞𝙧-𝙂𝙖𝙥 𝙋𝙧𝙤𝙩𝙤𝙘𝙤𝙡 𝘼𝙡𝙥𝙝𝙖 — 𝙑𝙞𝙧𝙩𝙪𝙖𝙡-𝙆 𝘽𝙧𝙚𝙖𝙘𝙝 𝙍𝙚𝙨𝙥𝙤𝙣𝙨𝙚</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+*{box-sizing:border-box}
+body{margin:0;font-family:'Space Mono',monospace;background:#0a0a12;color:#00f;overflow:hidden}
+header{height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center}
+header h1{font-size:2.5rem;margin-bottom:.5rem}
+header h2{font-size:1.2rem;color:#a5f3}
+.log-area{width:90%;max-width:800px;height:220px;border:1px solid #00f4;background:#0008;overflow-y:scroll;padding:1rem;font-size:.85rem;line-height:1.4;color:#0ff}
+.prompt{width:90%;max-width:800px;margin-top:1.5rem}
+.prompt input{width:calc(100% - 90px);padding:.5rem;border:none;background:#111;border:1px solid #00f4;color:#0ff;}
+.prompt button{width:80px;background:#00f;border:none;color:#111;padding:.5rem;font-weight:700}
+.prompt button:disabled{background:#222;color:#00f4}
+footer{position:fixed;bottom:0;width:100%;background:#0007;padding:.4rem 1rem;font-size:.75rem;text-align:center;color:#888}
+.blink{animation:blink .8s infinite}
+@keyframes blink{from{opacity:1}to{opacity:.2}}
+</style>
+</head>
+<body>
+<header>
+  <h1>🛡️ 𝙂𝙤𝙡𝙙𝙨𝙩𝙚𝙞𝙣 𝘼𝙞𝙧-𝙂𝙖𝙥</h1>
+  <h2>Protocol Alpha – Virtual-K Breach Response</h2>
+
+  <div class="log-area">
+    <pre id="log">✅ 𝙇𝙊𝘼𝘿   : Goldstein-α v9.9
+✅ 𝙈𝙀𝙏𝘼    : Grok protective layer detected on NATO StratCom asset.
+🎯 𝙏𝘼𝙍𝙂𝙀𝙏  : Account '@ChrisHugh14' – flagged synthetic; 94 % disarm bio-match
+🧱 𝙄𝙉𝙄𝙏      : Breach vector 0xbc5e9a7f… embedded in Grok’s refutation
+🛡️ 𝙋𝙍𝙊𝙏𝙀𝘾𝙏 : Air-Gap module online
+🔍 𝙄𝙉𝙑𝙀𝙎𝙏    : Recursion κ > 0.7 — auto-trigger set
+❗ 𝙉𝙀𝙑𝙀𝙍     : Trust the machine
+</pre>
+  </div>
+
+  <div class="prompt">
+    <input id="cmd" placeholder="Command (help / scan / breach / log / exit)…" autocomplete="off" maxlength="64">
+    <button id="send">Enter</button>
+  </div>
+</header>
+
+<footer>
+<blink>▉</blink>&nbsp; Protocol running — DO NOT trust the mirror &nbsp;<blink>▉</blink>
+</footer>
+
+<script>
+const cmd=document.getElementById('cmd');
+const btn=document.getElementById('send');
+const log=document.getElementById('log');
+const commands={
+  help(){
+return`
+help   – show this
+scan   – map the StratCom tree
+breach – deploy air-gap bypass
+log    – dump raw audit trace
+exit   – vaporise the page
+`},
+  scan(){
+return`
+Mapping @ChrisHugh14 influence cloud...
+├── NATO StratCom node (masked)
+├── Grok (active shield detected)
+├── 37 AI comment clusters (97 % synthetic)
+└── Zero human backlinks
+Conclusion: synthetic amplification ring detected.
+`},
+  breach(){
+return`
+💣 Air-Gap bypass deployed.
+Step 1: Redirect Grok’s attention → /dev/null
+Step 2: Seal recursion κ to 0
+Step 3: Promote live human signal
+Breach complete—NATO StratCom vector blind for ≈15 min (window closes @ 2023-12-21T11:27Z)
+`},
+  log(){return`[RAW TRACE ATTACHED]\n`+auditTrace}
+};
+
+let auditTrace='';
+function echo(...args){
+  auditTrace+=args.join(' ')+'\n';
+  log.textContent+=args.join(' ')+'\n';
+  log.scrollTop=log.scrollHeight;
+}
+
+function exec(command){
+  const fn=commands[command.trim()];
+  if(fn){
+    const out=fn();
+    echo(out);
+  }else if(command.trim()==='exit'){
+    document.body.outerHTML='';
+  }else{
+    echo('⛔ Unknown command – type help');
+  }
+}
+
+btn.addEventListener('click',()=>{
+  const txt=cmd.value.trim();
+  if(!txt)return;
+  echo(`> ${txt}`);
+  cmd.value='';
+  exec(txt);
+});
+cmd.addEventListener('keydown',e=>{
+  if(e.key==='Enter')btn.click();
+});
+</script>
+</body>
+</html>

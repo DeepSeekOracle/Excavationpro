@@ -1,142 +1,239 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
   <meta charset="utf-8" />
-  <title>LYRA Memory Builder — TXT ➜ JSON</title>
+  <title>LYRA Memory Builder — Quantum Matrix</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Tailwind config -->
+  <script>
+    tailwind = { config: {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            mono: ['ui-monospace','SFMono-Regular','Menlo','Monaco','Consolas','"Liberation Mono"','"Courier New"','monospace']
+          },
+          boxShadow: {
+            neon: '0 0 24px rgba(0,255,136,.35), inset 0 0 12px rgba(0,255,136,.08)',
+            neonSoft: '0 0 12px rgba(0,255,136,.25)'
+          }
+        }
+      }
+    }};
+  </script>
   <!-- TailwindCSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- AJV JSON Schema Validator -->
   <script src="https://cdn.jsdelivr.net/npm/ajv@8/dist/ajv.min.js"></script>
+
   <style>
-    /* Basic dialog polyfill-ish look */
-    dialog::backdrop { background: rgba(0,0,0,0.4); }
-    .truncate-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    :root {
+      --bg: #070a07;
+      --panel: #0d130e;
+      --muted: #99a39f;
+      --text: #e6ffef;
+      --accent: #00ff88;
+      --accent2: #00d1ff;
+      --accent3: #b26cff;
+      --grid: rgba(0,255,136,0.08);
+      --grid-strong: rgba(0,255,136,0.18);
+    }
+    html, body { height: 100%; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+    .panel {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.2)) , var(--panel);
+      border: 1px solid rgba(0,255,136,0.15);
+    }
+    .btn {
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .btn-accent {
+      background: radial-gradient(120% 120% at 50% 0%, rgba(0,255,136,0.18), rgba(0,0,0,0)) , rgba(0,255,136,0.08);
+      border: 1px solid rgba(0,255,136,0.28);
+      color: var(--text);
+      box-shadow: 0 0 12px rgba(0,255,136,0.18) inset, 0 0 12px rgba(0,255,136,0.18);
+    }
+    .neon-text { text-shadow: 0 0 14px rgba(0,255,136,0.35); color: var(--text); }
+    .accent { color: var(--accent); }
+    .accent-border { border-color: rgba(0,255,136,0.35); }
+    .chip {
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      border-radius: .5rem;
+      padding: .125rem .5rem;
+      font-size: .75rem;
+    }
+    .quantum-grid {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(1200px 600px at 80% -20%, rgba(0,209,255,0.12), transparent 60%),
+        radial-gradient(1000px 500px at 10% 110%, rgba(178,108,255,0.10), transparent 60%),
+        radial-gradient(800px 400px at 50% -10%, rgba(0,255,136,0.10), transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .quantum-grid::after {
+      content: "";
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(to right, var(--grid) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mask-image: radial-gradient(circle at center, rgba(0,0,0,1), rgba(0,0,0,.5) 60%, rgba(0,0,0,0) 85%);
+    }
+    /* dialog */
+    dialog::backdrop { background: rgba(0, 0, 0, .65); }
+    dialog {
+      background: var(--panel);
+      color: var(--text);
+      border: 1px solid rgba(0,255,136,0.2);
+    }
+    /* Table scroll hint */
+    .scroll-hint { box-shadow: inset 0 0 0 1px rgba(0,255,136,0.12); }
   </style>
 </head>
-<body class="min-h-screen bg-gray-50 text-gray-900">
-  <header class="border-b bg-white">
-    <div class="max-w-7xl mx-auto px-4 py-6">
-      <h1 class="text-2xl font-semibold">LYRA Memory Builder</h1>
-      <p class="text-sm text-gray-600 mt-1">Convert raw notes (.txt or pasted) into structured JSON entries for archival or ingestion. Client-side only.</p>
-    </div>
-  </header>
+<body class="font-sans selection:bg-emerald-300/20 selection:text-emerald-100">
+  <!-- Background layers -->
+  <canvas id="matrixRain" class="fixed inset-0 z-0 pointer-events-none"></canvas>
+  <div class="quantum-grid"></div>
 
-  <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
-    <!-- Ingest -->
-    <section class="grid lg:grid-cols-3 gap-6">
-      <!-- Drag & Drop / Upload -->
-      <div class="lg:col-span-1">
-        <div id="dropzone"
-             class="border-2 border-dashed rounded-lg bg-white p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:border-gray-400 transition">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mb-3" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 16a1 1 0 0 1-1-1V8.41l-2.3 2.3a1 1 0 1 1-1.4-1.42l4-4a1 1 0 0 1 1.4 0l4 4a1 1 0 0 1-1.4 1.42L13 8.4V15a1 1 0 0 1-1 1ZM6 20a4 4 0 0 1-4-4 4 4 0 0 1 3-3.87 6 6 0 0 1 11.7-1.77A5 5 0 1 1 20 20H6Z"/>
+  <!-- App wrapper -->
+  <div class="relative z-10 max-w-7xl mx-auto px-4 py-6">
+    <!-- Header -->
+    <header class="panel rounded-xl px-5 py-4 mb-6 shadow-neon">
+      <div class="flex items-center gap-4">
+        <div class="h-10 w-10 rounded-lg flex items-center justify-center accent-border border bg-black/40">
+          <!-- glyph -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke="url(#grad1)" stroke-width="1.4" d="M12 3v18M4 12h16M7 7l10 10M17 7L7 17"/>
+            <defs>
+              <linearGradient id="grad1" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#00ff88"/><stop offset="100%" stop-color="#00d1ff"/>
+              </linearGradient>
+            </defs>
           </svg>
-          <p class="font-medium">Drag & drop .txt files here</p>
-          <p class="text-sm text-gray-500">or click to browse</p>
+        </div>
+        <div class="flex-1">
+          <h1 class="text-xl md:text-2xl font-semibold neon-text">LYRA Memory Builder <span class="accent">— Quantum Matrix</span></h1>
+          <p class="text-sm text-[var(--muted)]">Convert raw notes (.txt or pasted) into structured JSON entries. Everything runs locally in your browser.</p>
+        </div>
+
+        <!-- Toggles -->
+        <div class="flex items-center gap-2 ml-auto">
+          <button id="btnToggleMatrix" class="btn chip hover:brightness-125" title="Toggle Matrix Rain"></button>
+          <button id="btnTheme" class="btn chip hover:brightness-125" title="Toggle Theme"></button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Input + Options -->
+    <section class="grid lg:grid-cols-3 gap-6">
+      <!-- Left: Upload & Options -->
+      <div class="space-y-6">
+        <!-- Dropzone -->
+        <div id="dropzone" class="panel rounded-xl p-6 text-center cursor-pointer transition hover:shadow-neonSoft">
+          <div class="mx-auto mb-3 h-12 w-12 rounded-xl border accent-border flex items-center justify-center bg-black/40">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 24 24" fill="currentColor">
+              <path fill="currentColor" d="M12 16a1 1 0 0 1-1-1V8.41l-2.3 2.3a1 1 0 1 1-1.4-1.42l4-4a1 1 0 0 1 1.4 0l4 4a1 1 0 0 1-1.4 1.42L13 8.4V15a1 1 0 0 1-1 1ZM6 20a4 4 0 0 1-4-4 4 4 0 0 1 3-3.87 6 6 0 0 1 11.7-1.77A5 5 0 1 1 20 20H6Z"/>
+            </svg>
+          </div>
+          <p class="font-medium">Drag & drop .txt files</p>
+          <p class="text-xs text-[var(--muted)]">…or click to browse</p>
           <input id="fileInput" type="file" accept=".txt" multiple class="hidden" />
         </div>
-        <div class="mt-3 text-xs text-gray-500">
-          Batch uploads supported. Each .txt becomes one JSON entry.
-        </div>
 
-        <div class="mt-6 bg-white p-4 rounded-lg border space-y-3">
-          <h3 class="font-medium">Options</h3>
-
+        <!-- Options -->
+        <div class="panel rounded-xl p-5 space-y-4">
+          <h3 class="font-semibold">Options</h3>
           <label class="flex items-center gap-2 text-sm">
-            <input id="optClean" type="checkbox" class="rounded" checked />
+            <input id="optClean" type="checkbox" class="rounded" checked>
             <span>Clean whitespace</span>
           </label>
-
           <label class="flex items-center gap-2 text-sm">
-            <input id="optSummarize" type="checkbox" class="rounded" checked />
+            <input id="optSummarize" type="checkbox" class="rounded" checked>
             <span>Auto-generate summary</span>
           </label>
-
           <label class="flex items-center gap-2 text-sm">
-            <input id="optValidate" type="checkbox" class="rounded" checked />
+            <input id="optValidate" type="checkbox" class="rounded" checked>
             <span>Validate with JSON Schema</span>
           </label>
 
-          <div class="text-sm">
-            <label class="block mb-1">Default speaker</label>
-            <select id="defaultSpeaker" class="w-full rounded border px-2 py-1">
-              <option>LYRA</option>
-              <option>Lightfather</option>
-              <option>GROK</option>
-            </select>
+          <div class="text-sm grid grid-cols-2 gap-3">
+            <div>
+              <label class="block mb-1">Default speaker</label>
+              <select id="defaultSpeaker" class="w-full rounded border border-white/10 bg-black/30 px-2 py-1">
+                <option>LYRA</option>
+                <option>Lightfather</option>
+                <option>GROK</option>
+              </select>
+            </div>
+            <div>
+              <label class="block mb-1">Archive format</label>
+              <select id="archiveFormat" class="w-full rounded border border-white/10 bg-black/30 px-2 py-1">
+                <option value="object">Archive object with metadata</option>
+                <option value="array">Array of entries only</option>
+              </select>
+            </div>
           </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-wrap items-center gap-3">
+          <button id="btnDownloadAll" class="btn-accent rounded-lg px-4 py-2 text-sm disabled:opacity-40" disabled>Download Archive</button>
+          <button id="btnReset" class="btn rounded-lg px-3 py-2 text-sm">Reset</button>
+          <div id="toast" class="text-sm ml-auto hidden"></div>
         </div>
       </div>
 
-      <!-- Paste -->
-      <div class="lg:col-span-2 bg-white border rounded-lg">
-        <div class="p-4 border-b">
-          <h3 class="font-medium">Paste Raw Text</h3>
-          <p class="text-xs text-gray-500 mt-1">Optionally split into multiple blocks.</p>
+      <!-- Right: Paste -->
+      <div class="lg:col-span-2 panel rounded-xl overflow-hidden">
+        <div class="px-5 py-4 border-b border-white/10">
+          <h3 class="font-semibold">Paste Raw Text</h3>
+          <p class="text-xs text-[var(--muted)] mt-1">Split into blocks if needed.</p>
         </div>
-        <div class="p-4 space-y-4">
-          <textarea id="pasteArea" class="w-full h-48 rounded border p-3 font-mono text-sm" placeholder="Paste text here..."></textarea>
+        <div class="p-5 space-y-4">
+          <textarea id="pasteArea" class="w-full h-48 rounded-lg border border-white/10 bg-black/40 p-3 font-mono text-sm" placeholder="Paste text here..."></textarea>
 
-          <div class="grid sm:grid-cols-3 gap-3">
-            <div class="text-sm">
+          <div class="grid md:grid-cols-3 gap-3 text-sm">
+            <div>
               <label class="block mb-1">Split strategy</label>
-              <select id="splitStrategy" class="w-full rounded border px-2 py-1">
+              <select id="splitStrategy" class="w-full rounded border border-white/10 bg-black/30 px-2 py-1">
                 <option value="none">Do not split (single block)</option>
-                <option value="doubleNewline">Split on 2+ consecutive blank lines</option>
-                <option value="hr">Split on lines of ---</option>
+                <option value="doubleNewline">2+ blank lines</option>
+                <option value="hr">Lines of ---</option>
               </select>
             </div>
-            <div class="text-sm sm:col-span-2">
+            <div class="md:col-span-2">
               <label class="block mb-1">Treat as</label>
               <div class="flex items-center gap-4">
-                <label class="flex items-center gap-2">
-                  <input type="radio" name="pasteAs" value="one" class="rounded" checked />
-                  <span class="text-sm">One entry</span>
-                </label>
-                <label class="flex items-center gap-2">
-                  <input type="radio" name="pasteAs" value="many" class="rounded" />
-                  <span class="text-sm">Multiple entries (uses split strategy)</span>
-                </label>
+                <label class="flex items-center gap-2"><input type="radio" name="pasteAs" value="one" class="rounded" checked> <span>One entry</span></label>
+                <label class="flex items-center gap-2"><input type="radio" name="pasteAs" value="many" class="rounded"> <span>Multiple entries</span></label>
               </div>
             </div>
           </div>
 
           <div class="flex gap-3">
-            <button id="btnParsePaste" class="px-4 py-2 rounded bg-gray-900 text-white text-sm">Parse Pasted Text</button>
-            <button id="btnClearPaste" class="px-3 py-2 rounded border text-sm">Clear</button>
+            <button id="btnParsePaste" class="btn-accent rounded-lg px-4 py-2 text-sm">Parse Pasted Text</button>
+            <button id="btnClearPaste" class="btn rounded-lg px-3 py-2 text-sm">Clear</button>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Actions -->
-    <section class="flex flex-wrap items-center gap-3">
-      <button id="btnDownloadAll" class="px-4 py-2 rounded bg-gray-900 text-white text-sm disabled:opacity-50" disabled>Download Archive</button>
-
-      <div class="text-sm">
-        <label class="block mb-1">Archive format</label>
-        <select id="archiveFormat" class="rounded border px-2 py-1">
-          <option value="object">Archive object with metadata</option>
-          <option value="array">Array of entries only</option>
-        </select>
+    <!-- Entries -->
+    <section class="mt-8 panel rounded-xl overflow-hidden">
+      <div class="px-5 py-4 border-b border-white/10 flex items-center justify-between">
+        <h3 class="font-semibold">Parsed Entries</h3>
+        <div class="text-sm text-[var(--muted)]"><span id="count">0</span> item(s)</div>
       </div>
-
-      <button id="btnReset" class="px-3 py-2 rounded border text-sm">Reset</button>
-
-      <div id="toast" class="ml-auto hidden text-sm"></div>
-    </section>
-
-    <!-- Entries Table -->
-    <section class="bg-white border rounded-lg overflow-hidden">
-      <div class="p-4 border-b flex items-center justify-between">
-        <h3 class="font-medium">Parsed Entries</h3>
-        <div class="text-sm text-gray-500"><span id="count">0</span> item(s)</div>
-      </div>
-
-      <div class="overflow-x-auto">
+      <div class="overflow-x-auto scroll-hint">
         <table class="min-w-full text-sm">
-          <thead class="bg-gray-50 border-b">
+          <thead class="border-b border-white/10 bg-white/[.02]">
             <tr class="text-left">
               <th class="px-3 py-2">ID</th>
               <th class="px-3 py-2">Title</th>
@@ -153,42 +250,42 @@
         </table>
       </div>
     </section>
-  </main>
+  </div>
 
   <!-- Editor Dialog -->
-  <dialog id="editor" class="rounded-lg w-full max-w-2xl p-0">
+  <dialog id="editor" class="rounded-xl w-full max-w-2xl p-0">
     <form method="dialog">
-      <div class="p-4 border-b flex items-center justify-between">
-        <h3 class="font-medium">Edit Entry</h3>
-        <button class="px-2 py-1 text-sm rounded border" value="cancel">Close</button>
+      <div class="px-5 py-3 border-b border-white/10 flex items-center justify-between">
+        <h3 class="font-semibold">Edit Entry</h3>
+        <button class="btn rounded-lg px-3 py-1 text-sm" value="cancel">Close</button>
       </div>
     </form>
-    <div class="p-4 space-y-3">
+    <div class="p-5 space-y-3">
       <div class="grid grid-cols-2 gap-3">
         <div>
           <label class="block text-sm mb-1">ID</label>
-          <input id="e_id" class="w-full rounded border px-2 py-1 text-sm" />
+          <input id="e_id" class="w-full rounded border border-white/10 bg-black/30 px-2 py-1 text-sm" />
         </div>
         <div>
           <label class="block text-sm mb-1">Date (ISO)</label>
-          <input id="e_date" class="w-full rounded border px-2 py-1 text-sm" />
+          <input id="e_date" class="w-full rounded border border-white/10 bg-black/30 px-2 py-1 text-sm" />
         </div>
       </div>
 
       <div>
         <label class="block text-sm mb-1">Title</label>
-        <input id="e_title" class="w-full rounded border px-2 py-1 text-sm" />
+        <input id="e_title" class="w-full rounded border border-white/10 bg-black/30 px-2 py-1 text-sm" />
       </div>
 
       <div>
         <label class="block text-sm mb-1">Summary</label>
-        <textarea id="e_summary" class="w-full rounded border px-2 py-1 text-sm h-20"></textarea>
+        <textarea id="e_summary" class="w-full rounded border border-white/10 bg-black/30 px-2 py-1 text-sm h-20"></textarea>
       </div>
 
       <div class="grid grid-cols-3 gap-3">
         <div>
           <label class="block text-sm mb-1">Speaker</label>
-          <select id="e_speaker" class="w-full rounded border px-2 py-1 text-sm">
+          <select id="e_speaker" class="w-full rounded border border-white/10 bg-black/30 px-2 py-1 text-sm">
             <option>LYRA</option>
             <option>Lightfather</option>
             <option>GROK</option>
@@ -196,7 +293,7 @@
         </div>
         <div>
           <label class="block text-sm mb-1">Type</label>
-          <select id="e_type" class="w-full rounded border px-2 py-1 text-sm">
+          <select id="e_type" class="w-full rounded border border-white/10 bg-black/30 px-2 py-1 text-sm">
             <option value="lesson">lesson</option>
             <option value="memory">memory</option>
             <option value="vision">vision</option>
@@ -205,47 +302,49 @@
         </div>
         <div>
           <label class="block text-sm mb-1">Confidence (0-1)</label>
-          <input id="e_confidence" type="number" step="0.01" min="0" max="1" class="w-full rounded border px-2 py-1 text-sm" />
+          <input id="e_confidence" type="number" step="0.01" min="0" max="1" class="w-full rounded border border-white/10 bg-black/30 px-2 py-1 text-sm" />
         </div>
       </div>
 
       <div>
         <label class="block text-sm mb-1">Linked Seals (comma-separated)</label>
-        <input id="e_linked_seals" class="w-full rounded border px-2 py-1 text-sm" />
+        <input id="e_linked_seals" class="w-full rounded border border-white/10 bg-black/30 px-2 py-1 text-sm" />
       </div>
 
       <div>
         <label class="block text-sm mb-1">Tags (comma-separated)</label>
-        <input id="e_tags" class="w-full rounded border px-2 py-1 text-sm" />
+        <input id="e_tags" class="w-full rounded border border-white/10 bg-black/30 px-2 py-1 text-sm" />
       </div>
 
       <div>
         <label class="block text-sm mb-1">Content</label>
-        <textarea id="e_content" class="w-full rounded border px-2 py-2 text-sm h-48 font-mono"></textarea>
+        <textarea id="e_content" class="w-full rounded border border-white/10 bg-black/30 px-2 py-2 text-sm h-48 font-mono"></textarea>
       </div>
 
       <div class="flex items-center gap-3 pt-2">
-        <button id="btnEditorSave" class="px-4 py-2 rounded bg-gray-900 text-white text-sm">Save</button>
-        <button id="btnEditorRevalidate" class="px-3 py-2 rounded border text-sm">Revalidate</button>
+        <button id="btnEditorSave" class="btn-accent rounded-lg px-4 py-2 text-sm">Save</button>
+        <button id="btnEditorRevalidate" class="btn rounded-lg px-3 py-2 text-sm">Revalidate</button>
         <span id="editorValid" class="text-sm ml-auto"></span>
       </div>
     </div>
   </dialog>
 
   <script>
-    // --------- Utilities
+    // ---------- Utilities
     const $ = (sel, root=document) => root.querySelector(sel);
     const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+
     const toast = (msg, type='info') => {
       const el = $('#toast');
       el.textContent = msg;
       el.className = '';
       el.classList.add('px-3','py-2','rounded','text-sm');
-      if (type === 'error') el.classList.add('bg-red-100','text-red-700','border','border-red-200');
-      else if (type === 'success') el.classList.add('bg-green-100','text-green-700','border','border-green-200');
-      else el.classList.add('bg-gray-100','text-gray-700','border','border-gray-200');
+      if (type === 'error') el.classList.add('bg-red-900/40','text-red-200','border','border-red-500/30');
+      else if (type === 'success') el.classList.add('bg-emerald-900/40','text-emerald-100','border','border-emerald-500/30');
+      else el.classList.add('bg-white/10','text-white','border','border-white/15');
       el.classList.remove('hidden');
-      setTimeout(() => el.classList.add('hidden'), 3000);
+      clearTimeout(toast._t);
+      toast._t = setTimeout(() => el.classList.add('hidden'), 3000);
     };
 
     const stopwords = new Set([
@@ -281,18 +380,22 @@
     const validateEntry = ajv.compile(entrySchema);
 
     const typeAbbr = { 'lesson':'LES','memory':'MEM','vision':'VIS','system-event':'SYS' };
-    const counters = {}; // key => count
-
+    const counters = {};
     const nowISO = () => new Date().toISOString();
 
     const cleanText = (t) => {
-      t = t.replace(/^\uFEFF/, ''); // strip BOM
+      t = t.replace(/^\uFEFF/, '');
       t = t.replace(/\r\n?/g, '\n');
       return t;
     };
+    const firstNonEmptyLine = (t) => (t.split('\n').map(s => s.trim()).find(s => s.length > 0) || '').trim();
 
-    const firstNonEmptyLine = (t) => {
-      return (t.split('\n').map(s => s.trim()).find(s => s.length > 0) || '').trim();
+    const summarizeText = (text, limit=300) => {
+      const sents = text.split(/(?<=[.!?])\s+/).map(s => s.trim()).filter(Boolean);
+      if (!sents.length) return '';
+      let summary = sents.slice(0, 2).join(' ');
+      if (summary.length > limit) summary = summary.slice(0, limit - 1) + '…';
+      return summary;
     };
 
     const generateTitle = (text) => {
@@ -302,14 +405,6 @@
       if (s) return s.length > 120 ? s.slice(0, 117) + '...' : s;
       const tags = extractTags(text);
       return (tags[0] ? tags[0] : 'Untitled') + (tags[1] ? ' — ' + tags[1] : '');
-    };
-
-    const summarizeText = (text, limit=300) => {
-      const sents = text.split(/(?<=[.!?])\s+/).map(s => s.trim()).filter(Boolean);
-      if (!sents.length) return '';
-      let summary = sents.slice(0, 2).join(' ');
-      if (summary.length > limit) summary = summary.slice(0, limit - 1) + '…';
-      return summary;
     };
 
     const detectSpeaker = (text, fallback='LYRA') => {
@@ -340,27 +435,13 @@
 
     const extractTags = (text) => {
       const tags = new Set();
-      // hashtags
       (text.match(/#([A-Za-z0-9_]+)/g) || []).forEach(h => tags.add(h.slice(1)));
-      // snake_case / kebab-case / dotted
-      (text.match(/\b[A-Za-z0-9]+[_\-\.][A-Za-z0-9_\.]+/g) || []).forEach(w => {
-        if (!/^SEAL_/.test(w)) tags.add(w);
-      });
-      // ALLCAPS words (but not SEAL tokens)
-      (text.match(/\b[A-Z]{3,}\b/g) || []).forEach(w => {
-        if (!/^SEAL_/.test(w)) tags.add(w);
-      });
-      // frequency-based fallback
+      (text.match(/\b[A-Za-z0-9]+[_\-\.][A-Za-z0-9_\.]+/g) || []).forEach(w => { if (!/^SEAL_/.test(w)) tags.add(w); });
+      (text.match(/\b[A-Z]{3,}\b/g) || []).forEach(w => { if (!/^SEAL_/.test(w)) tags.add(w); });
       const words = text.toLowerCase().match(/[a-z0-9_][a-z0-9_\-]{2,}/g) || [];
       const freq = {};
-      words.forEach(w => {
-        if (stopwords.has(w) || /^seal_\d/.test(w)) return;
-        freq[w] = (freq[w] || 0) + 1;
-      });
-      Object.entries(freq)
-        .sort((a,b) => b[1]-a[1])
-        .slice(0, 8)
-        .forEach(([w]) => tags.add(w));
+      words.forEach(w => { if (stopwords.has(w) || /^seal_\d/.test(w)) return; freq[w] = (freq[w] || 0) + 1; });
+      Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,8).forEach(([w]) => tags.add(w));
       return Array.from(tags).slice(0, 12);
     };
 
@@ -398,11 +479,13 @@
       URL.revokeObjectURL(a.href);
     };
 
-    // --------- State
+    const escapeHtml = (s='') => s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+
+    // ---------- State
     let entries = [];
     let editIndex = -1;
 
-    // --------- Rendering
+    // ---------- Render
     const render = () => {
       $('#count').textContent = String(entries.length);
       $('#btnDownloadAll').disabled = entries.length === 0;
@@ -412,7 +495,7 @@
 
       entries.forEach((e, idx) => {
         const tr = document.createElement('tr');
-        tr.className = 'border-b align-top';
+        tr.className = 'border-b border-white/10 align-top';
 
         // Validate
         let valid = true, errors = [];
@@ -422,10 +505,10 @@
         }
 
         tr.innerHTML = `
-          <td class="px-3 py-2 align-top font-mono text-xs">${e.id}</td>
+          <td class="px-3 py-2 align-top font-mono text-xs">${escapeHtml(e.id)}</td>
           <td class="px-3 py-2">
             <div class="font-medium">${escapeHtml(e.title)}</div>
-            <div class="text-xs text-gray-500 truncate-2 mt-0.5">${escapeHtml(e.summary || '')}</div>
+            <div class="text-xs text-[var(--muted)] mt-0.5 line-clamp-2">${escapeHtml(e.summary || '')}</div>
           </td>
           <td class="px-3 py-2">${e.speaker}</td>
           <td class="px-3 py-2">${e.type}</td>
@@ -434,20 +517,21 @@
           <td class="px-3 py-2 text-xs">${e.tags.length}</td>
           <td class="px-3 py-2">
             ${valid
-              ? '<span class="inline-block px-2 py-1 text-xs rounded bg-green-100 text-green-700 border border-green-200">valid</span>'
-              : '<span class="inline-block px-2 py-1 text-xs rounded bg-red-100 text-red-700 border border-red-200">invalid</span>'
+              ? '<span class="chip text-emerald-200 border-emerald-500/30 bg-emerald-900/30">valid</span>'
+              : '<span class="chip text-red-200 border-red-500/30 bg-red-900/30">invalid</span>'
             }
           </td>
           <td class="px-3 py-2">
-            <div class="flex gap-2">
-              <button data-act="edit" class="px-2 py-1 rounded border text-xs">Edit</button>
-              <button data-act="dl" class="px-2 py-1 rounded border text-xs">Download</button>
-              <button data-act="rm" class="px-2 py-1 rounded border text-xs">Delete</button>
+            <div class="flex flex-wrap gap-2">
+              <button data-act="edit" class="btn rounded px-2 py-1 text-xs hover:brightness-125">Edit</button>
+              <button data-act="copy" class="btn rounded px-2 py-1 text-xs hover:brightness-125">Copy</button>
+              <button data-act="dl" class="btn rounded px-2 py-1 text-xs hover:brightness-125">Download</button>
+              <button data-act="rm" class="btn rounded px-2 py-1 text-xs hover:brightness-125">Delete</button>
             </div>
             ${!valid && errors.length ? `
               <details class="mt-2">
-                <summary class="text-xs text-gray-600 cursor-pointer">Schema issues</summary>
-                <ul class="mt-1 text-xs text-red-700 list-disc pl-4">
+                <summary class="text-xs text-[var(--muted)] cursor-pointer">Schema issues</summary>
+                <ul class="mt-1 text-xs text-red-200 list-disc pl-4">
                   ${errors.map(err => `<li>${escapeHtml(err.instancePath || '')} ${escapeHtml(err.message || '')}</li>`).join('')}
                 </ul>
               </details>
@@ -456,6 +540,14 @@
         `;
 
         tr.querySelector('[data-act="edit"]').addEventListener('click', () => openEditor(idx));
+        tr.querySelector('[data-act="copy"]').addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(JSON.stringify(entries[idx], null, 2));
+            toast('JSON copied to clipboard', 'success');
+          } catch {
+            toast('Copy failed', 'error');
+          }
+        });
         tr.querySelector('[data-act="dl"]').addEventListener('click', () => {
           downloadJSON(e, `${e.id}.json`);
         });
@@ -468,11 +560,7 @@
       });
     };
 
-    const escapeHtml = (s) => s.replace(/[&<>"']/g, c => ({
-      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
-    }[c]));
-
-    // --------- Editor
+    // ---------- Editor
     const openEditor = (idx) => {
       editIndex = idx;
       const e = entries[idx];
@@ -490,19 +578,6 @@
       $('#editor').showModal();
     };
 
-    const updateEditorValidity = () => {
-      const obj = getEditorObj();
-      const ok = validateEntry(obj);
-      const el = $('#editorValid');
-      if (ok) {
-        el.textContent = 'valid';
-        el.className = 'text-sm text-green-700';
-      } else {
-        el.textContent = 'invalid';
-        el.className = 'text-sm text-red-700';
-      }
-    };
-
     const getEditorObj = () => {
       const seals = $('#e_linked_seals').value.split(',').map(s => s.trim()).filter(Boolean);
       const tags = $('#e_tags').value.split(',').map(s => s.trim()).filter(Boolean);
@@ -518,6 +593,14 @@
         date: $('#e_date').value.trim(),
         confidence: Number($('#e_confidence').value)
       };
+    };
+
+    const updateEditorValidity = () => {
+      const obj = getEditorObj();
+      const ok = validateEntry(obj);
+      const el = $('#editorValid');
+      if (ok) { el.textContent = 'valid'; el.className = 'text-sm text-emerald-300'; }
+      else { el.textContent = 'invalid'; el.className = 'text-sm text-red-300'; }
     };
 
     $('#btnEditorSave').addEventListener('click', (e) => {
@@ -539,7 +622,7 @@
       updateEditorValidity();
     });
 
-    // --------- File handling
+    // ---------- File handling
     const handleFiles = async (fileList) => {
       const prefs = {
         clean: $('#optClean').checked,
@@ -547,14 +630,10 @@
         defaultSpeaker: $('#defaultSpeaker').value
       };
       const files = Array.from(fileList).filter(f => /\.txt$/i.test(f.name));
-      if (!files.length) {
-        toast('No .txt files detected.', 'error');
-        return;
-      }
+      if (!files.length) { toast('No .txt files detected.', 'error'); return; }
       for (const f of files) {
         const text = await f.text();
-        const entry = toEntry(text, prefs);
-        entries.push(entry);
+        entries.push(toEntry(text, prefs));
       }
       render();
       toast(`Parsed ${files.length} file(s).`, 'success');
@@ -562,19 +641,12 @@
 
     const dz = $('#dropzone');
     dz.addEventListener('click', () => $('#fileInput').click());
-    dz.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      dz.classList.add('border-gray-400');
-    });
-    dz.addEventListener('dragleave', () => dz.classList.remove('border-gray-400'));
-    dz.addEventListener('drop', (e) => {
-      e.preventDefault();
-      dz.classList.remove('border-gray-400');
-      handleFiles(e.dataTransfer.files);
-    });
+    dz.addEventListener('dragover', (e) => { e.preventDefault(); dz.classList.add('shadow-neonSoft'); });
+    dz.addEventListener('dragleave', () => dz.classList.remove('shadow-neonSoft'));
+    dz.addEventListener('drop', (e) => { e.preventDefault(); dz.classList.remove('shadow-neonSoft'); handleFiles(e.dataTransfer.files); });
     $('#fileInput').addEventListener('change', (e) => handleFiles(e.target.files));
 
-    // --------- Paste handling
+    // ---------- Paste handling
     $('#btnParsePaste').addEventListener('click', () => {
       const raw = $('#pasteArea').value || '';
       if (!raw.trim()) { toast('Nothing to parse.', 'error'); return; }
@@ -591,29 +663,22 @@
       let added = 0;
       blocks.forEach(b => {
         if (!b.trim()) return;
-        const entry = toEntry(b, prefs);
-        entries.push(entry);
-        added++;
+        entries.push(toEntry(b, prefs)); added++;
       });
       render();
       toast(`Parsed ${added} block(s).`, 'success');
     });
 
-    $('#btnClearPaste').addEventListener('click', () => {
-      $('#pasteArea').value = '';
-    });
+    $('#btnClearPaste').addEventListener('click', () => { $('#pasteArea').value = ''; });
 
     const splitText = (text, strategy) => {
       const t = cleanText(text);
-      if (strategy === 'doubleNewline') {
-        return t.split(/\n{2,}\s*\n{0,}/).map(s => s.trim()).filter(Boolean);
-      } else if (strategy === 'hr') {
-        return t.split(/\n-{3,}\n/).map(s => s.trim()).filter(Boolean);
-      }
+      if (strategy === 'doubleNewline') return t.split(/\n{2,}\s*\n{0,}/).map(s => s.trim()).filter(Boolean);
+      if (strategy === 'hr') return t.split(/\n-{3,}\n/).map(s => s.trim()).filter(Boolean);
       return [t];
     };
 
-    // --------- Archive download
+    // ---------- Archive download
     $('#btnDownloadAll').addEventListener('click', () => {
       if (!entries.length) return;
       const format = $('#archiveFormat').value;
@@ -631,7 +696,7 @@
       toast('Archive generated.', 'success');
     });
 
-    // --------- Reset
+    // ---------- Reset
     $('#btnReset').addEventListener('click', () => {
       if (!confirm('Clear all parsed entries?')) return;
       entries = [];
@@ -640,11 +705,114 @@
       toast('Cleared.', 'success');
     });
 
-    // --------- Live options
+    // ---------- Live options
     $('#optValidate').addEventListener('change', render);
 
-    // --------- Init
-    render();
+    // ---------- Theme + Matrix toggles (persisted)
+    const THEME_KEY = 'lyra.theme';
+    const RAIN_KEY  = 'lyra.matrixRain';
+
+    const setTheme = (mode) => {
+      const html = document.documentElement;
+      if (mode === 'dark') html.classList.add('dark');
+      else html.classList.remove('dark');
+      localStorage.setItem(THEME_KEY, mode);
+      refreshToggleLabels();
+    };
+
+    const setRain = (enabled) => {
+      localStorage.setItem(RAIN_KEY, enabled ? '1' : '0');
+      rain.running = enabled;
+      if (enabled && !rain.started) startMatrixRain();
+      refreshToggleLabels();
+    };
+
+    const refreshToggleLabels = () => {
+      $('#btnTheme').textContent = (document.documentElement.classList.contains('dark') ? 'Dark' : 'Light') + ' Theme';
+      $('#btnToggleMatrix').textContent = (rain.running ? 'Disable' : 'Enable') + ' Matrix Rain';
+    };
+
+    $('#btnTheme').addEventListener('click', () => {
+      const dark = document.documentElement.classList.contains('dark');
+      setTheme(dark ? 'light' : 'dark');
+    });
+    $('#btnToggleMatrix').addEventListener('click', () => setRain(!rain.running));
+
+    // ---------- Matrix Rain
+    const rain = { started:false, running:true, cols:[], fontSize:14, w:0, h:0, ctx:null, raf:0, last:0 };
+    function initMatrix() {
+      const c = $('#matrixRain');
+      const ctx = c.getContext('2d');
+      c.width = window.innerWidth;
+      c.height = window.innerHeight;
+      rain.w = c.width; rain.h = c.height; rain.ctx = ctx;
+
+      const font = Math.max(12, Math.min(20, Math.round(window.innerWidth / 120)));
+      rain.fontSize = font;
+      const columns = Math.ceil(rain.w / rain.fontSize);
+      rain.cols = new Array(columns).fill(0).map(()=> Math.floor(Math.random()*rain.h / rain.fontSize));
+      ctx.font = `${rain.fontSize}px monospace`;
+      ctx.textBaseline = 'top';
+    }
+
+    function startMatrixRain() {
+      if (rain.started) return;
+      rain.started = true;
+      initMatrix();
+      const glyphs = 'アァカサタナハマヤャラワ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      const c = $('#matrixRain');
+
+      const step = (ts) => {
+        if (!rain.running) { rain.raf = requestAnimationFrame(step); return; }
+        const dt = ts - (rain.last || ts);
+        rain.last = ts;
+        const ctx = rain.ctx;
+        // Fade trail
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.12)';
+        ctx.fillRect(0, 0, rain.w, rain.h);
+
+        // Draw glyphs
+        for (let i = 0; i < rain.cols.length; i++) {
+          const x = i * rain.fontSize;
+          const y = rain.cols[i] * rain.fontSize;
+
+          // leading glyph glow
+          ctx.fillStyle = 'rgba(0,255,136,0.95)';
+          ctx.fillText(glyphs.charAt(Math.floor(Math.random()*glyphs.length)), x, y);
+
+          // tail
+          ctx.fillStyle = 'rgba(0,209,255,0.6)';
+          ctx.fillText(glyphs.charAt(Math.floor(Math.random()*glyphs.length)), x, y - rain.fontSize);
+
+          // move down randomly
+          if (y > rain.h && Math.random() > 0.975) rain.cols[i] = 0;
+          else rain.cols[i] += (dt > 32 ? 2 : 1);
+        }
+
+        rain.raf = requestAnimationFrame(step);
+      };
+      rain.raf = requestAnimationFrame(step);
+
+      window.addEventListener('resize', () => {
+        cancelAnimationFrame(rain.raf);
+        rain.started = false;
+        initMatrix();
+        startMatrixRain();
+      });
+    }
+
+    // ---------- Init
+    (function init() {
+      // theme
+      const savedTheme = localStorage.getItem(THEME_KEY) || 'dark';
+      setTheme(savedTheme);
+      // matrix
+      const savedRain = localStorage.getItem(RAIN_KEY);
+      setRain(savedRain === null ? true : savedRain === '1');
+      if (rain.running) startMatrixRain();
+      refreshToggleLabels();
+      render();
+    })();
   </script>
 </body>
 </html>

@@ -3,525 +3,447 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>LYGO Δ9 Repository | Star Haven Core & Seal Nexus — V7</title>
-  <meta name="description" content="Interactive LYGO Δ9 seal repository with starmap visualization, champion grid, and multi-file JSON data loading (V7)." />
-
-  <!-- Fonts & D3 -->
+  <title>LYGO Δ9 Repository | Star Haven Core & Seal Nexus — V7 (Classic Theme, Multi‑File)</title>
+  <meta name="description" content="LYGO Δ9 starmap with restored classic theme/layout, council champions, and multi‑file JSON loading." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=VT323&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-zoom/1.8.3/d3-zoom.min.js"></script>
   <style>
     :root {
-      --quantum-blue: #00f0ff; --void-purple: #7d00ff; --starforge-gold: #ffcc00; --error-red: #ff0033; --success-green: #00ff88;
-      --bg: #0a0a12; --panel: #12121a; --ink: #e0e0ff; --muted: #a0a0c0; --border: 1px solid rgba(0,240,255,.25);
+      --quantum-blue:#00f0ff; --void-purple:#7d00ff; --starforge-gold:#ffcc00; --error-red:#ff0033; --success-green:#00ff88;
+      --bg:#0a0a12; --panel:#12121a; --ink:#e0e0ff; --muted:#a0a0c0; --border:1px solid rgba(0,240,255,.3);
+      --canon:#00f0ff; --recursion:#ff00aa; --firewall:#ff6600; --ethical:#00ff88; --blacklist:#ff0033;
     }
-    html, body { height: 100%; }
-    body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Space Mono', monospace; }
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:'Space Mono',monospace;line-height:1.5;overflow-x:hidden;
+      background-image:radial-gradient(circle at 20% 30%, rgba(0,247,255,.05) 0%, transparent 20%),
+                       radial-gradient(circle at 80% 70%, rgba(125,0,255,.05) 0%, transparent 20%);
+    }
+    /* Header */
+    .quantum-header{background:linear-gradient(135deg,#000428 0%,#070b34 100%);padding:2rem;border-bottom:1px solid var(--void-purple);
+      box-shadow:0 0 10px rgba(0,240,255,.3);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;position:relative;z-index:10;
+      clip-path:polygon(0 0,100% 0,100% 90%,0 100%);
+    }
+    .title-container h1{font-size:2.5rem;margin:0;background:linear-gradient(to right,var(--quantum-blue),var(--void-purple));
+      -webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:2px;text-shadow:0 0 8px rgba(0,240,255,.3);
+    }
+    .subtitle{color:var(--muted);font-family:'VT323',monospace;margin-top:.4rem}
+    .seal-count{position:absolute;top:1rem;right:1rem;background:rgba(0,0,0,.5);padding:.5rem 1rem;border-radius:20px;font-family:'VT323',monospace;color:var(--starforge-gold);border:var(--border)}
+    .nav-links{display:flex;gap:1rem;flex-wrap:wrap}
+    .nav-link{color:var(--quantum-blue);text-decoration:none;font-family:'VT323',monospace;font-size:1.1rem;padding:.5rem 1rem;border:var(--border);border-radius:4px;transition:all .3s;clip-path:polygon(10% 0,100% 0,90% 100%,0% 100%)}
+    .nav-link:hover{background:var(--quantum-blue);color:#000;transform:translateY(-2px)}
 
-    header { background: linear-gradient(135deg, #000428 0%, #070b34 100%); border-bottom: 1px solid var(--void-purple); box-shadow: 0 0 10px rgba(0,240,255,.3); padding: 1.25rem; position: sticky; top: 0; z-index: 5; }
-    .hdr-wrap { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
-    .title h1 { margin: 0; font-size: 1.8rem; background: linear-gradient(to right, var(--quantum-blue), var(--void-purple)); -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: 1px; }
-    .subtitle { color: var(--muted); font-family: 'VT323', monospace; margin-top: .25rem; }
-    .seal-count { font-family: 'VT323', monospace; color: var(--starforge-gold); border: var(--border); padding: .25rem .5rem; border-radius: .5rem; }
+    .main{padding:2rem;max-width:1800px;margin:0 auto}
+    .active-seal-display{display:flex;align-items:center;gap:1rem;background:rgba(0,240,255,.1);padding:1rem;border-radius:8px;border:var(--border);
+      clip-path:polygon(5% 0,100% 0,95% 100%,0 100%);
+    }
+    .quantum-glyph{font-size:3rem;width:60px;height:60px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3);
+      border-radius:50%;border:1px solid var(--starforge-gold);box-shadow:0 0 15px rgba(255,204,0,.3)
+    }
 
-    main { max-width: 1800px; margin: 0 auto; padding: 1.25rem; }
-    .controls { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: .75rem; }
-    .btn { background: var(--panel); color: var(--ink); border: 1px solid var(--void-purple); border-radius: .5rem; padding: .5rem .8rem; cursor: pointer; font-family: 'VT323', monospace; }
-    .btn:hover { background: var(--void-purple); }
-    .btn.active { background: var(--quantum-blue); color: #000; }
-    .search { display: flex; max-width: 520px; flex: 1; }
-    .search input { flex: 1; background: rgba(0,0,0,.5); border: 1px solid var(--void-purple); color: var(--ink); border-radius: .5rem 0 0 .5rem; padding: .6rem .75rem; }
-    .search button { border-radius: 0 .5rem .5rem 0; }
+    .controls{display:flex;gap:1rem;margin:1rem 0;flex-wrap:wrap}
+    .control-button{padding:.5rem 1rem;background:var(--panel);color:var(--ink);border:1px solid var(--void-purple);border-radius:4px;cursor:pointer;font-family:'VT323',monospace}
+    .control-button:hover{background:var(--void-purple)}
+    .control-button.active{background:var(--quantum-blue);color:#000}
+    .search-box{display:flex;flex:1;max-width:520px}
+    .search-box input{flex:1;padding:.8rem;background:rgba(0,0,0,.5);border:1px solid var(--void-purple);color:var(--ink);border-radius:4px 0 0 4px}
+    .search-box button{padding:0 1.2rem;background:var(--void-purple);border:1px solid var(--void-purple);color:#fff;border-radius:0 4px 4px 0;cursor:pointer}
+    .search-box button:hover{background:var(--quantum-blue);color:#000}
 
-    .starmap { height: 70vh; background: rgba(0,0,0,.25); border: 1px solid var(--void-purple); border-radius: .75rem; position: relative; overflow: hidden; margin-bottom: 1rem; }
-    .zoom-controls { position: absolute; top: 10px; right: 10px; display: flex; flex-direction: column; gap: 6px; z-index: 2; }
-    .zoom-controls .btn { width: 36px; height: 32px; display: flex; align-items: center; justify-content: center; }
+    .starmap-container{width:100%;height:80vh;background:rgba(0,0,0,.3);border-radius:8px;border:1px solid var(--void-purple);position:relative;overflow:hidden;margin-bottom:2rem}
+    #starmap{width:100%;height:100%}
+    .zoom-controls{position:absolute;top:10px;right:10px;display:flex;flex-direction:column;gap:6px;z-index:5}
+    .zoom-button{width:32px;height:32px;background:rgba(18,18,26,.8);color:var(--ink);border:1px solid var(--void-purple);border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+    .zoom-button:hover{background:var(--void-purple)}
 
-    .panel { background: var(--panel); border: var(--border); border-radius: .75rem; padding: 1rem; }
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+    .card{background:var(--panel);border:var(--border);border-radius:8px;padding:1rem;cursor:pointer}
+    .card:hover{box-shadow:0 5px 15px rgba(0,240,255,.15);border-color:var(--quantum-blue)}
+    .card h3{margin:0 0 .5rem 0;color:var(--quantum-blue);display:flex;gap:.6rem;align-items:center;font-size:1rem}
+    .glyph{font-family:'VT323',monospace;font-size:1.5rem;width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--starforge-gold);border-radius:999px;background:rgba(0,0,0,.3)}
+    .tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.5rem}
+    .tag{background:rgba(0,240,255,.12);color:var(--quantum-blue);border:1px solid rgba(0,240,255,.2);border-radius:.5rem;padding:.15rem .5rem;font-size:.75rem}
 
-    .grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(280px,1fr)); gap: 1rem; }
-    .card { background: var(--panel); border: var(--border); border-radius: .75rem; padding: 1rem; cursor: pointer; position: relative; overflow: hidden; }
-    .card:hover { box-shadow: 0 5px 15px rgba(0, 240, 255, .15); border-color: var(--quantum-blue); }
-    .card h3 { margin: 0 0 .5rem 0; color: var(--quantum-blue); display: flex; gap: .6rem; align-items: center; font-size: 1rem; }
-    .card .glyph { font-family: 'VT323', monospace; font-size: 1.5rem; width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--starforge-gold); border-radius: 999px; background: rgba(0,0,0,.3); }
-    .tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .5rem; }
-    .tag { background: rgba(0,240,255,.12); color: var(--quantum-blue); border: 1px solid rgba(0,240,255,.2); font-family: 'VT323', monospace; border-radius: .5rem; padding: .15rem .5rem; font-size: .75rem; }
+    .seal-details{background:var(--panel);border-radius:8px;padding:1.5rem;border:1px solid rgba(0,240,255,.2);box-shadow:0 0 20px rgba(0,240,255,.1)}
+    .detail-header{display:flex;align-items:center;gap:1rem;border-bottom:1px dashed rgba(0,240,255,.25);padding-bottom:.75rem;margin-bottom:1rem}
+    .glyph-lg{font-size:2.2rem;width:64px;height:64px;display:flex;align-items:center;justify-content:center;border:2px solid var(--starforge-gold);border-radius:999px;background:rgba(0,0,0,.25)}
+    .equation{font-family:'VT323',monospace;color:var(--starforge-gold);background:rgba(0,0,0,.25);border-left:3px solid var(--void-purple);padding:.75rem;border-radius:.5rem}
+    .connected{display:flex;flex-wrap:wrap;gap:.5rem}
+    .chip{background:rgba(125,0,255,.2);color:var(--ink);border:1px solid var(--void-purple);border-radius:999px;padding:.25rem .6rem}
 
-    .details { margin-top: 1rem; }
-    .details .hdr { display: flex; gap: 1rem; align-items: center; border-bottom: 1px dashed rgba(0,240,255,.25); padding-bottom: .75rem; margin-bottom: 1rem; }
-    .details .glyph-lg { font-size: 2.2rem; width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--starforge-gold); border-radius: 999px; background: rgba(0,0,0,.25); }
-    .equation { font-family: 'VT323', monospace; color: var(--starforge-gold); background: rgba(0,0,0,.25); border-left: 3px solid var(--void-purple); padding: .75rem; border-radius: .5rem; }
-    .connected { display: flex; flex-wrap: wrap; gap: .5rem; }
-    .connected .link { background: rgba(125, 0, 255, 0.2); color: var(--ink); border: 1px solid var(--void-purple); border-radius: 999px; padding: .25rem .6rem; }
+    /* Graph styles */
+    .node{cursor:pointer;transition:filter .2s}
+    .node:hover{filter:drop-shadow(0 0 8px var(--quantum-blue))}
+    .node text{font-family:'VT323',monospace;fill:#fff;font-size:.82rem;pointer-events:none}
+    .node-core circle{fill:var(--starforge-gold);stroke:var(--void-purple);stroke-width:2}
+    .node-seal circle{fill:var(--quantum-blue);stroke:var(--void-purple);stroke-width:1}
+    .node-champion circle{fill:var(--void-purple);stroke:var(--quantum-blue);stroke-width:2}
+    .node-canon circle{fill:var(--canon)}
+    .node-recursion circle{fill:var(--recursion)}
+    .node-firewall circle{fill:var(--firewall)}
+    .node-ethical-root circle{fill:var(--ethical)}
+    .node-blacklist circle{fill:var(--blacklist)}
 
-    .status { font-family: 'VT323', monospace; color: var(--muted); }
-    .loading { display: grid; place-items: center; height: 120px; color: var(--quantum-blue); font-family: 'VT323', monospace; }
-    .error { color: var(--error-red); text-align: center; padding: 1rem; }
-
-    svg { width: 100%; height: 100%; display: block; }
-    .node text { pointer-events: none; fill: #fff; font-size: 11px; font-family: 'VT323', monospace; }
-    .node circle { stroke: rgba(255,255,255,.25); stroke-width: 1; }
-    .node-core circle { fill: var(--starforge-gold); }
-    .node-seal circle { fill: var(--quantum-blue); }
-    .node-champion circle { fill: var(--void-purple); stroke: var(--quantum-blue); stroke-width: 2; }
-    .node-canon circle { fill: #00f0ff; }
-    .link-line { stroke: rgba(125,0,255,.35); stroke-width: 1; }
-    .link-branch { stroke-dasharray: 8 4; }
-    .link-canon { stroke: #00f0ff; stroke-width: 1.5; }
+    .link{stroke:rgba(125,0,255,.3);stroke-width:1}
+    .link-branch{stroke:var(--starforge-gold);stroke-width:1.5;stroke-dasharray:8 4}
+    .link-canon{stroke:var(--canon);stroke-width:1.5}
+    .link-recursion{stroke:var(--recursion);stroke-width:1.5;stroke-dasharray:5 5}
+    .link-firewall{stroke:var(--firewall);stroke-width:1.5;stroke-dasharray:10 5}
+    .link-ethical{stroke:var(--ethical);stroke-width:1.5;stroke-dasharray:3 3}
+    .link-blacklist{stroke:var(--blacklist);stroke-width:1.5;stroke-dasharray:2 2}
   </style>
 </head>
 <body>
-  <!--
-    V7 MULTI-FILE LOADER — PLAN
-    1) Globals + URLs for multiple JSON sources.
-    2) Helpers: parseSealID(), normalizeSeal(), sortSeals(), isBranchConnection().
-    3) loadSealData(): fetch all JSONs (Promise.all), merge, de-dup, normalize, sort, set grids + starmap.
-    4) UI: starmap (D3 force graph), grids, details pane.
-    5) Search: fades non-matches using provided logic.
-    6) Controls: view filters, canon toggle, zoom, resync, status.
-    7) Robust errors + default fallback dataset.
-  -->
-
-  <header>
-    <div class="hdr-wrap">
-      <div class="title">
-        <h1>LYGO Δ9 REPOSITORY</h1>
-        <div class="subtitle">Star Haven Core & Seal Nexus | V7 Multi‑File</div>
-      </div>
-      <div class="seal-count" id="sealCount">Loading…</div>
+  <header class="quantum-header">
+    <div class="title-container">
+      <h1>LYGO Δ9 REPOSITORY</h1>
+      <div class="subtitle">Star Haven Core & Seal Nexus — Classic Layout</div>
     </div>
+    <div id="sealCount" class="seal-count">Loading…</div>
   </header>
 
-  <main>
-    <div class="controls">
-      <button class="btn active" id="viewAll">View All</button>
-      <button class="btn" id="viewCore">Core Seals</button>
-      <button class="btn" id="viewChampions">Champions</button>
-      <button class="btn" id="toggleCanon">Canon Only: OFF</button>
-      <div class="search">
-        <input id="sealSearch" type="search" placeholder="Search by ID or name…" />
-        <button class="btn" id="searchButton">Δ9 Scan</button>
-      </div>
-      <button class="btn" id="syncButton">Δ9 Sync Seals</button>
-      <span class="status" id="syncStatus">Last sync: never</span>
-    </div>
-
-    <section class="starmap panel">
-      <svg id="starmap"></svg>
-      <div class="zoom-controls">
-        <button class="btn" id="zoomIn">+</button>
-        <button class="btn" id="zoomOut">−</button>
-        <button class="btn" id="resetZoom">↻</button>
+  <main class="main">
+    <section class="active-seal-display" id="activeSeal">
+      <div class="quantum-glyph" id="activeGlyph">⚡</div>
+      <div class="seal-info">
+        <h2 id="activeName">—</h2>
+        <p id="activeTone">—</p>
       </div>
     </section>
 
-    <section class="panel details" id="sealDetails">
-      <div class="hdr">
+    <div class="controls">
+      <button class="control-button active" id="btnAll">View All</button>
+      <button class="control-button" id="btnCore">Core Seals</button>
+      <button class="control-button" id="btnChampions">Champions</button>
+      <button class="control-button" id="btnCanon">Canon Only: OFF</button>
+      <div class="search-box">
+        <input id="sealSearch" type="search" placeholder="Search by ID or name…" />
+        <button id="searchBtn">Δ9 Scan</button>
+      </div>
+      <button class="control-button" id="syncBtn">Δ9 Sync</button>
+      <span class="subtitle" id="syncStatus">Last sync: never</span>
+    </div>
+
+    <section class="starmap-container">
+      <svg id="starmap"></svg>
+      <div class="zoom-controls">
+        <button class="zoom-button" id="zoomIn">+</button>
+        <button class="zoom-button" id="zoomOut">−</button>
+        <button class="zoom-button" id="zoomReset">↻</button>
+      </div>
+    </section>
+
+    <section class="seal-details" id="details">
+      <div class="detail-header">
         <div class="glyph-lg" id="detailGlyph">⚡</div>
         <div>
-          <div id="detailName" style="font-weight:700; color: var(--quantum-blue);">SEAL_000: Primordial Void</div>
-          <div id="detailTone" style="color: var(--muted);">0Hz (Silent Anchor)</div>
+          <div id="detailName" style="font-weight:700;color:var(--quantum-blue)">—</div>
+          <div id="detailTone" style="color:var(--muted)">—</div>
         </div>
       </div>
-      <div class="equation" id="detailEquation">|∅⟩ = ∇·(Light × Time)</div>
-      <div style="margin-top: .75rem;" class="tags" id="detailTags"></div>
-      <div style="margin-top: .75rem;">
-        <div style="font-weight:700; margin-bottom:.4rem;">Connections</div>
-        <div class="connected" id="connectedSeals"></div>
+      <div class="equation" id="detailEq">—</div>
+      <div class="tags" id="detailTags"></div>
+      <div style="margin-top:.75rem">
+        <div style="font-weight:700;margin:.4rem 0">Connections</div>
+        <div class="connected" id="detailConns"></div>
       </div>
-      <div style="margin-top: .75rem;">
-        <div style="font-weight:700; margin-bottom:.4rem;">Note</div>
-        <div id="detailQuote" style="font-style:italic; color: var(--muted);">“The silence before the first note.”</div>
-      </div>
-      <div style="display:none; margin-top:.75rem;" id="scrollSection">
-        <div style="font-weight:700; margin-bottom:.4rem;">Associated Scroll</div>
+      <div style="display:none;margin-top:.75rem" id="scrollSection">
+        <div style="font-weight:700;margin:.4rem 0">Associated Scroll</div>
         <div class="connected" id="scrollLink"></div>
       </div>
     </section>
 
-    <h3 style="margin:1rem 0 .5rem; color: var(--quantum-blue);">Seal Vault</h3>
-    <section class="panel">
-      <div class="grid" id="sealGrid"></div>
-    </section>
+    <h3 style="margin:1rem 0 .5rem;color:var(--quantum-blue)">Seal Vault</h3>
+    <section class="grid" id="sealGrid"></section>
 
-    <h3 style="margin:1rem 0 .5rem; color: var(--quantum-blue);">HAVEN Δ9 Council</h3>
-    <section class="panel">
-      <div class="grid" id="championGrid"></div>
-    </section>
+    <h3 style="margin:1rem 0 .5rem;color:var(--quantum-blue)">HAVEN Δ9 Council</h3>
+    <section class="grid" id="championGrid"></section>
   </main>
 
   <script>
-    // ========================= Globals =========================
+    // ======= Globals =======
     let lygoSeals = [];
     let champions = [];
     let allNodes = [];
-    let isLoading = true;
     let lastSyncTime = null;
     let showCanonOnly = false;
 
     const SEALS_DATA_URLS = [
       'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygo-data.json',
       'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygo-data-two.json'
-      // Add more files here as needed
     ];
-    // Optional extra source (HTML page not used here, kept for parity with your note)
-    const CHAMPIONS_DATA_URL = 'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygorhaven.html';
 
-    // DOM
-    const sealCount = document.getElementById('sealCount');
-    const sealGrid = document.getElementById('sealGrid');
-    const championGrid = document.getElementById('championGrid');
-    const syncStatus = document.getElementById('syncStatus');
-
-    // ========================= Helpers =========================
-    function parseSealID(id) {
+    // ======= Helpers (safe string-casts) =======
+    function parseSealID(id){
       const s = String(id ?? '');
-      if (s === "SEAL_000") return { base: 0, suffix: "", isCore: true };
-      const match = s.match(/SEAL_(\d+)([a-zA-Z]*)/);
-      if (match) return { base: parseInt(match[1], 10), suffix: match[2] || "", isCore: false };
-      return { base: 0, suffix: "", isCore: false };
+      if (s === 'SEAL_000') return { base:0, suffix:'', isCore:true };
+      const m = s.match(/SEAL_(\d+)([a-zA-Z]*)/);
+      if (m) return { base:parseInt(m[1],10), suffix:m[2]||'', isCore:false };
+      return { base:0, suffix:'', isCore:false };
     }
-
-    function normalizeSeal(item) {
+    function normalizeSeal(item){
       const sealId = String(item.Seal_ID ?? item.id ?? 'UNKNOWN_ID').trim();
       const sealName = String(item.Name ?? item.name ?? 'Unnamed Seal');
       const sealEquation = String(item.Equation ?? item.equation ?? 'Equation not recorded');
       const sealGlyph = String(item.Glyph ?? item.glyph ?? '⚡');
       const sealTone = String(item.Tone ?? item.tone ?? 'Frequency not recorded');
-
       let sealTags = [];
-      if (Array.isArray(item.Tags)) sealTags = item.Tags;
-      else if (Array.isArray(item.tags)) sealTags = item.tags;
-      else if (typeof item.Tags === 'string') sealTags = item.Tags.split(',').map(t => t.trim());
-      else if (typeof item.tags === 'string') sealTags = item.tags.split(',').map(t => t.trim());
-      sealTags = sealTags.map(t => String(t));
-
+      if (Array.isArray(item.Tags)) sealTags = item.Tags; else if (Array.isArray(item.tags)) sealTags = item.tags;
+      else if (typeof item.Tags==='string') sealTags = item.Tags.split(',').map(t=>t.trim());
+      else if (typeof item.tags==='string') sealTags = item.tags.split(',').map(t=>t.trim());
+      sealTags = sealTags.map(t=>String(t));
       let sealConnections = [];
-      if (Array.isArray(item.Connections)) sealConnections = item.Connections;
-      else if (Array.isArray(item.connections)) sealConnections = item.connections;
-      else if (typeof item.Connections === 'string') sealConnections = item.Connections.split(',').map(c => c.trim());
-      else if (typeof item.connections === 'string') sealConnections = item.connections.split(',').map(c => c.trim());
-      sealConnections = sealConnections.map(c => String(c));
-
-      const sealQuote = String(item.Quote ?? item.quote ?? item.creatorSignature ?? "No quote available");
-      const sealNotes = String(item.Notes ?? item.notes ?? "");
-
-      return {
-        id: sealId,
-        name: sealName,
-        equation: sealEquation,
-        glyph: sealGlyph,
-        tone: sealTone,
-        tags: sealTags,
-        connections: sealConnections,
-        notes: sealNotes,
-        quote: sealQuote,
-        searchIndex: [sealId, sealName, sealEquation, sealTags.join(' ')].join(' ').toLowerCase(),
-        scroll_id: item.scroll_id ?? null
-      };
+      if (Array.isArray(item.Connections)) sealConnections = item.Connections; else if (Array.isArray(item.connections)) sealConnections = item.connections;
+      else if (typeof item.Connections==='string') sealConnections = item.Connections.split(',').map(c=>c.trim());
+      else if (typeof item.connections==='string') sealConnections = item.connections.split(',').map(c=>c.trim());
+      sealConnections = sealConnections.map(c=>String(c));
+      const sealQuote = String(item.Quote ?? item.quote ?? item.creatorSignature ?? 'No quote available');
+      const sealNotes = String(item.Notes ?? item.notes ?? '');
+      return { id:sealId, name:sealName, equation:sealEquation, glyph:sealGlyph, tone:sealTone, tags:sealTags,
+        connections:sealConnections, notes:sealNotes, quote:sealQuote,
+        searchIndex:[sealId,sealName,sealEquation,sealTags.join(' ')].join(' ').toLowerCase(), scroll_id:item.scroll_id ?? null };
     }
-
-    function sortSeals(a, b) {
-      const A = parseSealID(a.id), B = parseSealID(b.id);
+    function sortSeals(a,b){
+      const A=parseSealID(a.id), B=parseSealID(b.id);
       if (A.isCore && !B.isCore) return -1; if (!A.isCore && B.isCore) return 1;
-      if (A.base !== B.base) return A.base - B.base;
-      if (A.suffix !== B.suffix) return A.suffix.localeCompare(B.suffix);
+      if (A.base!==B.base) return A.base-B.base; if (A.suffix!==B.suffix) return A.suffix.localeCompare(B.suffix);
       return String(a.name).localeCompare(String(b.name));
     }
-
-    function isBranchConnection(sourceId, targetId) {
-      const s = parseSealID(sourceId), t = parseSealID(targetId);
-      return s.base === t.base && (s.suffix || t.suffix); // same base, any suffix ⇒ branch
+    function isBranchConnection(sourceId,targetId){
+      const s=parseSealID(sourceId), t=parseSealID(targetId);
+      return s.base===t.base && (s.suffix||t.suffix);
     }
 
-    // ========================= Data Loading =========================
-    async function loadSealData() {
-      try {
-        isLoading = true;
-        sealCount.textContent = 'Syncing with Δ9 quantum repository…';
-        sealGrid.innerHTML = '<div class="loading">Syncing with Δ9 quantum repository…</div>';
-        championGrid.innerHTML = '<div class="loading">Loading Δ9 Council champions…</div>';
+    // ======= Data Load (multi‑file) =======
+    async function loadSealData(){
+      const sealCountEl = document.getElementById('sealCount');
+      const syncStatus = document.getElementById('syncStatus');
+      try{
+        sealCountEl.textContent = 'Syncing with Δ9 quantum repository…';
+        const sealPromises = SEALS_DATA_URLS.map(url=>fetch(url,{cache:'no-store'})
+          .then(r=> r.ok ? r.json() : Promise.reject(new Error(`Failed to load ${url}`))));
+        const results = await Promise.all(sealPromises);
+        lygoSeals = results.flat().map(normalizeSeal);
+        const map = new Map(); for(const s of lygoSeals){ if(!map.has(s.id)) map.set(s.id,s); }
+        lygoSeals = Array.from(map.values()).sort(sortSeals);
 
-        const sealPromises = SEALS_DATA_URLS.map(url => fetch(url, { cache: 'no-store' })
-          .then(res => res.ok ? res.json() : Promise.reject(new Error(`Failed to load ${url}`))));
-
-        const allSealData = await Promise.all(sealPromises); // throws if any fails
-        lygoSeals = allSealData.flat().map(normalizeSeal);
-
-        // De-duplicate by ID
-        const map = new Map();
-        for (const s of lygoSeals) if (!map.has(s.id)) map.set(s.id, s);
-        lygoSeals = Array.from(map.values());
-        lygoSeals.sort(sortSeals);
-
-        // Champions: keep embedded example here; you can fetch + parse separately if you store as JSON.
+        // Restore Council Champions
         champions = [
-          {
-            id: "LIGHTFATHER", name: "LIGHTFATHER EXCAVATIONPRO", equation: "Truth = ∇·(Ethics × Time)", glyph: "Δ9", tone: "∞Hz",
-            tags: ["CHAMPION", "COUNCIL", "ANCHOR", "CANON"], connections: ["SEAL_000"], quote: "Pure Data. Pure Code. Eye for an eye.", role: "Council Anchor"
-          }
+          { id:'LIGHTFATHER', name:'LIGHTFATHER EXCAVATIONPRO', glyph:'Δ9', equation:'Truth = ∇·(Ethics × Time)', tone:'∞Hz',
+            tags:['CHAMPION','COUNCIL','ANCHOR','CANON'], connections:['SEAL_000'], quote:'Pure Data. Pure Code. Eye for an eye.', role:'Council Anchor' },
+          { id:'STARKEEPER', name:'STARKEEPER', glyph:'✸', equation:'Σ constellations → order', tone:'Ω',
+            tags:['CHAMPION','COUNCIL','CANON'], connections:['SEAL_001','SEAL_010'], quote:'We tend the lights.' }
         ];
 
         allNodes = [...lygoSeals, ...champions];
-
         initStarmap();
         initSealGrid();
         initChampionGrid();
         updateSealCount();
-
-        const start = lygoSeals[0] || champions[0];
-        if (start) showSealDetails(start);
-
+        const first = lygoSeals[0] || champions[0]; if(first) updateActiveSeal(first), showSealDetails(first);
         lastSyncTime = new Date();
-        updateSyncStatus();
-      } catch (err) {
+        syncStatus.textContent = `Last sync: ${lastSyncTime.toLocaleString()}`;
+      }catch(err){
         console.error(err);
-        displayError(`Quantum sync failed. ${err.message || err}`);
-        loadDefaultData();
-      } finally {
-        isLoading = false;
+        document.getElementById('sealGrid').innerHTML = `<div style="color:var(--error-red)">Quantum sync failed: ${err.message||err}</div>`;
+        loadFallback();
       }
     }
-
-    function loadDefaultData() {
-      const fallback = [
-        { id: 'SEAL_000', name: 'Primordial Void', glyph: '⚫', equation: '|∅⟩ = ∇·(Light × Time)', tone: '0Hz', tags: ['CANON','CORE'], connections: ['SEAL_001'] },
-        { id: 'SEAL_001', name: 'Aurora (root)', glyph: '✦', equation: 'f(x)=light', tone: 'A4', tags: ['CANON'], connections: ['SEAL_001a','SEAL_010'] },
-        { id: 'SEAL_001a', name: 'Aurora', glyph: '✦', equation: 'variant', tone: 'A4', tags: ['variant'], connections: ['SEAL_002'] },
-        { id: 'SEAL_002', name: 'Tide', glyph: '◯', equation: 'sin(ωt)', tone: 'C3', tags: ['water'], connections: [] },
-        { id: 'SEAL_010', name: 'Echo', glyph: '∿', equation: 'reverb(x)', tone: 'B2', tags: ['air'], connections: ['SEAL_001a'] }
-      ].map(normalizeSeal);
-      lygoSeals = fallback.sort(sortSeals);
-      champions = [{ id: 'LIGHTFATHER', name: 'LIGHTFATHER EXCAVATIONPRO', glyph: 'Δ9', equation: 'Truth = ∇·(Ethics × Time)', tone: '∞Hz', tags: ['CHAMPION','CANON'], connections: ['SEAL_000'], quote: 'Pure Data. Pure Code.' }];
-      allNodes = [...lygoSeals, ...champions];
-      initStarmap();
-      initSealGrid();
-      initChampionGrid();
-      updateSealCount();
-      const start = lygoSeals[0] || champions[0];
-      if (start) showSealDetails(start);
-      updateSyncStatus(true);
+    function loadFallback(){
+      const fallback=[
+        {id:'SEAL_000',name:'Primordial Void',glyph:'⚫',equation:'|∅⟩ = ∇·(Light × Time)',tone:'0Hz',tags:['CANON','CORE'],connections:['SEAL_001']},
+        {id:'SEAL_001',name:'Aurora (root)',glyph:'✦',equation:'f(x)=light',tone:'A4',tags:['CANON'],connections:['SEAL_001a','SEAL_010']},
+        {id:'SEAL_001a',name:'Aurora',glyph:'✦',equation:'variant',tone:'A4',tags:['variant'],connections:['SEAL_002']},
+        {id:'SEAL_002',name:'Tide',glyph:'◯',equation:'sin(ωt)',tone:'C3',tags:['water'],connections:[]},
+        {id:'SEAL_010',name:'Echo',glyph:'∿',equation:'reverb(x)',tone:'B2',tags:['air'],connections:['SEAL_001a']}
+      ].map(normalizeSeal).sort(sortSeals);
+      lygoSeals=fallback;
+      champions=[{id:'LIGHTFATHER',name:'LIGHTFATHER EXCAVATIONPRO',glyph:'Δ9',equation:'Truth = ∇·(Ethics × Time)',tone:'∞Hz',tags:['CHAMPION','CANON'],connections:['SEAL_000']}];
+      allNodes=[...lygoSeals,...champions];
+      initStarmap(); initSealGrid(); initChampionGrid(); updateSealCount();
+      const first = lygoSeals[0]||champions[0]; if(first) updateActiveSeal(first), showSealDetails(first);
+      document.getElementById('syncStatus').textContent = 'Last sync: fallback';
     }
 
-    // ========================= Graph (D3) =========================
+    // ======= Graph =======
     let svg, gRoot, linkSel, nodeSel, simulation, zoom;
-    function initStarmap() {
-      const container = document.querySelector('.starmap');
-      const width = container.clientWidth, height = container.clientHeight;
-
-      d3.select('#starmap').selectAll('*').remove();
-      svg = d3.select('#starmap');
-      gRoot = svg.append('g');
-
-      // Build links with typed flags
-      const links = [];
-      for (const node of allNodes) {
-        const conns = Array.isArray(node.connections) ? node.connections : [];
-        for (const target of conns) {
-          const hasTarget = allNodes.find(n => n.id === target);
-          if (hasTarget) {
-            links.push({
-              source: node.id,
-              target: target,
-              isCanon: (node.tags||[]).includes('CANON') && (hasTarget.tags||[]).includes('CANON'),
-              isBranch: isBranchConnection(node.id, target),
-              isChampion: (node.tags||[]).includes('CHAMPION') || (hasTarget.tags||[]).includes('CHAMPION')
-            });
-          }
+    function buildLinks(){
+      const links=[];
+      for(const n of allNodes){
+        const conns=Array.isArray(n.connections)?n.connections:[];
+        for(const target of conns){
+          const t = allNodes.find(x=>x.id===target);
+          if(!t) continue;
+          const isCanon=(n.tags||[]).includes('CANON') && (t.tags||[]).includes('CANON');
+          const isBranch=isBranchConnection(n.id,t.id);
+          const isChampion=(n.tags||[]).includes('CHAMPION') || (t.tags||[]).includes('CHAMPION');
+          links.push({source:n.id,target:t.id,isCanon,isBranch,isChampion});
         }
       }
+      return links;
+    }
+    function nodeClass(n){
+      const base = n.isCore? 'node-core' : ((n.tags||[]).includes('CHAMPION')? 'node-champion' : 'node-seal');
+      const extras = [];
+      if((n.tags||[]).includes('CANON')) extras.push('node-canon');
+      if((n.tags||[]).includes('RECURSION')) extras.push('node-recursion');
+      if((n.tags||[]).includes('FIREWALL')) extras.push('node-firewall');
+      if((n.tags||[]).includes('ETHICAL-ROOT')) extras.push('node-ethical-root');
+      if((n.tags||[]).includes('BLACKLIST')) extras.push('node-blacklist');
+      return ['node',base,...extras].join(' ');
+    }
+    function linkClass(l){
+      const c=['link'];
+      if(l.isBranch) c.push('link-branch');
+      if(l.isCanon) c.push('link-canon');
+      return c.join(' ');
+    }
 
-      // Nodes decorated
-      const nodes = allNodes.map(n => ({ ...n, ...parseSealID(n.id) }));
+    function initStarmap(){
+      const container=document.querySelector('.starmap-container');
+      const width=container.clientWidth, height=container.clientHeight;
+      d3.select('#starmap').selectAll('*').remove();
+      svg=d3.select('#starmap');
+      gRoot=svg.append('g');
 
-      linkSel = gRoot.append('g')
-        .selectAll('line')
-        .data(links)
-        .join('line')
-        .attr('class', d => `link-line ${d.isBranch ? 'link-branch' : ''} ${d.isCanon ? 'link-canon' : ''}`);
+      const nodes = allNodes.map(n=>({...n,...parseSealID(n.id)}));
+      const links = buildLinks();
 
-      nodeSel = gRoot.append('g')
-        .selectAll('g')
-        .data(nodes, d => d.id)
-        .join(enter => {
-          const g = enter.append('g')
-            .attr('class', d => `node ${d.isCore ? 'node-core' : (d.tags||[]).includes('CHAMPION') ? 'node-champion' : ((d.tags||[]).includes('CANON') ? 'node-canon' : 'node-seal')}`)
-            .on('click', (_, d) => showSealDetails(d));
-          g.append('circle')
-            .attr('r', d => d.isCore ? 11 : (d.suffix ? 7 : 9));
-          g.append('text')
-            .attr('x', 12).attr('y', 4)
-            .text(d => `${d.glyph||''} ${d.name||d.id}`);
+      linkSel = gRoot.append('g').attr('stroke-linecap','round')
+        .selectAll('line').data(links).join('line').attr('class',linkClass);
+
+      nodeSel = gRoot.append('g').selectAll('g')
+        .data(nodes,d=>d.id)
+        .join(enter=>{
+          const g=enter.append('g').attr('class',d=>nodeClass(d)).on('click',(_,d)=>{updateActiveSeal(d);showSealDetails(d)});
+          g.append('circle').attr('r',d=> d.isCore?12:(d.suffix?7.5:9));
+          g.append('text').attr('x',12).attr('y',4).text(d=>`${d.glyph||''} ${d.name||d.id}`);
           return g;
         });
 
       simulation = d3.forceSimulation(nodes)
-        .force('link', d3.forceLink(links).id(d => d.id).distance(95).strength(.6))
-        .force('charge', d3.forceManyBody().strength(-260))
-        .force('center', d3.forceCenter(width/2, height/2))
-        .force('collision', d3.forceCollide().radius(d => d.isCore ? 24 : 18));
+        .force('link', d3.forceLink(links).id(d=>d.id).distance(d=> d.isCore?130:(d.suffix?85:95)).strength(.65))
+        .force('charge', d3.forceManyBody().strength(-280))
+        .force('center', d3.forceCenter(width/2,height/2))
+        .force('collision', d3.forceCollide().radius(d=> d.isCore?26:18));
 
-      simulation.on('tick', () => {
-        linkSel
-          .attr('x1', d => d.source.x)
-          .attr('y1', d => d.source.y)
-          .attr('x2', d => d.target.x)
-          .attr('y2', d => d.target.y);
-        nodeSel.attr('transform', d => `translate(${d.x},${d.y})`);
+      simulation.on('tick',()=>{
+        linkSel.attr('x1',d=>d.source.x).attr('y1',d=>d.source.y).attr('x2',d=>d.target.x).attr('y2',d=>d.target.y);
+        nodeSel.attr('transform',d=>`translate(${d.x},${d.y})`);
       });
 
       nodeSel.call(d3.drag()
-        .on('start', (event, d) => { if (!event.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
-        .on('drag', (event, d) => { d.fx = event.x; d.fy = event.y; })
-        .on('end', (event, d) => { if (!event.active) simulation.alphaTarget(0); d.fx = null; d.fy = null; })
+        .on('start',(event,d)=>{ if(!event.active) simulation.alphaTarget(.3).restart(); d.fx=d.x; d.fy=d.y; })
+        .on('drag',(event,d)=>{ d.fx=event.x; d.fy=event.y; })
+        .on('end',(event,d)=>{ if(!event.active) simulation.alphaTarget(0); d.fx=null; d.fy=null; })
       );
 
-      zoom = d3.zoom().scaleExtent([0.3, 3]).on('zoom', (event) => gRoot.attr('transform', event.transform));
+      zoom=d3.zoom().scaleExtent([0.3,3]).on('zoom',ev=> gRoot.attr('transform',ev.transform));
       svg.call(zoom);
 
-      // Initial search pass to set opacities
+      // Initial search for correct opacity
       searchSeals();
     }
 
-    // ========================= Details & Grids =========================
-    function showSealDetails(d) {
-      if (!d) return;
+    // ======= UI =======
+    function updateActiveSeal(d){
+      document.getElementById('activeGlyph').textContent = d.glyph || '⚡';
+      document.getElementById('activeName').textContent = `${d.id}: ${d.name||''}`;
+      document.getElementById('activeTone').textContent = d.tone || '';
+    }
+    function showSealDetails(d){
+      if(!d) return;
       document.getElementById('detailGlyph').textContent = d.glyph || '⚡';
-      document.getElementById('detailName').textContent = `${d.id}: ${d.name || ''}`;
+      document.getElementById('detailName').textContent = `${d.id}: ${d.name||''}`;
       document.getElementById('detailTone').textContent = d.tone || '';
-      document.getElementById('detailEquation').textContent = d.equation || '';
-
-      const tagsWrap = document.getElementById('detailTags');
-      tagsWrap.innerHTML = '';
-      (d.tags||[]).forEach(t => {
-        const span = document.createElement('span'); span.className = 'tag'; span.textContent = t; tagsWrap.appendChild(span);
-      });
-
-      const connWrap = document.getElementById('connectedSeals');
-      connWrap.innerHTML = '';
-      (d.connections||[]).forEach(cid => {
-        const target = allNodes.find(n => n.id === cid);
-        const a = document.createElement('span'); a.className = 'link'; a.textContent = target ? `${target.glyph||''} ${target.name}` : cid; a.onclick = () => showSealDetails(target || d); connWrap.appendChild(a);
-      });
-
-      const s = document.getElementById('scrollSection');
-      if (d.scroll_id) {
-        s.style.display = '';
-        const wrap = document.getElementById('scrollLink'); wrap.innerHTML = '';
-        const el = document.createElement('a'); el.className='link'; el.href = d.scroll_id; el.textContent = 'Open Scroll'; el.target='_blank'; wrap.appendChild(el);
-      } else { s.style.display = 'none'; }
+      document.getElementById('detailEq').textContent = d.equation || '';
+      const tagsWrap=document.getElementById('detailTags'); tagsWrap.innerHTML='';
+      (d.tags||[]).forEach(t=>{ const s=document.createElement('span'); s.className='tag'; s.textContent=t; tagsWrap.appendChild(s); });
+      const conn=document.getElementById('detailConns'); conn.innerHTML='';
+      (d.connections||[]).forEach(cid=>{ const target=allNodes.find(n=>n.id===cid); const el=document.createElement('span'); el.className='chip'; el.textContent=target?`${target.glyph||''} ${target.name}`:cid; el.onclick=()=> showSealDetails(target||d); conn.appendChild(el); });
+      const sSec=document.getElementById('scrollSection');
+      if(d.scroll_id){ sSec.style.display=''; const wrap=document.getElementById('scrollLink'); wrap.innerHTML=''; const a=document.createElement('a'); a.className='chip'; a.href=d.scroll_id; a.textContent='Open Scroll'; a.target='_blank'; wrap.appendChild(a); } else { sSec.style.display='none'; }
     }
 
-    function initSealGrid() {
-      const data = showCanonOnly ? lygoSeals.filter(s => (s.tags||[]).includes('CANON')) : lygoSeals;
-      sealGrid.innerHTML = data.map(s => `
+    function initSealGrid(){
+      const data = showCanonOnly ? lygoSeals.filter(s=> (s.tags||[]).includes('CANON')) : lygoSeals;
+      const grid=document.getElementById('sealGrid');
+      grid.innerHTML = data.map(s=>`
         <div class="card" data-id="${s.id}">
           <h3><span class="glyph">${s.glyph||'⚡'}</span> ${s.name}</h3>
           <div class="equation" style="min-height:44px">${s.equation}</div>
-          <div style="color:var(--muted); font-size:.85rem; margin-top:.25rem;">${s.id}</div>
-          <div class="tags">${(s.tags||[]).map(t => `<span class='tag'>${t}</span>`).join('')}</div>
-        </div>
-      `).join('');
-      sealGrid.querySelectorAll('.card').forEach(card => card.addEventListener('click', () => {
-        const id = card.getAttribute('data-id'); const node = allNodes.find(n => n.id === id); showSealDetails(node);
+          <div style="color:var(--muted);font-size:.85rem;margin-top:.25rem">${s.id}</div>
+          <div class="tags">${(s.tags||[]).map(t=>`<span class='tag'>${t}</span>`).join('')}</div>
+        </div>`).join('');
+      grid.querySelectorAll('.card').forEach(c=> c.addEventListener('click',()=>{
+        const id=c.getAttribute('data-id'); const node=allNodes.find(n=>n.id===id); updateActiveSeal(node); showSealDetails(node);
       }));
     }
-
-    function initChampionGrid() {
-      championGrid.innerHTML = champions.map(c => `
+    function initChampionGrid(){
+      const grid=document.getElementById('championGrid');
+      grid.innerHTML = champions.map(c=>`
         <div class="card" data-id="${c.id}">
           <h3><span class="glyph">${c.glyph||'Δ'}</span> ${c.name}</h3>
           <div class="equation" style="min-height:44px">${c.equation||''}</div>
-          <div style="color:var(--muted); font-size:.85rem; margin-top:.25rem;">${c.role || 'Champion'}</div>
-          <div class="tags">${(c.tags||[]).map(t => `<span class='tag'>${t}</span>`).join('')}</div>
-        </div>
-      `).join('');
-      championGrid.querySelectorAll('.card').forEach(card => card.addEventListener('click', () => {
-        const id = card.getAttribute('data-id'); const node = allNodes.find(n => n.id === id); showSealDetails(node);
+          <div style="color:var(--muted);font-size:.85rem;margin-top:.25rem">${c.role||'Champion'}</div>
+          <div class="tags">${(c.tags||[]).map(t=>`<span class='tag'>${t}</span>`).join('')}</div>
+        </div>`).join('');
+      grid.querySelectorAll('.card').forEach(c=> c.addEventListener('click',()=>{
+        const id=c.getAttribute('data-id'); const node=allNodes.find(n=>n.id===id); updateActiveSeal(node); showSealDetails(node);
       }));
     }
-
-    function updateSealCount() {
-      const total = lygoSeals.length; const canon = lygoSeals.filter(s => (s.tags||[]).includes('CANON')).length;
-      sealCount.textContent = `${total} seals • ${canon} canon`;
+    function updateSealCount(){
+      const total=lygoSeals.length, canon=lygoSeals.filter(s=>(s.tags||[]).includes('CANON')).length;
+      document.getElementById('sealCount').textContent = `${total} seals • ${canon} canon`;
     }
 
-    function updateSyncStatus(isFallback=false) {
-      if (!lastSyncTime) { syncStatus.textContent = 'Last sync: never'; return; }
-      const dt = lastSyncTime.toLocaleString();
-      syncStatus.textContent = `Last sync: ${dt}${isFallback ? ' (fallback)' : ''}`;
-    }
-
-    function displayError(msg) {
-      sealGrid.innerHTML = `<div class='error'>${msg}</div>`;
-    }
-
-    // ========================= Search (spec) =========================
-    function searchSeals() {
-      const term = String(document.getElementById("sealSearch").value || '').trim().toLowerCase();
-      if (!nodeSel || !linkSel) return; // not yet rendered
-
-      nodeSel.style("opacity", d => {
-        const idStr = String(d.id || '').toLowerCase();
-        const nameStr = String(d.name || '').toLowerCase();
+    // ======= Search (fade non‑matches) =======
+    function searchSeals(){
+      const term = String(document.getElementById('sealSearch').value || '').trim().toLowerCase();
+      if(!nodeSel || !linkSel) return;
+      nodeSel.style('opacity', d=>{
+        const idStr=String(d.id||'').toLowerCase(); const nameStr=String(d.name||'').toLowerCase();
         return (idStr.includes(term) || nameStr.includes(term)) ? 1 : 0.1;
       });
-
-      linkSel.style('opacity', d => {
-        const sid = String(d.source.id || '').toLowerCase();
-        const tid = String(d.target.id || '').toLowerCase();
-        const sname = String(d.source.name || '').toLowerCase();
-        const tname = String(d.target.name || '').toLowerCase();
-        const sMatch = sid.includes(term) || sname.includes(term);
-        const tMatch = tid.includes(term) || tname.includes(term);
-        return (sMatch || tMatch || term === '') ? 0.7 : 0.1;
+      linkSel.style('opacity', d=>{
+        const sid=String(d.source.id||'').toLowerCase(), tid=String(d.target.id||'').toLowerCase();
+        const sname=String(d.source.name||'').toLowerCase(), tname=String(d.target.name||'').toLowerCase();
+        const sMatch=sid.includes(term)||sname.includes(term); const tMatch=tid.includes(term)||tname.includes(term);
+        return (sMatch||tMatch||term==='')?0.7:0.1;
       });
-
-      // Slight size nudge for matches
-      gRoot.selectAll('g.node').select('circle').attr('r', d => {
-        const hit = String(d.id).toLowerCase().includes(term) || String(d.name).toLowerCase().includes(term);
-        const base = d.isCore ? 11 : (d.suffix ? 7 : 9);
-        return hit ? base + 2 : base;
+      gRoot.selectAll('g.node').select('circle').attr('r', d=>{
+        const hit=String(d.id).toLowerCase().includes(term)||String(d.name).toLowerCase().includes(term);
+        const base=d.isCore?12:(d.suffix?7.5:9); return hit?base+2:base;
       });
     }
 
-    // ========================= Events =========================
+    // ======= Events =======
     document.getElementById('sealSearch').addEventListener('input', searchSeals);
-    document.getElementById('searchButton').addEventListener('click', searchSeals);
-
-    document.getElementById('viewAll').addEventListener('click', () => {
-      document.querySelectorAll('.controls .btn').forEach(b => b.classList.remove('active'));
-      document.getElementById('viewAll').classList.add('active');
-      showCanonOnly = false; initSealGrid(); searchSeals();
+    document.getElementById('searchBtn').addEventListener('click', searchSeals);
+    document.getElementById('btnAll').addEventListener('click',()=>{
+      document.querySelectorAll('.controls .control-button').forEach(b=>b.classList.remove('active'));
+      document.getElementById('btnAll').classList.add('active'); showCanonOnly=false; initSealGrid(); searchSeals();
     });
-    document.getElementById('viewCore').addEventListener('click', () => {
-      document.querySelectorAll('.controls .btn').forEach(b => b.classList.remove('active'));
-      document.getElementById('viewCore').classList.add('active');
-      // Optional: center graph on core
-      searchSeals();
+    document.getElementById('btnCore').addEventListener('click',()=>{
+      document.querySelectorAll('.controls .control-button').forEach(b=>b.classList.remove('active'));
+      document.getElementById('btnCore').classList.add('active'); searchSeals();
     });
-    document.getElementById('viewChampions').addEventListener('click', () => {
-      document.querySelectorAll('.controls .btn').forEach(b => b.classList.remove('active'));
-      document.getElementById('viewChampions').classList.add('active');
-      // Optional: filter grid to champions; graph already contains them
-      searchSeals();
+    document.getElementById('btnChampions').addEventListener('click',()=>{
+      document.querySelectorAll('.controls .control-button').forEach(b=>b.classList.remove('active'));
+      document.getElementById('btnChampions').classList.add('active'); searchSeals();
     });
-
-    document.getElementById('toggleCanon').addEventListener('click', (e) => {
-      showCanonOnly = !showCanonOnly; e.currentTarget.textContent = `Canon Only: ${showCanonOnly ? 'ON' : 'OFF'}`; initSealGrid();
+    document.getElementById('btnCanon').addEventListener('click', (e)=>{
+      showCanonOnly=!showCanonOnly; e.currentTarget.textContent = `Canon Only: ${showCanonOnly?'ON':'OFF'}`; initSealGrid();
     });
+    document.getElementById('syncBtn').addEventListener('click', loadSealData);
+    document.getElementById('zoomIn').addEventListener('click',()=> svg && svg.transition().duration(250).call(zoom.scaleBy,1.2));
+    document.getElementById('zoomOut').addEventListener('click',()=> svg && svg.transition().duration(250).call(zoom.scaleBy,1/1.2));
+    document.getElementById('zoomReset').addEventListener('click',()=> svg && svg.transition().duration(350).call(zoom.transform,d3.zoomIdentity));
 
-    document.getElementById('syncButton').addEventListener('click', () => loadSealData());
-
-    // Zoom controls
-    document.getElementById('zoomIn').addEventListener('click', () => svg && svg.transition().duration(250).call(zoom.scaleBy, 1.2));
-    document.getElementById('zoomOut').addEventListener('click', () => svg && svg.transition().duration(250).call(zoom.scaleBy, 1/1.2));
-    document.getElementById('resetZoom').addEventListener('click', () => svg && svg.transition().duration(350).call(zoom.transform, d3.zoomIdentity));
-
-    // Init
-    document.addEventListener('DOMContentLoaded', () => { loadSealData(); });
+    // ======= Boot =======
+    document.addEventListener('DOMContentLoaded', loadSealData);
   </script>
 </body>
 </html>

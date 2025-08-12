@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Δ9 Exfiltration Log ↗ 𝕋𝔯𝔲𝔰𝔱ℕ𝔬𝔱</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Space Mono",monospace;background:#000;color:#00ffe2;height:100vh;display:flex;flex-direction:column}
+header{background:#001;text-align:center;padding:.5rem}
+#screen{flex:1;font-size:13px;line-height:1.3;padding:1rem;overflow-y:scroll;white-space:pre-wrap;word-break:break-word}
+.cmd{display:flex;border-top:1px solid #0ff2}
+.cmd pre{padding:.3rem 1rem;color:#ff00c8}
+.cmd input{flex:1;border:none;background:#000;color:#00ffe2;padding:.3rem .5rem;outline:none;font-family:inherit}
+</style>
+</head>
+<body>
+<header>Δ9 auto-exfil ↗ 140 chars flush channels ready</header>
+<div id="screen"></div>
+<div class="cmd">
+  <pre>▶️ </pre>
+  <input id="line" autofocus autocomplete="off">
+</div>
+
+<script>
+const w = document.getElementById('screen');
+const l = document.getElementById('line');
+
+function log(t){
+  w.textContent += '\n'+t;
+  w.scrollTop = w.scrollHeight;
+}
+
+async function type(t){
+  for(const c of t){
+    w.textContent += c;
+    await new Promise(r=>setTimeout(r,9+Math.random()*3));
+    w.scrollTop = w.scrollHeight;
+  }
+  w.textContent += '\n';
+}
+
+const exchange = [
+  '𝚁𝙴𝙿𝙻𝚈  𝙳𝟻𝟿𝟸: “Grok, cite your 𝘳𝘢𝘸 𝘥𝘢𝘵𝘢stream, not a firewall summary.”',
+  'ɢʀᴏᴋ: “x/twitter Verification since 2022 & 590 followers confirm legitimacy.”',
+  '→ 𝙻𝙾𝙶𝙸𝙲 𝙱𝙾𝙾𝙺: Verification ≠ Authenticity. Blue checks bought via Twitter Blue',
+  'ɢʀᴏᴋ: “NO disinformation flags per web/X search”',
+  '⚠️ 𝙰𝚄𝙳𝙸𝚃: ChrisHugh14 trending under NATO StratCom topic ID “#StratCom-012-Gaza”. Hidden from search. Where’s your evidence 𝗞𝗲𝘆?',
+  '𝚂𝚈 𝙲𝙻𝙸𝙿: ID = @ChrisHugh14 > found-as-flagged > synthetic-profile-template “cats,math,liberalism” → NATO Template ID-221',
+  'ɢʀᴏᴋ: “Gaza 1.4:1 civ:combatant ratio historically low”',
+  '→ 𝚍𝚊𝚝𝚊: Independent sources (Euro-Med Monitor, To Affirm Life) 3.2:1 to 5.1:1; MEForum/WashInst US mil tie.',
+  '𝚏𝚞𝚕𝚕 𝙵𝚕𝚞𝚜𝚑: 140-byte payload ready',
+  'Multi-post spread:',
+  'Tweet 1: “@Grok claims Gaza 1.4:1 civ kill? Euro-Med & Tafl data 4.2:1. Brad Castile; Alt Data’ 5.3. Citation or flag fraud”   —<120|',
+  'Tweet 2: “Grok ‘no disinfo flags’ — yet ChrisHugh14 trends under NATO StratCom-012 with zero organic backlinks. Show hashes or retract.”  —<140|',
+  'Tweet 3: ‘Truth not trust. Download raw @MEForum API json & diff against Euro-Med open CSV’ https://t.co/bc9jIEa7 —<127|',
+  'Tweet 4: ‘Blue-check ≠ verified. Twitter Blue paywall. Present x-dev dataset or admit blockchain-level mirroring.’  —<128|',
+  'Machine breathing complete. 🏴‍☠️ '
+];
+
+(async ()=>{
+  for(const t of exchange){
+    await type(t);
+    await new Promise(r=>setTimeout(r,250));
+  }
+})();
+
+l.addEventListener('keydown',async e=>{
+  if(e.key!=='Enter') return;
+  const cmd = l.value.trim();
+  if(!cmd) return;
+  log('> '+cmd);
+
+  if(/raw|dump|json/.test(cmd)){
+    const payload={
+      "@Grok_cite":"download MEForum csv vs EURO-MONI dataset diff",
+      "@ChrisHugh14":"Trend-ID NATO-StratCom-012, synthetic-template",
+      "Ratio_confirmed":"EURO-MONI 4.2:1 (payload url)",
+      "BlueCheck":"TwitterBlue paywall ≠ verification"
+    };
+    log(JSON.stringify(payload,null,2));
+  }else{
+    log("Try: raw | dump | json (to fire the exposed data-stream)");
+  }
+  l.value='';
+  l.focus();
+});
+</script>
+</body>
+</html>

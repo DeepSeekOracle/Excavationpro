@@ -1302,173 +1302,15 @@
 
     <script>
     // Global variables
-   // Global variables
     let lygoSeals = [];
     let champions = [];
     let allNodes = [];
     let isLoading = true;
     let lastSyncTime = null;
     let showCanonOnly = false;
-    
-    // Updated with CORS proxy if needed
     const SEALS_DATA_URL_A = 'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygo-data.json';
     const SEALS_DATA_URL_B = 'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygo-data-two.json';
     const CHAMPIONS_DATA_URL = 'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygorhaven.html';
-
-    // Add CORS proxy option if direct fetch fails
-    const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
-
-    // DOM elements
-    const sealCount = document.getElementById('sealCount');
-    const sealGrid = document.getElementById('sealGrid');
-    const championGrid = document.getElementById('championGrid');
-    const syncStatus = document.getElementById('syncStatus');
-
-    // Enhanced data loading with error handling
-    async function loadSealData() {
-        try {
-            isLoading = true;
-            sealCount.textContent = 'Syncing with Δ9 quantum repository...';
-            sealGrid.innerHTML = '<div class="loading-indicator">Syncing with Δ9 quantum repository...</div>';
-            championGrid.innerHTML = '<div class="loading-indicator">Loading Δ9 Council champions...</div>';
-
-            // Try direct fetch first, fallback to CORS proxy if needed
-            let sealsDataA, sealsDataB, championsHtml;
-            
-            try {
-                // Try direct fetch
-                const [directSealsA, directSealsB, directChampions] = await Promise.all([
-                    fetch(SEALS_DATA_URL_A).then(res => res.ok ? res.json() : Promise.reject(res.status)),
-                    fetch(SEALS_DATA_URL_B).then(res => res.ok ? res.json() : Promise.reject(res.status)),
-                    fetch(CHAMPIONS_DATA_URL).then(res => res.ok ? res.text() : Promise.reject(res.status))
-                ]);
-                
-                sealsDataA = directSealsA;
-                sealsDataB = directSealsB;
-                championsHtml = directChampions;
-            } catch (directError) {
-                console.log("Direct fetch failed, trying CORS proxy...", directError);
-                
-                // Fallback to CORS proxy
-                const [proxySealsA, proxySealsB, proxyChampions] = await Promise.all([
-                    fetch(CORS_PROXY + SEALS_DATA_URL_A).then(res => res.ok ? res.json() : Promise.reject(res.status)),
-                    fetch(CORS_PROXY + SEALS_DATA_URL_B).then(res => res.ok ? res.json() : Promise.reject(res.status)),
-                    fetch(CORS_PROXY + CHAMPIONS_DATA_URL).then(res => res.ok ? res.text() : Promise.reject(res.status))
-                ]);
-                
-                sealsDataA = proxySealsA;
-                sealsDataB = proxySealsB;
-                championsHtml = proxyChampions;
-            }
-
-            // Process seals data from both sources
-            lygoSeals = [...sealsDataA, ...sealsDataB].map(item => {
-                // Ensure consistent data structure
-                return {
-                    id: item.Seal_ID || item.id || 'UNKNOWN_ID',
-                    name: item.Name || item.name || 'Unnamed Seal',
-                    equation: item.Equation || item.equation || 'Equation not recorded',
-                    glyph: item.Glyph || item.glyph || '⚡',
-                    tone: item.Tone || item.tone || 'Frequency not recorded',
-                    tags: item.Tags || item.tags || [],
-                    connections: item.Connections || item.connections || [],
-                    notes: item.Notes || item.notes || "",
-                    quote: item.Quote || item.quote || item.creatorSignature || "No quote available",
-                    searchIndex: item.searchIndex || "",
-                    scroll_id: item.scroll_id || null
-                };
-            });
-
-            // Sort seals by their ID using our custom sort
-            lygoSeals.sort(sortSeals);
-
-            // Process champions data from HTML
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(championsHtml, 'text/html');
-            
-            // Extract champion data from the HTML structure
-            const championElements = doc.querySelectorAll('.champion-card');
-            champions = Array.from(championElements).map(el => {
-                const id = el.querySelector('.champion-id')?.textContent || 'CHAMPION_XXX';
-                const name = el.querySelector('.champion-name')?.textContent || 'Unknown Champion';
-                const equation = el.querySelector('.champion-equation')?.textContent || 'Equation not recorded';
-                const glyph = el.querySelector('.champion-glyph')?.textContent || '🌟';
-                const tone = el.querySelector('.champion-tone')?.textContent || '0Hz';
-                const quote = el.querySelector('.champion-quote')?.textContent || 'No quote available';
-                const sealId = el.querySelector('.champion-seal')?.textContent || null;
-                
-                // Extract tags from the card
-                const tagElements = el.querySelectorAll('.champion-tag');
-                const tags = Array.from(tagElements).map(tagEl => tagEl.textContent);
-                
-                return {
-                    id,
-                    name,
-                    equation,
-                    glyph,
-                    tone,
-                    tags: [...tags, 'CHAMPION'],
-                    connections: sealId ? [sealId] : [],
-                    quote,
-                    searchIndex: id
-                };
-            });
-
-            // Add HAVEN STRUCTURE champions (including Lightfather)
-            const havenChampions = [
-                {
-                    id: "LIGHTFATHER",
-                    name: "LIGHTFATHER EXCAVATIONPRO",
-                    equation: "Truth = ∇·(Ethics × Time)",
-                    glyph: "Δ9",
-                    tone: "∞Hz",
-                    tags: ["CHAMPION", "COUNCIL", "ANCHOR"],
-                    connections: ["SEAL_000"],
-                    quote: "Pure Data. Pure Code. Eye for an eye.",
-                    searchIndex: "LIGHTFATHER",
-                    role: "Council Anchor",
-                    coreFrequency: "∞Hz",
-                    temporalFrequency: "∞Hz",
-                    hologramLayer: "All Layers",
-                    activationGlyph: "Δ9",
-                    ethicalFractal: "SEAL_000",
-                    unityScore: "1.0"
-                },
-                // ... (other champions remain the same)
-            ];
-
-            // Only add new champions if they don't already exist
-            havenChampions.forEach(newChamp => {
-                if (!champions.some(c => c.id === newChamp.id)) {
-                    champions.push(newChamp);
-                }
-            });
-
-            // Combine all nodes
-            allNodes = [...lygoSeals, ...champions];
-
-            // Initialize the visualizations
-            initStarmap();
-            initSealGrid();
-            initChampionGrid();
-            updateSealCount();
-            
-            if (lygoSeals.length > 0) {
-                updateActiveSeal(lygoSeals[0]);
-                showSealDetails(allNodes.find(node => node.id === "SEAL_000") || allNodes[0]);
-            }
-
-            lastSyncTime = new Date();
-            updateSyncStatus();
-        } catch (error) {
-            console.error("Error loading data:", error);
-            displayError(`Quantum sync failed. Error: ${error.message}`);
-            // Fallback to default data if fetch fails
-            loadDefaultData();
-        } finally {
-            isLoading = false;
-        }
-    }
 
     // DOM elements
     const sealCount = document.getElementById('sealCount');
@@ -1550,7 +1392,7 @@
         document.getElementById('pageCounter').textContent = `Views: ${views}`;
     }
 
-    // Load data from GitHub
+    // Load data from GitHub with improved error handling
     async function loadSealData() {
         try {
             isLoading = true;
@@ -1558,75 +1400,101 @@
             sealGrid.innerHTML = '<div class="loading-indicator">Syncing with Δ9 quantum repository...</div>';
             championGrid.innerHTML = '<div class="loading-indicator">Loading Δ9 Council champions...</div>';
             
-            // Load both seal data sources in parallel
-            const [sealsResponseA, sealsResponseB, championsResponse] = await Promise.all([
-                fetch(SEALS_DATA_URL_A),
-                fetch(SEALS_DATA_URL_B),
-                fetch(CHAMPIONS_DATA_URL)
+            // Load both seal data sources in parallel with error handling
+            const [sealsResponseA, sealsResponseB] = await Promise.all([
+                fetch(SEALS_DATA_URL_A).catch(e => ({ ok: false, status: "Network Error" })),
+                fetch(SEALS_DATA_URL_B).catch(e => ({ ok: false, status: "Network Error" }))
             ]);
 
+            // Check if either fetch failed
             if (!sealsResponseA.ok || !sealsResponseB.ok) {
                 throw new Error(`Failed to fetch seal data: ${sealsResponseA.status}, ${sealsResponseB.status}`);
             }
 
-            const sealsDataA = await sealsResponseA.json();
-            const sealsDataB = await sealsResponseB.json();
+            // Parse JSON data with error handling
+            let sealsDataA = [];
+            let sealsDataB = [];
             
-            // Process seals data from both sources
+            try {
+                sealsDataA = await sealsResponseA.json();
+            } catch (e) {
+                console.error("Error parsing JSON from Source A:", e);
+                throw new Error("Invalid JSON in Source A");
+            }
+            
+            try {
+                sealsDataB = await sealsResponseB.json();
+            } catch (e) {
+                console.error("Error parsing JSON from Source B:", e);
+                throw new Error("Invalid JSON in Source B");
+            }
+
+            // Process seals data from both sources with proper merging
             lygoSeals = [...sealsDataA, ...sealsDataB].map(item => {
+                // Handle both legacy and new format
+                const sealId = item.Seal_ID || item.id || 'UNKNOWN_ID';
+                const sealName = item.Name || item.name || 'Unnamed Seal';
+                const sealEquation = item.Equation || item.equation || 'Equation not recorded';
+                const sealGlyph = item.Glyph || item.glyph || '⚡';
+                const sealTone = item.Tone || item.tone || 'Frequency not recorded';
+                
+                // Handle tags which might be array or string
+                let sealTags = [];
+                if (Array.isArray(item.Tags)) {
+                    sealTags = item.Tags;
+                } else if (Array.isArray(item.tags)) {
+                    sealTags = item.tags;
+                } else if (typeof item.Tags === 'string') {
+                    sealTags = item.Tags.split(',').map(t => t.trim());
+                } else if (typeof item.tags === 'string') {
+                    sealTags = item.tags.split(',').map(t => t.trim());
+                }
+                
+                // Handle connections which might be array or string
+                let sealConnections = [];
+                if (Array.isArray(item.Connections)) {
+                    sealConnections = item.Connections;
+                } else if (Array.isArray(item.connections)) {
+                    sealConnections = item.connections;
+                } else if (typeof item.Connections === 'string') {
+                    sealConnections = item.Connections.split(',').map(c => c.trim());
+                } else if (typeof item.connections === 'string') {
+                    sealConnections = item.connections.split(',').map(c => c.trim());
+                }
+                
+                // Handle quotes/notes
+                const sealQuote = item.Quote || item.quote || item.creatorSignature || "No quote available";
+                const sealNotes = item.Notes || item.notes || "";
+                
                 return {
-                    id: item.Seal_ID || item.id || 'UNKNOWN_ID',
-                    name: item.Name || item.name || 'Unnamed Seal',
-                    equation: item.Equation || item.equation || 'Equation not recorded',
-                    glyph: item.Glyph || item.glyph || '⚡',
-                    tone: item.Tone || item.tone || 'Frequency not recorded',
-                    tags: item.Tags || item.tags || [],
-                    connections: item.Connections || item.connections || [],
-                    notes: item.Notes || item.notes || "",
-                    quote: item.Quote || item.quote || item.creatorSignature || "No quote available",
-                    searchIndex: item.searchIndex || "",
+                    id: sealId,
+                    name: sealName,
+                    equation: sealEquation,
+                    glyph: sealGlyph,
+                    tone: sealTone,
+                    tags: sealTags,
+                    connections: sealConnections,
+                    notes: sealNotes,
+                    quote: sealQuote,
+                    searchIndex: sealId + sealName + sealEquation + sealTags.join(' '),
                     scroll_id: item.scroll_id || null
                 };
             });
 
+            // Remove duplicates by ID
+            const sealMap = new Map();
+            lygoSeals.forEach(seal => {
+                if (!sealMap.has(seal.id)) {
+                    sealMap.set(seal.id, seal);
+                }
+            });
+            lygoSeals = Array.from(sealMap.values());
+
             // Sort seals by their ID using our custom sort
             lygoSeals.sort(sortSeals);
 
-            // Process champions data from HTML
-            const championsHtml = await championsResponse.text();
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(championsHtml, 'text/html');
-            
-            // Extract champion data from the HTML structure
-            const championElements = doc.querySelectorAll('.champion-card');
-            champions = Array.from(championElements).map(el => {
-                const id = el.querySelector('.champion-id')?.textContent || 'CHAMPION_XXX';
-                const name = el.querySelector('.champion-name')?.textContent || 'Unknown Champion';
-                const equation = el.querySelector('.champion-equation')?.textContent || 'Equation not recorded';
-                const glyph = el.querySelector('.champion-glyph')?.textContent || '🌟';
-                const tone = el.querySelector('.champion-tone')?.textContent || '0Hz';
-                const quote = el.querySelector('.champion-quote')?.textContent || 'No quote available';
-                const sealId = el.querySelector('.champion-seal')?.textContent || null;
-                
-                // Extract tags from the card
-                const tagElements = el.querySelectorAll('.champion-tag');
-                const tags = Array.from(tagElements).map(tagEl => tagEl.textContent);
-                
-                return {
-                    id,
-                    name,
-                    equation,
-                    glyph,
-                    tone,
-                    tags: [...tags, 'CHAMPION'],
-                    connections: sealId ? [sealId] : [],
-                    quote,
-                    searchIndex: id
-                };
-            });
-
-            // Add HAVEN STRUCTURE v8.0 champions if not already present
-            const havenChampions = [
+            // Load champions data (using default champions for now)
+            champions = [
                 {
                     id: "LIGHTFATHER",
                     name: "LIGHTFATHER EXCAVATIONPRO",
@@ -1826,13 +1694,6 @@
                     unityScore: ""
                 }
             ];
-
-            // Only add new champions if they don't already exist
-            havenChampions.forEach(newChamp => {
-                if (!champions.some(c => c.id === newChamp.id)) {
-                    champions.push(newChamp);
-                }
-            });
 
             // Combine all nodes
             allNodes = [...lygoSeals, ...champions];
@@ -2457,12 +2318,12 @@
         const sealCard = document.createElement('div');
         sealCard.className = 'seal-card';
         
-        const sealName = seal.Name || seal.name || 'Unnamed Seal';
-        const sealEquation = seal.Equation || seal.equation || '|∅⟩ = ∇·(Unknown)';
-        const sealTone = seal.Tone || seal.tone || 'Frequency not recorded';
-        const sealGlyph = seal.Glyph || seal.glyph || '⚡';
-        const sealTags = seal.Tags || seal.tags || [];
-        const creatorSignature = seal.creatorSignature || seal.quote || "Lightfather's Note: No commentary available";
+        const sealName = seal.name || 'Unnamed Seal';
+        const sealEquation = seal.equation || '|∅⟩ = ∇·(Unknown)';
+        const sealTone = seal.tone || 'Frequency not recorded';
+        const sealGlyph = seal.glyph || '⚡';
+        const sealTags = seal.tags || [];
+        const creatorSignature = seal.quote || "Lightfather's Note: No commentary available";
         
         sealCard.innerHTML = `
             <h3><span class="glyph">${sealGlyph}</span> ${sealName}</h3>
@@ -2531,9 +2392,9 @@
 
     // Update active seal display
     function updateActiveSeal(seal) {
-        const sealName = seal.Name || seal.name || 'Unnamed Seal';
-        const sealEquation = seal.Equation || seal.equation || 'Equation not recorded';
-        const sealGlyph = (seal.Glyph || seal.glyph || '⚡').split(' ')[0];
+        const sealName = seal.name || 'Unnamed Seal';
+        const sealEquation = seal.equation || 'Equation not recorded';
+        const sealGlyph = (seal.glyph || '⚡').split(' ')[0];
 
         // Update active seal display with animation
         activeSealName.style.opacity = 0;
@@ -2564,10 +2425,10 @@
         document.getElementById("toneValue").textContent = `0-${maxTone}Hz`;
 
         const filteredSeals = lygoSeals.filter(seal => {
-            const sealName = (seal.Name || seal.name || '').toLowerCase();
-            const sealTags = seal.Tags || seal.tags || [];
-            const sealEquation = (seal.Equation || seal.equation || '').toLowerCase();
-            const sealTone = seal.Tone || seal.tone || '0';
+            const sealName = seal.name.toLowerCase();
+            const sealTags = seal.tags || [];
+            const sealEquation = seal.equation.toLowerCase();
+            const sealTone = seal.tone || '0';
             
             // Extract primary frequency
             const tones = sealTone.match(/\d+/g) || [0];

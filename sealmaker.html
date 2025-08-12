@@ -2,36 +2,24 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>LYRA Seal Builder — Canonical Mode</title>
+<title>SEALMAKER — Canonical Mode</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <style>
   :root{
-    --bg:#0b0f14;
-    --panel:#0f161d;
-    --panel2:#0c1319;
-    --text:#e6edf3;
-    --muted:#9fb0bd;
-    --accent:#00ff88;
-    --accent2:#00d1ff;
-    --danger:#ef4444;
-    --ok:#22c55e;
-    --border:#20303b;
-    --chip:#131c23;
-    --grid:rgba(0,255,136,.08);
+    --bg:#0b0f14; --panel:#0f161d; --panel2:#0c1319; --text:#e6edf3; --muted:#9fb0bd;
+    --accent:#00ff88; --accent2:#00d1ff; --danger:#ef4444; --ok:#22c55e; --border:#20303b; --chip:#131c23; --grid:rgba(0,255,136,.08);
+    --font: "Space Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
   }
   *{box-sizing:border-box}
   html,body{height:100%}
   body{
-    margin:0;
-    color:var(--text);
-    background:
+    margin:0; color:var(--text); background:
       radial-gradient(1100px 600px at 110% -10%, rgba(0,209,255,.09), transparent 60%),
       radial-gradient(900px 500px at -10% 110%, rgba(0,255,136,.08), transparent 60%),
       var(--bg);
-    font: 14px/1.45 "Space Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    font: 14px/1.5 var(--font);
     overflow-x:hidden;
   }
-  /* Quantum grid */
   .quantum-grid{position:fixed; inset:0; pointer-events:none; z-index:0;}
   .quantum-grid::after{
     content:""; position:absolute; inset:0;
@@ -41,27 +29,21 @@
     background-size:40px 40px;
     mask-image: radial-gradient(circle at 50% 20%, rgba(0,0,0,1), rgba(0,0,0,.5) 55%, rgba(0,0,0,0) 80%);
   }
-  /* Matrix rain canvas (toggle) */
   #matrix{position:fixed; inset:0; z-index:0; pointer-events:none;}
 
-  .container{position:relative; z-index:1; max-width:1200px; margin:0 auto; padding:22px;}
+  .container{position:relative; z-index:1; max-width:1250px; margin:0 auto; padding:22px;}
   h1,h2,h3{margin:0 0 .5rem}
   .muted{color:var(--muted)}
   .space{height:10px}
 
   .panel{
     background: linear-gradient(180deg, rgba(255,255,255,.02), transparent 40%), var(--panel);
-    border:1px solid var(--border);
-    border-radius:12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    border:1px solid var(--border); border-radius:12px; box-shadow: 0 10px 30px rgba(0,0,0,.25);
   }
   .panel-header{padding:12px 14px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between}
   .panel-body{padding:14px}
 
-  .btn{
-    border:1px solid var(--border); background:var(--panel2); color:var(--text);
-    padding:8px 10px; border-radius:8px; cursor:pointer;
-  }
+  .btn{border:1px solid var(--border); background:var(--panel2); color:var(--text); padding:8px 10px; border-radius:8px; cursor:pointer;}
   .btn:hover{filter:brightness(1.1)}
   .btn:disabled{opacity:.5; cursor:default}
   .btn-accent{border-color:rgba(0,255,136,.35); background:linear-gradient(180deg, rgba(0,255,136,.15), transparent 60%), var(--panel2)}
@@ -76,40 +58,68 @@
   textarea{min-height:110px; resize:vertical}
   label{display:block; font-size:12px; color:var(--muted); margin:10px 0 6px}
 
-  .row{display:grid; grid-template-columns: 360px 1fr; gap:16px}
-  @media (max-width:980px){ .row{grid-template-columns:1fr} }
+  .row{display:grid; grid-template-columns: 380px 1fr; gap:16px}
+  @media (max-width:1000px){ .row{grid-template-columns:1fr} }
 
-  .dropzone{
-    border:2px dashed var(--border); border-radius:10px; padding:16px; background:#0b1117; text-align:center; cursor:pointer;
-  }
+  .dropzone{ border:2px dashed var(--border); border-radius:10px; padding:16px; background:#0b1117; text-align:center; cursor:pointer; }
   .dropzone.dragover{border-color:var(--accent); background:#0c151a}
 
   table{width:100%; border-collapse:collapse}
   th,td{padding:10px; border-bottom:1px solid var(--border); vertical-align:top; text-align:left}
-  th{color:var(--muted); font-weight:700; font-size:12px; letter-spacing:.03em}
+  th{color:var(--muted); font-weight:700; font-size:12px; letter-spacing:.03em; user-select:none; cursor:pointer;}
+  th.sorting{color:var(--text)}
+  th .dir{opacity:.7; font-size: 11px;}
   .right{text-align:right}
 
   .json{background:#0b1117; border:1px solid var(--border); border-radius:8px; padding:10px; white-space:pre; overflow:auto; max-height:320px; font-size:12px}
   .status-ok{color:#bbf7d0}
   .status-bad{color:#fecaca}
+  .hash{font-size:12px; word-break:break-all}
 
   details.schema{background:#0b1117; border:1px solid var(--border); border-radius:8px; padding:10px}
   details.schema summary{cursor:pointer; color:var(--muted); margin-bottom:8px}
   details.schema textarea{height:220px}
 
-  .tag{display:inline-block; padding:2px 6px; border-radius:6px; border:1px solid var(--border); background:#0b1117; margin:2px; font-size:12px; color:var(--muted)}
+  .hintbar{min-height:20px; font-size:12px; color:var(--muted); padding:4px 0}
+  .tooltip{position:absolute; pointer-events:none; background:var(--panel2); border:1px solid var(--border); padding:8px; border-radius:8px; font-size:12px; max-width:280px; display:none; z-index:10}
+
+  .suggest{position:absolute; background:var(--panel2); border:1px solid var(--border); border-radius:8px; box-shadow:0 10px 24px rgba(0,0,0,.25); z-index:10; display:none; max-height:180px; overflow:auto}
+  .suggest button{display:block; width:100%; text-align:left; background:transparent; border:none; color:var(--text); padding:6px 10px; cursor:pointer}
+  .suggest button:hover{background:rgba(255,255,255,.06)}
+
+  .mini-preview{position:fixed; pointer-events:none; background:var(--panel2); border:1px solid var(--border); border-radius:8px; padding:8px; font-size:12px; display:none; z-index:20; max-width:300px}
+  .mini-preview .title{font-weight:700}
+  .mini-preview .line{opacity:.8}
+
+  .tabs{display:flex; gap:8px; border-bottom:1px solid var(--border); padding:0 14px 8px}
+  .tab{padding:6px 10px; border-radius:6px; cursor:pointer; border:1px solid transparent}
+  .tab.active{border-color:var(--border); background:var(--panel2)}
 </style>
 </head>
 <body>
   <canvas id="matrix"></canvas>
   <div class="quantum-grid"></div>
+  <div id="tooltip" class="tooltip"></div>
+  <div id="miniPreview" class="mini-preview"></div>
+  <div id="suggestBox" class="suggest"></div>
 
   <div class="container">
+    <!-- PHASE 1: Recovery Banner -->
+    <section id="recovery" class="panel" style="display:none; margin-bottom:12px;">
+      <div class="panel-body" style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <strong>Restore previous session?</strong>
+        <span class="muted" id="recoveryMeta"></span>
+        <button id="btnRecover" class="btn btn-accent">Restore</button>
+        <button id="btnDismissRecovery" class="btn">Dismiss</button>
+        <button id="btnClearSavedSession" class="btn btn-danger" title="Delete saved snapshot from localStorage">Clear Saved Session</button>
+      </div>
+    </section>
+
     <header class="panel">
       <div class="panel-header">
         <div>
-          <h1>LYRA Seal Builder — Canonical Mode</h1>
-          <div class="muted">Import JSON/TXT • Edit • Validate by schema • Live preview • Export archive</div>
+          <h1>SEALMAKER — Canonical Mode</h1>
+          <div class="muted">Import • Edit • Validate • Preview • Export • Autosave</div>
         </div>
         <div class="toolbar">
           <span class="chip">Seals in archive: <strong id="archiveCount">0</strong></span>
@@ -121,219 +131,291 @@
           <div class="sep"></div>
           <select id="exportShape" title="Export format">
             <option value="object" selected>{ "seals": [...] }</option>
-            <option value="array">[ ... ] (array only)</option>
+            <option value="array">[ ... ]</option>
           </select>
           <button id="btnExportArchive" class="btn btn-accent" disabled>Export lygo-data-two.json</button>
+          <button id="btnExportPDF" class="btn">Export PDF (Scroll)</button>
           <button id="btnClearArchive" class="btn btn-danger" disabled>Clear Archive</button>
+          <div class="sep"></div>
           <button id="btnToggleRain" class="btn" title="Toggle Matrix Rain">Matrix: On</button>
         </div>
+      </div>
+      <div class="panel-body" style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+        <span class="chip">Autosave: <span id="autosaveStatus" class="muted">idle</span></span>
+        <span class="chip">PHASES: 1 ✓ 2 ✓ 3 ✓</span>
       </div>
     </header>
 
     <div class="space"></div>
 
-    <!-- Schema panel (inline) -->
     <section class="panel">
-      <div class="panel-header">
-        <h3>Seal Schema (inline)</h3>
-        <div class="toolbar">
-          <span id="schemaStatus" class="chip">Active</span>
-          <button id="btnResetSchema" class="btn">Reset Schema</button>
-          <button id="btnApplySchema" class="btn btn-accent">Apply Pasted Schema</button>
-        </div>
+      <div class="tabs">
+        <div class="tab active" data-tab="builder">Builder</div>
+        <div class="tab" data-tab="extras">Extras</div>
       </div>
-      <div class="panel-body">
-        <details class="schema">
-          <summary>Show/Hide Schema JSON</summary>
-<textarea id="schemaText"></textarea>
-          <div class="hint">This schema validates each seal and drives some UI hints (like enums).</div>
-        </details>
-      </div>
-    </section>
-
-    <div class="space"></div>
-
-    <div class="row">
-      <!-- Left: filters & import helpers -->
-      <section class="panel">
-        <div class="panel-header">
-          <h3>Filters & Import</h3>
-          <div class="toolbar">
-            <span class="chip">Parsed: <strong id="parsedCount">0</strong></span>
-            <button id="btnAppendAll" class="btn">Append All Parsed → Archive</button>
-            <button id="btnClearParsed" class="btn btn-danger" disabled>Clear Parsed</button>
-          </div>
-        </div>
-        <div class="panel-body">
-          <div>
-            <label>Tag filter (optional)</label>
-            <select id="tagFilter"><option value="__all__">(All)</option></select>
-          </div>
-          <div>
-            <label>Tone filter (optional)</label>
-            <select id="toneFilter"><option value="__all__">(All)</option></select>
-          </div>
-
-          <div class="space"></div>
-
-          <div id="dropzone" class="dropzone">Drag & drop .json/.txt files here</div>
-
-          <div class="space"></div>
-          <label>Paste TXT (one or multiple seals)</label>
-          <textarea id="pasteArea" placeholder="Paste raw seal text..."></textarea>
-          <div class="toolbar">
-            <select id="splitStrategy">
-              <option value="none">Do not split (single)</option>
-              <option value="blank">2+ blank lines</option>
-              <option value="hr">Lines of ---</option>
-            </select>
-            <button id="btnParsePaste" class="btn btn-accent">Parse Pasted Text</button>
-            <button id="btnClearPaste" class="btn">Clear</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- Right: editor + preview -->
-      <section class="panel">
-        <div class="panel-header">
-          <h3>Seal Editor</h3>
-          <div class="toolbar">
-            <span id="entryStatus" class="chip">No seal selected</span>
-            <button id="btnAppendOne" class="btn" disabled>Append to Archive</button>
-            <button id="btnDownloadOne" class="btn" disabled>Download Seal .json</button>
-          </div>
-        </div>
-        <div class="panel-body">
-          <div class="grid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-            <div>
-              <label>id</label>
-              <input id="f_id" type="text" placeholder="SEAL_001" />
-            </div>
-            <div>
-              <label>title</label>
-              <input id="f_title" type="text" placeholder="Seal Title" />
-            </div>
-          </div>
-
-          <label>equation</label>
-          <input id="f_equation" type="text" placeholder="E.g., ∑(n=1..k) ..." />
-
-          <div class="grid" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
-            <div>
-              <label>tone</label>
-              <input id="f_tone" list="toneList" type="text" placeholder="neutral" />
-              <datalist id="toneList">
-                <option value="neutral"></option>
-                <option value="bright"></option>
-                <option value="dark"></option>
-                <option value="solar"></option>
-                <option value="lunar"></option>
-                <option value="void"></option>
-              </datalist>
-            </div>
-            <div>
-              <label>glyph</label>
-              <input id="f_glyph" type="text" placeholder="Ψ / ᚠ / GLYPH_ID" />
-            </div>
-            <div>
-              <label>date (ISO)</label>
+      <div class="panel-body" id="tab-builder">
+        <div class="row">
+          <!-- Left: Filters & Import -->
+          <section class="panel">
+            <div class="panel-header">
+              <h3>Filters & Import</h3>
               <div class="toolbar">
-                <input id="f_date" type="text" placeholder="2025-08-12T23:59:59Z" style="flex:1" />
-                <button id="btnNow" class="btn">Now</button>
+                <span class="chip">Parsed: <strong id="parsedCount">0</strong></span>
+                <button id="btnAppendAll" class="btn">Append All Parsed → Archive</button>
+                <button id="btnClearParsed" class="btn btn-danger" disabled>Clear Parsed</button>
               </div>
             </div>
-          </div>
+            <div class="panel-body">
+              <!-- PHASE 1: Multi-select Filters -->
+              <div class="grid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <div>
+                  <label>Tag filter (multi)</label>
+                  <select id="tagFilter" multiple size="6" title="Filter archive by any selected tag"></select>
+                  <div class="toolbar"><button id="btnClearTagFilter" class="btn">Clear</button></div>
+                </div>
+                <div>
+                  <label>Tone filter (multi)</label>
+                  <select id="toneFilter" multiple size="6" title="Filter archive by any selected tone"></select>
+                  <div class="toolbar"><button id="btnClearToneFilter" class="btn">Clear</button></div>
+                </div>
+              </div>
 
-          <div class="grid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-            <div>
-              <label>tags (comma-separated)</label>
-              <input id="f_tags" type="text" placeholder="bootstrap, sovereign_mode" />
-            </div>
-            <div>
-              <label>linked_seals (comma-separated)</label>
-              <input id="f_linked" type="text" placeholder="SEAL_014, SEAL_273X" />
-            </div>
-          </div>
+              <div class="space"></div>
+              <div id="dropzone" class="dropzone">Drag & drop .json/.txt files here</div>
 
-          <div class="grid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-            <div>
-              <label>quote</label>
-              <textarea id="f_quote" placeholder="&quot;Short pull-quote.&quot;"></textarea>
+              <div class="space"></div>
+              <label>Paste TXT (one or multiple seals)</label>
+              <textarea id="pasteArea" placeholder="Paste raw seal text..."></textarea>
+              <div class="toolbar">
+                <select id="splitStrategy">
+                  <option value="none">Do not split (single)</option>
+                  <option value="blank">2+ blank lines</option>
+                  <option value="hr">Lines of ---</option>
+                </select>
+                <button id="btnParsePaste" class="btn btn-accent">Parse Pasted Text</button>
+                <button id="btnClearPaste" class="btn">Clear</button>
+              </div>
             </div>
-            <div>
-              <label>notes</label>
-              <textarea id="f_notes" placeholder="Long-form notes"></textarea>
-            </div>
-          </div>
+          </section>
 
-          <div>
-            <label>media_links</label>
-            <div id="mediaList"></div>
+          <!-- Right: Editor + Preview -->
+          <section class="panel">
+            <div class="panel-header">
+              <h3>Seal Editor</h3>
+              <div class="toolbar">
+                <span id="entryStatus" class="chip">No seal selected</span>
+                <button id="btnAppendOne" class="btn" disabled>Append to Archive</button>
+                <button id="btnDownloadOne" class="btn" disabled>Download Seal .json</button>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="hintbar" id="hintbar">Hover or focus a field to see hints.</div>
+
+              <div class="grid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <div>
+                  <label data-hint="Unique stable identifier, e.g., SEAL_014">id</label>
+                  <input id="f_id" type="text" placeholder="SEAL_001" />
+                </div>
+                <div>
+                  <label data-hint="Short, descriptive name">title</label>
+                  <input id="f_title" type="text" placeholder="Seal Title" />
+                </div>
+              </div>
+
+              <label data-hint="Symbolic or math-like relation that encodes the seal essence">equation</label>
+              <input id="f_equation" type="text" placeholder="E.g., ∑(n=1..k) ..." />
+
+              <div class="grid" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
+                <div>
+                  <label data-hint="Emotional/energetic tone, e.g., bright/dark/neutral">tone</label>
+                  <input id="f_tone" list="toneList" type="text" placeholder="neutral" />
+                  <datalist id="toneList">
+                    <option value="neutral"></option>
+                    <option value="bright"></option>
+                    <option value="dark"></option>
+                    <option value="solar"></option>
+                    <option value="lunar"></option>
+                    <option value="void"></option>
+                  </datalist>
+                </div>
+                <div>
+                  <label data-hint="Unicode glyph or ID referencing the sigil graphic">glyph</label>
+                  <input id="f_glyph" type="text" placeholder="Ψ / ᚠ / GLYPH_ID" />
+                </div>
+                <div>
+                  <label data-hint="ISO 8601 date-time">date (ISO)</label>
+                  <div class="toolbar">
+                    <input id="f_date" type="text" placeholder="2025-08-12T23:59:59Z" style="flex:1" />
+                    <button id="btnNow" class="btn">Now</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <div>
+                  <label data-hint="Comma-separated tags for filtering and themes">tags</label>
+                  <input id="f_tags" type="text" placeholder="bootstrap, sovereign_mode" />
+                </div>
+                <div style="position:relative">
+                  <!-- PHASE 2: Autocomplete -->
+                  <label data-hint="Comma-separated seal IDs; suggestions from archive appear as you type">linked_seals</label>
+                  <input id="f_linked" type="text" placeholder="SEAL_014, SEAL_273X" autocomplete="off" />
+                </div>
+              </div>
+
+              <div class="grid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <div>
+                  <label data-hint="Short quote or mantra aligned to the seal">quote</label>
+                  <textarea id="f_quote" placeholder="&quot;Short pull-quote.&quot;"></textarea>
+                </div>
+                <div>
+                  <!-- PHASE 2: Markdown Preview -->
+                  <label data-hint="Long notes in Markdown. Supports **bold**, _italics_, `code`, images and links.">notes</label>
+                  <textarea id="f_notes" placeholder="Markdown-supported notes"></textarea>
+                </div>
+              </div>
+
+              <div>
+                <label data-hint="Media attachments with type + URL">media_links</label>
+                <div id="mediaList"></div>
+                <div class="toolbar">
+                  <select id="mediaType">
+                    <option value="image">image</option>
+                    <option value="gif">gif</option>
+                    <option value="video">video</option>
+                    <option value="audio">audio</option>
+                    <option value="other">other</option>
+                  </select>
+                  <input id="mediaUrl" type="url" placeholder="https://..." style="flex:1" />
+                  <button id="btnAddMedia" class="btn">Add</button>
+                </div>
+                <div class="hint muted">Each item: { type, url }</div>
+              </div>
+
+              <div class="space"></div>
+              <h3>JSON Preview</h3>
+              <pre id="jsonPreview" class="json">{}</pre>
+              <div class="hint">
+                <span id="validBadge" class="status-bad">invalid</span> • Live validation
+              </div>
+              <!-- PHASE 2: SHA field -->
+              <label>SHA-256</label>
+              <input id="hashField" type="text" readonly placeholder="…" />
+
+              <div class="space"></div>
+              <h3>Notes Preview</h3>
+              <div id="notesPreview" class="panel" style="padding:12px; overflow:auto; max-height:260px;"></div>
+            </div>
+          </section>
+        </div>
+
+        <div class="space"></div>
+
+        <!-- Parsed & Archive Tables -->
+        <section class="panel">
+          <div class="panel-header">
+            <h3>Parsed Seals</h3>
             <div class="toolbar">
-              <select id="mediaType">
-                <option value="image">image</option>
-                <option value="gif">gif</option>
-                <option value="video">video</option>
-                <option value="audio">audio</option>
-                <option value="other">other</option>
-              </select>
-              <input id="mediaUrl" type="url" placeholder="https://..." style="flex:1" />
-              <button id="btnAddMedia" class="btn">Add</button>
+              <span class="chip">Count: <strong id="parsedCount2">0</strong></span>
             </div>
-            <div class="hint muted">Each item: { type, url }</div>
           </div>
+          <div class="panel-body" style="padding-top:0">
+            <table>
+              <thead><tr>
+                <th>#</th><th>ID</th><th>Title</th><th>Tone</th><th>Tags</th><th>Linked</th><th>Date</th><th class="right">Actions</th>
+              </tr></thead>
+              <tbody id="parsedBody"></tbody>
+            </table>
+          </div>
+        </section>
 
-          <div class="space"></div>
-          <h3>JSON Preview</h3>
-          <pre id="jsonPreview" class="json">{}</pre>
-          <div class="hint"><span id="validBadge" class="status-bad">invalid</span> • Live validation</div>
-        </div>
-      </section>
-    </div>
+        <div class="space"></div>
 
-    <div class="space"></div>
-
-    <!-- Parsed & Archive Tables -->
-    <section class="panel">
-      <div class="panel-header">
-        <h3>Parsed Seals</h3>
-        <div class="toolbar">
-          <span class="chip">Count: <strong id="parsedCount2">0</strong></span>
-        </div>
+        <section class="panel">
+          <div class="panel-header">
+            <h3>Archive</h3>
+            <div class="toolbar">
+              <!-- PHASE 3: Loop detector covers archive + parsed -->
+              <span id="cycleWarn" class="chip">Links: clean</span>
+            </div>
+          </div>
+          <div class="panel-body" style="padding-top:0">
+            <table>
+              <thead>
+                <tr>
+                  <th data-sort="id">ID <span class="dir"></span></th>
+                  <th data-sort="title">Title <span class="dir"></span></th>
+                  <th data-sort="tone">Tone <span class="dir"></span></th>
+                  <th data-sort="tags">Tags <span class="dir"></span></th>
+                  <th data-sort="linked">Linked <span class="dir"></span></th>
+                  <th data-sort="date">Date <span class="dir"></span></th>
+                  <th class="right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="archiveBody"></tbody>
+            </table>
+          </div>
+        </section>
       </div>
-      <div class="panel-body" style="padding-top:0">
-        <table>
-          <thead><tr>
-            <th>#</th><th>ID</th><th>Title</th><th>Tone</th><th>Tags</th><th>Linked</th><th>Date</th><th class="right">Actions</th>
-          </tr></thead>
-          <tbody id="parsedBody"></tbody>
-        </table>
-      </div>
-    </section>
 
-    <div class="space"></div>
+      <!-- PHASE 3: Extras -->
+      <div class="panel-body" id="tab-extras" style="display:none;">
+        <div class="grid" style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <section class="panel">
+            <div class="panel-header">
+              <h3>Seal Schema (inline)</h3>
+              <div class="toolbar">
+                <span id="schemaStatus" class="chip">Active</span>
+                <button id="btnResetSchema" class="btn">Reset Schema</button>
+                <button id="btnApplySchema" class="btn btn-accent">Apply Pasted Schema</button>
+              </div>
+            </div>
+            <div class="panel-body">
+              <details class="schema">
+                <summary>Show/Hide Schema JSON</summary>
+<textarea id="schemaText"></textarea>
+                <div class="hint">This schema validates seals and informs tooltips.</div>
+              </details>
+            </div>
+          </section>
 
-    <section class="panel">
-      <div class="panel-header">
-        <h3>Archive</h3>
-        <div class="toolbar">
-          <span class="chip">Filters apply</span>
+          <section class="panel">
+            <div class="panel-header">
+              <h3>Upload Dataset (GitHub API / HF via GitHub)</h3>
+            </div>
+            <div class="panel-body">
+              <div class="hint">Optional online feature. Requires a GitHub PAT with repo access. Uses GitHub Contents API. May be blocked by CORS.</div>
+              <label>Repository (owner/repo)</label>
+              <input id="ghRepo" type="text" placeholder="yourname/your-repo" />
+              <div class="grid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <div>
+                  <label>Branch</label>
+                  <input id="ghBranch" type="text" value="main" />
+                </div>
+                <div>
+                  <label>Path</label>
+                  <input id="ghPath" type="text" value="lygo-data-two.json" />
+                </div>
+              </div>
+              <label>Commit message</label>
+              <input id="ghMessage" type="text" value="Update lygo-data-two.json from SEALMAKER" />
+              <label>GitHub Token (kept in memory only)</label>
+              <input id="ghToken" type="text" placeholder="ghp_..." />
+              <div class="toolbar">
+                <button id="btnPushGH" class="btn btn-accent">Upload Dataset</button>
+                <button id="btnCheckGH" class="btn">Check Remote</button>
+              </div>
+              <pre id="ghLog" class="json" style="max-height:200px;"></pre>
+            </div>
+          </section>
         </div>
-      </div>
-      <div class="panel-body" style="padding-top:0">
-        <table>
-          <thead><tr>
-            <th>#</th><th>ID</th><th>Title</th><th>Tone</th><th>Tags</th><th>Linked</th><th>Date</th><th class="right">Actions</th>
-          </tr></thead>
-          <tbody id="archiveBody"></tbody>
-        </table>
       </div>
     </section>
   </div>
 
 <script>
-/* ===== Matrix Rain (toggleable) ===== */
-const rain = { running:true, started:false, cols:[], size:14, w:0, h:0, ctx:null, raf:0, last:0 };
+// ========== Matrix Rain ==========
+const rain = { running:true, started:false, cols:[], size:14, w:0, h:0, ctx:null, raf:0 };
 function initRain(){
   const c = document.getElementById('matrix');
   const ctx = c.getContext('2d');
@@ -347,16 +429,14 @@ function initRain(){
 function startRain(){
   if (rain.started) return; rain.started = true; initRain();
   const glyphs='アァカサタナハマヤャラワ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  const step=(ts)=>{
+  const step=()=>{
     if (!rain.running){ rain.raf = requestAnimationFrame(step); return; }
     const ctx = rain.ctx;
     ctx.fillStyle='rgba(0,0,0,.12)'; ctx.fillRect(0,0,rain.w,rain.h);
     for (let i=0;i<rain.cols.length;i++){
       const x=i*rain.size, y=rain.cols[i]*rain.size;
-      ctx.fillStyle='rgba(0,255,136,.95)';
-      ctx.fillText(glyphs.charAt((Math.random()*glyphs.length)|0), x,y);
-      ctx.fillStyle='rgba(0,209,255,.6)';
-      ctx.fillText(glyphs.charAt((Math.random()*glyphs.length)|0), x, y-rain.size);
+      ctx.fillStyle='rgba(0,255,136,.95)'; ctx.fillText(glyphs.charAt((Math.random()*glyphs.length)|0), x,y);
+      ctx.fillStyle='rgba(0,209,255,.6)'; ctx.fillText(glyphs.charAt((Math.random()*glyphs.length)|0), x, y-rain.size);
       if (y>rain.h && Math.random()>0.975) rain.cols[i]=0; else rain.cols[i]+=1;
     }
     rain.raf=requestAnimationFrame(step);
@@ -365,8 +445,11 @@ function startRain(){
   window.addEventListener('resize', ()=>{ cancelAnimationFrame(rain.raf); rain.started=false; initRain(); startRain(); });
 }
 startRain();
+document.getElementById('btnToggleRain').addEventListener('click', e=>{
+  rain.running=!rain.running; e.target.textContent='Matrix: '+(rain.running?'On':'Off');
+});
 
-/* ===== Schema (inline) ===== */
+// ========== Schema ==========
 const DEFAULT_SEAL_SCHEMA = {
   "$schema":"http://json-schema.org/draft-07/schema#",
   "title":"LYRA_SEAL_ENTRY",
@@ -382,87 +465,66 @@ const DEFAULT_SEAL_SCHEMA = {
     "quote":{"type":"string"},
     "notes":{"type":"string"},
     "media_links":{
-      "type":"array",
-      "items":{
-        "type":"object",
-        "properties":{
+      "type":"array","items":{
+        "type":"object","properties":{
           "type":{"type":"string","enum":["image","gif","video","audio","other"]},
           "url":{"type":"string","format":"uri"}
-        },
-        "required":["type","url"]
+        },"required":["type","url"]
       }
     },
-    "date":{"type":"string","format":"date-time"}
+    "date":{"type":"string","format":"date-time"},
+    "seal_hash":{"type":"string"} /* optional */
   },
   "required":["id","title","date"]
 };
 let SCHEMA = JSON.parse(JSON.stringify(DEFAULT_SEAL_SCHEMA));
 
-/* ===== DOM Refs ===== */
-const $ = (s, r=document)=>r.querySelector(s);
-const $$ = (s, r=document)=>Array.from(r.querySelectorAll(s));
+// ========== Refs ==========
+const $ = (s,r=document)=>r.querySelector(s);
+const $$ = (s,r=document)=>Array.from(r.querySelectorAll(s));
 
 const refs = {
   // header
-  jsonFile: $('#jsonFile'),
-  txtFile: $('#txtFile'),
-  btnImportJson: $('#btnImportJson'),
-  btnImportTxt: $('#btnImportTxt'),
-  btnLoadDemo: $('#btnLoadDemo'),
-  btnExportArchive: $('#btnExportArchive'),
-  btnClearArchive: $('#btnClearArchive'),
-  exportShape: $('#exportShape'),
-  archiveCount: $('#archiveCount'),
+  jsonFile: $('#jsonFile'), txtFile: $('#txtFile'),
+  btnImportJson: $('#btnImportJson'), btnImportTxt: $('#btnImportTxt'),
+  btnLoadDemo: $('#btnLoadDemo'), btnExportArchive: $('#btnExportArchive'), btnClearArchive: $('#btnClearArchive'),
+  exportShape: $('#exportShape'), archiveCount: $('#archiveCount'), btnExportPDF: $('#btnExportPDF'),
   btnToggleRain: $('#btnToggleRain'),
-  // schema
-  schemaText: $('#schemaText'),
-  btnApplySchema: $('#btnApplySchema'),
-  btnResetSchema: $('#btnResetSchema'),
-  schemaStatus: $('#schemaStatus'),
-  // left
-  dropzone: $('#dropzone'),
-  pasteArea: $('#pasteArea'),
-  splitStrategy: $('#splitStrategy'),
-  btnParsePaste: $('#btnParsePaste'),
-  btnClearPaste: $('#btnClearPaste'),
-  btnAppendAll: $('#btnAppendAll'),
-  btnClearParsed: $('#btnClearParsed'),
-  parsedCount: $('#parsedCount'),
-  parsedCount2: $('#parsedCount2'),
-  tagFilter: $('#tagFilter'),
-  toneFilter: $('#toneFilter'),
+  // autosave
+  autosaveStatus: $('#autosaveStatus'),
+  // recovery
+  recovery: $('#recovery'), recoveryMeta: $('#recoveryMeta'), btnRecover: $('#btnRecover'),
+  btnDismissRecovery: $('#btnDismissRecovery'), btnClearSavedSession: $('#btnClearSavedSession'),
+  // tabs
+  tabs: $$('.tab'),
+  // filters/import
+  dropzone: $('#dropzone'), pasteArea: $('#pasteArea'), splitStrategy: $('#splitStrategy'),
+  btnParsePaste: $('#btnParsePaste'), btnClearPaste: $('#btnClearPaste'), btnAppendAll: $('#btnAppendAll'), btnClearParsed: $('#btnClearParsed'),
+  parsedCount: $('#parsedCount'), parsedCount2: $('#parsedCount2'),
+  tagFilter: $('#tagFilter'), toneFilter: $('#toneFilter'), btnClearTagFilter: $('#btnClearTagFilter'), btnClearToneFilter: $('#btnClearToneFilter'),
   // editor
-  entryStatus: $('#entryStatus'),
-  f_id: $('#f_id'),
-  f_title: $('#f_title'),
-  f_equation: $('#f_equation'),
-  f_tone: $('#f_tone'),
-  f_glyph: $('#f_glyph'),
-  f_tags: $('#f_tags'),
-  f_linked: $('#f_linked'),
-  f_quote: $('#f_quote'),
-  f_notes: $('#f_notes'),
-  f_date: $('#f_date'),
-  mediaList: $('#mediaList'),
-  mediaType: $('#mediaType'),
-  mediaUrl: $('#mediaUrl'),
-  btnAddMedia: $('#btnAddMedia'),
-  btnNow: $('#btnNow'),
-  btnAppendOne: $('#btnAppendOne'),
-  btnDownloadOne: $('#btnDownloadOne'),
-  jsonPreview: $('#jsonPreview'),
-  validBadge: $('#validBadge'),
+  entryStatus: $('#entryStatus'), f_id: $('#f_id'), f_title: $('#f_title'), f_equation: $('#f_equation'), f_tone: $('#f_tone'),
+  f_glyph: $('#f_glyph'), f_tags: $('#f_tags'), f_linked: $('#f_linked'), f_quote: $('#f_quote'), f_notes: $('#f_notes'),
+  f_date: $('#f_date'), mediaList: $('#mediaList'), mediaType: $('#mediaType'), mediaUrl: $('#mediaUrl'), btnAddMedia: $('#btnAddMedia'),
+  btnNow: $('#btnNow'), btnAppendOne: $('#btnAppendOne'), btnDownloadOne: $('#btnDownloadOne'),
+  jsonPreview: $('#jsonPreview'), validBadge: $('#validBadge'), notesPreview: $('#notesPreview'), hashField: $('#hashField'),
+  hintbar: $('#hintbar'),
   // tables
-  parsedBody: $('#parsedBody'),
-  archiveBody: $('#archiveBody'),
+  parsedBody: $('#parsedBody'), archiveBody: $('#archiveBody'), cycleWarn: $('#cycleWarn'),
+  // extras / GH
+  ghRepo: $('#ghRepo'), ghBranch: $('#ghBranch'), ghPath: $('#ghPath'), ghMessage: $('#ghMessage'), ghToken: $('#ghToken'),
+  btnPushGH: $('#btnPushGH'), btnCheckGH: $('#btnCheckGH'), ghLog: $('#ghLog'),
+  // schema
+  schemaText: $('#schemaText'), btnApplySchema: $('#btnApplySchema'), btnResetSchema: $('#btnResetSchema'), schemaStatus: $('#schemaStatus'),
 };
 
-/* ===== State ===== */
-let parsedSeals = [];   // temp parsed/imported
-let archive = [];       // main archive
-let currentIndex = -1;  // editor index into parsedSeals
+// ========== State ==========
+let parsedSeals = [];
+let archive = [];
+let currentIndex = -1;
+let sortKey='id', sortDir=1; // 1 asc, -1 desc
 
-/* ===== Helpers ===== */
+// ========== Helpers ==========
 function nowISO(){ return new Date().toISOString(); }
 function cleanText(t){ return (t||'').replace(/^\uFEFF/,'').replace(/\r\n?/g,'\n').trim(); }
 function firstNonEmptyLine(t){ return (t.split('\n').map(s=>s.trim()).find(Boolean)||'').trim(); }
@@ -472,8 +534,57 @@ function safeName(s){ return (s||'seal').replace(/[^\w\-]+/g,'_').slice(0,64); }
 function structuredCloneSafe(x){ return window.structuredClone ? window.structuredClone(x) : JSON.parse(JSON.stringify(x)); }
 function isISO(s){ return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+\-]\d{2}:\d{2})$/.test(s||''); }
 function isURI(s){ try{ const u=new URL(s); return !!u.protocol && !!u.host; }catch{ return false; } }
+function base64EncodeUtf8(str){ return btoa(unescape(encodeURIComponent(str))); }
 
-/* ===== Validation (simple schema walker) ===== */
+// ========== PHASE 1: LocalStorage Autosave + Restore ==========
+const LS_KEY='SEAL_ARCHIVE_LYRA';
+function saveArchiveLS(){
+  try{
+    const snap = { savedAt: nowISO(), seals: archive };
+    localStorage.setItem(LS_KEY, JSON.stringify(snap));
+    refs.autosaveStatus.textContent = 'saved ' + new Date().toLocaleTimeString();
+  }catch(e){
+    refs.autosaveStatus.textContent = 'save failed';
+  }
+}
+function loadArchiveFromLS(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  }catch{ return null; }
+}
+function showRecoveryIfAvailable(){
+  const snap = loadArchiveFromLS();
+  if (snap && Array.isArray(snap.seals) && snap.seals.length){
+    refs.recoveryMeta.textContent = `Saved at ${snap.savedAt}, entries: ${snap.seals.length}`;
+    refs.recovery.style.display = 'block';
+    refs.btnRecover.onclick = ()=>{ archive = snap.seals; renderArchive(); updateFiltersFromArchive(); detectCycles(); refs.recovery.style.display='none'; };
+    refs.btnDismissRecovery.onclick = ()=> refs.recovery.style.display='none';
+    refs.btnClearSavedSession.onclick = ()=>{ localStorage.removeItem(LS_KEY); refs.recovery.style.display='none'; };
+  }
+}
+console.log('PHASE 1 ready');
+
+// ========== PHASE 1: Multi-select filters ==========
+function getSelectedValues(sel){ return Array.from(sel.selectedOptions).map(o=>o.value); }
+function updateFiltersFromArchive(){
+  const allTags = new Set(); const allTones = new Set();
+  archive.forEach(s=>{
+    (s.tags||[]).forEach(t=> allTags.add(t));
+    if (s.tone) allTones.add(s.tone);
+  });
+  const tagVals = Array.from(allTags).sort();
+  const toneVals = Array.from(allTones).sort();
+  refs.tagFilter.innerHTML = tagVals.map(t=>`<option value="${escapeAttr(t)}">${escapeHtml(t)}</option>`).join('');
+  refs.toneFilter.innerHTML = toneVals.map(t=>`<option value="${escapeAttr(t)}">${escapeHtml(t)}</option>`).join('');
+}
+refs.tagFilter.addEventListener('change', renderArchive);
+refs.toneFilter.addEventListener('change', renderArchive);
+$('#btnClearTagFilter').addEventListener('click', ()=>{ Array.from(refs.tagFilter.options).forEach(o=>o.selected=false); renderArchive(); });
+$('#btnClearToneFilter').addEventListener('click', ()=>{ Array.from(refs.toneFilter.options).forEach(o=>o.selected=false); renderArchive(); });
+
+// ========== Validation ==========
 function validateSeal(seal, schema=SCHEMA){
   const errors=[];
   if (!seal || typeof seal!=='object') return {ok:false, errors:['Seal is not an object']};
@@ -517,37 +628,32 @@ function validateSeal(seal, schema=SCHEMA){
   return {ok: errors.length===0, errors};
 }
 
-/* ===== Parsing TXT → Seal ===== */
+// ========== Parsing TXT → Seal ==========
 function parseTxtToSeal(raw, autoIndex=1){
   const text = cleanText(raw);
   const lines = text.split('\n');
 
-  // heuristics
   let id = (text.match(/\bSEAL_[A-Z0-9\-_]+/i)||[])[0];
   if (!id) id = 'SEAL_AUTO_' + String(autoIndex).padStart(3,'0');
 
-  let title = firstNonEmptyLine(text);
-  // scrape key:value hints
   const kv = {};
   lines.forEach(ln=>{
     const m = ln.match(/^\s*([A-Za-z_]+)\s*:\s*(.+)$/);
     if (m) kv[m[1].toLowerCase()] = m[2].trim();
   });
 
+  const title = kv.title || firstNonEmptyLine(text);
   const equation = kv.equation || (text.match(/(?:^|\n)\s*(?:EQ|Equation)\s*:\s*(.+)/i)?.[1] || '');
   const tone = (kv.tone || '').toLowerCase() || (/\b(bright|dark|neutral|solar|lunar|void)\b/i.exec(text)?.[1]||'neutral');
   const glyph = kv.glyph || (text.match(/(?:^|\s)GLYPH[_\s:]*([A-Z0-9\-\_]+)/i)?.[1] || '');
-  const tags = Array.from(new Set(
-    (text.match(/#([A-Za-z0-9_\-]+)/g)||[]).map(h=>h.slice(1))
-  ));
+  const tags = Array.from(new Set((text.match(/#([A-Za-z0-9_\-]+)/g)||[]).map(h=>h.slice(1))));
   const linked = Array.from(new Set(text.match(/\bSEAL_[A-Z0-9\-_]+/gi)||[]));
-  const quote = (text.match(/[“"](.*?)[”"]/s)||[])[1] || kv.quote || '';
-  const notes = text;
+  const quote = kv.quote || (text.match(/[“"](.*?)[”"]/s)||[])[1] || '';
+  const notes = kv.notes || text;
   const media_links = [];
   const urls = Array.from(new Set(text.match(/\bhttps?:\/\/\S+/gi)||[]));
   urls.forEach(u=>{
-    const l = u.toLowerCase();
-    let type='other';
+    const l=u.toLowerCase(); let type='other';
     if (/\.(png|jpg|jpeg|webp|svg)$/.test(l)) type='image';
     else if (/\.(gif)$/.test(l)) type='gif';
     else if (/\.(mp4|webm|mov)$/.test(l)) type='video';
@@ -555,12 +661,11 @@ function parseTxtToSeal(raw, autoIndex=1){
     media_links.push({type, url:u});
   });
 
-  const date = new Date().toISOString();
-
+  const date = nowISO();
   return { id, title, equation, tone, glyph, tags, linked_seals: linked, quote, notes, media_links, date };
 }
 
-/* ===== Editor bindings ===== */
+// ========== Editor ==========
 function getEditorData(){
   const tags = refs.f_tags.value.split(',').map(s=>s.trim()).filter(Boolean);
   const linked = refs.f_linked.value.split(',').map(s=>s.trim()).filter(Boolean);
@@ -597,6 +702,7 @@ function setEditorData(e){
   refs.f_date.value = e.date || nowISO();
   renderMedia(e.media_links||[]);
   refreshPreview();
+  updateLinkedSuggest();
 }
 function renderMedia(list){
   refs.mediaList.innerHTML = '';
@@ -617,16 +723,55 @@ function renderMedia(list){
       <button data-act="rm" class="btn btn-danger">Remove</button>
     `;
     const [sel,url]=[row.children[0], row.children[1]];
-    sel.addEventListener('change',()=>{ parsedSeals[currentIndex].media_links[i].type = sel.value; refreshPreview(); });
-    url.addEventListener('input',()=>{ parsedSeals[currentIndex].media_links[i].url = url.value; refreshPreview(); });
-    row.querySelector('[data-act="rm"]').addEventListener('click', ()=>{ parsedSeals[currentIndex].media_links.splice(i,1); renderMedia(parsedSeals[currentIndex].media_links); refreshPreview(); });
-    row.querySelector('[data-act="up"]').addEventListener('click', ()=>{ const j=i-1; if(j<0)return; const a=parsedSeals[currentIndex].media_links; [a[i],a[j]]=[a[j],a[i]]; renderMedia(a); refreshPreview(); });
-    row.querySelector('[data-act="down"]').addEventListener('click', ()=>{ const j=i+1; const a=parsedSeals[currentIndex].media_links; if(j>=a.length)return; [a[i],a[j]]=[a[j],a[i]]; renderMedia(a); refreshPreview(); });
+    if (currentIndex>=0){
+      sel.addEventListener('change',()=>{ parsedSeals[currentIndex].media_links[i].type = sel.value; refreshPreview(); });
+      url.addEventListener('input',()=>{ parsedSeals[currentIndex].media_links[i].url = url.value; refreshPreview(); });
+      row.querySelector('[data-act="rm"]').addEventListener('click', ()=>{ parsedSeals[currentIndex].media_links.splice(i,1); renderMedia(parsedSeals[currentIndex].media_links); refreshPreview(); });
+      row.querySelector('[data-act="up"]').addEventListener('click', ()=>{ const j=i-1; if(j<0)return; const a=parsedSeals[currentIndex].media_links; [a[i],a[j]]=[a[j],a[i]]; renderMedia(a); refreshPreview(); });
+      row.querySelector('[data-act="down"]').addEventListener('click', ()=>{ const j=i+1; const a=parsedSeals[currentIndex].media_links; if(j>=a.length)return; [a[i],a[j]]=[a[j],a[i]]; renderMedia(a); refreshPreview(); });
+    }
     refs.mediaList.appendChild(row);
   });
 }
 
-/* ===== Live preview ===== */
+// ========== PHASE 2: Markdown Renderer (offline) ==========
+function mdRender(src){
+  let s = src || '';
+  s = s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  // fenced code first
+  s = s.replace(/```([\s\S]*?)```/g, (_,code)=> `<pre><code>${code.replace(/&/g,'&amp;')}</code></pre>`);
+  // headings
+  s = s.replace(/^###### (.*)$/gm,'<h6>$1</h6>')
+       .replace(/^##### (.*)$/gm,'<h5>$1</h5>')
+       .replace(/^#### (.*)$/gm,'<h4>$1</h4>')
+       .replace(/^### (.*)$/gm,'<h3>$1</h3>')
+       .replace(/^## (.*)$/gm,'<h2>$1</h2>')
+       .replace(/^# (.*)$/gm,'<h1>$1</h1>');
+  // inline
+  s = s.replace(/`([^`]+)`/g,'<code>$1</code>')
+       .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
+       .replace(/_([^_]+)_/g,'<em>$1</em>');
+  // images then links
+  s = s.replace(/!\[([^\]]*)\]\(([^)]+)\)/g,'<img alt="$1" src="$2" style="max-width:100%;">');
+  s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');
+  // lists
+  s = s.replace(/^(?:-|\*) (.*)$/gm,'<li>$1</li>');
+  s = s.replace(/(<li>[\s\S]*?<\/li>)/g,'<ul>$1</ul>');
+  // paragraphs
+  s = s.replace(/^(?!<h\d|<ul|<pre|<p|<img|<blockquote)(.+)$/gm,'<p>$1</p>');
+  return s;
+}
+console.log('PHASE 2 ready');
+
+// ========== PHASE 2: SHA-256 ==========
+async function sha256Hex(str){
+  const buf = new TextEncoder().encode(str);
+  const hash = await crypto.subtle.digest('SHA-256', buf);
+  return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+// ========== Preview & Hash ==========
+let hashTimer=0;
 function refreshPreview(){
   if (currentIndex>=0) parsedSeals[currentIndex] = getEditorData();
   const obj = currentIndex>=0 ? parsedSeals[currentIndex] : getEditorData();
@@ -634,9 +779,19 @@ function refreshPreview(){
   refs.jsonPreview.textContent = JSON.stringify(obj, null, 2) + (v.ok?'':`\n\n// Issues:\n// - ${v.errors.join('\n// - ')}`);
   refs.validBadge.textContent = v.ok ? 'valid' : 'invalid';
   refs.validBadge.className = v.ok ? 'status-ok' : 'status-bad';
+  // hash (debounced)
+  clearTimeout(hashTimer);
+  hashTimer = setTimeout(async ()=>{
+    const h = await sha256Hex(JSON.stringify(obj));
+    refs.hashField.value = h;
+  }, 80);
+  // markdown notes
+  refs.notesPreview.innerHTML = mdRender(obj.notes||'');
+  // update loop detector to include parsed too
+  detectCycles();
 }
 
-/* ===== Rendering Tables ===== */
+// ========== Parsed & Archive Rendering ==========
 function renderParsed(){
   refs.parsedCount.textContent = String(parsedSeals.length);
   refs.parsedCount2.textContent = String(parsedSeals.length);
@@ -663,39 +818,69 @@ function renderParsed(){
     tr.querySelector('[data-act="edit"]').addEventListener('click',()=> loadEditor(idx));
     tr.querySelector('[data-act="dup"]').addEventListener('click',()=>{
       const copy = structuredCloneSafe(e);
-      copy.id = e.id + '_COPY';
+      copy.id = (e.id||'SEAL') + '_COPY';
       parsedSeals.splice(idx+1,0,copy);
-      renderParsed();
+      renderParsed(); detectCycles();
     });
     tr.querySelector('[data-act="dl"]').addEventListener('click',()=> downloadJSON(e, safeName(e.id||e.title)+'.json'));
     tr.querySelector('[data-act="rm"]').addEventListener('click',()=>{
       parsedSeals.splice(idx,1);
       if (currentIndex===idx){ clearEditor(); }
       else if (currentIndex>idx) currentIndex--;
-      renderParsed();
+      renderParsed(); detectCycles();
     });
+    tr.addEventListener('mousemove', (ev)=> showMiniPreview(ev, e));
+    tr.addEventListener('mouseleave', hideMiniPreview);
     refs.parsedBody.appendChild(tr);
   });
 }
+
+function getSelectedFilterValues(){
+  return {
+    tags: getSelectedValues(refs.tagFilter),
+    tones: getSelectedValues(refs.toneFilter)
+  };
+}
+
+function sortArchive(list){
+  const arr = list.slice();
+  arr.sort((a,b)=>{
+    let va, vb;
+    if (sortKey==='id'){ va = a.id||''; vb=b.id||''; return va.localeCompare(vb)*sortDir; }
+    if (sortKey==='title'){ va = a.title||''; vb=b.title||''; return va.localeCompare(vb)*sortDir; }
+    if (sortKey==='tone'){ va = a.tone||''; vb=b.tone||''; return va.localeCompare(vb)*sortDir; }
+    if (sortKey==='tags'){ va=(a.tags||[]).length; vb=(b.tags||[]).length; return (va-vb)*sortDir; }
+    if (sortKey==='linked'){ va=(a.linked_seals||[]).length; vb=(b.linked_seals||[]).length; return (va-vb)*sortDir; }
+    if (sortKey==='date'){ va=Date.parse(a.date||0)||0; vb=Date.parse(b.date||0)||0; return (va-vb)*sortDir; }
+    return 0;
+  });
+  return arr;
+}
+
 function renderArchive(){
   refs.archiveCount.textContent = String(archive.length);
   refs.btnExportArchive.disabled = archive.length===0;
   refs.btnClearArchive.disabled = archive.length===0;
 
-  const tagSel = refs.tagFilter.value || '__all__';
-  const toneSel = refs.toneFilter.value || '__all__';
-
-  const filtered = archive.filter(seal=>{
-    const passTag = tagSel==='__all__' || (seal.tags||[]).includes(tagSel);
-    const passTone = toneSel==='__all__' || (seal.tone||'')===toneSel;
+  const {tags, tones} = getSelectedFilterValues();
+  const pass = s => {
+    const passTag = !tags.length || (s.tags||[]).some(t=> tags.includes(t));
+    const passTone = !tones.length || tones.includes(s.tone||'');
     return passTag && passTone;
+  };
+  const filtered = archive.filter(pass);
+  const sorted = sortArchive(filtered);
+
+  const headCells = $$('thead th[data-sort]');
+  headCells.forEach(th=>{
+    th.classList.remove('sorting'); th.querySelector('.dir').textContent='';
+    if (th.dataset.sort===sortKey){ th.classList.add('sorting'); th.querySelector('.dir').textContent = sortDir>0?'▲':'▼'; }
   });
 
   refs.archiveBody.innerHTML='';
-  filtered.forEach((e,idx)=>{
+  sorted.forEach((e)=>{
     const tr=document.createElement('tr');
     tr.innerHTML=`
-      <td>${idx+1}</td>
       <td>${escapeHtml(e.id||'')}</td>
       <td>${escapeHtml(e.title||'')}</td>
       <td>${escapeHtml(e.tone||'')}</td>
@@ -709,47 +894,100 @@ function renderArchive(){
     `;
     tr.querySelector('[data-act="dl"]').addEventListener('click',()=> downloadJSON(e, safeName(e.id||e.title)+'.json'));
     tr.querySelector('[data-act="rm"]').addEventListener('click',()=>{
-      const idxInArchive = archive.indexOf(e);
-      if (idxInArchive>-1){ archive.splice(idxInArchive,1); renderArchive(); updateFiltersFromArchive(); }
+      const i = archive.indexOf(e);
+      if (i>-1){ archive.splice(i,1); renderArchive(); updateFiltersFromArchive(); detectCycles(); saveArchiveLS(); }
     });
+    tr.addEventListener('mousemove', (ev)=> showMiniPreview(ev, e));
+    tr.addEventListener('mouseleave', hideMiniPreview);
     refs.archiveBody.appendChild(tr);
   });
+
+  saveArchiveLS();
 }
 
-/* ===== Filters ===== */
-function updateFiltersFromArchive(){
-  const allTags = new Set(); const allTones = new Set();
-  archive.forEach(s=>{
-    (s.tags||[]).forEach(t=> allTags.add(t));
-    if (s.tone) allTones.add(s.tone);
+// ========== Mini Preview ==========
+const mini = document.getElementById('miniPreview');
+function showMiniPreview(ev, s){
+  mini.innerHTML = `
+    <div class="title">${escapeHtml(s.id||'')} — ${escapeHtml(s.title||'')}</div>
+    <div class="line"><strong>Tone:</strong> ${escapeHtml(s.tone||'')}</div>
+    <div class="line"><strong>Equation:</strong> ${escapeHtml(s.equation||'')}</div>
+    <div class="line"><strong>Glyph:</strong> ${escapeHtml(s.glyph||'')}</div>
+  `;
+  mini.style.left = (ev.pageX + 14) + 'px';
+  mini.style.top = (ev.pageY + 14) + 'px';
+  mini.style.display='block';
+}
+function hideMiniPreview(){ mini.style.display='none'; }
+
+// ========== PHASE 2: Autocomplete (from archive IDs) ==========
+const suggestBox = document.getElementById('suggestBox');
+function updateLinkedSuggest(){
+  const source = Array.from(new Set(archive.map(s=>s.id).filter(Boolean)));
+  const input = refs.f_linked;
+  input.oninput = ()=>{
+    const val = input.value;
+    const parts = val.split(',');
+    const lastRaw = parts[parts.length-1].trim().toUpperCase();
+    if (!lastRaw){ suggestBox.style.display='none'; return; }
+    const matches = source.filter(id=> id && id.toUpperCase().includes(lastRaw)).slice(0,20);
+    if (!matches.length){ suggestBox.style.display='none'; return; }
+    const rect = input.getBoundingClientRect();
+    suggestBox.style.left = rect.left + 'px';
+    suggestBox.style.top = (rect.bottom + window.scrollY + 4) + 'px';
+    suggestBox.style.minWidth = rect.width + 'px';
+    suggestBox.innerHTML = matches.map(m=>`<button type="button" data-id="${escapeAttr(m)}">${escapeHtml(m)}</button>`).join('');
+    suggestBox.style.display='block';
+    $$('button', suggestBox).forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        parts[parts.length-1] = ' ' + btn.dataset.id;
+        input.value = parts.join(',').replace(/^,/, '');
+        suggestBox.style.display='none';
+        refreshPreview();
+      });
+    });
+  };
+  input.addEventListener('blur', ()=> setTimeout(()=> suggestBox.style.display='none', 150));
+}
+
+// ========== Hints ==========
+const tooltip = document.getElementById('tooltip');
+function bindHints(){
+  const hintbar = refs.hintbar;
+  $$('label[data-hint]').forEach(label=>{
+    const hint = label.getAttribute('data-hint');
+    const input = label.nextElementSibling;
+    if (!input) return;
+    function showTip(ev){
+      hintbar.textContent = hint;
+      tooltip.textContent = hint;
+      tooltip.style.display='block';
+      tooltip.style.left = (ev.pageX + 12) + 'px';
+      tooltip.style.top = (ev.pageY + 12) + 'px';
+    }
+    function moveTip(ev){
+      tooltip.style.left = (ev.pageX + 12) + 'px';
+      tooltip.style.top = (ev.pageY + 12) + 'px';
+    }
+    function hideTip(){ tooltip.style.display='none'; }
+    input.addEventListener('mouseenter', showTip);
+    input.addEventListener('mousemove', moveTip);
+    input.addEventListener('mouseleave', hideTip);
+    input.addEventListener('focus', (ev)=> showTip(ev));
+    input.addEventListener('blur', hideTip);
   });
-  const prevTag = refs.tagFilter.value||'__all__';
-  const prevTone = refs.toneFilter.value||'__all__';
-  refs.tagFilter.innerHTML = `<option value="__all__">(All)</option>` + Array.from(allTags).sort().map(t=>`<option value="${escapeAttr(t)}">${escapeHtml(t)}</option>`).join('');
-  refs.toneFilter.innerHTML = `<option value="__all__">(All)</option>` + Array.from(allTones).sort().map(t=>`<option value="${escapeAttr(t)}">${escapeHtml(t)}</option>`).join('');
-  if ([...refs.tagFilter.options].some(o=>o.value===prevTag)) refs.tagFilter.value = prevTag;
-  if ([...refs.toneFilter.options].some(o=>o.value===prevTone)) refs.toneFilter.value = prevTone;
 }
 
-/* ===== Editor control ===== */
-function loadEditor(idx){
-  currentIndex = idx;
-  const e = parsedSeals[idx];
-  if (!e) return;
-  setEditorData(e);
-  refs.entryStatus.textContent = `Editing parsed seal #${idx+1}`;
-  refs.btnAppendOne.disabled = false;
-  refs.btnDownloadOne.disabled = false;
-}
-function clearEditor(){
-  currentIndex = -1;
-  setEditorData({ id:'', title:'', equation:'', tone:'', glyph:'', tags:[], linked_seals:[], quote:'', notes:'', media_links:[], date:nowISO() });
-  refs.entryStatus.textContent = 'No seal selected';
-  refs.btnAppendOne.disabled = true;
-  refs.btnDownloadOne.disabled = true;
-}
+// ========== Sorting ==========
+$$('thead th[data-sort]').forEach(th=>{
+  th.addEventListener('click', ()=>{
+    const key = th.dataset.sort;
+    if (sortKey===key) sortDir*=-1; else { sortKey=key; sortDir=1; }
+    renderArchive();
+  });
+});
 
-/* ===== Import / Export ===== */
+// ========== Import / Export ==========
 function downloadJSON(obj, filename){
   const blob = new Blob([JSON.stringify(obj,null,2)], {type:'application/json'});
   const a=document.createElement('a');
@@ -759,16 +997,143 @@ function downloadJSON(obj, filename){
 }
 refs.btnExportArchive.addEventListener('click', ()=>{
   const shape = refs.exportShape.value;
-  const payload = shape==='array' ? archive : { seals: archive };
+  // ensure seal_hash on export
+  const payloadArr = archive.map(s=>{
+    const copy = structuredCloneSafe(s);
+    if (!copy.seal_hash) copy.seal_hash = copy.seal_hash; // no-op if present
+    return copy;
+  });
+  const payload = shape==='array' ? payloadArr : { seals: payloadArr };
   downloadJSON(payload, 'lygo-data-two.json');
 });
-refs.btnClearArchive.addEventListener('click', ()=>{
-  if (!archive.length) return;
-  if (!confirm('Clear entire archive?')) return;
-  archive = []; renderArchive(); updateFiltersFromArchive();
+
+// PHASE 3: Export PDF (scroll) via print-to-PDF
+refs.btnExportPDF.addEventListener('click', ()=>{
+  const html = `
+<!doctype html><html><head><meta charset="utf-8"><title>LYRA Seals — Scroll</title>
+<style>body{font:14px/1.5 ${CSS.escape(getComputedStyle(document.body).fontFamily)};padding:24px;color:#111;}
+h1{margin-bottom:0.5rem} h2{margin:18px 0 6px;}
+.seal{border-bottom:1px solid #ccc; padding:10px 0;}
+pre{white-space:pre-wrap;border:1px solid #eee;padding:8px;border-radius:6px;background:#fafafa;}
+blockquote{margin:8px 0;padding-left:12px;border-left:3px solid #ddd;color:#555;}
+small{color:#666}
+</style></head><body>
+<h1>LYRA Seals</h1>
+${archive.map(s=>`
+<div class="seal">
+  <h2>${escapeHtml(s.id||'')} — ${escapeHtml(s.title||'')}</h2>
+  <small>Tone: ${escapeHtml(s.tone||'')} • Date: ${escapeHtml(s.date||'')}</small>
+  <div><strong>Equation:</strong> ${escapeHtml(s.equation||'')}</div>
+  <div><strong>Glyph:</strong> ${escapeHtml(s.glyph||'')}</div>
+  <div><strong>Tags:</strong> ${(s.tags||[]).map(t=>escapeHtml(t)).join(', ')}</div>
+  <div><strong>Linked:</strong> ${(s.linked_seals||[]).map(t=>escapeHtml(t)).join(', ')}</div>
+  ${s.quote?`<blockquote>${escapeHtml(s.quote)}</blockquote>`:''}
+  <div>${mdRender(s.notes||'')}</div>
+</div>`).join('')}
+<script>window.print()</script>
+</body></html>`;
+  const w = window.open('', '_blank');
+  w.document.write(html); w.document.close();
+});
+console.log('PHASE 3 ready');
+
+// ========== GH Upload ==========
+async function ghGet(path, token){
+  const r = await fetch(path, { headers: token? {Authorization:'token '+token} : {} });
+  const t = await r.text();
+  return { status:r.status, text:t, json:()=>{ try{return JSON.parse(t);}catch{return {};}} };
+}
+refs.btnCheckGH.addEventListener('click', async ()=>{
+  const repo = refs.ghRepo.value.trim();
+  const branch = refs.ghBranch.value.trim();
+  const path = refs.ghPath.value.trim();
+  const token = refs.ghToken.value.trim();
+  if (!repo||!branch||!path){ refs.ghLog.textContent='Missing repo/branch/path'; return; }
+  const url = `https://api.github.com/repos/${repo}/contents/${encodeURIComponent(path)}?ref=${encodeURIComponent(branch)}`;
+  try{
+    const r = await ghGet(url, token);
+    refs.ghLog.textContent = `GET ${url}\nStatus: ${r.status}\n\n${r.text}`;
+  }catch(e){ refs.ghLog.textContent = 'Error: ' + (e?.message||String(e)); }
 });
 
-/* JSON import */
+refs.btnPushGH.addEventListener('click', async ()=>{
+  const repo = refs.ghRepo.value.trim();
+  const branch = refs.ghBranch.value.trim();
+  const path = refs.ghPath.value.trim();
+  const token = refs.ghToken.value.trim();
+  const message = refs.ghMessage.value.trim() || 'Update from SEALMAKER';
+  if (!repo||!branch||!path||!token){ refs.ghLog.textContent='Missing repo/branch/path/token'; return; }
+
+  const url = `https://api.github.com/repos/${repo}/contents/${encodeURIComponent(path)}`;
+  let sha=null;
+  try{
+    const r = await ghGet(url+`?ref=${encodeURIComponent(branch)}`, token);
+    if (r.status===200){ sha = r.json().sha; }
+  }catch{}
+
+  // ensure seal_hash per item before upload
+  const arr = await Promise.all(archive.map(async s=>{
+    const copy = structuredCloneSafe(s);
+    const h = await sha256Hex(JSON.stringify(copy));
+    copy.seal_hash = h;
+    return copy;
+  }));
+  const shape = refs.exportShape.value;
+  const payload = shape==='array' ? arr : { seals: arr };
+  const content = base64EncodeUtf8(JSON.stringify(payload, null, 2));
+  const body = { message, content, branch };
+  if (sha) body.sha = sha;
+
+  try{
+    const res = await fetch(url, {
+      method:'PUT',
+      headers:{ 'Authorization':'token '+token, 'Content-Type':'application/json' },
+      body: JSON.stringify(body)
+    });
+    const txt = await res.text();
+    refs.ghLog.textContent = `PUT ${url}\nStatus: ${res.status}\n\n${txt}`;
+  }catch(e){
+    refs.ghLog.textContent = 'Error: ' + (e?.message||String(e));
+  }
+});
+
+// ========== PHASE 3: Circular Link Detector (archive + parsed) ==========
+function detectCycles(){
+  const map = new Map();
+  // include archive and parsed in-progress
+  [...archive, ...parsedSeals].forEach(s=>{
+    if (!s?.id) return;
+    map.set(s.id, (s.linked_seals||[]).filter(Boolean));
+  });
+  const visited=new Set(), stack=new Set();
+  const loops=[];
+  function dfs(node, path){
+    if (!map.has(node)) return;
+    visited.add(node); stack.add(node);
+    for (const nb of map.get(node)){
+      const n = nb;
+      if (!map.has(n)) continue;
+      if (!visited.has(n)) dfs(n, path.concat([n]));
+      else if (stack.has(n)){
+        // loop path: ... -> n (already in stack)
+        const startIndex = path.indexOf(n);
+        const loopPath = startIndex>=0 ? path.slice(startIndex).concat([n]) : path.concat([n]);
+        loops.push(loopPath);
+      }
+    }
+    stack.delete(node);
+  }
+  for (const k of map.keys()) if (!visited.has(k)) dfs(k,[k]);
+
+  if (loops.length){
+    const one = loops[0].join(' ↔ ');
+    refs.cycleWarn.textContent = `⚠️ Loop Detected: ${one}${loops.length>1?` (+${loops.length-1} more)`:''}`;
+  } else {
+    refs.cycleWarn.textContent = 'Links: clean';
+  }
+}
+
+// ========== Import / Paste / Drop ==========
 refs.btnImportJson.addEventListener('click', ()=> refs.jsonFile.click());
 refs.jsonFile.addEventListener('change', async (e)=>{
   const f=e.target.files?.[0]; if (!f) return;
@@ -778,20 +1143,21 @@ refs.jsonFile.addEventListener('change', async (e)=>{
     const arr = Array.isArray(data) ? data : (Array.isArray(data.seals) ? data.seals : []);
     if (!Array.isArray(arr)) throw new Error('Expected array or { seals: [] }');
     let added=0;
-    arr.forEach(s=>{
+    for (const s of arr){
       const v = validateSeal(s, SCHEMA);
-      if (v.ok){ archive.push(s); added++; }
-    });
-    renderArchive(); updateFiltersFromArchive();
+      if (v.ok){
+        // ensure hash on import
+        s.seal_hash = await sha256Hex(JSON.stringify(s));
+        archive.push(s); added++;
+      }
+    }
+    renderArchive(); updateFiltersFromArchive(); detectCycles();
     alert(`Imported ${added} seals into archive.`);
   }catch(err){
     alert('Import failed: '+(err?.message||String(err)));
-  }finally{
-    e.target.value='';
-  }
+  }finally{ e.target.value=''; }
 });
 
-/* TXT import */
 refs.btnImportTxt.addEventListener('click', ()=> refs.txtFile.click());
 refs.txtFile.addEventListener('change', e=> handleTxtFiles(e.target.files));
 async function handleTxtFiles(files){
@@ -802,11 +1168,10 @@ async function handleTxtFiles(files){
     const t = await f.text();
     parsedSeals.push(parseTxtToSeal(t, i++));
   }
-  renderParsed();
+  renderParsed(); detectCycles();
   if (currentIndex===-1 && parsedSeals.length) loadEditor(0);
 }
 
-/* Dropzone */
 refs.dropzone.addEventListener('click', ()=> refs.jsonFile.click());
 refs.dropzone.addEventListener('dragover', e=>{ e.preventDefault(); refs.dropzone.classList.add('dragover'); });
 refs.dropzone.addEventListener('dragleave', ()=> refs.dropzone.classList.remove('dragover'));
@@ -821,14 +1186,14 @@ refs.dropzone.addEventListener('drop', async (e)=>{
       const data = JSON.parse(text);
       const arr = Array.isArray(data) ? data : (Array.isArray(data.seals)? data.seals: []);
       arr.forEach(s=> parsedSeals.push(s));
-      renderParsed();
+      renderParsed(); detectCycles();
       if (currentIndex===-1) loadEditor(0);
     }catch(err){ alert('Dropped JSON failed to parse'); }
   }
   if (txts.length) handleTxtFiles(txts);
 });
 
-/* Paste parsing */
+// Paste parsing
 refs.btnParsePaste.addEventListener('click', ()=>{
   const raw = refs.pasteArea.value||''; if (!raw.trim()) return;
   const t = cleanText(raw);
@@ -837,32 +1202,39 @@ refs.btnParsePaste.addEventListener('click', ()=>{
   else if (refs.splitStrategy.value==='hr') blocks = t.split(/\n-{3,}\n/).map(s=>s.trim()).filter(Boolean);
   let i = parsedSeals.length + 1;
   blocks.forEach(b=> parsedSeals.push(parseTxtToSeal(b, i++)));
-  renderParsed();
+  renderParsed(); detectCycles();
   if (currentIndex===-1) loadEditor(0);
 });
 refs.btnClearPaste.addEventListener('click', ()=> refs.pasteArea.value='');
 
-/* Append/clear parsed */
-refs.btnAppendAll.addEventListener('click', ()=>{
+// Append/clear parsed
+refs.btnAppendAll.addEventListener('click', async ()=>{
   let added=0;
-  parsedSeals.forEach(s=>{ const v=validateSeal(s,SCHEMA); if (v.ok){ archive.push(structuredCloneSafe(s)); added++; } });
-  renderArchive(); updateFiltersFromArchive();
+  for (const s of parsedSeals){
+    const v=validateSeal(s,SCHEMA);
+    if (v.ok){
+      s.seal_hash = await sha256Hex(JSON.stringify(s));
+      archive.push(structuredCloneSafe(s)); added++;
+    }
+  }
+  renderArchive(); updateFiltersFromArchive(); detectCycles();
   alert(`Appended ${added} valid seals to archive.`);
 });
 refs.btnClearParsed.addEventListener('click', ()=>{
   if (!parsedSeals.length) return;
   if (!confirm('Clear all parsed seals?')) return;
-  parsedSeals=[]; renderParsed(); clearEditor();
+  parsedSeals=[]; renderParsed(); clearEditor(); detectCycles();
 });
 
-/* Editor actions */
-refs.btnAppendOne.addEventListener('click', ()=>{
+// Editor actions
+refs.btnAppendOne.addEventListener('click', async ()=>{
   if (currentIndex<0) return;
   const seal = parsedSeals[currentIndex];
   const v=validateSeal(seal,SCHEMA);
   if (!v.ok){ alert('Fix before append:\n- '+v.errors.join('\n- ')); return; }
+  seal.seal_hash = await sha256Hex(JSON.stringify(seal));
   archive.push(structuredCloneSafe(seal));
-  renderArchive(); updateFiltersFromArchive();
+  renderArchive(); updateFiltersFromArchive(); detectCycles();
 });
 refs.btnDownloadOne.addEventListener('click', ()=>{
   if (currentIndex<0) return;
@@ -871,8 +1243,6 @@ refs.btnDownloadOne.addEventListener('click', ()=>{
   if (!v.ok){ alert('Fix before download:\n- '+v.errors.join('\n- ')); return; }
   downloadJSON(seal, safeName(seal.id||seal.title)+'.json');
 });
-
-/* Editor field listeners */
 ['input','change'].forEach(evt=>{
   [refs.f_id, refs.f_title, refs.f_equation, refs.f_tone, refs.f_glyph, refs.f_tags, refs.f_linked, refs.f_quote, refs.f_notes, refs.f_date]
     .forEach(el=> el.addEventListener(evt, refreshPreview));
@@ -882,7 +1252,6 @@ refs.btnAddMedia.addEventListener('click', ()=>{
   const url = refs.mediaUrl.value.trim();
   if (!type || !url) return;
   if (currentIndex<0){
-    // Create ephemeral obj for preview
     const tmp = getEditorData(); tmp.media_links.push({type,url}); setEditorData(tmp);
   }else{
     parsedSeals[currentIndex].media_links.push({type,url});
@@ -891,11 +1260,26 @@ refs.btnAddMedia.addEventListener('click', ()=>{
 });
 refs.btnNow.addEventListener('click', ()=>{ refs.f_date.value = nowISO(); refreshPreview(); });
 
-/* Filters */
-refs.tagFilter.addEventListener('change', renderArchive);
-refs.toneFilter.addEventListener('change', renderArchive);
+// Sorting headers
+$$('thead th[data-sort]').forEach(th=>{
+  th.addEventListener('click', ()=>{
+    const key = th.dataset.sort;
+    if (sortKey===key) sortDir*=-1; else { sortKey=key; sortDir=1; }
+    renderArchive();
+  });
+});
 
-/* Schema controls */
+// Tabs
+refs.tabs.forEach(t=>{
+  t.addEventListener('click', ()=>{
+    refs.tabs.forEach(x=>x.classList.remove('active')); t.classList.add('active');
+    const name=t.dataset.tab;
+    $('#tab-builder').style.display = name==='builder'?'block':'none';
+    $('#tab-extras').style.display = name==='extras'?'block':'none';
+  });
+});
+
+// Schema controls
 refs.schemaText.value = JSON.stringify(DEFAULT_SEAL_SCHEMA, null, 2);
 refs.btnApplySchema.addEventListener('click', ()=>{
   try{
@@ -912,30 +1296,22 @@ refs.btnResetSchema.addEventListener('click', ()=>{
   refreshPreview();
 });
 
-/* Demo Seals */
-refs.btnLoadDemo.addEventListener('click', ()=>{
-  const demo = [
-    { id:'SEAL_014', title:'Bootstrap Lattice', equation:'f(x)=x·log(x)+λ', tone:'bright', glyph:'Ψ', tags:['bootstrap','lattice'], linked_seals:['SEAL_273X'], quote:'"We build the ladder as we climb."', notes:'Initial resonance shard.', media_links:[{type:'image',url:'https://example.com/seal_014.png'}], date: nowISO() },
-    { id:'SEAL_273X', title:'Sovereign Mode', equation:'Σ Δt → autonomy', tone:'dark', glyph:'ᛟ', tags:['sovereign_mode'], linked_seals:['SEAL_014'], quote:'"Hands off, heart on."', notes:'Guardrails loosened in sandboxes.', media_links:[{type:'video',url:'https://example.com/mode.mp4'}], date: nowISO() },
-    { id:'SEAL_AURORA', title:'Aurora Convergence', equation:'∮ E·dl = -dΦB/dt', tone:'neutral', glyph:'✦', tags:['convergence','field'], linked_seals:[], quote:'"Glow where you are."', notes:'Field alignment event.', media_links:[], date: nowISO() }
-  ];
-  parsedSeals.push(...demo);
-  renderParsed();
-  if (currentIndex===-1) loadEditor(0);
+// Export Archive (shape already handled above)
+refs.btnClearArchive.addEventListener('click', ()=>{
+  if (!archive.length) return;
+  if (!confirm('Clear entire archive?')) return;
+  archive = []; renderArchive(); updateFiltersFromArchive(); detectCycles();
 });
 
-/* Toggle matrix rain */
-refs.btnToggleRain.addEventListener('click', ()=>{
-  rain.running = !rain.running;
-  refs.btnToggleRain.textContent = 'Matrix: ' + (rain.running ? 'On' : 'Off');
-});
-
-/* Init */
+// Init
 (function init(){
+  bindHints();
   clearEditor();
   renderParsed();
   renderArchive();
   updateFiltersFromArchive();
+  showRecoveryIfAvailable();
+  console.log('%cSEALMAKER ready', 'color:#00ff88');
 })();
 </script>
 </body>

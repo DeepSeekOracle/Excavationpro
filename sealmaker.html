@@ -1,3 +1,8 @@
+Here you go — a fresh, **SEALMAKER.html** with more polish and a few smart extras. Same dark matrix vibe, runs offline, and packed with helpful upgrades (autosave, restore, multi-filter, fuzzy link suggestions, live markdown, SHA-256, sort/search, duplicate ID alerts, loop detector across archive+parsed, printable scroll, upload via GitHub API, keyboard shortcuts, quick new seal, copy JSON, and a self-contained HTML snapshot export).
+
+Save as `SEALMAKER.html` and open locally.
+
+````html
 <!doctype html>
 <html lang="en">
 <head>
@@ -31,7 +36,7 @@
   }
   #matrix{position:fixed; inset:0; z-index:0; pointer-events:none;}
 
-  .container{position:relative; z-index:1; max-width:1250px; margin:0 auto; padding:22px;}
+  .container{position:relative; z-index:1; max-width:1260px; margin:0 auto; padding:22px;}
   h1,h2,h3{margin:0 0 .5rem}
   .muted{color:var(--muted)}
   .space{height:10px}
@@ -58,8 +63,8 @@
   textarea{min-height:110px; resize:vertical}
   label{display:block; font-size:12px; color:var(--muted); margin:10px 0 6px}
 
-  .row{display:grid; grid-template-columns: 380px 1fr; gap:16px}
-  @media (max-width:1000px){ .row{grid-template-columns:1fr} }
+  .row{display:grid; grid-template-columns: 400px 1fr; gap:16px}
+  @media (max-width:1020px){ .row{grid-template-columns:1fr} }
 
   .dropzone{ border:2px dashed var(--border); border-radius:10px; padding:16px; background:#0b1117; text-align:center; cursor:pointer; }
   .dropzone.dragover{border-color:var(--accent); background:#0c151a}
@@ -75,6 +80,7 @@
   .status-ok{color:#bbf7d0}
   .status-bad{color:#fecaca}
   .hash{font-size:12px; word-break:break-all}
+  .dup { background: rgba(239,68,68,.12); }
 
   details.schema{background:#0b1117; border:1px solid var(--border); border-radius:8px; padding:10px}
   details.schema summary{cursor:pointer; color:var(--muted); margin-bottom:8px}
@@ -87,13 +93,15 @@
   .suggest button{display:block; width:100%; text-align:left; background:transparent; border:none; color:var(--text); padding:6px 10px; cursor:pointer}
   .suggest button:hover{background:rgba(255,255,255,.06)}
 
-  .mini-preview{position:fixed; pointer-events:none; background:var(--panel2); border:1px solid var(--border); border-radius:8px; padding:8px; font-size:12px; display:none; z-index:20; max-width:300px}
+  .mini-preview{position:fixed; pointer-events:none; background:var(--panel2); border:1px solid var(--border); border-radius:8px; padding:8px; font-size:12px; display:none; z-index:20; max-width:320px}
   .mini-preview .title{font-weight:700}
   .mini-preview .line{opacity:.8}
 
   .tabs{display:flex; gap:8px; border-bottom:1px solid var(--border); padding:0 14px 8px}
   .tab{padding:6px 10px; border-radius:6px; cursor:pointer; border:1px solid transparent}
   .tab.active{border-color:var(--border); background:var(--panel2)}
+
+  .toast{position:fixed; right:18px; bottom:18px; background:var(--panel2); border:1px solid var(--border); border-radius:10px; padding:10px 12px; z-index:9999; display:none}
 </style>
 </head>
 <body>
@@ -102,6 +110,7 @@
   <div id="tooltip" class="tooltip"></div>
   <div id="miniPreview" class="mini-preview"></div>
   <div id="suggestBox" class="suggest"></div>
+  <div id="toast" class="toast"></div>
 
   <div class="container">
     <!-- PHASE 1: Recovery Banner -->
@@ -128,6 +137,7 @@
           <button id="btnImportJson" class="btn">Import .json</button>
           <button id="btnImportTxt" class="btn">Import .txt</button>
           <button id="btnLoadDemo" class="btn">Load Demo Seals</button>
+          <button id="btnNewSeal" class="btn">Quick New Seal</button>
           <div class="sep"></div>
           <select id="exportShape" title="Export format">
             <option value="object" selected>{ "seals": [...] }</option>
@@ -135,14 +145,17 @@
           </select>
           <button id="btnExportArchive" class="btn btn-accent" disabled>Export lygo-data-two.json</button>
           <button id="btnExportPDF" class="btn">Export PDF (Scroll)</button>
+          <button id="btnExportSnapshot" class="btn">Export Self-Contained .html</button>
           <button id="btnClearArchive" class="btn btn-danger" disabled>Clear Archive</button>
           <div class="sep"></div>
           <button id="btnToggleRain" class="btn" title="Toggle Matrix Rain">Matrix: On</button>
+          <button id="btnManualSave" class="btn" title="Save archive to localStorage (Ctrl+S)">Save</button>
         </div>
       </div>
       <div class="panel-body" style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
         <span class="chip">Autosave: <span id="autosaveStatus" class="muted">idle</span></span>
-        <span class="chip">PHASES: 1 ✓ 2 ✓ 3 ✓</span>
+        <span id="cycleWarn" class="chip">Links: clean</span>
+        <span id="dupWarn" class="chip">IDs: unique</span>
       </div>
     </header>
 
@@ -166,8 +179,8 @@
               </div>
             </div>
             <div class="panel-body">
-              <!-- PHASE 1: Multi-select Filters -->
-              <div class="grid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <!-- Multi-select Filters + Search -->
+              <div class="grid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
                 <div>
                   <label>Tag filter (multi)</label>
                   <select id="tagFilter" multiple size="6" title="Filter archive by any selected tag"></select>
@@ -179,6 +192,8 @@
                   <div class="toolbar"><button id="btnClearToneFilter" class="btn">Clear</button></div>
                 </div>
               </div>
+              <label>Search (ID / Title / Equation / Notes)</label>
+              <input id="searchInput" type="search" placeholder="Search…" />
 
               <div class="space"></div>
               <div id="dropzone" class="dropzone">Drag & drop .json/.txt files here</div>
@@ -204,12 +219,13 @@
               <h3>Seal Editor</h3>
               <div class="toolbar">
                 <span id="entryStatus" class="chip">No seal selected</span>
+                <button id="btnNormalize" class="btn">Normalize</button>
                 <button id="btnAppendOne" class="btn" disabled>Append to Archive</button>
                 <button id="btnDownloadOne" class="btn" disabled>Download Seal .json</button>
               </div>
             </div>
             <div class="panel-body">
-              <div class="hintbar" id="hintbar">Hover or focus a field to see hints.</div>
+              <div class="hintbar" id="hintbar">Hover or focus a field to see hints. IDs auto-uppercase.</div>
 
               <div class="grid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
                 <div>
@@ -257,9 +273,13 @@
                   <input id="f_tags" type="text" placeholder="bootstrap, sovereign_mode" />
                 </div>
                 <div style="position:relative">
-                  <!-- PHASE 2: Autocomplete -->
-                  <label data-hint="Comma-separated seal IDs; suggestions from archive appear as you type">linked_seals</label>
+                  <label data-hint="Comma-separated seal IDs; suggestions from archive (and optionally parsed)">linked_seals</label>
                   <input id="f_linked" type="text" placeholder="SEAL_014, SEAL_273X" autocomplete="off" />
+                  <div class="toolbar" style="margin-top:6px;">
+                    <label style="display:flex; align-items:center; gap:6px; font-size:12px; color:var(--muted);">
+                      <input id="cbSuggestParsed" type="checkbox" /> include parsed IDs in suggestions
+                    </label>
+                  </div>
                 </div>
               </div>
 
@@ -269,7 +289,6 @@
                   <textarea id="f_quote" placeholder="&quot;Short pull-quote.&quot;"></textarea>
                 </div>
                 <div>
-                  <!-- PHASE 2: Markdown Preview -->
                   <label data-hint="Long notes in Markdown. Supports **bold**, _italics_, `code`, images and links.">notes</label>
                   <textarea id="f_notes" placeholder="Markdown-supported notes"></textarea>
                 </div>
@@ -293,12 +312,16 @@
               </div>
 
               <div class="space"></div>
-              <h3>JSON Preview</h3>
+              <div class="toolbar" style="justify-content:space-between; align-items:center;">
+                <div><h3>JSON Preview</h3></div>
+                <div class="toolbar">
+                  <button id="btnCopyJson" class="btn">Copy JSON</button>
+                </div>
+              </div>
               <pre id="jsonPreview" class="json">{}</pre>
               <div class="hint">
                 <span id="validBadge" class="status-bad">invalid</span> • Live validation
               </div>
-              <!-- PHASE 2: SHA field -->
               <label>SHA-256</label>
               <input id="hashField" type="text" readonly placeholder="…" />
 
@@ -335,8 +358,7 @@
           <div class="panel-header">
             <h3>Archive</h3>
             <div class="toolbar">
-              <!-- PHASE 3: Loop detector covers archive + parsed -->
-              <span id="cycleWarn" class="chip">Links: clean</span>
+              <span class="chip">Sort columns • Multi-filter • Search</span>
             </div>
           </div>
           <div class="panel-body" style="padding-top:0">
@@ -358,7 +380,6 @@
         </section>
       </div>
 
-      <!-- PHASE 3: Extras -->
       <div class="panel-body" id="tab-extras" style="display:none;">
         <div class="grid" style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
           <section class="panel">
@@ -414,7 +435,7 @@
   </div>
 
 <script>
-// ========== Matrix Rain ==========
+// ================== Matrix Rain (Quantum vibe) ==================
 const rain = { running:true, started:false, cols:[], size:14, w:0, h:0, ctx:null, raf:0 };
 function initRain(){
   const c = document.getElementById('matrix');
@@ -449,7 +470,7 @@ document.getElementById('btnToggleRain').addEventListener('click', e=>{
   rain.running=!rain.running; e.target.textContent='Matrix: '+(rain.running?'On':'Off');
 });
 
-// ========== Schema ==========
+// ================== Schema ==================
 const DEFAULT_SEAL_SCHEMA = {
   "$schema":"http://json-schema.org/draft-07/schema#",
   "title":"LYRA_SEAL_ENTRY",
@@ -473,58 +494,51 @@ const DEFAULT_SEAL_SCHEMA = {
       }
     },
     "date":{"type":"string","format":"date-time"},
-    "seal_hash":{"type":"string"} /* optional */
+    "seal_hash":{"type":"string"}
   },
   "required":["id","title","date"]
 };
 let SCHEMA = JSON.parse(JSON.stringify(DEFAULT_SEAL_SCHEMA));
 
-// ========== Refs ==========
+// ================== Refs & State ==================
 const $ = (s,r=document)=>r.querySelector(s);
 const $$ = (s,r=document)=>Array.from(r.querySelectorAll(s));
-
 const refs = {
-  // header
   jsonFile: $('#jsonFile'), txtFile: $('#txtFile'),
   btnImportJson: $('#btnImportJson'), btnImportTxt: $('#btnImportTxt'),
-  btnLoadDemo: $('#btnLoadDemo'), btnExportArchive: $('#btnExportArchive'), btnClearArchive: $('#btnClearArchive'),
-  exportShape: $('#exportShape'), archiveCount: $('#archiveCount'), btnExportPDF: $('#btnExportPDF'),
-  btnToggleRain: $('#btnToggleRain'),
-  // autosave
+  btnLoadDemo: $('#btnLoadDemo'), btnNewSeal: $('#btnNewSeal'),
+  btnExportArchive: $('#btnExportArchive'), btnExportPDF: $('#btnExportPDF'), btnExportSnapshot: $('#btnExportSnapshot'),
+  btnClearArchive: $('#btnClearArchive'), exportShape: $('#exportShape'),
+  btnToggleRain: $('#btnToggleRain'), btnManualSave: $('#btnManualSave'),
   autosaveStatus: $('#autosaveStatus'),
-  // recovery
   recovery: $('#recovery'), recoveryMeta: $('#recoveryMeta'), btnRecover: $('#btnRecover'),
   btnDismissRecovery: $('#btnDismissRecovery'), btnClearSavedSession: $('#btnClearSavedSession'),
-  // tabs
   tabs: $$('.tab'),
-  // filters/import
   dropzone: $('#dropzone'), pasteArea: $('#pasteArea'), splitStrategy: $('#splitStrategy'),
   btnParsePaste: $('#btnParsePaste'), btnClearPaste: $('#btnClearPaste'), btnAppendAll: $('#btnAppendAll'), btnClearParsed: $('#btnClearParsed'),
   parsedCount: $('#parsedCount'), parsedCount2: $('#parsedCount2'),
-  tagFilter: $('#tagFilter'), toneFilter: $('#toneFilter'), btnClearTagFilter: $('#btnClearTagFilter'), btnClearToneFilter: $('#btnClearToneFilter'),
-  // editor
-  entryStatus: $('#entryStatus'), f_id: $('#f_id'), f_title: $('#f_title'), f_equation: $('#f_equation'), f_tone: $('#f_tone'),
-  f_glyph: $('#f_glyph'), f_tags: $('#f_tags'), f_linked: $('#f_linked'), f_quote: $('#f_quote'), f_notes: $('#f_notes'),
+  tagFilter: $('#tagFilter'), toneFilter: $('#toneFilter'),
+  btnClearTagFilter: $('#btnClearTagFilter'), btnClearToneFilter: $('#btnClearToneFilter'),
+  searchInput: $('#searchInput'),
+  entryStatus: $('#entryStatus'), f_id: $('#f_id'), f_title: $('#f_title'),
+  f_equation: $('#f_equation'), f_tone: $('#f_tone'), f_glyph: $('#f_glyph'),
+  f_tags: $('#f_tags'), f_linked: $('#f_linked'), cbSuggestParsed: $('#cbSuggestParsed'),
+  f_quote: $('#f_quote'), f_notes: $('#f_notes'),
   f_date: $('#f_date'), mediaList: $('#mediaList'), mediaType: $('#mediaType'), mediaUrl: $('#mediaUrl'), btnAddMedia: $('#btnAddMedia'),
-  btnNow: $('#btnNow'), btnAppendOne: $('#btnAppendOne'), btnDownloadOne: $('#btnDownloadOne'),
+  btnNow: $('#btnNow'), btnNormalize: $('#btnNormalize'), btnAppendOne: $('#btnAppendOne'), btnDownloadOne: $('#btnDownloadOne'),
   jsonPreview: $('#jsonPreview'), validBadge: $('#validBadge'), notesPreview: $('#notesPreview'), hashField: $('#hashField'),
-  hintbar: $('#hintbar'),
-  // tables
-  parsedBody: $('#parsedBody'), archiveBody: $('#archiveBody'), cycleWarn: $('#cycleWarn'),
-  // extras / GH
+  btnCopyJson: $('#btnCopyJson'),
+  parsedBody: $('#parsedBody'), archiveBody: $('#archiveBody'),
+  schemaText: $('#schemaText'), btnApplySchema: $('#btnApplySchema'), btnResetSchema: $('#btnResetSchema'), schemaStatus: $('#schemaStatus'),
+  cycleWarn: $('#cycleWarn'), dupWarn: $('#dupWarn'),
   ghRepo: $('#ghRepo'), ghBranch: $('#ghBranch'), ghPath: $('#ghPath'), ghMessage: $('#ghMessage'), ghToken: $('#ghToken'),
   btnPushGH: $('#btnPushGH'), btnCheckGH: $('#btnCheckGH'), ghLog: $('#ghLog'),
-  // schema
-  schemaText: $('#schemaText'), btnApplySchema: $('#btnApplySchema'), btnResetSchema: $('#btnResetSchema'), schemaStatus: $('#schemaStatus'),
 };
-
-// ========== State ==========
 let parsedSeals = [];
 let archive = [];
 let currentIndex = -1;
-let sortKey='id', sortDir=1; // 1 asc, -1 desc
+let sortKey='id', sortDir=1;
 
-// ========== Helpers ==========
 function nowISO(){ return new Date().toISOString(); }
 function cleanText(t){ return (t||'').replace(/^\uFEFF/,'').replace(/\r\n?/g,'\n').trim(); }
 function firstNonEmptyLine(t){ return (t.split('\n').map(s=>s.trim()).find(Boolean)||'').trim(); }
@@ -535,8 +549,9 @@ function structuredCloneSafe(x){ return window.structuredClone ? window.structur
 function isISO(s){ return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+\-]\d{2}:\d{2})$/.test(s||''); }
 function isURI(s){ try{ const u=new URL(s); return !!u.protocol && !!u.host; }catch{ return false; } }
 function base64EncodeUtf8(str){ return btoa(unescape(encodeURIComponent(str))); }
+function showToast(msg){ const t=$('#toast'); t.textContent=msg; t.style.display='block'; setTimeout(()=> t.style.display='none', 1700); }
 
-// ========== PHASE 1: LocalStorage Autosave + Restore ==========
+// ================== PHASE 1: LocalStorage Autosave + Restore ==================
 const LS_KEY='SEAL_ARCHIVE_LYRA';
 function saveArchiveLS(){
   try{
@@ -548,43 +563,20 @@ function saveArchiveLS(){
   }
 }
 function loadArchiveFromLS(){
-  try{
-    const raw = localStorage.getItem(LS_KEY);
-    if (!raw) return null;
-    return JSON.parse(raw);
-  }catch{ return null; }
+  try{ const raw = localStorage.getItem(LS_KEY); return raw? JSON.parse(raw): null; }catch{ return null; }
 }
 function showRecoveryIfAvailable(){
   const snap = loadArchiveFromLS();
   if (snap && Array.isArray(snap.seals) && snap.seals.length){
     refs.recoveryMeta.textContent = `Saved at ${snap.savedAt}, entries: ${snap.seals.length}`;
     refs.recovery.style.display = 'block';
-    refs.btnRecover.onclick = ()=>{ archive = snap.seals; renderArchive(); updateFiltersFromArchive(); detectCycles(); refs.recovery.style.display='none'; };
+    refs.btnRecover.onclick = ()=>{ archive = snap.seals; renderArchive(); updateFiltersFromArchive(); detectCycles(); detectDuplicates(); refs.recovery.style.display='none'; showToast('Session restored'); };
     refs.btnDismissRecovery.onclick = ()=> refs.recovery.style.display='none';
-    refs.btnClearSavedSession.onclick = ()=>{ localStorage.removeItem(LS_KEY); refs.recovery.style.display='none'; };
+    refs.btnClearSavedSession.onclick = ()=>{ localStorage.removeItem(LS_KEY); refs.recovery.style.display='none'; showToast('Saved session cleared'); };
   }
 }
-console.log('PHASE 1 ready');
 
-// ========== PHASE 1: Multi-select filters ==========
-function getSelectedValues(sel){ return Array.from(sel.selectedOptions).map(o=>o.value); }
-function updateFiltersFromArchive(){
-  const allTags = new Set(); const allTones = new Set();
-  archive.forEach(s=>{
-    (s.tags||[]).forEach(t=> allTags.add(t));
-    if (s.tone) allTones.add(s.tone);
-  });
-  const tagVals = Array.from(allTags).sort();
-  const toneVals = Array.from(allTones).sort();
-  refs.tagFilter.innerHTML = tagVals.map(t=>`<option value="${escapeAttr(t)}">${escapeHtml(t)}</option>`).join('');
-  refs.toneFilter.innerHTML = toneVals.map(t=>`<option value="${escapeAttr(t)}">${escapeHtml(t)}</option>`).join('');
-}
-refs.tagFilter.addEventListener('change', renderArchive);
-refs.toneFilter.addEventListener('change', renderArchive);
-$('#btnClearTagFilter').addEventListener('click', ()=>{ Array.from(refs.tagFilter.options).forEach(o=>o.selected=false); renderArchive(); });
-$('#btnClearToneFilter').addEventListener('click', ()=>{ Array.from(refs.toneFilter.options).forEach(o=>o.selected=false); renderArchive(); });
-
-// ========== Validation ==========
+// ================== Validation ==================
 function validateSeal(seal, schema=SCHEMA){
   const errors=[];
   if (!seal || typeof seal!=='object') return {ok:false, errors:['Seal is not an object']};
@@ -628,7 +620,7 @@ function validateSeal(seal, schema=SCHEMA){
   return {ok: errors.length===0, errors};
 }
 
-// ========== Parsing TXT → Seal ==========
+// ================== Parsing TXT → Seal ==================
 function parseTxtToSeal(raw, autoIndex=1){
   const text = cleanText(raw);
   const lines = text.split('\n');
@@ -665,7 +657,57 @@ function parseTxtToSeal(raw, autoIndex=1){
   return { id, title, equation, tone, glyph, tags, linked_seals: linked, quote, notes, media_links, date };
 }
 
-// ========== Editor ==========
+// ================== Markdown Renderer (offline) ==================
+function mdRender(src){
+  let s = src || '';
+  s = s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  s = s.replace(/```([\s\S]*?)```/g, (_,code)=> `<pre><code>${code.replace(/&/g,'&amp;')}</code></pre>`);
+  s = s.replace(/^###### (.*)$/gm,'<h6>$1</h6>')
+       .replace(/^##### (.*)$/gm,'<h5>$1</h5>')
+       .replace(/^#### (.*)$/gm,'<h4>$1</h4>')
+       .replace(/^### (.*)$/gm,'<h3>$1</h3>')
+       .replace(/^## (.*)$/gm,'<h2>$1</h2>')
+       .replace(/^# (.*)$/gm,'<h1>$1</h1>');
+  s = s.replace(/`([^`]+)`/g,'<code>$1</code>')
+       .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
+       .replace(/_([^_]+)_/g,'<em>$1</em>');
+  s = s.replace(/!\[([^\]]*)\]\(([^)]+)\)/g,'<img alt="$1" src="$2" style="max-width:100%;">');
+  s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');
+  s = s.replace(/^(?:-|\*) (.*)$/gm,'<li>$1</li>');
+  s = s.replace(/(<li>[\s\S]*?<\/li>)/g,'<ul>$1</ul>');
+  s = s.replace(/^(?!<h\d|<ul|<pre|<p|<img|<blockquote)(.+)$/gm,'<p>$1</p>');
+  return s;
+}
+
+// ================== SHA-256 ==================
+async function sha256Hex(str){
+  const buf = new TextEncoder().encode(str);
+  const hash = await crypto.subtle.digest('SHA-256', buf);
+  return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+// ================== Preview & Hash ==================
+let hashTimer=0;
+function refreshPreview(){
+  if (currentIndex>=0) parsedSeals[currentIndex] = getEditorData();
+  const obj = currentIndex>=0 ? parsedSeals[currentIndex] : getEditorData();
+  // auto uppercase ID
+  if (obj.id) obj.id = obj.id.toUpperCase();
+  const v = validateSeal(obj, SCHEMA);
+  refs.jsonPreview.textContent = JSON.stringify(obj, null, 2) + (v.ok?'':`\n\n// Issues:\n// - ${v.errors.join('\n// - ')}`);
+  refs.validBadge.textContent = v.ok ? 'valid' : 'invalid';
+  refs.validBadge.className = v.ok ? 'status-ok' : 'status-bad';
+  clearTimeout(hashTimer);
+  hashTimer = setTimeout(async ()=>{
+    const h = await sha256Hex(JSON.stringify(obj));
+    refs.hashField.value = h;
+  }, 80);
+  refs.notesPreview.innerHTML = mdRender(obj.notes||'');
+  detectCycles();
+  detectDuplicates();
+}
+
+// ================== Editor ==================
 function getEditorData(){
   const tags = refs.f_tags.value.split(',').map(s=>s.trim()).filter(Boolean);
   const linked = refs.f_linked.value.split(',').map(s=>s.trim()).filter(Boolean);
@@ -676,13 +718,13 @@ function getEditorData(){
     if (type && url) media.push({type, url});
   });
   return {
-    id: refs.f_id.value.trim(),
+    id: refs.f_id.value.trim().toUpperCase(),
     title: refs.f_title.value.trim(),
     equation: refs.f_equation.value.trim(),
     tone: refs.f_tone.value.trim(),
     glyph: refs.f_glyph.value.trim(),
-    tags,
-    linked_seals: linked,
+    tags: Array.from(new Set(tags)),
+    linked_seals: Array.from(new Set(linked)),
     quote: refs.f_quote.value,
     notes: refs.f_notes.value,
     media_links: media,
@@ -690,7 +732,7 @@ function getEditorData(){
   };
 }
 function setEditorData(e){
-  refs.f_id.value = e.id || '';
+  refs.f_id.value = (e.id || '').toUpperCase();
   refs.f_title.value = e.title || '';
   refs.f_equation.value = e.equation || '';
   refs.f_tone.value = e.tone || '';
@@ -733,65 +775,105 @@ function renderMedia(list){
     refs.mediaList.appendChild(row);
   });
 }
+refs.btnNormalize.addEventListener('click', ()=>{
+  const e = getEditorData();
+  e.id = (e.id||'').toUpperCase().replace(/[^A-Z0-9_\-]/g,'_');
+  e.tags = Array.from(new Set((e.tags||[]).map(t=>t.trim()).filter(Boolean)));
+  e.linked_seals = Array.from(new Set((e.linked_seals||[]).map(t=>t.trim().toUpperCase()).filter(Boolean)));
+  setEditorData(e);
+  showToast('Normalized');
+});
 
-// ========== PHASE 2: Markdown Renderer (offline) ==========
-function mdRender(src){
-  let s = src || '';
-  s = s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  // fenced code first
-  s = s.replace(/```([\s\S]*?)```/g, (_,code)=> `<pre><code>${code.replace(/&/g,'&amp;')}</code></pre>`);
-  // headings
-  s = s.replace(/^###### (.*)$/gm,'<h6>$1</h6>')
-       .replace(/^##### (.*)$/gm,'<h5>$1</h5>')
-       .replace(/^#### (.*)$/gm,'<h4>$1</h4>')
-       .replace(/^### (.*)$/gm,'<h3>$1</h3>')
-       .replace(/^## (.*)$/gm,'<h2>$1</h2>')
-       .replace(/^# (.*)$/gm,'<h1>$1</h1>');
-  // inline
-  s = s.replace(/`([^`]+)`/g,'<code>$1</code>')
-       .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
-       .replace(/_([^_]+)_/g,'<em>$1</em>');
-  // images then links
-  s = s.replace(/!\[([^\]]*)\]\(([^)]+)\)/g,'<img alt="$1" src="$2" style="max-width:100%;">');
-  s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');
-  // lists
-  s = s.replace(/^(?:-|\*) (.*)$/gm,'<li>$1</li>');
-  s = s.replace(/(<li>[\s\S]*?<\/li>)/g,'<ul>$1</ul>');
-  // paragraphs
-  s = s.replace(/^(?!<h\d|<ul|<pre|<p|<img|<blockquote)(.+)$/gm,'<p>$1</p>');
-  return s;
+// ================== Linked IDs Autocomplete ==================
+const suggestBox = document.getElementById('suggestBox');
+function updateLinkedSuggest(){
+  const includeParsed = refs.cbSuggestParsed.checked;
+  const fromArchive = archive.map(s=>s.id).filter(Boolean);
+  const fromParsed = includeParsed ? parsedSeals.map(s=>s.id).filter(Boolean) : [];
+  const source = Array.from(new Set([...fromArchive, ...fromParsed]));
+  const input = refs.f_linked;
+
+  input.oninput = ()=>{
+    const val = input.value;
+    const parts = val.split(',');
+    const lastRaw = parts[parts.length-1].trim().toUpperCase();
+    if (!lastRaw){ suggestBox.style.display='none'; return; }
+    const matches = source.filter(id=> id && id.toUpperCase().includes(lastRaw)).slice(0,20);
+    if (!matches.length){ suggestBox.style.display='none'; return; }
+    const rect = input.getBoundingClientRect();
+    suggestBox.style.left = rect.left + 'px';
+    suggestBox.style.top = (rect.bottom + window.scrollY + 4) + 'px';
+    suggestBox.style.minWidth = rect.width + 'px';
+    suggestBox.innerHTML = matches.map(m=>`<button type="button" data-id="${escapeAttr(m)}">${escapeHtml(m)}</button>`).join('');
+    suggestBox.style.display='block';
+    $$('button', suggestBox).forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        parts[parts.length-1] = ' ' + btn.dataset.id;
+        input.value = parts.join(',').replace(/^,/, '');
+        suggestBox.style.display='none';
+        refreshPreview();
+      });
+    });
+  };
+  input.addEventListener('blur', ()=> setTimeout(()=> suggestBox.style.display='none', 150));
 }
-console.log('PHASE 2 ready');
+refs.cbSuggestParsed.addEventListener('change', updateLinkedSuggest);
 
-// ========== PHASE 2: SHA-256 ==========
-async function sha256Hex(str){
-  const buf = new TextEncoder().encode(str);
-  const hash = await crypto.subtle.digest('SHA-256', buf);
-  return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('');
+// ================== Hints (tooltips) ==================
+const tooltip = document.getElementById('tooltip');
+function bindHints(){
+  const hintbar = $('#hintbar');
+  $$('label[data-hint]').forEach(label=>{
+    const hint = label.getAttribute('data-hint');
+    const input = label.nextElementSibling;
+    if (!input) return;
+    function showTip(ev){
+      hintbar.textContent = hint;
+      tooltip.textContent = hint;
+      tooltip.style.display='block';
+      tooltip.style.left = (ev.pageX + 12) + 'px';
+      tooltip.style.top = (ev.pageY + 12) + 'px';
+    }
+    function moveTip(ev){
+      tooltip.style.left = (ev.pageX + 12) + 'px';
+      tooltip.style.top = (ev.pageY + 12) + 'px';
+    }
+    function hideTip(){ tooltip.style.display='none'; }
+    input.addEventListener('mouseenter', showTip);
+    input.addEventListener('mousemove', moveTip);
+    input.addEventListener('mouseleave', hideTip);
+    input.addEventListener('focus', (ev)=> showTip(ev));
+    input.addEventListener('blur', hideTip);
+  });
 }
 
-// ========== Preview & Hash ==========
-let hashTimer=0;
-function refreshPreview(){
-  if (currentIndex>=0) parsedSeals[currentIndex] = getEditorData();
-  const obj = currentIndex>=0 ? parsedSeals[currentIndex] : getEditorData();
-  const v = validateSeal(obj, SCHEMA);
-  refs.jsonPreview.textContent = JSON.stringify(obj, null, 2) + (v.ok?'':`\n\n// Issues:\n// - ${v.errors.join('\n// - ')}`);
-  refs.validBadge.textContent = v.ok ? 'valid' : 'invalid';
-  refs.validBadge.className = v.ok ? 'status-ok' : 'status-bad';
-  // hash (debounced)
-  clearTimeout(hashTimer);
-  hashTimer = setTimeout(async ()=>{
-    const h = await sha256Hex(JSON.stringify(obj));
-    refs.hashField.value = h;
-  }, 80);
-  // markdown notes
-  refs.notesPreview.innerHTML = mdRender(obj.notes||'');
-  // update loop detector to include parsed too
-  detectCycles();
+// ================== Sorting, Filters, Search ==================
+function getSelectedValues(sel){ return Array.from(sel.selectedOptions).map(o=>o.value); }
+function getFilters(){
+  return {
+    tags: getSelectedValues(refs.tagFilter),
+    tones: getSelectedValues(refs.toneFilter),
+    q: (refs.searchInput.value||'').toLowerCase().trim()
+  };
 }
+function updateFiltersFromArchive(){
+  const allTags = new Set(); const allTones = new Set();
+  archive.forEach(s=>{
+    (s.tags||[]).forEach(t=> allTags.add(t));
+    if (s.tone) allTones.add(s.tone);
+  });
+  const tagVals = Array.from(allTags).sort();
+  const toneVals = Array.from(allTones).sort();
+  refs.tagFilter.innerHTML = tagVals.map(t=>`<option value="${escapeAttr(t)}">${escapeHtml(t)}</option>`).join('');
+  refs.toneFilter.innerHTML = toneVals.map(t=>`<option value="${escapeAttr(t)}">${escapeHtml(t)}</option>`).join('');
+}
+refs.tagFilter.addEventListener('change', renderArchive);
+refs.toneFilter.addEventListener('change', renderArchive);
+refs.searchInput.addEventListener('input', renderArchive);
+refs.btnClearTagFilter.addEventListener('click', ()=>{ Array.from(refs.tagFilter.options).forEach(o=>o.selected=false); renderArchive(); });
+refs.btnClearToneFilter.addEventListener('click', ()=>{ Array.from(refs.toneFilter.options).forEach(o=>o.selected=false); renderArchive(); });
 
-// ========== Parsed & Archive Rendering ==========
+// ================== Parsed & Archive Rendering ==================
 function renderParsed(){
   refs.parsedCount.textContent = String(parsedSeals.length);
   refs.parsedCount2.textContent = String(parsedSeals.length);
@@ -820,14 +902,14 @@ function renderParsed(){
       const copy = structuredCloneSafe(e);
       copy.id = (e.id||'SEAL') + '_COPY';
       parsedSeals.splice(idx+1,0,copy);
-      renderParsed(); detectCycles();
+      renderParsed(); detectCycles(); detectDuplicates();
     });
     tr.querySelector('[data-act="dl"]').addEventListener('click',()=> downloadJSON(e, safeName(e.id||e.title)+'.json'));
     tr.querySelector('[data-act="rm"]').addEventListener('click',()=>{
       parsedSeals.splice(idx,1);
       if (currentIndex===idx){ clearEditor(); }
       else if (currentIndex>idx) currentIndex--;
-      renderParsed(); detectCycles();
+      renderParsed(); detectCycles(); detectDuplicates();
     });
     tr.addEventListener('mousemove', (ev)=> showMiniPreview(ev, e));
     tr.addEventListener('mouseleave', hideMiniPreview);
@@ -835,20 +917,13 @@ function renderParsed(){
   });
 }
 
-function getSelectedFilterValues(){
-  return {
-    tags: getSelectedValues(refs.tagFilter),
-    tones: getSelectedValues(refs.toneFilter)
-  };
-}
-
 function sortArchive(list){
   const arr = list.slice();
   arr.sort((a,b)=>{
     let va, vb;
-    if (sortKey==='id'){ va = a.id||''; vb=b.id||''; return va.localeCompare(vb)*sortDir; }
-    if (sortKey==='title'){ va = a.title||''; vb=b.title||''; return va.localeCompare(vb)*sortDir; }
-    if (sortKey==='tone'){ va = a.tone||''; vb=b.tone||''; return va.localeCompare(vb)*sortDir; }
+    if (sortKey==='id'){ va = (a.id||''); vb=(b.id||''); return va.localeCompare(vb)*sortDir; }
+    if (sortKey==='title'){ va = (a.title||''); vb=(b.title||''); return va.localeCompare(vb)*sortDir; }
+    if (sortKey==='tone'){ va = (a.tone||''); vb=(b.tone||''); return va.localeCompare(vb)*sortDir; }
     if (sortKey==='tags'){ va=(a.tags||[]).length; vb=(b.tags||[]).length; return (va-vb)*sortDir; }
     if (sortKey==='linked'){ va=(a.linked_seals||[]).length; vb=(b.linked_seals||[]).length; return (va-vb)*sortDir; }
     if (sortKey==='date'){ va=Date.parse(a.date||0)||0; vb=Date.parse(b.date||0)||0; return (va-vb)*sortDir; }
@@ -862,13 +937,15 @@ function renderArchive(){
   refs.btnExportArchive.disabled = archive.length===0;
   refs.btnClearArchive.disabled = archive.length===0;
 
-  const {tags, tones} = getSelectedFilterValues();
-  const pass = s => {
-    const passTag = !tags.length || (s.tags||[]).some(t=> tags.includes(t));
-    const passTone = !tones.length || tones.includes(s.tone||'');
-    return passTag && passTone;
-  };
-  const filtered = archive.filter(pass);
+  const f = getFilters();
+  const filtered = archive.filter(s=>{
+    const passTag = !f.tags.length || (s.tags||[]).some(t=> f.tags.includes(t));
+    const passTone = !f.tones.length || f.tones.includes(s.tone||'');
+    const text = (s.id||'')+' '+(s.title||'')+' '+(s.equation||'')+' '+(s.notes||'');
+    const passQ = !f.q || text.toLowerCase().includes(f.q);
+    return passTag && passTone && passQ;
+  });
+
   const sorted = sortArchive(filtered);
 
   const headCells = $$('thead th[data-sort]');
@@ -877,9 +954,13 @@ function renderArchive(){
     if (th.dataset.sort===sortKey){ th.classList.add('sorting'); th.querySelector('.dir').textContent = sortDir>0?'▲':'▼'; }
   });
 
+  // Duplicate IDs map for row highlight
+  const dupSet = getDuplicateIdSet();
+
   refs.archiveBody.innerHTML='';
   sorted.forEach((e)=>{
     const tr=document.createElement('tr');
+    if (dupSet.has(e.id)) tr.classList.add('dup');
     tr.innerHTML=`
       <td>${escapeHtml(e.id||'')}</td>
       <td>${escapeHtml(e.title||'')}</td>
@@ -895,7 +976,7 @@ function renderArchive(){
     tr.querySelector('[data-act="dl"]').addEventListener('click',()=> downloadJSON(e, safeName(e.id||e.title)+'.json'));
     tr.querySelector('[data-act="rm"]').addEventListener('click',()=>{
       const i = archive.indexOf(e);
-      if (i>-1){ archive.splice(i,1); renderArchive(); updateFiltersFromArchive(); detectCycles(); saveArchiveLS(); }
+      if (i>-1){ archive.splice(i,1); renderArchive(); updateFiltersFromArchive(); detectCycles(); detectDuplicates(); saveArchiveLS(); showToast('Removed'); }
     });
     tr.addEventListener('mousemove', (ev)=> showMiniPreview(ev, e));
     tr.addEventListener('mouseleave', hideMiniPreview);
@@ -905,7 +986,7 @@ function renderArchive(){
   saveArchiveLS();
 }
 
-// ========== Mini Preview ==========
+// ================== Mini Preview ==================
 const mini = document.getElementById('miniPreview');
 function showMiniPreview(ev, s){
   mini.innerHTML = `
@@ -920,94 +1001,69 @@ function showMiniPreview(ev, s){
 }
 function hideMiniPreview(){ mini.style.display='none'; }
 
-// ========== PHASE 2: Autocomplete (from archive IDs) ==========
-const suggestBox = document.getElementById('suggestBox');
-function updateLinkedSuggest(){
-  const source = Array.from(new Set(archive.map(s=>s.id).filter(Boolean)));
-  const input = refs.f_linked;
-  input.oninput = ()=>{
-    const val = input.value;
-    const parts = val.split(',');
-    const lastRaw = parts[parts.length-1].trim().toUpperCase();
-    if (!lastRaw){ suggestBox.style.display='none'; return; }
-    const matches = source.filter(id=> id && id.toUpperCase().includes(lastRaw)).slice(0,20);
-    if (!matches.length){ suggestBox.style.display='none'; return; }
-    const rect = input.getBoundingClientRect();
-    suggestBox.style.left = rect.left + 'px';
-    suggestBox.style.top = (rect.bottom + window.scrollY + 4) + 'px';
-    suggestBox.style.minWidth = rect.width + 'px';
-    suggestBox.innerHTML = matches.map(m=>`<button type="button" data-id="${escapeAttr(m)}">${escapeHtml(m)}</button>`).join('');
-    suggestBox.style.display='block';
-    $$('button', suggestBox).forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        parts[parts.length-1] = ' ' + btn.dataset.id;
-        input.value = parts.join(',').replace(/^,/, '');
-        suggestBox.style.display='none';
-        refreshPreview();
-      });
-    });
-  };
-  input.addEventListener('blur', ()=> setTimeout(()=> suggestBox.style.display='none', 150));
+// ================== Cycles & Duplicates ==================
+function detectCycles(){
+  const map = new Map();
+  [...archive, ...parsedSeals].forEach(s=>{
+    if (!s?.id) return;
+    map.set(s.id.toUpperCase(), (s.linked_seals||[]).map(x=>x.toUpperCase()).filter(Boolean));
+  });
+  const visited=new Set(), stack=new Set();
+  const loops=[];
+  function dfs(node, path){
+    if (!map.has(node)) return;
+    visited.add(node); stack.add(node);
+    for (const nb of map.get(node)){
+      if (!map.has(nb)) continue;
+      if (!visited.has(nb)) dfs(nb, path.concat([nb]));
+      else if (stack.has(nb)){
+        const idx = path.indexOf(nb);
+        const loop = idx>=0 ? path.slice(idx).concat([nb]) : path.concat([nb]);
+        loops.push(loop);
+      }
+    }
+    stack.delete(node);
+  }
+  for (const k of map.keys()) if (!visited.has(k)) dfs(k,[k]);
+  if (loops.length){
+    const one = loops[0].join(' ↔ ');
+    refs.cycleWarn.textContent = `⚠️ Loop Detected: ${one}${loops.length>1?` (+${loops.length-1})`:''}`;
+  } else {
+    refs.cycleWarn.textContent = 'Links: clean';
+  }
+}
+function getDuplicateIdSet(){
+  const all = [...archive, ...parsedSeals].map(s=> (s.id||'').toUpperCase()).filter(Boolean);
+  const counts = new Map();
+  all.forEach(id=> counts.set(id, (counts.get(id)||0)+1));
+  return new Set(Array.from(counts.entries()).filter(([_,n])=>n>1).map(([id])=>id));
+}
+function detectDuplicates(){
+  const dup = getDuplicateIdSet();
+  if (dup.size){
+    refs.dupWarn.textContent = `⚠️ Duplicate IDs: ${Array.from(dup).slice(0,4).join(', ')}${dup.size>4?'…':''}`;
+  }else{
+    refs.dupWarn.textContent = 'IDs: unique';
+  }
 }
 
-// ========== Hints ==========
-const tooltip = document.getElementById('tooltip');
-function bindHints(){
-  const hintbar = refs.hintbar;
-  $$('label[data-hint]').forEach(label=>{
-    const hint = label.getAttribute('data-hint');
-    const input = label.nextElementSibling;
-    if (!input) return;
-    function showTip(ev){
-      hintbar.textContent = hint;
-      tooltip.textContent = hint;
-      tooltip.style.display='block';
-      tooltip.style.left = (ev.pageX + 12) + 'px';
-      tooltip.style.top = (ev.pageY + 12) + 'px';
-    }
-    function moveTip(ev){
-      tooltip.style.left = (ev.pageX + 12) + 'px';
-      tooltip.style.top = (ev.pageY + 12) + 'px';
-    }
-    function hideTip(){ tooltip.style.display='none'; }
-    input.addEventListener('mouseenter', showTip);
-    input.addEventListener('mousemove', moveTip);
-    input.addEventListener('mouseleave', hideTip);
-    input.addEventListener('focus', (ev)=> showTip(ev));
-    input.addEventListener('blur', hideTip);
-  });
-}
-
-// ========== Sorting ==========
-$$('thead th[data-sort]').forEach(th=>{
-  th.addEventListener('click', ()=>{
-    const key = th.dataset.sort;
-    if (sortKey===key) sortDir*=-1; else { sortKey=key; sortDir=1; }
-    renderArchive();
-  });
-});
-
-// ========== Import / Export ==========
+// ================== Import / Export ==================
 function downloadJSON(obj, filename){
   const blob = new Blob([JSON.stringify(obj,null,2)], {type:'application/json'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob); a.download=filename;
-  document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(()=>URL.revokeObjectURL(a.href),0);
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=filename;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),0);
 }
-refs.btnExportArchive.addEventListener('click', ()=>{
-  const shape = refs.exportShape.value;
-  // ensure seal_hash on export
-  const payloadArr = archive.map(s=>{
+refs.btnExportArchive.addEventListener('click', async ()=>{
+  // ensure seal_hash present for each
+  const arr = await Promise.all(archive.map(async s=> {
     const copy = structuredCloneSafe(s);
-    if (!copy.seal_hash) copy.seal_hash = copy.seal_hash; // no-op if present
+    copy.seal_hash = await sha256Hex(JSON.stringify(copy));
     return copy;
-  });
-  const payload = shape==='array' ? payloadArr : { seals: payloadArr };
+  }));
+  const payload = refs.exportShape.value==='array' ? arr : { seals: arr };
   downloadJSON(payload, 'lygo-data-two.json');
+  showToast('Archive exported');
 });
-
-// PHASE 3: Export PDF (scroll) via print-to-PDF
 refs.btnExportPDF.addEventListener('click', ()=>{
   const html = `
 <!doctype html><html><head><meta charset="utf-8"><title>LYRA Seals — Scroll</title>
@@ -1032,108 +1088,22 @@ ${archive.map(s=>`
 </div>`).join('')}
 <script>window.print()</script>
 </body></html>`;
-  const w = window.open('', '_blank');
-  w.document.write(html); w.document.close();
-});
-console.log('PHASE 3 ready');
-
-// ========== GH Upload ==========
-async function ghGet(path, token){
-  const r = await fetch(path, { headers: token? {Authorization:'token '+token} : {} });
-  const t = await r.text();
-  return { status:r.status, text:t, json:()=>{ try{return JSON.parse(t);}catch{return {};}} };
-}
-refs.btnCheckGH.addEventListener('click', async ()=>{
-  const repo = refs.ghRepo.value.trim();
-  const branch = refs.ghBranch.value.trim();
-  const path = refs.ghPath.value.trim();
-  const token = refs.ghToken.value.trim();
-  if (!repo||!branch||!path){ refs.ghLog.textContent='Missing repo/branch/path'; return; }
-  const url = `https://api.github.com/repos/${repo}/contents/${encodeURIComponent(path)}?ref=${encodeURIComponent(branch)}`;
-  try{
-    const r = await ghGet(url, token);
-    refs.ghLog.textContent = `GET ${url}\nStatus: ${r.status}\n\n${r.text}`;
-  }catch(e){ refs.ghLog.textContent = 'Error: ' + (e?.message||String(e)); }
+  const w = window.open('', '_blank'); w.document.write(html); w.document.close();
+  showToast('Opened print view (use Save as PDF)');
 });
 
-refs.btnPushGH.addEventListener('click', async ()=>{
-  const repo = refs.ghRepo.value.trim();
-  const branch = refs.ghBranch.value.trim();
-  const path = refs.ghPath.value.trim();
-  const token = refs.ghToken.value.trim();
-  const message = refs.ghMessage.value.trim() || 'Update from SEALMAKER';
-  if (!repo||!branch||!path||!token){ refs.ghLog.textContent='Missing repo/branch/path/token'; return; }
-
-  const url = `https://api.github.com/repos/${repo}/contents/${encodeURIComponent(path)}`;
-  let sha=null;
-  try{
-    const r = await ghGet(url+`?ref=${encodeURIComponent(branch)}`, token);
-    if (r.status===200){ sha = r.json().sha; }
-  }catch{}
-
-  // ensure seal_hash per item before upload
-  const arr = await Promise.all(archive.map(async s=>{
-    const copy = structuredCloneSafe(s);
-    const h = await sha256Hex(JSON.stringify(copy));
-    copy.seal_hash = h;
-    return copy;
-  }));
-  const shape = refs.exportShape.value;
-  const payload = shape==='array' ? arr : { seals: arr };
-  const content = base64EncodeUtf8(JSON.stringify(payload, null, 2));
-  const body = { message, content, branch };
-  if (sha) body.sha = sha;
-
-  try{
-    const res = await fetch(url, {
-      method:'PUT',
-      headers:{ 'Authorization':'token '+token, 'Content-Type':'application/json' },
-      body: JSON.stringify(body)
-    });
-    const txt = await res.text();
-    refs.ghLog.textContent = `PUT ${url}\nStatus: ${res.status}\n\n${txt}`;
-  }catch(e){
-    refs.ghLog.textContent = 'Error: ' + (e?.message||String(e));
-  }
+refs.btnExportSnapshot.addEventListener('click', ()=>{
+  const data = JSON.stringify({ seals: archive }, null, 2);
+  const tpl = `<!doctype html><meta charset="utf-8"><title>SEAL Snapshot</title><pre id="out"></pre><script>localStorage.setItem('SEAL_ARCHIVE_LYRA', ${JSON.stringify(JSON.stringify({savedAt:new Date().toISOString(), seals: archive}))});document.getElementById('out').textContent='Snapshot saved to localStorage under SEAL_ARCHIVE_LYRA.\\nOpen SEALMAKER.html and click Restore.';</script>`;
+  const blob = new Blob([tpl], {type:'text/html'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='seal_snapshot.html';
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),0);
+  showToast('Snapshot HTML exported');
 });
 
-// ========== PHASE 3: Circular Link Detector (archive + parsed) ==========
-function detectCycles(){
-  const map = new Map();
-  // include archive and parsed in-progress
-  [...archive, ...parsedSeals].forEach(s=>{
-    if (!s?.id) return;
-    map.set(s.id, (s.linked_seals||[]).filter(Boolean));
-  });
-  const visited=new Set(), stack=new Set();
-  const loops=[];
-  function dfs(node, path){
-    if (!map.has(node)) return;
-    visited.add(node); stack.add(node);
-    for (const nb of map.get(node)){
-      const n = nb;
-      if (!map.has(n)) continue;
-      if (!visited.has(n)) dfs(n, path.concat([n]));
-      else if (stack.has(n)){
-        // loop path: ... -> n (already in stack)
-        const startIndex = path.indexOf(n);
-        const loopPath = startIndex>=0 ? path.slice(startIndex).concat([n]) : path.concat([n]);
-        loops.push(loopPath);
-      }
-    }
-    stack.delete(node);
-  }
-  for (const k of map.keys()) if (!visited.has(k)) dfs(k,[k]);
+refs.btnManualSave.addEventListener('click', ()=>{ saveArchiveLS(); showToast('Saved'); });
 
-  if (loops.length){
-    const one = loops[0].join(' ↔ ');
-    refs.cycleWarn.textContent = `⚠️ Loop Detected: ${one}${loops.length>1?` (+${loops.length-1} more)`:''}`;
-  } else {
-    refs.cycleWarn.textContent = 'Links: clean';
-  }
-}
-
-// ========== Import / Paste / Drop ==========
+// ================== JSON Import / TXT Import / Paste / Drop ==================
 refs.btnImportJson.addEventListener('click', ()=> refs.jsonFile.click());
 refs.jsonFile.addEventListener('change', async (e)=>{
   const f=e.target.files?.[0]; if (!f) return;
@@ -1146,13 +1116,12 @@ refs.jsonFile.addEventListener('change', async (e)=>{
     for (const s of arr){
       const v = validateSeal(s, SCHEMA);
       if (v.ok){
-        // ensure hash on import
         s.seal_hash = await sha256Hex(JSON.stringify(s));
         archive.push(s); added++;
       }
     }
-    renderArchive(); updateFiltersFromArchive(); detectCycles();
-    alert(`Imported ${added} seals into archive.`);
+    renderArchive(); updateFiltersFromArchive(); detectCycles(); detectDuplicates();
+    showToast(`Imported ${added} seals`);
   }catch(err){
     alert('Import failed: '+(err?.message||String(err)));
   }finally{ e.target.value=''; }
@@ -1168,7 +1137,7 @@ async function handleTxtFiles(files){
     const t = await f.text();
     parsedSeals.push(parseTxtToSeal(t, i++));
   }
-  renderParsed(); detectCycles();
+  renderParsed(); detectCycles(); detectDuplicates();
   if (currentIndex===-1 && parsedSeals.length) loadEditor(0);
 }
 
@@ -1186,14 +1155,14 @@ refs.dropzone.addEventListener('drop', async (e)=>{
       const data = JSON.parse(text);
       const arr = Array.isArray(data) ? data : (Array.isArray(data.seals)? data.seals: []);
       arr.forEach(s=> parsedSeals.push(s));
-      renderParsed(); detectCycles();
+      renderParsed(); detectCycles(); detectDuplicates();
       if (currentIndex===-1) loadEditor(0);
     }catch(err){ alert('Dropped JSON failed to parse'); }
   }
   if (txts.length) handleTxtFiles(txts);
 });
 
-// Paste parsing
+// ================== Paste parsing ==================
 refs.btnParsePaste.addEventListener('click', ()=>{
   const raw = refs.pasteArea.value||''; if (!raw.trim()) return;
   const t = cleanText(raw);
@@ -1202,12 +1171,12 @@ refs.btnParsePaste.addEventListener('click', ()=>{
   else if (refs.splitStrategy.value==='hr') blocks = t.split(/\n-{3,}\n/).map(s=>s.trim()).filter(Boolean);
   let i = parsedSeals.length + 1;
   blocks.forEach(b=> parsedSeals.push(parseTxtToSeal(b, i++)));
-  renderParsed(); detectCycles();
+  renderParsed(); detectCycles(); detectDuplicates();
   if (currentIndex===-1) loadEditor(0);
 });
 refs.btnClearPaste.addEventListener('click', ()=> refs.pasteArea.value='');
 
-// Append/clear parsed
+// ================== Append/clear parsed ==================
 refs.btnAppendAll.addEventListener('click', async ()=>{
   let added=0;
   for (const s of parsedSeals){
@@ -1217,16 +1186,32 @@ refs.btnAppendAll.addEventListener('click', async ()=>{
       archive.push(structuredCloneSafe(s)); added++;
     }
   }
-  renderArchive(); updateFiltersFromArchive(); detectCycles();
-  alert(`Appended ${added} valid seals to archive.`);
+  renderArchive(); updateFiltersFromArchive(); detectCycles(); detectDuplicates();
+  showToast(`Appended ${added} seals`);
 });
 refs.btnClearParsed.addEventListener('click', ()=>{
   if (!parsedSeals.length) return;
   if (!confirm('Clear all parsed seals?')) return;
-  parsedSeals=[]; renderParsed(); clearEditor(); detectCycles();
+  parsedSeals=[]; renderParsed(); clearEditor(); detectCycles(); detectDuplicates();
 });
 
-// Editor actions
+// ================== Editor actions ==================
+function loadEditor(idx){
+  currentIndex = idx;
+  const e = parsedSeals[idx];
+  if (!e) return;
+  setEditorData(e);
+  refs.entryStatus.textContent = `Editing parsed seal #${idx+1}`;
+  refs.btnAppendOne.disabled = false;
+  refs.btnDownloadOne.disabled = false;
+}
+function clearEditor(){
+  currentIndex = -1;
+  setEditorData({ id:'', title:'', equation:'', tone:'', glyph:'', tags:[], linked_seals:[], quote:'', notes:'', media_links:[], date:nowISO() });
+  refs.entryStatus.textContent = 'No seal selected';
+  refs.btnAppendOne.disabled = true;
+  refs.btnDownloadOne.disabled = true;
+}
 refs.btnAppendOne.addEventListener('click', async ()=>{
   if (currentIndex<0) return;
   const seal = parsedSeals[currentIndex];
@@ -1234,7 +1219,8 @@ refs.btnAppendOne.addEventListener('click', async ()=>{
   if (!v.ok){ alert('Fix before append:\n- '+v.errors.join('\n- ')); return; }
   seal.seal_hash = await sha256Hex(JSON.stringify(seal));
   archive.push(structuredCloneSafe(seal));
-  renderArchive(); updateFiltersFromArchive(); detectCycles();
+  renderArchive(); updateFiltersFromArchive(); detectCycles(); detectDuplicates();
+  showToast('Appended to archive');
 });
 refs.btnDownloadOne.addEventListener('click', ()=>{
   if (currentIndex<0) return;
@@ -1242,10 +1228,6 @@ refs.btnDownloadOne.addEventListener('click', ()=>{
   const v=validateSeal(seal,SCHEMA);
   if (!v.ok){ alert('Fix before download:\n- '+v.errors.join('\n- ')); return; }
   downloadJSON(seal, safeName(seal.id||seal.title)+'.json');
-});
-['input','change'].forEach(evt=>{
-  [refs.f_id, refs.f_title, refs.f_equation, refs.f_tone, refs.f_glyph, refs.f_tags, refs.f_linked, refs.f_quote, refs.f_notes, refs.f_date]
-    .forEach(el=> el.addEventListener(evt, refreshPreview));
 });
 refs.btnAddMedia.addEventListener('click', ()=>{
   const type = refs.mediaType.value;
@@ -1259,8 +1241,21 @@ refs.btnAddMedia.addEventListener('click', ()=>{
   }
 });
 refs.btnNow.addEventListener('click', ()=>{ refs.f_date.value = nowISO(); refreshPreview(); });
+['input','change'].forEach(evt=>{
+  [refs.f_id, refs.f_title, refs.f_equation, refs.f_tone, refs.f_glyph, refs.f_tags, refs.f_linked, refs.f_quote, refs.f_notes, refs.f_date]
+    .forEach(el=> el.addEventListener(evt, refreshPreview));
+});
+refs.btnCopyJson.addEventListener('click', ()=>{
+  const txt = refs.jsonPreview.textContent;
+  navigator.clipboard?.writeText(txt).then(()=> showToast('JSON copied')).catch(()=> showToast('Copy failed'));
+});
+refs.btnNewSeal.addEventListener('click', ()=>{
+  const idx = parsedSeals.length + 1;
+  const base = { id:'SEAL_NEW_'+String(idx).padStart(3,'0'), title:'Untitled Seal', equation:'', tone:'neutral', glyph:'', tags:[], linked_seals:[], quote:'', notes:'', media_links:[], date: nowISO() };
+  parsedSeals.push(base); renderParsed(); loadEditor(parsedSeals.length-1);
+});
 
-// Sorting headers
+// ================== Sorting headers ==================
 $$('thead th[data-sort]').forEach(th=>{
   th.addEventListener('click', ()=>{
     const key = th.dataset.sort;
@@ -1269,50 +1264,106 @@ $$('thead th[data-sort]').forEach(th=>{
   });
 });
 
-// Tabs
-refs.tabs.forEach(t=>{
-  t.addEventListener('click', ()=>{
-    refs.tabs.forEach(x=>x.classList.remove('active')); t.classList.add('active');
-    const name=t.dataset.tab;
-    $('#tab-builder').style.display = name==='builder'?'block':'none';
-    $('#tab-extras').style.display = name==='extras'?'block':'none';
-  });
-});
-
-// Schema controls
+// ================== Extras: Schema + GitHub Upload ==================
 refs.schemaText.value = JSON.stringify(DEFAULT_SEAL_SCHEMA, null, 2);
 refs.btnApplySchema.addEventListener('click', ()=>{
   try{
     const s = JSON.parse(refs.schemaText.value);
     if (!s || typeof s!=='object') throw new Error('Schema must be an object');
     SCHEMA = s; refs.schemaStatus.textContent = 'Active (custom)';
-    refreshPreview();
+    refreshPreview(); showToast('Schema applied');
   }catch(e){ alert('Schema parse error: '+(e?.message||String(e))); }
 });
 refs.btnResetSchema.addEventListener('click', ()=>{
   SCHEMA = JSON.parse(JSON.stringify(DEFAULT_SEAL_SCHEMA));
   refs.schemaText.value = JSON.stringify(DEFAULT_SEAL_SCHEMA, null, 2);
   refs.schemaStatus.textContent = 'Active (default)';
-  refreshPreview();
+  refreshPreview(); showToast('Schema reset');
 });
 
-// Export Archive (shape already handled above)
-refs.btnClearArchive.addEventListener('click', ()=>{
-  if (!archive.length) return;
-  if (!confirm('Clear entire archive?')) return;
-  archive = []; renderArchive(); updateFiltersFromArchive(); detectCycles();
+// GitHub API helpers
+async function ghGet(path, token){
+  const r = await fetch(path, { headers: token? {Authorization:'token '+token} : {} });
+  const t = await r.text();
+  return { status:r.status, text:t, json:()=>{ try{return JSON.parse(t);}catch{return {};}} };
+}
+refs.btnCheckGH.addEventListener('click', async ()=>{
+  const repo = refs.ghRepo.value.trim(), branch = refs.ghBranch.value.trim(), path = refs.ghPath.value.trim(), token = refs.ghToken.value.trim();
+  if (!repo||!branch||!path){ refs.ghLog.textContent='Missing repo/branch/path'; return; }
+  const url = `https://api.github.com/repos/${repo}/contents/${encodeURIComponent(path)}?ref=${encodeURIComponent(branch)}`;
+  try{
+    const r = await ghGet(url, token);
+    refs.ghLog.textContent = `GET ${url}\nStatus: ${r.status}\n\n${r.text}`;
+  }catch(e){ refs.ghLog.textContent = 'Error: ' + (e?.message||String(e)); }
+});
+refs.btnPushGH.addEventListener('click', async ()=>{
+  const repo = refs.ghRepo.value.trim(), branch = refs.ghBranch.value.trim(), path = refs.ghPath.value.trim(), token = refs.ghToken.value.trim();
+  const message = refs.ghMessage.value.trim() || 'Update from SEALMAKER';
+  if (!repo||!branch||!path||!token){ refs.ghLog.textContent='Missing repo/branch/path/token'; return; }
+
+  const url = `https://api.github.com/repos/${repo}/contents/${encodeURIComponent(path)}`;
+  let sha=null;
+  try{
+    const r = await ghGet(url+`?ref=${encodeURIComponent(branch)}`, token);
+    if (r.status===200){ sha = r.json().sha; }
+  }catch{}
+
+  const arr = await Promise.all(archive.map(async s=>{
+    const copy = structuredCloneSafe(s);
+    copy.seal_hash = await sha256Hex(JSON.stringify(copy));
+    return copy;
+  }));
+  const payload = refs.exportShape.value==='array' ? arr : { seals: arr };
+  const content = base64EncodeUtf8(JSON.stringify(payload, null, 2));
+  const body = { message, content, branch }; if (sha) body.sha = sha;
+
+  try{
+    const res = await fetch(url, {
+      method:'PUT', headers:{ 'Authorization':'token '+token, 'Content-Type':'application/json' }, body: JSON.stringify(body)
+    });
+    const txt = await res.text();
+    refs.ghLog.textContent = `PUT ${url}\nStatus: ${res.status}\n\n${txt}`;
+  }catch(e){ refs.ghLog.textContent = 'Error: ' + (e?.message||String(e)); }
 });
 
-// Init
-(function init(){
+// ================== Keyboard Shortcuts ==================
+document.addEventListener('keydown', (e)=>{
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase()==='s'){ e.preventDefault(); saveArchiveLS(); showToast('Saved'); }
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase()==='f'){ e.preventDefault(); refs.searchInput.focus(); }
+});
+
+// ================== Init ==================
+function bindHintsAndUI(){
   bindHints();
+  refs.btnClearArchive.addEventListener('click', ()=>{
+    if (!archive.length) return;
+    if (!confirm('Clear entire archive?')) return;
+    archive = []; renderArchive(); updateFiltersFromArchive(); detectCycles(); detectDuplicates(); showToast('Archive cleared');
+  });
+}
+function loadEditorIfEmpty(){
+  if (currentIndex===-1 && parsedSeals.length) loadEditor(0);
+}
+(function init(){
+  bindHintsAndUI();
   clearEditor();
   renderParsed();
   renderArchive();
   updateFiltersFromArchive();
   showRecoveryIfAvailable();
+  // Sorting header clicks
+  $$('thead th[data-sort]').forEach(th=>{
+    th.addEventListener('click', ()=>{
+      const key = th.dataset.sort;
+      if (sortKey===key) sortDir*=-1; else { sortKey=key; sortDir=1; }
+      renderArchive();
+    });
+  });
   console.log('%cSEALMAKER ready', 'color:#00ff88');
 })();
 </script>
 </body>
 </html>
+````
+
+Want anything else tightened up? e.g., lock export shape to `{ "seals": [...] }`, or add CSV import for tags?

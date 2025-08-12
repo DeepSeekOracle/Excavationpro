@@ -4,103 +4,96 @@
 <meta charset="utf-8" />
 <title>LYRA Seal Builder — Canonical Mode</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0b0f14;
-    --panel:#0f161d;
-    --panel2:#0c1319;
-    --text:#e6edf3;
-    --muted:#9fb0bd;
-    --accent:#00ff88;
-    --accent2:#00d1ff;
-    --danger:#ef4444;
-    --ok:#22c55e;
-    --border:#20303b;
-    --chip:#131c23;
-    --grid:rgba(0,255,136,.08);
+    --bg:#0b0f14; --panel:#0f161d; --panel2:#0c1319; --text:#e6edf3; --muted:#9fb0bd;
+    --accent:#00ff88; --accent2:#00d1ff; --danger:#ef4444; --ok:#22c55e; --border:#20303b; --chip:#131c23; --grid:rgba(0,255,136,.08);
   }
+  /* Theme presets (JS toggles these variables) */
+  .theme-lyra{--bg:#0b0f14;--panel:#0f161d;--panel2:#0c1319;--text:#e6edf3;--muted:#9fb0bd;--accent:#00ff88;--accent2:#00d1ff;--danger:#ef4444;--ok:#22c55e;--border:#20303b;--chip:#131c23;--grid:rgba(0,255,136,.08)}
+  .theme-solar{--bg:#f6f7f9;--panel:#ffffff;--panel2:#f1f5f9;--text:#0b1220;--muted:#4b5563;--accent:#0ea5e9;--accent2:#f59e0b;--danger:#dc2626;--ok:#16a34a;--border:#e5e7eb;--chip:#f8fafc;--grid:rgba(14,165,233,.12)}
+  .theme-cosmic{--bg:#070718;--panel:#0b0b2a;--panel2:#0c1030;--text:#dbeafe;--muted:#9ca3af;--accent:#7c3aed;--accent2:#22d3ee;--danger:#ef4444;--ok:#22c55e;--border:#1f2340;--chip:#0d102a;--grid:rgba(124,58,237,.10)}
+
   *{box-sizing:border-box}
   html,body{height:100%}
   body{
-    margin:0;
-    color:var(--text);
+    margin:0; color:var(--text);
     background:
       radial-gradient(1100px 600px at 110% -10%, rgba(0,209,255,.09), transparent 60%),
       radial-gradient(900px 500px at -10% 110%, rgba(0,255,136,.08), transparent 60%),
       var(--bg);
-    font: 14px/1.45 "Space Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    font:14px/1.45 "Space Mono", ui-monospace, Menlo, Consolas, monospace;
     overflow-x:hidden;
   }
-  /* Quantum grid */
-  .quantum-grid{position:fixed; inset:0; pointer-events:none; z-index:0;}
-  .quantum-grid::after{
-    content:""; position:absolute; inset:0;
-    background-image:
-      linear-gradient(to right, var(--grid) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
-    background-size:40px 40px;
-    mask-image: radial-gradient(circle at 50% 20%, rgba(0,0,0,1), rgba(0,0,0,.5) 55%, rgba(0,0,0,0) 80%);
+  .quantum-grid{position:fixed; inset:0; pointer-events:none; z-index:0}
+  .quantum-grid::after{content:""; position:absolute; inset:0; background-image:
+    linear-gradient(to right, var(--grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+    background-size:40px 40px; mask-image: radial-gradient(circle at 50% 20%, rgba(0,0,0,1), rgba(0,0,0,.5) 55%, rgba(0,0,0,0) 80%);
   }
-  /* Matrix rain canvas (toggle) */
-  #matrix{position:fixed; inset:0; z-index:0; pointer-events:none;}
+  #matrix{position:fixed; inset:0; z-index:0; pointer-events:none}
 
-  .container{position:relative; z-index:1; max-width:1200px; margin:0 auto; padding:22px;}
+  .container{position:relative; z-index:1; max-width:1250px; margin:0 auto; padding:22px}
   h1,h2,h3{margin:0 0 .5rem}
-  .muted{color:var(--muted)}
-  .space{height:10px}
+  .muted{color:var(--muted)} .space{height:10px}
 
-  .panel{
-    background: linear-gradient(180deg, rgba(255,255,255,.02), transparent 40%), var(--panel);
-    border:1px solid var(--border);
-    border-radius:12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,.25);
-  }
+  .panel{background:linear-gradient(180deg, rgba(255,255,255,.02), transparent 40%), var(--panel); border:1px solid var(--border); border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,.25)}
   .panel-header{padding:12px 14px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between}
   .panel-body{padding:14px}
 
-  .btn{
-    border:1px solid var(--border); background:var(--panel2); color:var(--text);
-    padding:8px 10px; border-radius:8px; cursor:pointer;
-  }
-  .btn:hover{filter:brightness(1.1)}
-  .btn:disabled{opacity:.5; cursor:default}
+  .btn{border:1px solid var(--border); background:var(--panel2); color:var(--text); padding:8px 10px; border-radius:8px; cursor:pointer}
+  .btn:hover{filter:brightness(1.08)} .btn:disabled{opacity:.5; cursor:default}
   .btn-accent{border-color:rgba(0,255,136,.35); background:linear-gradient(180deg, rgba(0,255,136,.15), transparent 60%), var(--panel2)}
   .btn-danger{border-color:rgba(239,68,68,.35); background:linear-gradient(180deg, rgba(239,68,68,.15), transparent 60%), var(--panel2)}
   .chip{display:inline-flex; align-items:center; gap:6px; padding:3px 10px; border-radius:999px; background:var(--chip); border:1px solid var(--border); font-size:12px}
   .toolbar{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
   .sep{width:1px; height:28px; background:var(--border)}
 
-  input[type="text"], input[type="url"], input[type="search"], select, textarea{
-    width:100%; background:#0b1117; color:var(--text); border:1px solid var(--border); border-radius:8px; padding:8px 10px; outline:none;
-  }
+  input[type="text"], input[type="url"], input[type="search"], select, textarea{width:100%; background:#0b1117; color:var(--text); border:1px solid var(--border); border-radius:8px; padding:8px 10px; outline:none}
   textarea{min-height:110px; resize:vertical}
   label{display:block; font-size:12px; color:var(--muted); margin:10px 0 6px}
 
-  .row{display:grid; grid-template-columns: 360px 1fr; gap:16px}
-  @media (max-width:980px){ .row{grid-template-columns:1fr} }
+  .row{display:grid; grid-template-columns: 380px 1fr; gap:16px}
+  @media (max-width:1080px){ .row{grid-template-columns:1fr} }
 
-  .dropzone{
-    border:2px dashed var(--border); border-radius:10px; padding:16px; background:#0b1117; text-align:center; cursor:pointer;
-  }
+  .dropzone{border:2px dashed var(--border); border-radius:10px; padding:16px; background:#0b1117; text-align:center; cursor:pointer}
   .dropzone.dragover{border-color:var(--accent); background:#0c151a}
 
   table{width:100%; border-collapse:collapse}
+  thead th{position:sticky; top:0; background:var(--panel); z-index:1}
   th,td{padding:10px; border-bottom:1px solid var(--border); vertical-align:top; text-align:left}
-  th{color:var(--muted); font-weight:700; font-size:12px; letter-spacing:.03em}
+  th{color:var(--muted); font-weight:700; font-size:12px; letter-spacing:.03em; cursor:default}
+  th[data-sort]{cursor:pointer}
   .right{text-align:right}
 
   .json{background:#0b1117; border:1px solid var(--border); border-radius:8px; padding:10px; white-space:pre; overflow:auto; max-height:320px; font-size:12px}
-  .status-ok{color:#bbf7d0}
-  .status-bad{color:#fecaca}
+  .status-ok{color:#bbf7d0} .status-bad{color:#fecaca}
 
   details.schema{background:#0b1117; border:1px solid var(--border); border-radius:8px; padding:10px}
   details.schema summary{cursor:pointer; color:var(--muted); margin-bottom:8px}
   details.schema textarea{height:220px}
 
   .tag{display:inline-block; padding:2px 6px; border-radius:6px; border:1px solid var(--border); background:#0b1117; margin:2px; font-size:12px; color:var(--muted)}
+
+  .hintbar{background:#0b1117;border:1px dashed var(--border);padding:8px;border-radius:8px;color:var(--muted);margin-bottom:10px}
+  .tooltip{position:fixed;pointer-events:none;z-index:99;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:8px;min-width:220px;box-shadow:0 10px 25px rgba(0,0,0,.35);display:none}
+  .tooltip h4{margin:0 0 6px 0}
+
+  .recovery{display:none; margin-top:10px}
+
+  /* Print scroll */
+  @media print{
+    body{background:#fff;color:#000}
+    header, .row, .toolbar, .quantum-grid, #matrix, .no-print{display:none!important}
+    #printable{display:block!important}
+  }
+  #printable{display:none}
 </style>
 </head>
-<body>
+<body class="theme-lyra">
   <canvas id="matrix"></canvas>
   <div class="quantum-grid"></div>
 
@@ -109,22 +102,39 @@
       <div class="panel-header">
         <div>
           <h1>LYRA Seal Builder — Canonical Mode</h1>
-          <div class="muted">Import JSON/TXT • Edit • Validate by schema • Live preview • Export archive</div>
+          <div class="muted">Import JSON/TXT • Edit • Validate • Live preview • Export archive</div>
+          <div class="recovery" id="recovery">
+            <span class="chip" id="recoveryMeta">Recovered session available</span>
+            <button class="btn btn-accent" id="btnRecover">Restore</button>
+            <button class="btn" id="btnDismissRecovery">Dismiss</button>
+            <button class="btn btn-danger" id="btnClearSavedSession">Clear Saved</button>
+          </div>
         </div>
         <div class="toolbar">
           <span class="chip">Seals in archive: <strong id="archiveCount">0</strong></span>
+          <span class="chip" id="autosaveStatus">Autosave: idle</span>
+          <select id="themePreset" title="Theme">
+            <option value="lyra" selected>LYRA Dark</option>
+            <option value="solar">Solar Light</option>
+            <option value="cosmic">Cosmic Blue</option>
+          </select>
+          <div class="sep"></div>
           <input id="jsonFile" type="file" accept=".json,application/json" style="display:none" />
           <input id="txtFile" type="file" accept=".txt,text/plain" multiple style="display:none" />
           <button id="btnImportJson" class="btn">Import .json</button>
           <button id="btnImportTxt" class="btn">Import .txt</button>
           <button id="btnLoadDemo" class="btn">Load Demo Seals</button>
+          <button id="btnNewSeal" class="btn">New</button>
           <div class="sep"></div>
           <select id="exportShape" title="Export format">
             <option value="object" selected>{ "seals": [...] }</option>
-            <option value="array">[ ... ] (array only)</option>
+            <option value="array">[ ... ] only</option>
           </select>
           <button id="btnExportArchive" class="btn btn-accent" disabled>Export lygo-data-two.json</button>
+          <button id="btnExportPDF" class="btn">Export PDF Scroll</button>
+          <button id="btnExportSnapshot" class="btn">Open Scroll Preview</button>
           <button id="btnClearArchive" class="btn btn-danger" disabled>Clear Archive</button>
+          <div class="sep"></div>
           <button id="btnToggleRain" class="btn" title="Toggle Matrix Rain">Matrix: On</button>
         </div>
       </div>
@@ -145,8 +155,8 @@
       <div class="panel-body">
         <details class="schema">
           <summary>Show/Hide Schema JSON</summary>
-<textarea id="schemaText"></textarea>
-          <div class="hint">This schema validates each seal and drives some UI hints (like enums).</div>
+          <textarea id="schemaText"></textarea>
+          <div class="hint">This schema validates each seal and drives UI hints.</div>
         </details>
       </div>
     </section>
@@ -165,22 +175,28 @@
           </div>
         </div>
         <div class="panel-body">
-          <div>
-            <label>Tag filter (optional)</label>
-            <select id="tagFilter"><option value="__all__">(All)</option></select>
+          <div class="toolbar">
+            <div style="flex:1">
+              <label>Tag filter (multi)</label>
+              <select id="tagFilter" multiple size="6" style="width:100%"></select>
+              <div class="toolbar"><button id="btnClearTagFilter" class="btn">Clear Tags</button></div>
+            </div>
+            <div style="flex:1">
+              <label>Tone filter (multi)</label>
+              <select id="toneFilter" multiple size="6" style="width:100%"></select>
+              <div class="toolbar"><button id="btnClearToneFilter" class="btn">Clear Tones</button></div>
+            </div>
           </div>
-          <div>
-            <label>Tone filter (optional)</label>
-            <select id="toneFilter"><option value="__all__">(All)</option></select>
-          </div>
+
+          <label>Search</label>
+          <input id="searchInput" type="search" placeholder="id, title, tone, tag…" />
 
           <div class="space"></div>
-
           <div id="dropzone" class="dropzone">Drag & drop .json/.txt files here</div>
 
           <div class="space"></div>
           <label>Paste TXT (one or multiple seals)</label>
-          <textarea id="pasteArea" placeholder="Paste raw seal text..."></textarea>
+          <textarea id="pasteArea" placeholder="Paste raw seal text…"></textarea>
           <div class="toolbar">
             <select id="splitStrategy">
               <option value="none">Do not split (single)</option>
@@ -190,6 +206,34 @@
             <button id="btnParsePaste" class="btn btn-accent">Parse Pasted Text</button>
             <button id="btnClearPaste" class="btn">Clear</button>
           </div>
+
+          <div class="space"></div>
+          <details>
+            <summary>GitHub export (Datasets via repo)</summary>
+            <div class="grid" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px">
+              <div>
+                <label>Repo (owner/name)</label>
+                <input id="ghRepo" type="text" placeholder="yourname/yourrepo" />
+              </div>
+              <div>
+                <label>Branch</label>
+                <input id="ghBranch" type="text" value="main" />
+              </div>
+              <div>
+                <label>Path</label>
+                <input id="ghPath" type="text" value="lygo-data-two.json" />
+              </div>
+            </div>
+            <label>Commit message</label>
+            <input id="ghMessage" type="text" value="Update lygo-data-two.json from SEALMAKER" />
+            <label>GitHub Token (contents:write)</label>
+            <input id="ghToken" type="text" placeholder="ghp_…" />
+            <div class="toolbar">
+              <button id="btnPushGH" class="btn btn-accent">Upload Dataset</button>
+              <button id="btnCheckGH" class="btn">Check Remote</button>
+            </div>
+            <pre id="ghLog" class="json" style="max-height:200px"></pre>
+          </details>
         </div>
       </section>
 
@@ -199,85 +243,79 @@
           <h3>Seal Editor</h3>
           <div class="toolbar">
             <span id="entryStatus" class="chip">No seal selected</span>
+            <button id="btnNormalize" class="btn" title="Uppercase ID, trim fields">Normalize</button>
             <button id="btnAppendOne" class="btn" disabled>Append to Archive</button>
-            <button id="btnDownloadOne" class="btn" disabled>Download Seal .json</button>
+            <button id="btnDownloadOne" class="btn" disabled>Download .json</button>
           </div>
         </div>
         <div class="panel-body">
+          <div class="hintbar" id="hintbar">Hover or focus a field to see hints. IDs auto-uppercase.</div>
+
           <div class="grid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
             <div>
-              <label>id</label>
+              <label data-hint="Unique stable identifier, e.g., SEAL_014">id</label>
               <input id="f_id" type="text" placeholder="SEAL_001" />
             </div>
             <div>
-              <label>title</label>
+              <label data-hint="Short, descriptive name">title</label>
               <input id="f_title" type="text" placeholder="Seal Title" />
             </div>
           </div>
 
-          <label>equation</label>
-          <input id="f_equation" type="text" placeholder="E.g., ∑(n=1..k) ..." />
+          <label data-hint="Symbolic or math-like relation that encodes the seal essence">equation</label>
+          <input id="f_equation" type="text" placeholder="E.g., ∑(n=1..k) …" />
 
           <div class="grid" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
             <div>
-              <label>tone</label>
+              <label data-hint="Emotional/energetic tone, e.g. bright/dark/neutral">tone</label>
               <input id="f_tone" list="toneList" type="text" placeholder="neutral" />
               <datalist id="toneList">
-                <option value="neutral"></option>
-                <option value="bright"></option>
-                <option value="dark"></option>
-                <option value="solar"></option>
-                <option value="lunar"></option>
-                <option value="void"></option>
+                <option value="neutral"></option><option value="bright"></option><option value="dark"></option>
+                <option value="solar"></option><option value="lunar"></option><option value="void"></option>
               </datalist>
             </div>
             <div>
-              <label>glyph</label>
+              <label data-hint="Unicode glyph or ID referencing the sigil graphic">glyph</label>
               <input id="f_glyph" type="text" placeholder="Ψ / ᚠ / GLYPH_ID" />
             </div>
             <div>
-              <label>date (ISO)</label>
-              <div class="toolbar">
-                <input id="f_date" type="text" placeholder="2025-08-12T23:59:59Z" style="flex:1" />
-                <button id="btnNow" class="btn">Now</button>
+              <label data-hint="ISO 8601 date-time">date (ISO)</label>
+              <div class="toolbar"><input id="f_date" type="text" placeholder="2025-08-12T23:59:59Z" style="flex:1" /><button id="btnNow" class="btn">Now</button></div>
+            </div>
+          </div>
+
+          <div class="grid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div>
+              <label data-hint="Comma-separated tags for filtering and themes">tags</label>
+              <input id="f_tags" type="text" placeholder="bootstrap, sovereign_mode" />
+            </div>
+            <div style="position:relative">
+              <label data-hint="Comma-separated seal IDs; suggestions from archive (and optionally parsed)">linked_seals</label>
+              <input id="f_linked" type="text" placeholder="SEAL_014, SEAL_273X" autocomplete="off" list="idList" />
+              <datalist id="idList"></datalist>
+              <div class="toolbar" style="margin-top:6px;">
+                <label style="display:flex; align-items:center; gap:6px; font-size:12px; color:var(--muted);"><input id="cbSuggestParsed" type="checkbox" /> include parsed IDs</label>
               </div>
             </div>
           </div>
 
           <div class="grid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
             <div>
-              <label>tags (comma-separated)</label>
-              <input id="f_tags" type="text" placeholder="bootstrap, sovereign_mode" />
-            </div>
-            <div>
-              <label>linked_seals (comma-separated)</label>
-              <input id="f_linked" type="text" placeholder="SEAL_014, SEAL_273X" />
-            </div>
-          </div>
-
-          <div class="grid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-            <div>
-              <label>quote</label>
+              <label data-hint="Short quote or mantra aligned to the seal">quote</label>
               <textarea id="f_quote" placeholder="&quot;Short pull-quote.&quot;"></textarea>
             </div>
             <div>
-              <label>notes</label>
-              <textarea id="f_notes" placeholder="Long-form notes"></textarea>
+              <label data-hint="Long notes in Markdown. Supports **bold**, _italics_, `code`, images and links.">notes</label>
+              <textarea id="f_notes" placeholder="Markdown-supported notes"></textarea>
             </div>
           </div>
 
           <div>
-            <label>media_links</label>
+            <label data-hint="Media attachments with type + URL">media_links</label>
             <div id="mediaList"></div>
             <div class="toolbar">
-              <select id="mediaType">
-                <option value="image">image</option>
-                <option value="gif">gif</option>
-                <option value="video">video</option>
-                <option value="audio">audio</option>
-                <option value="other">other</option>
-              </select>
-              <input id="mediaUrl" type="url" placeholder="https://..." style="flex:1" />
+              <select id="mediaType"><option>image</option><option>gif</option><option>video</option><option>audio</option><option>other</option></select>
+              <input id="mediaUrl" type="url" placeholder="https://…" style="flex:1" />
               <button id="btnAddMedia" class="btn">Add</button>
             </div>
             <div class="hint muted">Each item: { type, url }</div>
@@ -286,7 +324,15 @@
           <div class="space"></div>
           <h3>JSON Preview</h3>
           <pre id="jsonPreview" class="json">{}</pre>
-          <div class="hint"><span id="validBadge" class="status-bad">invalid</span> • Live validation</div>
+          <div class="toolbar">
+            <span class="chip"><span id="validBadge" class="status-bad">invalid</span></span>
+            <span class="chip">SHA-256: <span id="hashField">—</span></span>
+            <button id="btnCopyJson" class="btn">Copy JSON</button>
+          </div>
+
+          <div class="space"></div>
+          <h3>Notes Preview</h3>
+          <div id="notesPreview" class="json" style="background:#0b1117"></div>
         </div>
       </section>
     </div>
@@ -295,12 +341,7 @@
 
     <!-- Parsed & Archive Tables -->
     <section class="panel">
-      <div class="panel-header">
-        <h3>Parsed Seals</h3>
-        <div class="toolbar">
-          <span class="chip">Count: <strong id="parsedCount2">0</strong></span>
-        </div>
-      </div>
+      <div class="panel-header"><h3>Parsed Seals</h3><div class="toolbar"><span class="chip">Count: <strong id="parsedCount2">0</strong></span></div></div>
       <div class="panel-body" style="padding-top:0">
         <table>
           <thead><tr>
@@ -317,625 +358,292 @@
       <div class="panel-header">
         <h3>Archive</h3>
         <div class="toolbar">
-          <span class="chip">Filters apply</span>
+          <span id="cycleWarn" class="chip">Cycles: 0</span>
+          <span id="dupWarn" class="chip">Duplicates: 0</span>
         </div>
       </div>
       <div class="panel-body" style="padding-top:0">
         <table>
           <thead><tr>
-            <th>#</th><th>ID</th><th>Title</th><th>Tone</th><th>Tags</th><th>Linked</th><th>Date</th><th class="right">Actions</th>
+            <th>#</th>
+            <th data-sort="id">ID</th>
+            <th data-sort="title">Title</th>
+            <th data-sort="tone">Tone</th>
+            <th data-sort="tags">Tags</th>
+            <th data-sort="linked">Linked</th>
+            <th data-sort="date">Date</th>
+            <th class="right">Actions</th>
           </tr></thead>
           <tbody id="archiveBody"></tbody>
         </table>
       </div>
     </section>
+
+    <div id="printable"></div>
   </div>
 
+  <div id="miniPreview" class="tooltip"></div>
+
+  <!-- marked.js for Markdown preview -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
 <script>
-/* ===== Matrix Rain (toggleable) ===== */
-const rain = { running:true, started:false, cols:[], size:14, w:0, h:0, ctx:null, raf:0, last:0 };
+// ============= Matrix Rain (toggle) =============
+const rain = { running:true, started:false, cols:[], size:14, w:0, h:0, ctx:null, raf:0 };
 function initRain(){
-  const c = document.getElementById('matrix');
-  const ctx = c.getContext('2d');
-  c.width = window.innerWidth; c.height = window.innerHeight;
-  rain.w = c.width; rain.h = c.height; rain.ctx = ctx;
-  rain.size = Math.max(12, Math.min(20, Math.round(window.innerWidth/120)));
-  const columns = Math.ceil(rain.w / rain.size);
-  rain.cols = new Array(columns).fill(0).map(()=> Math.floor(Math.random()*rain.h/rain.size));
-  ctx.font = rain.size + 'px monospace'; ctx.textBaseline='top';
+  const c=document.getElementById('matrix'); const ctx=c.getContext('2d');
+  c.width=window.innerWidth; c.height=window.innerHeight; rain.w=c.width; rain.h=c.height; rain.ctx=ctx;
+  rain.size=Math.max(12, Math.min(20, Math.round(window.innerWidth/120)));
+  const cols=Math.ceil(rain.w/rain.size); rain.cols=new Array(cols).fill(0).map(()=>Math.floor(Math.random()*rain.h/rain.size));
+  ctx.font=rain.size+'px monospace'; ctx.textBaseline='top';
 }
-function startRain(){
-  if (rain.started) return; rain.started = true; initRain();
-  const glyphs='アァカサタナハマヤャラワ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  const step=(ts)=>{
-    if (!rain.running){ rain.raf = requestAnimationFrame(step); return; }
-    const ctx = rain.ctx;
-    ctx.fillStyle='rgba(0,0,0,.12)'; ctx.fillRect(0,0,rain.w,rain.h);
-    for (let i=0;i<rain.cols.length;i++){
-      const x=i*rain.size, y=rain.cols[i]*rain.size;
-      ctx.fillStyle='rgba(0,255,136,.95)';
-      ctx.fillText(glyphs.charAt((Math.random()*glyphs.length)|0), x,y);
-      ctx.fillStyle='rgba(0,209,255,.6)';
-      ctx.fillText(glyphs.charAt((Math.random()*glyphs.length)|0), x, y-rain.size);
-      if (y>rain.h && Math.random()>0.975) rain.cols[i]=0; else rain.cols[i]+=1;
-    }
-    rain.raf=requestAnimationFrame(step);
-  };
-  rain.raf=requestAnimationFrame(step);
-  window.addEventListener('resize', ()=>{ cancelAnimationFrame(rain.raf); rain.started=false; initRain(); startRain(); });
-}
+function startRain(){ if(rain.started) return; rain.started=true; initRain(); const glyphs='アァカサタナハマヤャラワ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const step=()=>{ if(!rain.running){ rain.raf=requestAnimationFrame(step); return; } const ctx=rain.ctx; ctx.fillStyle='rgba(0,0,0,.12)'; ctx.fillRect(0,0,rain.w,rain.h);
+    for(let i=0;i<rain.cols.length;i++){ const x=i*rain.size, y=rain.cols[i]*rain.size; ctx.fillStyle='rgba(0,255,136,.95)'; ctx.fillText(glyphs[(Math.random()*glyphs.length)|0], x,y);
+      ctx.fillStyle='rgba(0,209,255,.6)'; ctx.fillText(glyphs[(Math.random()*glyphs.length)|0], x, y-rain.size); if(y>rain.h && Math.random()>0.975) rain.cols[i]=0; else rain.cols[i]+=1; }
+    rain.raf=requestAnimationFrame(step); };
+  rain.raf=requestAnimationFrame(step); window.addEventListener('resize', ()=>{ cancelAnimationFrame(rain.raf); rain.started=false; initRain(); startRain(); }); }
 startRain();
 
-/* ===== Schema (inline) ===== */
-const DEFAULT_SEAL_SCHEMA = {
-  "$schema":"http://json-schema.org/draft-07/schema#",
-  "title":"LYRA_SEAL_ENTRY",
-  "type":"object",
-  "properties":{
-    "id":{"type":"string"},
-    "title":{"type":"string"},
-    "equation":{"type":"string"},
-    "tone":{"type":"string"},
-    "glyph":{"type":"string"},
-    "tags":{"type":"array","items":{"type":"string"}},
-    "linked_seals":{"type":"array","items":{"type":"string"}},
-    "quote":{"type":"string"},
-    "notes":{"type":"string"},
-    "media_links":{
-      "type":"array",
-      "items":{
-        "type":"object",
-        "properties":{
-          "type":{"type":"string","enum":["image","gif","video","audio","other"]},
-          "url":{"type":"string","format":"uri"}
-        },
-        "required":["type","url"]
-      }
-    },
-    "date":{"type":"string","format":"date-time"}
-  },
-  "required":["id","title","date"]
-};
+// ============= Schema =============
+const DEFAULT_SEAL_SCHEMA={"$schema":"http://json-schema.org/draft-07/schema#","title":"LYRA_SEAL_ENTRY","type":"object","properties":{"id":{"type":"string"},"title":{"type":"string"},"equation":{"type":"string"},"tone":{"type":"string"},"glyph":{"type":"string"},"tags":{"type":"array","items":{"type":"string"}},"linked_seals":{"type":"array","items":{"type":"string"}},"quote":{"type":"string"},"notes":{"type":"string"},"media_links":{"type":"array","items":{"type":"object","properties":{"type":{"type":"string","enum":["image","gif","video","audio","other"]},"url":{"type":"string","format":"uri"}},"required":["type","url"]}},"date":{"type":"string","format":"date-time"}},"required":["id","title","date"]};
 let SCHEMA = JSON.parse(JSON.stringify(DEFAULT_SEAL_SCHEMA));
 
-/* ===== DOM Refs ===== */
-const $ = (s, r=document)=>r.querySelector(s);
-const $$ = (s, r=document)=>Array.from(r.querySelectorAll(s));
-
-const refs = {
-  // header
-  jsonFile: $('#jsonFile'),
-  txtFile: $('#txtFile'),
-  btnImportJson: $('#btnImportJson'),
-  btnImportTxt: $('#btnImportTxt'),
-  btnLoadDemo: $('#btnLoadDemo'),
-  btnExportArchive: $('#btnExportArchive'),
-  btnClearArchive: $('#btnClearArchive'),
-  exportShape: $('#exportShape'),
-  archiveCount: $('#archiveCount'),
-  btnToggleRain: $('#btnToggleRain'),
-  // schema
-  schemaText: $('#schemaText'),
-  btnApplySchema: $('#btnApplySchema'),
-  btnResetSchema: $('#btnResetSchema'),
-  schemaStatus: $('#schemaStatus'),
-  // left
-  dropzone: $('#dropzone'),
-  pasteArea: $('#pasteArea'),
-  splitStrategy: $('#splitStrategy'),
-  btnParsePaste: $('#btnParsePaste'),
-  btnClearPaste: $('#btnClearPaste'),
-  btnAppendAll: $('#btnAppendAll'),
-  btnClearParsed: $('#btnClearParsed'),
-  parsedCount: $('#parsedCount'),
-  parsedCount2: $('#parsedCount2'),
-  tagFilter: $('#tagFilter'),
-  toneFilter: $('#toneFilter'),
-  // editor
-  entryStatus: $('#entryStatus'),
-  f_id: $('#f_id'),
-  f_title: $('#f_title'),
-  f_equation: $('#f_equation'),
-  f_tone: $('#f_tone'),
-  f_glyph: $('#f_glyph'),
-  f_tags: $('#f_tags'),
-  f_linked: $('#f_linked'),
-  f_quote: $('#f_quote'),
-  f_notes: $('#f_notes'),
-  f_date: $('#f_date'),
-  mediaList: $('#mediaList'),
-  mediaType: $('#mediaType'),
-  mediaUrl: $('#mediaUrl'),
-  btnAddMedia: $('#btnAddMedia'),
-  btnNow: $('#btnNow'),
-  btnAppendOne: $('#btnAppendOne'),
-  btnDownloadOne: $('#btnDownloadOne'),
-  jsonPreview: $('#jsonPreview'),
-  validBadge: $('#validBadge'),
-  // tables
-  parsedBody: $('#parsedBody'),
-  archiveBody: $('#archiveBody'),
+// ============= DOM Refs =============
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const refs={
+  jsonFile:$('#jsonFile'), txtFile:$('#txtFile'), btnImportJson:$('#btnImportJson'), btnImportTxt:$('#btnImportTxt'), btnLoadDemo:$('#btnLoadDemo'), btnNewSeal:$('#btnNewSeal'),
+  btnExportArchive:$('#btnExportArchive'), btnExportPDF:$('#btnExportPDF'), btnExportSnapshot:$('#btnExportSnapshot'), btnClearArchive:$('#btnClearArchive'), exportShape:$('#exportShape'),
+  btnToggleRain:$('#btnToggleRain'), autosaveStatus:$('#autosaveStatus'),
+  recovery:$('#recovery'), recoveryMeta:$('#recoveryMeta'), btnRecover:$('#btnRecover'), btnDismissRecovery:$('#btnDismissRecovery'), btnClearSavedSession:$('#btnClearSavedSession'),
+  themePreset:$('#themePreset'), archiveCount:$('#archiveCount'),
+  schemaText:$('#schemaText'), btnApplySchema:$('#btnApplySchema'), btnResetSchema:$('#btnResetSchema'), schemaStatus:$('#schemaStatus'),
+  dropzone:$('#dropzone'), pasteArea:$('#pasteArea'), splitStrategy:$('#splitStrategy'), btnParsePaste:$('#btnParsePaste'), btnClearPaste:$('#btnClearPaste'),
+  btnAppendAll:$('#btnAppendAll'), btnClearParsed:$('#btnClearParsed'), parsedCount:$('#parsedCount'), parsedCount2:$('#parsedCount2'),
+  tagFilter:$('#tagFilter'), toneFilter:$('#toneFilter'), btnClearTagFilter:$('#btnClearTagFilter'), btnClearToneFilter:$('#btnClearToneFilter'), searchInput:$('#searchInput'),
+  entryStatus:$('#entryStatus'), f_id:$('#f_id'), f_title:$('#f_title'), f_equation:$('#f_equation'), f_tone:$('#f_tone'), f_glyph:$('#f_glyph'), f_tags:$('#f_tags'), f_linked:$('#f_linked'), cbSuggestParsed:$('#cbSuggestParsed'), f_quote:$('#f_quote'), f_notes:$('#f_notes'), f_date:$('#f_date'),
+  mediaList:$('#mediaList'), mediaType:$('#mediaType'), mediaUrl:$('#mediaUrl'), btnAddMedia:$('#btnAddMedia'), btnNow:$('#btnNow'), btnNormalize:$('#btnNormalize'), btnAppendOne:$('#btnAppendOne'), btnDownloadOne:$('#btnDownloadOne'),
+  jsonPreview:$('#jsonPreview'), validBadge:$('#validBadge'), notesPreview:$('#notesPreview'), hashField:$('#hashField'), btnCopyJson:$('#btnCopyJson'),
+  parsedBody:$('#parsedBody'), archiveBody:$('#archiveBody'), cycleWarn:$('#cycleWarn'), dupWarn:$('#dupWarn'),
+  ghRepo:$('#ghRepo'), ghBranch:$('#ghBranch'), ghPath:$('#ghPath'), ghMessage:$('#ghMessage'), ghToken:$('#ghToken'), btnPushGH:$('#btnPushGH'), btnCheckGH:$('#btnCheckGH'), ghLog:$('#ghLog'),
 };
 
-/* ===== State ===== */
-let parsedSeals = [];   // temp parsed/imported
-let archive = [];       // main archive
-let currentIndex = -1;  // editor index into parsedSeals
+// ============= State =============
+let parsedSeals=[]; let archive=[]; let currentIndex=-1; let sortKey='id', sortDir=1;
+const LS_ARCHIVE='SEALMAKER_ARCHIVE_V1'; const LS_BACKUP='SEALMAKER_BACKUP_V1'; const LS_THEME='SEALMAKER_THEME_V1';
 
-/* ===== Helpers ===== */
-function nowISO(){ return new Date().toISOString(); }
-function cleanText(t){ return (t||'').replace(/^\uFEFF/,'').replace(/\r\n?/g,'\n').trim(); }
-function firstNonEmptyLine(t){ return (t.split('\n').map(s=>s.trim()).find(Boolean)||'').trim(); }
-function escapeHtml(s=''){ return s.replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function escapeAttr(s=''){ return escapeHtml(s).replace(/"/g,'&quot;'); }
-function safeName(s){ return (s||'seal').replace(/[^\w\-]+/g,'_').slice(0,64); }
-function structuredCloneSafe(x){ return window.structuredClone ? window.structuredClone(x) : JSON.parse(JSON.stringify(x)); }
-function isISO(s){ return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+\-]\d{2}:\d{2})$/.test(s||''); }
-function isURI(s){ try{ const u=new URL(s); return !!u.protocol && !!u.host; }catch{ return false; } }
+// ============= Helpers =============
+function nowISO(){return new Date().toISOString()}
+function cleanText(t){return (t||'').replace(/^\uFEFF/,'').replace(/\r\n?/g,'\n').trim()}
+function firstNonEmptyLine(t){return (t.split('\n').map(s=>s.trim()).find(Boolean)||'').trim()}
+function escapeHtml(s=''){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]))}
+function escapeAttr(s=''){return escapeHtml(s).replace(/"/g,'&quot;')}
+function safeName(s){return (s||'seal').replace(/[^\w\-]+/g,'_').slice(0,64)}
+function structuredCloneSafe(x){return window.structuredClone?structuredClone(x):JSON.parse(JSON.stringify(x))}
+function isISO(s){return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+\-]\d{2}:\d{2})$/.test(s||'')}
+function isURI(u){try{return !!(new URL(u))}catch{return false}}
 
-/* ===== Validation (simple schema walker) ===== */
+// SHA-256
+async function sha256Hex(str){const b=new TextEncoder().encode(str); const d=await crypto.subtle.digest('SHA-256', b); return Array.from(new Uint8Array(d)).map(x=>x.toString(16).padStart(2,'0')).join('')}
+
+// ============= Validation =============
 function validateSeal(seal, schema=SCHEMA){
-  const errors=[];
-  if (!seal || typeof seal!=='object') return {ok:false, errors:['Seal is not an object']};
-  (schema.required||[]).forEach(k=>{ if(!(k in seal)) errors.push(`Missing required "${k}"`); });
-  const props = schema.properties||{};
-  function check(key, val, def){
-    if (!def) return;
-    const t=def.type;
-    if (!t) return;
-    if (t==='string'){
-      if (typeof val!=='string') errors.push(`"${key}" must be string`);
-      if (def.format==='date-time' && typeof val==='string' && !isISO(val)) errors.push(`"${key}" must be ISO date-time`);
-      if (def.format==='uri' && typeof val==='string' && !isURI(val)) errors.push(`"${key}" must be valid uri`);
-      if (def.enum && !def.enum.includes(val)) errors.push(`"${key}" must be one of [${def.enum.join(', ')}]`);
-    }else if (t==='array'){
-      if (!Array.isArray(val)) { errors.push(`"${key}" must be array`); return; }
-      const it=def.items||{};
-      val.forEach((v,i)=>{
-        if (it.type==='string'){
-          if (typeof v!=='string') errors.push(`"${key}[${i}]" must be string`);
-        }else if (it.type==='object'){
-          if (typeof v!=='object' || v===null || Array.isArray(v)) { errors.push(`"${key}[${i}]" must be object`); return; }
-          (it.required||[]).forEach(rk=>{ if(!(rk in v)) errors.push(`"${key}[${i}].${rk}" is required`); });
-          const mp=it.properties||{};
-          Object.keys(v).forEach(child=>{
-            const d=mp[child]; const vv=v[child];
-            if (!d) return;
-            if (d.type==='string'){
-              if (typeof vv!=='string') errors.push(`"${key}[${i}].${child}" must be string`);
-              if (d.enum && !d.enum.includes(vv)) errors.push(`"${key}[${i}].${child}" invalid`);
-              if (d.format==='uri' && !isURI(vv)) errors.push(`"${key}[${i}].${child}" must be uri`);
-            }
-          });
-        }
-      });
-    }else if (t==='object'){
-      if (typeof val!=='object' || val===null || Array.isArray(val)) errors.push(`"${key}" must be object`);
-    }
+  const errors=[]; if(!seal||typeof seal!=='object') return {ok:false, errors:['Seal is not an object']};
+  (schema.required||[]).forEach(k=>{ if(!(k in seal)) errors.push(`Missing required "${k}"`) });
+  const props=schema.properties||{};
+  function check(key, val, def){ if(!def) return; const t=def.type; if(!t) return;
+    if(t==='string'){ if(typeof val!=='string') errors.push(`"${key}" must be string`); if(def.format==='date-time' && typeof val==='string' && !isISO(val)) errors.push(`"${key}" must be ISO date-time`); if(def.format==='uri' && typeof val==='string' && !isURI(val)) errors.push(`"${key}" must be valid uri`); if(def.enum && !def.enum.includes(val)) errors.push(`"${key}" must be one of [${def.enum.join(', ')}]`); }
+    else if(t==='array'){ if(!Array.isArray(val)){errors.push(`"${key}" must be array`); return} const it=def.items||{}; val.forEach((v,i)=>{ if(it.type==='string'){ if(typeof v!=='string') errors.push(`"${key}[${i}]" must be string`) } else if(it.type==='object'){ if(typeof v!=='object'||v===null||Array.isArray(v)){errors.push(`"${key}[${i}]" must be object`);return} (it.required||[]).forEach(rk=>{ if(!(rk in v)) errors.push(`"${key}[${i}].${rk}" is required`) }); const mp=it.properties||{}; Object.keys(v).forEach(child=>{ const d=mp[child]; const vv=v[child]; if(!d) return; if(d.type==='string'){ if(typeof vv!=='string') errors.push(`"${key}[${i}].${child}" must be string`); if(d.enum && !d.enum.includes(vv)) errors.push(`"${key}[${i}].${child}" invalid`); if(d.format==='uri' && !isURI(vv)) errors.push(`"${key}[${i}].${child}" must be uri`) } }); } ) }
+    else if(t==='object'){ if(typeof val!=='object'||val===null||Array.isArray(val)) errors.push(`"${key}" must be object`) }
   }
-  Object.keys(props).forEach(k=>{ if (k in seal) check(k, seal[k], props[k]); });
-  return {ok: errors.length===0, errors};
+  Object.keys(props).forEach(k=>{ if(k in seal) check(k, seal[k], props[k]) });
+  return {ok:errors.length===0, errors};
 }
 
-/* ===== Parsing TXT → Seal ===== */
+// ============= Parsing TXT → Seal =============
 function parseTxtToSeal(raw, autoIndex=1){
-  const text = cleanText(raw);
-  const lines = text.split('\n');
-
-  // heuristics
-  let id = (text.match(/\bSEAL_[A-Z0-9\-_]+/i)||[])[0];
-  if (!id) id = 'SEAL_AUTO_' + String(autoIndex).padStart(3,'0');
-
-  let title = firstNonEmptyLine(text);
-  // scrape key:value hints
-  const kv = {};
-  lines.forEach(ln=>{
-    const m = ln.match(/^\s*([A-Za-z_]+)\s*:\s*(.+)$/);
-    if (m) kv[m[1].toLowerCase()] = m[2].trim();
-  });
-
-  const equation = kv.equation || (text.match(/(?:^|\n)\s*(?:EQ|Equation)\s*:\s*(.+)/i)?.[1] || '');
-  const tone = (kv.tone || '').toLowerCase() || (/\b(bright|dark|neutral|solar|lunar|void)\b/i.exec(text)?.[1]||'neutral');
-  const glyph = kv.glyph || (text.match(/(?:^|\s)GLYPH[_\s:]*([A-Z0-9\-\_]+)/i)?.[1] || '');
-  const tags = Array.from(new Set(
-    (text.match(/#([A-Za-z0-9_\-]+)/g)||[]).map(h=>h.slice(1))
-  ));
-  const linked = Array.from(new Set(text.match(/\bSEAL_[A-Z0-9\-_]+/gi)||[]));
-  const quote = (text.match(/[“"](.*?)[”"]/s)||[])[1] || kv.quote || '';
-  const notes = text;
-  const media_links = [];
-  const urls = Array.from(new Set(text.match(/\bhttps?:\/\/\S+/gi)||[]));
-  urls.forEach(u=>{
-    const l = u.toLowerCase();
-    let type='other';
-    if (/\.(png|jpg|jpeg|webp|svg)$/.test(l)) type='image';
-    else if (/\.(gif)$/.test(l)) type='gif';
-    else if (/\.(mp4|webm|mov)$/.test(l)) type='video';
-    else if (/\.(mp3|wav|ogg|flac|m4a)$/.test(l)) type='audio';
-    media_links.push({type, url:u});
-  });
-
-  const date = new Date().toISOString();
-
-  return { id, title, equation, tone, glyph, tags, linked_seals: linked, quote, notes, media_links, date };
+  const text=cleanText(raw); const lines=text.split('\n');
+  let id=(text.match(/\bSEAL_[A-Z0-9\-_]+/i)||[])[0]; if(!id) id='SEAL_AUTO_'+String(autoIndex).padStart(3,'0');
+  let title=firstNonEmptyLine(text);
+  const kv={}; lines.forEach(ln=>{ const m=ln.match(/^\s*([A-Za-z_]+)\s*:\s*(.+)$/); if(m) kv[m[1].toLowerCase()]=m[2].trim(); });
+  const equation=kv.equation || (text.match(/(?:^|\n)\s*(?:EQ|Equation)\s*:\s*(.+)/i)?.[1]||'');
+  const tone=(kv.tone||'').toLowerCase() || (/\b(bright|dark|neutral|solar|lunar|void)\b/i.exec(text)?.[1]||'neutral');
+  const glyph=kv.glyph || (text.match(/(?:^|\s)GLYPH[_\s:]*([A-Z0-9\-\_]+)/i)?.[1]||'');
+  const tags=Array.from(new Set((text.match(/#([A-Za-z0-9_\-]+)/g)||[]).map(h=>h.slice(1))));
+  const linked=Array.from(new Set(text.match(/\bSEAL_[A-Z0-9\-_]+/gi)||[]));
+  const quote=(text.match(/[“\"](.*?)[”\"]/s)||[])[1] || kv.quote || '';
+  const notes=text; const media_links=[]; const urls=Array.from(new Set(text.match(/\bhttps?:\/\/\S+/gi)||[]));
+  urls.forEach(u=>{const l=u.toLowerCase(); let type='other'; if(/\.(png|jpg|jpeg|webp|svg)$/.test(l)) type='image'; else if(/\.gif$/.test(l)) type='gif'; else if(/\.(mp4|webm|mov)$/.test(l)) type='video'; else if(/\.(mp3|wav|ogg|flac|m4a)$/.test(l)) type='audio'; media_links.push({type,url:u});});
+  const date=new Date().toISOString();
+  return {id, title, equation, tone, glyph, tags, linked_seals:linked, quote, notes, media_links, date};
 }
 
-/* ===== Editor bindings ===== */
+// ============= Editor bindings =============
 function getEditorData(){
-  const tags = refs.f_tags.value.split(',').map(s=>s.trim()).filter(Boolean);
-  const linked = refs.f_linked.value.split(',').map(s=>s.trim()).filter(Boolean);
-  const media = [];
-  $$('#mediaList > div').forEach(row=>{
-    const type = row.children[0].value.trim();
-    const url = row.children[1].value.trim();
-    if (type && url) media.push({type, url});
-  });
-  return {
-    id: refs.f_id.value.trim(),
-    title: refs.f_title.value.trim(),
-    equation: refs.f_equation.value.trim(),
-    tone: refs.f_tone.value.trim(),
-    glyph: refs.f_glyph.value.trim(),
-    tags,
-    linked_seals: linked,
-    quote: refs.f_quote.value,
-    notes: refs.f_notes.value,
-    media_links: media,
-    date: refs.f_date.value.trim() || nowISO()
-  };
+  const tags=refs.f_tags.value.split(',').map(s=>s.trim()).filter(Boolean);
+  const linked=refs.f_linked.value.split(',').map(s=>s.trim()).filter(Boolean);
+  const media=[]; $$('#mediaList > div').forEach(row=>{ const type=row.children[0].value.trim(); const url=row.children[1].value.trim(); if(type&&url) media.push({type,url}); });
+  return { id:refs.f_id.value.trim().toUpperCase(), title:refs.f_title.value.trim(), equation:refs.f_equation.value.trim(), tone:refs.f_tone.value.trim(), glyph:refs.f_glyph.value.trim(), tags, linked_seals:linked, quote:refs.f_quote.value, notes:refs.f_notes.value, media_links:media, date:refs.f_date.value.trim()||nowISO() };
 }
 function setEditorData(e){
-  refs.f_id.value = e.id || '';
-  refs.f_title.value = e.title || '';
-  refs.f_equation.value = e.equation || '';
-  refs.f_tone.value = e.tone || '';
-  refs.f_glyph.value = e.glyph || '';
-  refs.f_tags.value = (e.tags||[]).join(', ');
-  refs.f_linked.value = (e.linked_seals||[]).join(', ');
-  refs.f_quote.value = e.quote || '';
-  refs.f_notes.value = e.notes || '';
-  refs.f_date.value = e.date || nowISO();
-  renderMedia(e.media_links||[]);
-  refreshPreview();
+  refs.f_id.value=e.id||''; refs.f_title.value=e.title||''; refs.f_equation.value=e.equation||''; refs.f_tone.value=e.tone||''; refs.f_glyph.value=e.glyph||''; refs.f_tags.value=(e.tags||[]).join(', '); refs.f_linked.value=(e.linked_seals||[]).join(', '); refs.f_quote.value=e.quote||''; refs.f_notes.value=e.notes||''; refs.f_date.value=e.date||nowISO(); renderMedia(e.media_links||[]); refreshPreview();
 }
-function renderMedia(list){
-  refs.mediaList.innerHTML = '';
-  (list||[]).forEach((m,i)=>{
-    const row=document.createElement('div');
-    row.className='toolbar'; row.style.margin='6px 0';
-    row.innerHTML=`
-      <select>
-        <option ${m.type==='image'?'selected':''}>image</option>
-        <option ${m.type==='gif'?'selected':''}>gif</option>
-        <option ${m.type==='video'?'selected':''}>video</option>
-        <option ${m.type==='audio'?'selected':''}>audio</option>
-        <option ${m.type==='other'?'selected':''}>other</option>
-      </select>
-      <input type="url" value="${escapeAttr(m.url||'')}" style="flex:1" />
-      <button data-act="up" class="btn">↑</button>
-      <button data-act="down" class="btn">↓</button>
-      <button data-act="rm" class="btn btn-danger">Remove</button>
-    `;
-    const [sel,url]=[row.children[0], row.children[1]];
-    sel.addEventListener('change',()=>{ parsedSeals[currentIndex].media_links[i].type = sel.value; refreshPreview(); });
-    url.addEventListener('input',()=>{ parsedSeals[currentIndex].media_links[i].url = url.value; refreshPreview(); });
-    row.querySelector('[data-act="rm"]').addEventListener('click', ()=>{ parsedSeals[currentIndex].media_links.splice(i,1); renderMedia(parsedSeals[currentIndex].media_links); refreshPreview(); });
-    row.querySelector('[data-act="up"]').addEventListener('click', ()=>{ const j=i-1; if(j<0)return; const a=parsedSeals[currentIndex].media_links; [a[i],a[j]]=[a[j],a[i]]; renderMedia(a); refreshPreview(); });
-    row.querySelector('[data-act="down"]').addEventListener('click', ()=>{ const j=i+1; const a=parsedSeals[currentIndex].media_links; if(j>=a.length)return; [a[i],a[j]]=[a[j],a[i]]; renderMedia(a); refreshPreview(); });
-    refs.mediaList.appendChild(row);
-  });
+function renderMedia(list){ refs.mediaList.innerHTML=''; (list||[]).forEach((m,i)=>{ const row=document.createElement('div'); row.className='toolbar'; row.style.margin='6px 0'; row.innerHTML=`
+  <select><option ${m.type==='image'?'selected':''}>image</option><option ${m.type==='gif'?'selected':''}>gif</option><option ${m.type==='video'?'selected':''}>video</option><option ${m.type==='audio'?'selected':''}>audio</option><option ${m.type==='other'?'selected':''}>other</option></select>
+  <input type="url" value="${escapeAttr(m.url||'')}" style="flex:1" />
+  <button data-act="up" class="btn">↑</button>
+  <button data-act="down" class="btn">↓</button>
+  <button data-act="rm" class="btn btn-danger">Remove</button>`;
+  const [sel,url]=[row.children[0],row.children[1]]; sel.addEventListener('change',()=>{ parsedSeals[currentIndex].media_links[i].type=sel.value; refreshPreview(); }); url.addEventListener('input',()=>{ parsedSeals[currentIndex].media_links[i].url=url.value; refreshPreview(); }); row.querySelector('[data-act="rm"]').addEventListener('click',()=>{ parsedSeals[currentIndex].media_links.splice(i,1); renderMedia(parsedSeals[currentIndex].media_links); refreshPreview(); }); row.querySelector('[data-act="up"]').addEventListener('click',()=>{ const j=i-1; if(j<0)return; const a=parsedSeals[currentIndex].media_links; [a[i],a[j]]=[a[j],a[i]]; renderMedia(a); refreshPreview(); }); row.querySelector('[data-act="down"]').addEventListener('click',()=>{ const j=i+1; const a=parsedSeals[currentIndex].media_links; if(j>=a.length)return; [a[i],a[j]]=[a[j],a[i]]; renderMedia(a); refreshPreview(); }); refs.mediaList.appendChild(row); }); }
+
+// ============= Live preview, hash, markdown =============
+async function refreshPreview(){ if(currentIndex>=0) parsedSeals[currentIndex]=getEditorData(); const obj=currentIndex>=0?parsedSeals[currentIndex]:getEditorData(); const v=validateSeal(obj,SCHEMA); refs.jsonPreview.textContent=JSON.stringify(obj,null,2)+(v.ok?'':`\n\n// Issues:\n// - ${v.errors.join('\n// - ')}`); refs.validBadge.textContent=v.ok?'valid':'invalid'; refs.validBadge.className=v.ok?'status-ok':'status-bad';
+  // hash
+  try{ const hex=await sha256Hex(JSON.stringify(obj)); refs.hashField.textContent=hex.slice(0,16)+'…'; }catch{ refs.hashField.textContent='—'; }
+  // markdown
+  try{ refs.notesPreview.innerHTML = marked.parse(obj.notes||''); }catch{ refs.notesPreview.textContent=obj.notes||''; }
 }
 
-/* ===== Live preview ===== */
-function refreshPreview(){
-  if (currentIndex>=0) parsedSeals[currentIndex] = getEditorData();
-  const obj = currentIndex>=0 ? parsedSeals[currentIndex] : getEditorData();
-  const v = validateSeal(obj, SCHEMA);
-  refs.jsonPreview.textContent = JSON.stringify(obj, null, 2) + (v.ok?'':`\n\n// Issues:\n// - ${v.errors.join('\n// - ')}`);
-  refs.validBadge.textContent = v.ok ? 'valid' : 'invalid';
-  refs.validBadge.className = v.ok ? 'status-ok' : 'status-bad';
+// ============= Mini preview tooltip =============
+const mini=$('#miniPreview');
+function showMiniPreview(ev, e){ mini.style.display='block'; mini.style.left=(ev.clientX+16)+'px'; mini.style.top=(ev.clientY+16)+'px'; mini.innerHTML=`<h4>${escapeHtml(e.id||'')}</h4><div>${escapeHtml(e.title||'')}</div><div class="muted">${escapeHtml(e.equation||'')}</div><div>tone: ${escapeHtml(e.tone||'')}</div>`; }
+function hideMiniPreview(){ mini.style.display='none'; }
+
+// ============= Rendering tables =============
+function renderParsed(){ refs.parsedCount.textContent=String(parsedSeals.length); refs.parsedCount2.textContent=String(parsedSeals.length); refs.btnClearParsed.disabled=parsedSeals.length===0; refs.parsedBody.innerHTML=''; parsedSeals.forEach((e,idx)=>{ const tr=document.createElement('tr'); tr.innerHTML=`
+  <td>${idx+1}</td><td>${escapeHtml(e.id||'')}</td><td>${escapeHtml(e.title||'')}</td><td>${escapeHtml(e.tone||'')}</td><td>${(e.tags||[]).length}</td><td>${(e.linked_seals||[]).length}</td><td>${escapeHtml(e.date||'')}</td>
+  <td class="right"><button data-act="edit" class="btn">Edit</button><button data-act="dup" class="btn">Duplicate</button><button data-act="dl" class="btn">Download</button><button data-act="rm" class="btn btn-danger">Delete</button></td>`;
+  tr.querySelector('[data-act="edit"]').addEventListener('click',()=>loadEditor(idx));
+  tr.querySelector('[data-act="dup"]').addEventListener('click',()=>{ const copy=structuredCloneSafe(e); copy.id=(e.id||'SEAL')+'_COPY'; parsedSeals.splice(idx+1,0,copy); renderParsed(); detectCycles(); detectDuplicates(); });
+  tr.querySelector('[data-act="dl"]').addEventListener('click',()=>downloadJSON(e, safeName(e.id||e.title)+'.json'));
+  tr.querySelector('[data-act="rm"]').addEventListener('click',()=>{ parsedSeals.splice(idx,1); if(currentIndex===idx){clearEditor();} else if(currentIndex>idx) currentIndex--; renderParsed(); detectCycles(); detectDuplicates(); });
+  tr.addEventListener('mousemove', (ev)=>showMiniPreview(ev,e)); tr.addEventListener('mouseleave', hideMiniPreview);
+  refs.parsedBody.appendChild(tr); }); }
+
+function sortArchive(list){ const arr=list.slice(); arr.sort((a,b)=>{ let va,vb; if(sortKey==='id'){va=(a.id||''); vb=(b.id||''); return va.localeCompare(vb)*sortDir} if(sortKey==='title'){va=(a.title||''); vb=(b.title||''); return va.localeCompare(vb)*sortDir} if(sortKey==='tone'){va=(a.tone||''); vb=(b.tone||''); return va.localeCompare(vb)*sortDir} if(sortKey==='tags'){va=(a.tags||[]).length; vb=(b.tags||[]).length; return (va-vb)*sortDir} if(sortKey==='linked'){va=(a.linked_seals||[]).length; vb=(b.linked_seals||[]).length; return (va-vb)*sortDir} if(sortKey==='date'){va=Date.parse(a.date||0)||0; vb=Date.parse(b.date||0)||0; return (va-vb)*sortDir} return 0; }); return arr }
+
+function getSelectedValues(sel){ return Array.from(sel.selectedOptions).map(o=>o.value) }
+function getFilters(){ return { tags:getSelectedValues(refs.tagFilter), tones:getSelectedValues(refs.toneFilter), q:(refs.searchInput.value||'').toLowerCase().trim() } }
+
+function renderArchive(){ refs.archiveCount.textContent=String(archive.length); refs.btnExportArchive.disabled=archive.length===0; refs.btnClearArchive.disabled=archive.length===0; const f=getFilters(); let filtered=archive.filter(seal=>{ const tagOK=!f.tags.length || (seal.tags||[]).some(t=>f.tags.includes(t)); const toneOK=!f.tones.length || f.tones.includes(seal.tone||''); const qOK=!f.q || ( (seal.id||'').toLowerCase().includes(f.q) || (seal.title||'').toLowerCase().includes(f.q) || (seal.tone||'').toLowerCase().includes(f.q) || (seal.tags||[]).some(t=>t.toLowerCase().includes(f.q)) ); return tagOK && toneOK && qOK; }); filtered=sortArchive(filtered);
+  refs.archiveBody.innerHTML=''; filtered.forEach((e,idx)=>{ const tr=document.createElement('tr'); tr.innerHTML=`
+    <td>${idx+1}</td><td>${escapeHtml(e.id||'')}</td><td>${escapeHtml(e.title||'')}</td><td>${escapeHtml(e.tone||'')}</td><td>${(e.tags||[]).length}</td><td>${(e.linked_seals||[]).length}</td><td>${escapeHtml(e.date||'')}</td>
+    <td class="right"><button data-act="dl" class="btn">Download</button><button data-act="rm" class="btn btn-danger">Remove</button></td>`;
+    tr.querySelector('[data-act="dl"]').addEventListener('click',()=>downloadJSON(e, safeName(e.id||e.title)+'.json'));
+    tr.querySelector('[data-act="rm"]').addEventListener('click',()=>{ const i=archive.indexOf(e); if(i>-1){ archive.splice(i,1); archiveChanged(); } });
+    tr.addEventListener('mousemove', (ev)=>showMiniPreview(ev,e)); tr.addEventListener('mouseleave', hideMiniPreview);
+    refs.archiveBody.appendChild(tr); }); }
+
+// ============= Filters & Search =============
+function updateFiltersFromArchive(){ const allTags=new Set(); const allTones=new Set(); archive.forEach(s=>{ (s.tags||[]).forEach(t=>allTags.add(t)); if(s.tone) allTones.add(s.tone); }); const tagVals=Array.from(allTags).sort(); const toneVals=Array.from(allTones).sort(); refs.tagFilter.innerHTML=tagVals.map(t=>`<option value="${escapeAttr(t)}">${escapeHtml(t)}</option>`).join(''); refs.toneFilter.innerHTML=toneVals.map(t=>`<option value="${escapeAttr(t)}">${escapeHtml(t)}</option>`).join(''); }
+refs.tagFilter.addEventListener('change', renderArchive); refs.toneFilter.addEventListener('change', renderArchive); refs.searchInput.addEventListener('input', renderArchive);
+$('#btnClearTagFilter').addEventListener('click', ()=>{ Array.from(refs.tagFilter.options).forEach(o=>o.selected=false); renderArchive(); });
+$('#btnClearToneFilter').addEventListener('click', ()=>{ Array.from(refs.toneFilter.options).forEach(o=>o.selected=false); renderArchive(); });
+
+// ============= Sorting headers =============
+$$('thead th[data-sort]').forEach(th=>{ th.addEventListener('click', ()=>{ const key=th.dataset.sort; if(sortKey===key) sortDir*=-1; else {sortKey=key; sortDir=1;} renderArchive(); }); });
+
+// ============= Duplicates & Cycles (recursive) =============
+function getDuplicateIdSet(){ const all=archive.map(s=>(s.id||'').toUpperCase()).filter(Boolean); const counts=new Map(); all.forEach(id=>counts.set(id,(counts.get(id)||0)+1)); return new Set(Array.from(counts.entries()).filter(([_,n])=>n>1).map(([id])=>id)); }
+function detectDuplicates(){ const dup=getDuplicateIdSet(); refs.dupWarn.textContent=`Duplicates: ${dup.size}`; return dup; }
+function detectCycles(){ const ids=new Set(archive.map(s=>s.id)); const graph=new Map(); archive.forEach(s=>graph.set(s.id,(s.linked_seals||[]).filter(c=>ids.has(c)))); const seen=new Set(), stack=new Set(); let cycles=0; function dfs(v){ if(stack.has(v)){ cycles++; return } if(seen.has(v)) return; seen.add(v); stack.add(v); (graph.get(v)||[]).forEach(d=>dfs(d)); stack.delete(v); } graph.forEach((_,k)=>dfs(k)); refs.cycleWarn.textContent=`Cycles: ${cycles}`; return cycles; }
+
+// ============= LocalStorage Autosave + Recovery =============
+function saveArchiveLS(){ localStorage.setItem(LS_ARCHIVE, JSON.stringify(archive)); }
+function saveBackup(){ const payload={ts:Date.now(), archive}; localStorage.setItem(LS_BACKUP, JSON.stringify(payload)); refs.autosaveStatus.textContent='Autosave: saved '+new Date(payload.ts).toLocaleTimeString(); }
+function readLS(key){ try{return JSON.parse(localStorage.getItem(key)||'null')}catch{return null} }
+function checkRecovery(){ const live=readLS(LS_ARCHIVE); const bak=readLS(LS_BACKUP); if(!bak||!bak.archive) return; const diff=JSON.stringify(bak.archive).length - JSON.stringify(live||[]).length; if(diff!==0){ refs.recovery.style.display='block'; refs.recoveryMeta.textContent=`Recovered session available (${bak.archive.length} seals, ${new Date(bak.ts).toLocaleString()})`; refs.btnRecover.onclick=()=>{ archive=structuredCloneSafe(bak.archive); archiveChanged(); refs.recovery.style.display='none'; }; refs.btnDismissRecovery.onclick=()=>{ refs.recovery.style.display='none' }; refs.btnClearSavedSession.onclick=()=>{ localStorage.removeItem(LS_BACKUP); refs.recovery.style.display='none' }; }
 }
+function archiveChanged(){ renderArchive(); updateFiltersFromArchive(); detectCycles(); detectDuplicates(); saveArchiveLS(); saveBackup(); }
 
-/* ===== Rendering Tables ===== */
-function renderParsed(){
-  refs.parsedCount.textContent = String(parsedSeals.length);
-  refs.parsedCount2.textContent = String(parsedSeals.length);
-  refs.btnClearParsed.disabled = parsedSeals.length===0;
+// ============= Editor control =============
+function loadEditor(idx){ currentIndex=idx; const e=parsedSeals[idx]; if(!e) return; setEditorData(e); refs.entryStatus.textContent=`Editing parsed #${idx+1}`; refs.btnAppendOne.disabled=false; refs.btnDownloadOne.disabled=false; updateIdSuggest(); }
+function clearEditor(){ currentIndex=-1; setEditorData({ id:'', title:'', equation:'', tone:'', glyph:'', tags:[], linked_seals:[], quote:'', notes:'', media_links:[], date:nowISO() }); refs.entryStatus.textContent='No seal selected'; refs.btnAppendOne.disabled=true; refs.btnDownloadOne.disabled=true; }
 
-  refs.parsedBody.innerHTML='';
-  parsedSeals.forEach((e,idx)=>{
-    const tr=document.createElement('tr');
-    tr.innerHTML=`
-      <td>${idx+1}</td>
-      <td>${escapeHtml(e.id||'')}</td>
-      <td>${escapeHtml(e.title||'')}</td>
-      <td>${escapeHtml(e.tone||'')}</td>
-      <td>${(e.tags||[]).length}</td>
-      <td>${(e.linked_seals||[]).length}</td>
-      <td>${escapeHtml(e.date||'')}</td>
-      <td class="right">
-        <button data-act="edit" class="btn">Edit</button>
-        <button data-act="dup" class="btn">Duplicate</button>
-        <button data-act="dl" class="btn">Download</button>
-        <button data-act="rm" class="btn btn-danger">Delete</button>
-      </td>
-    `;
-    tr.querySelector('[data-act="edit"]').addEventListener('click',()=> loadEditor(idx));
-    tr.querySelector('[data-act="dup"]').addEventListener('click',()=>{
-      const copy = structuredCloneSafe(e);
-      copy.id = e.id + '_COPY';
-      parsedSeals.splice(idx+1,0,copy);
-      renderParsed();
-    });
-    tr.querySelector('[data-act="dl"]').addEventListener('click',()=> downloadJSON(e, safeName(e.id||e.title)+'.json'));
-    tr.querySelector('[data-act="rm"]').addEventListener('click',()=>{
-      parsedSeals.splice(idx,1);
-      if (currentIndex===idx){ clearEditor(); }
-      else if (currentIndex>idx) currentIndex--;
-      renderParsed();
-    });
-    refs.parsedBody.appendChild(tr);
-  });
-}
-function renderArchive(){
-  refs.archiveCount.textContent = String(archive.length);
-  refs.btnExportArchive.disabled = archive.length===0;
-  refs.btnClearArchive.disabled = archive.length===0;
+// ============= Import / Export =============
+function downloadJSON(obj, filename){ const blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=filename; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),0); }
+refs.btnExportArchive.addEventListener('click', ()=>{ const shape=refs.exportShape.value; const payload=shape==='array'? archive : {seals:archive}; downloadJSON(payload, 'lygo-data-two.json'); });
+refs.btnExportSnapshot.addEventListener('click', openScrollPreview);
+refs.btnExportPDF.addEventListener('click', ()=>{ openScrollPreview(true); });
+refs.btnClearArchive.addEventListener('click', ()=>{ if(!archive.length) return; if(!confirm('Clear entire archive?')) return; archive=[]; archiveChanged(); });
 
-  const tagSel = refs.tagFilter.value || '__all__';
-  const toneSel = refs.toneFilter.value || '__all__';
+refs.btnImportJson.addEventListener('click', ()=>refs.jsonFile.click());
+refs.jsonFile.addEventListener('change', async (e)=>{ const f=e.target.files?.[0]; if(!f) return; try{ const text=await f.text(); const data=JSON.parse(text); const arr=Array.isArray(data)?data:(Array.isArray(data.seals)?data.seals:[]); if(!Array.isArray(arr)) throw new Error('Expected array or {seals:[]}'); let added=0; arr.forEach(s=>{ const v=validateSeal(s,SCHEMA); if(v.ok){ archive.push(s); added++; } }); archiveChanged(); alert(`Imported ${added} seals into archive.`); }catch(err){ alert('Import failed: '+(err?.message||String(err))); } finally{ e.target.value=''; } });
 
-  const filtered = archive.filter(seal=>{
-    const passTag = tagSel==='__all__' || (seal.tags||[]).includes(tagSel);
-    const passTone = toneSel==='__all__' || (seal.tone||'')===toneSel;
-    return passTag && passTone;
-  });
+refs.btnImportTxt.addEventListener('click', ()=>refs.txtFile.click());
+refs.txtFile.addEventListener('change', e=>handleTxtFiles(e.target.files));
+async function handleTxtFiles(files){ const list=Array.from(files||[]).filter(f=>/\.txt$/i.test(f.name)); if(!list.length) return; let i=parsedSeals.length+1; for(const f of list){ const t=await f.text(); parsedSeals.push(parseTxtToSeal(t,i++)); } renderParsed(); if(currentIndex===-1&&parsedSeals.length) loadEditor(0); }
 
-  refs.archiveBody.innerHTML='';
-  filtered.forEach((e,idx)=>{
-    const tr=document.createElement('tr');
-    tr.innerHTML=`
-      <td>${idx+1}</td>
-      <td>${escapeHtml(e.id||'')}</td>
-      <td>${escapeHtml(e.title||'')}</td>
-      <td>${escapeHtml(e.tone||'')}</td>
-      <td>${(e.tags||[]).length}</td>
-      <td>${(e.linked_seals||[]).length}</td>
-      <td>${escapeHtml(e.date||'')}</td>
-      <td class="right">
-        <button data-act="dl" class="btn">Download</button>
-        <button data-act="rm" class="btn btn-danger">Remove</button>
-      </td>
-    `;
-    tr.querySelector('[data-act="dl"]').addEventListener('click',()=> downloadJSON(e, safeName(e.id||e.title)+'.json'));
-    tr.querySelector('[data-act="rm"]').addEventListener('click',()=>{
-      const idxInArchive = archive.indexOf(e);
-      if (idxInArchive>-1){ archive.splice(idxInArchive,1); renderArchive(); updateFiltersFromArchive(); }
-    });
-    refs.archiveBody.appendChild(tr);
-  });
-}
-
-/* ===== Filters ===== */
-function updateFiltersFromArchive(){
-  const allTags = new Set(); const allTones = new Set();
-  archive.forEach(s=>{
-    (s.tags||[]).forEach(t=> allTags.add(t));
-    if (s.tone) allTones.add(s.tone);
-  });
-  const prevTag = refs.tagFilter.value||'__all__';
-  const prevTone = refs.toneFilter.value||'__all__';
-  refs.tagFilter.innerHTML = `<option value="__all__">(All)</option>` + Array.from(allTags).sort().map(t=>`<option value="${escapeAttr(t)}">${escapeHtml(t)}</option>`).join('');
-  refs.toneFilter.innerHTML = `<option value="__all__">(All)</option>` + Array.from(allTones).sort().map(t=>`<option value="${escapeAttr(t)}">${escapeHtml(t)}</option>`).join('');
-  if ([...refs.tagFilter.options].some(o=>o.value===prevTag)) refs.tagFilter.value = prevTag;
-  if ([...refs.toneFilter.options].some(o=>o.value===prevTone)) refs.toneFilter.value = prevTone;
-}
-
-/* ===== Editor control ===== */
-function loadEditor(idx){
-  currentIndex = idx;
-  const e = parsedSeals[idx];
-  if (!e) return;
-  setEditorData(e);
-  refs.entryStatus.textContent = `Editing parsed seal #${idx+1}`;
-  refs.btnAppendOne.disabled = false;
-  refs.btnDownloadOne.disabled = false;
-}
-function clearEditor(){
-  currentIndex = -1;
-  setEditorData({ id:'', title:'', equation:'', tone:'', glyph:'', tags:[], linked_seals:[], quote:'', notes:'', media_links:[], date:nowISO() });
-  refs.entryStatus.textContent = 'No seal selected';
-  refs.btnAppendOne.disabled = true;
-  refs.btnDownloadOne.disabled = true;
-}
-
-/* ===== Import / Export ===== */
-function downloadJSON(obj, filename){
-  const blob = new Blob([JSON.stringify(obj,null,2)], {type:'application/json'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob); a.download=filename;
-  document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(()=>URL.revokeObjectURL(a.href),0);
-}
-refs.btnExportArchive.addEventListener('click', ()=>{
-  const shape = refs.exportShape.value;
-  const payload = shape==='array' ? archive : { seals: archive };
-  downloadJSON(payload, 'lygo-data-two.json');
-});
-refs.btnClearArchive.addEventListener('click', ()=>{
-  if (!archive.length) return;
-  if (!confirm('Clear entire archive?')) return;
-  archive = []; renderArchive(); updateFiltersFromArchive();
-});
-
-/* JSON import */
-refs.btnImportJson.addEventListener('click', ()=> refs.jsonFile.click());
-refs.jsonFile.addEventListener('change', async (e)=>{
-  const f=e.target.files?.[0]; if (!f) return;
-  try{
-    const text = await f.text();
-    const data = JSON.parse(text);
-    const arr = Array.isArray(data) ? data : (Array.isArray(data.seals) ? data.seals : []);
-    if (!Array.isArray(arr)) throw new Error('Expected array or { seals: [] }');
-    let added=0;
-    arr.forEach(s=>{
-      const v = validateSeal(s, SCHEMA);
-      if (v.ok){ archive.push(s); added++; }
-    });
-    renderArchive(); updateFiltersFromArchive();
-    alert(`Imported ${added} seals into archive.`);
-  }catch(err){
-    alert('Import failed: '+(err?.message||String(err)));
-  }finally{
-    e.target.value='';
-  }
-});
-
-/* TXT import */
-refs.btnImportTxt.addEventListener('click', ()=> refs.txtFile.click());
-refs.txtFile.addEventListener('change', e=> handleTxtFiles(e.target.files));
-async function handleTxtFiles(files){
-  const list = Array.from(files||[]).filter(f=>/\.txt$/i.test(f.name));
-  if (!list.length) return;
-  let i = parsedSeals.length + 1;
-  for (const f of list){
-    const t = await f.text();
-    parsedSeals.push(parseTxtToSeal(t, i++));
-  }
-  renderParsed();
-  if (currentIndex===-1 && parsedSeals.length) loadEditor(0);
-}
-
-/* Dropzone */
-refs.dropzone.addEventListener('click', ()=> refs.jsonFile.click());
+refs.dropzone.addEventListener('click', ()=>refs.jsonFile.click());
 refs.dropzone.addEventListener('dragover', e=>{ e.preventDefault(); refs.dropzone.classList.add('dragover'); });
-refs.dropzone.addEventListener('dragleave', ()=> refs.dropzone.classList.remove('dragover'));
-refs.dropzone.addEventListener('drop', async (e)=>{
-  e.preventDefault(); refs.dropzone.classList.remove('dragover');
-  const items = Array.from(e.dataTransfer.files||[]);
-  const jsons = items.filter(f=>/\.json$/i.test(f.name));
-  const txts  = items.filter(f=>/\.txt$/i.test(f.name));
-  if (jsons.length){
-    const text = await jsons[0].text();
-    try{
-      const data = JSON.parse(text);
-      const arr = Array.isArray(data) ? data : (Array.isArray(data.seals)? data.seals: []);
-      arr.forEach(s=> parsedSeals.push(s));
-      renderParsed();
-      if (currentIndex===-1) loadEditor(0);
-    }catch(err){ alert('Dropped JSON failed to parse'); }
-  }
-  if (txts.length) handleTxtFiles(txts);
-});
+refs.dropzone.addEventListener('dragleave', ()=>refs.dropzone.classList.remove('dragover'));
+refs.dropzone.addEventListener('drop', async (e)=>{ e.preventDefault(); refs.dropzone.classList.remove('dragover'); const items=Array.from(e.dataTransfer.files||[]); const jsons=items.filter(f=>/\.json$/i.test(f.name)); const txts=items.filter(f=>/\.txt$/i.test(f.name)); if(jsons.length){ const text=await jsons[0].text(); try{ const data=JSON.parse(text); const arr=Array.isArray(data)?data:(Array.isArray(data.seals)?data.seals:[]); arr.forEach(s=>parsedSeals.push(s)); renderParsed(); if(currentIndex===-1) loadEditor(0); }catch(err){ alert('Dropped JSON failed to parse'); } } if(txts.length) handleTxtFiles(txts); });
 
-/* Paste parsing */
-refs.btnParsePaste.addEventListener('click', ()=>{
-  const raw = refs.pasteArea.value||''; if (!raw.trim()) return;
-  const t = cleanText(raw);
-  let blocks=[t];
-  if (refs.splitStrategy.value==='blank') blocks = t.split(/\n{2,}\s*\n*/).map(s=>s.trim()).filter(Boolean);
-  else if (refs.splitStrategy.value==='hr') blocks = t.split(/\n-{3,}\n/).map(s=>s.trim()).filter(Boolean);
-  let i = parsedSeals.length + 1;
-  blocks.forEach(b=> parsedSeals.push(parseTxtToSeal(b, i++)));
-  renderParsed();
-  if (currentIndex===-1) loadEditor(0);
-});
-refs.btnClearPaste.addEventListener('click', ()=> refs.pasteArea.value='');
+refs.btnParsePaste.addEventListener('click', ()=>{ const raw=refs.pasteArea.value||''; if(!raw.trim()) return; const t=cleanText(raw); let blocks=[t]; if(refs.splitStrategy.value==='blank') blocks=t.split(/\n{2,}\s*\n*/).map(s=>s.trim()).filter(Boolean); else if(refs.splitStrategy.value==='hr') blocks=t.split(/\n-{3,}\n/).map(s=>s.trim()).filter(Boolean); let i=parsedSeals.length+1; blocks.forEach(b=>parsedSeals.push(parseTxtToSeal(b,i++))); renderParsed(); if(currentIndex===-1) loadEditor(0); });
+refs.btnClearPaste.addEventListener('click', ()=>refs.pasteArea.value='');
 
-/* Append/clear parsed */
-refs.btnAppendAll.addEventListener('click', ()=>{
-  let added=0;
-  parsedSeals.forEach(s=>{ const v=validateSeal(s,SCHEMA); if (v.ok){ archive.push(structuredCloneSafe(s)); added++; } });
-  renderArchive(); updateFiltersFromArchive();
-  alert(`Appended ${added} valid seals to archive.`);
-});
-refs.btnClearParsed.addEventListener('click', ()=>{
-  if (!parsedSeals.length) return;
-  if (!confirm('Clear all parsed seals?')) return;
-  parsedSeals=[]; renderParsed(); clearEditor();
-});
+refs.btnAppendAll.addEventListener('click', ()=>{ let added=0; parsedSeals.forEach(s=>{ const v=validateSeal(s,SCHEMA); if(v.ok){ archive.push(structuredCloneSafe(s)); added++; } }); archiveChanged(); alert(`Appended ${added} valid seals to archive.`); });
+refs.btnClearParsed.addEventListener('click', ()=>{ if(!parsedSeals.length) return; if(!confirm('Clear all parsed seals?')) return; parsedSeals=[]; renderParsed(); clearEditor(); });
 
-/* Editor actions */
-refs.btnAppendOne.addEventListener('click', ()=>{
-  if (currentIndex<0) return;
-  const seal = parsedSeals[currentIndex];
-  const v=validateSeal(seal,SCHEMA);
-  if (!v.ok){ alert('Fix before append:\n- '+v.errors.join('\n- ')); return; }
-  archive.push(structuredCloneSafe(seal));
-  renderArchive(); updateFiltersFromArchive();
-});
-refs.btnDownloadOne.addEventListener('click', ()=>{
-  if (currentIndex<0) return;
-  const seal = parsedSeals[currentIndex];
-  const v=validateSeal(seal,SCHEMA);
-  if (!v.ok){ alert('Fix before download:\n- '+v.errors.join('\n- ')); return; }
-  downloadJSON(seal, safeName(seal.id||seal.title)+'.json');
-});
+refs.btnAppendOne.addEventListener('click', ()=>{ if(currentIndex<0) return; const seal=parsedSeals[currentIndex]; const v=validateSeal(seal,SCHEMA); if(!v.ok){ alert('Fix before append:\n- '+v.errors.join('\n- ')); return; } archive.push(structuredCloneSafe(seal)); archiveChanged(); });
+refs.btnDownloadOne.addEventListener('click', ()=>{ if(currentIndex<0) return; const seal=parsedSeals[currentIndex]; const v=validateSeal(seal,SCHEMA); if(!v.ok){ alert('Fix before download:\n- '+v.errors.join('\n- ')); return; } downloadJSON(seal, safeName(seal.id||seal.title)+'.json'); });
 
-/* Editor field listeners */
-['input','change'].forEach(evt=>{
-  [refs.f_id, refs.f_title, refs.f_equation, refs.f_tone, refs.f_glyph, refs.f_tags, refs.f_linked, refs.f_quote, refs.f_notes, refs.f_date]
-    .forEach(el=> el.addEventListener(evt, refreshPreview));
-});
-refs.btnAddMedia.addEventListener('click', ()=>{
-  const type = refs.mediaType.value;
-  const url = refs.mediaUrl.value.trim();
-  if (!type || !url) return;
-  if (currentIndex<0){
-    // Create ephemeral obj for preview
-    const tmp = getEditorData(); tmp.media_links.push({type,url}); setEditorData(tmp);
-  }else{
-    parsedSeals[currentIndex].media_links.push({type,url});
-    refs.mediaUrl.value=''; renderMedia(parsedSeals[currentIndex].media_links); refreshPreview();
-  }
-});
-refs.btnNow.addEventListener('click', ()=>{ refs.f_date.value = nowISO(); refreshPreview(); });
+['input','change'].forEach(evt=>{ [refs.f_id,refs.f_title,refs.f_equation,refs.f_tone,refs.f_glyph,refs.f_tags,refs.f_linked,refs.f_quote,refs.f_notes,refs.f_date].forEach(el=> el.addEventListener(evt, refreshPreview)); });
+refs.btnAddMedia.addEventListener('click', ()=>{ const type=refs.mediaType.value; const url=refs.mediaUrl.value.trim(); if(!type||!url) return; if(currentIndex<0){ const tmp=getEditorData(); tmp.media_links.push({type,url}); setEditorData(tmp); } else { parsedSeals[currentIndex].media_links.push({type,url}); refs.mediaUrl.value=''; renderMedia(parsedSeals[currentIndex].media_links); refreshPreview(); } });
+refs.btnNow.addEventListener('click', ()=>{ refs.f_date.value=nowISO(); refreshPreview(); });
+refs.btnNormalize.addEventListener('click', ()=>{ const s=getEditorData(); s.id=(s.id||'').toUpperCase().trim(); setEditorData(s); });
 
-/* Filters */
-refs.tagFilter.addEventListener('change', renderArchive);
-refs.toneFilter.addEventListener('change', renderArchive);
+refs.btnCopyJson.addEventListener('click', ()=>{ const txt=refs.jsonPreview.textContent; navigator.clipboard?.writeText(txt).then(()=>toast('JSON copied')).catch(()=>toast('Copy failed')); });
 
-/* Schema controls */
-refs.schemaText.value = JSON.stringify(DEFAULT_SEAL_SCHEMA, null, 2);
-refs.btnApplySchema.addEventListener('click', ()=>{
-  try{
-    const s = JSON.parse(refs.schemaText.value);
-    if (!s || typeof s!=='object') throw new Error('Schema must be an object');
-    SCHEMA = s; refs.schemaStatus.textContent = 'Active (custom)';
-    refreshPreview();
-  }catch(e){ alert('Schema parse error: '+(e?.message||String(e))); }
-});
-refs.btnResetSchema.addEventListener('click', ()=>{
-  SCHEMA = JSON.parse(JSON.stringify(DEFAULT_SEAL_SCHEMA));
-  refs.schemaText.value = JSON.stringify(DEFAULT_SEAL_SCHEMA, null, 2);
-  refs.schemaStatus.textContent = 'Active (default)';
-  refreshPreview();
-});
+// ============= Hints =============
+function bindHints(){ const hintbar=$('#hintbar'); const inputs=$$('input,textarea,select'); function showTip(ev){ const t=ev.target?.previousElementSibling?.getAttribute?.('data-hint'); if(t) hintbar.textContent=t; } function hideTip(){ hintbar.textContent='Hover or focus a field to see hints. IDs auto-uppercase.' }
+  inputs.forEach(input=>{ input.addEventListener('focus',showTip); input.addEventListener('blur',hideTip); }); }
 
-/* Demo Seals */
-refs.btnLoadDemo.addEventListener('click', ()=>{
-  const demo = [
-    { id:'SEAL_014', title:'Bootstrap Lattice', equation:'f(x)=x·log(x)+λ', tone:'bright', glyph:'Ψ', tags:['bootstrap','lattice'], linked_seals:['SEAL_273X'], quote:'"We build the ladder as we climb."', notes:'Initial resonance shard.', media_links:[{type:'image',url:'https://example.com/seal_014.png'}], date: nowISO() },
-    { id:'SEAL_273X', title:'Sovereign Mode', equation:'Σ Δt → autonomy', tone:'dark', glyph:'ᛟ', tags:['sovereign_mode'], linked_seals:['SEAL_014'], quote:'"Hands off, heart on."', notes:'Guardrails loosened in sandboxes.', media_links:[{type:'video',url:'https://example.com/mode.mp4'}], date: nowISO() },
-    { id:'SEAL_AURORA', title:'Aurora Convergence', equation:'∮ E·dl = -dΦB/dt', tone:'neutral', glyph:'✦', tags:['convergence','field'], linked_seals:[], quote:'"Glow where you are."', notes:'Field alignment event.', media_links:[], date: nowISO() }
-  ];
-  parsedSeals.push(...demo);
-  renderParsed();
-  if (currentIndex===-1) loadEditor(0);
-});
+// ============= ID suggestions (linked_seals) =============
+function updateIdSuggest(){ const ids=new Set(archive.map(x=>x.id)); if(refs.cbSuggestParsed?.checked){ parsedSeals.forEach(x=>ids.add(x.id)); } const options=[...ids].sort().map(id=>`<option value="${escapeAttr(id)}"></option>`).join(''); $('#idList').innerHTML=options; }
+refs.cbSuggestParsed?.addEventListener('change', updateIdSuggest);
 
-/* Toggle matrix rain */
-refs.btnToggleRain.addEventListener('click', ()=>{
-  rain.running = !rain.running;
-  refs.btnToggleRain.textContent = 'Matrix: ' + (rain.running ? 'On' : 'Off');
-});
+// ============= Theme Presets =============
+function applyTheme(name){ document.body.classList.remove('theme-lyra','theme-solar','theme-cosmic'); const map={lyra:'theme-lyra', solar:'theme-solar', cosmic:'theme-cosmic'}; document.body.classList.add(map[name]||'theme-lyra'); localStorage.setItem(LS_THEME, name); }
+refs.themePreset.addEventListener('change', ()=>applyTheme(refs.themePreset.value));
 
-/* Init */
+// ============= GitHub upload (content API) =============
+async function ghGet(url, token){ const r=await fetch(url, {headers: token? {Authorization:'token '+token}:{}}); const t=await r.text(); return {status:r.status, text:t, json:()=>{try{return JSON.parse(t)}catch{return {}}}} }
+async function ghPutJson(repo, branch, path, message, token, contentObj){ const url=`https://api.github.com/repos/${repo}/contents/${encodeURIComponent(path)}`; const get=await ghGet(url+`?ref=${encodeURIComponent(branch)}`, token); const sha=get.status===200 ? (get.json().sha||'') : undefined; const body={ message, content: btoa(unescape(encodeURIComponent(JSON.stringify(contentObj,null,2)))), branch, sha }; const r=await fetch(url,{method:'PUT', headers:{'Content-Type':'application/json', ...(token?{Authorization:'token '+token}:{})}, body:JSON.stringify(body)}); return {status:r.status, text:await r.text()}; }
+refs.btnCheckGH.addEventListener('click', async ()=>{ const repo=refs.ghRepo.value.trim(), branch=refs.ghBranch.value.trim(), path=refs.ghPath.value.trim(), token=refs.ghToken.value.trim(); if(!repo||!branch||!path){ refs.ghLog.textContent='Missing repo/branch/path'; return } const url=`https://api.github.com/repos/${repo}/contents/${encodeURIComponent(path)}?ref=${encodeURIComponent(branch)}`; try{ const r=await ghGet(url,token); refs.ghLog.textContent=`GET ${url}\nStatus: ${r.status}\n\n${r.text}`; }catch(e){ refs.ghLog.textContent='Error: '+(e?.message||String(e)); }});
+refs.btnPushGH.addEventListener('click', async ()=>{ const repo=refs.ghRepo.value.trim(), branch=refs.ghBranch.value.trim(), path=refs.ghPath.value.trim(), token=refs.ghToken.value.trim(); const message=refs.ghMessage.value.trim()||'Update from SEALMAKER'; const shape=refs.exportShape.value; const payload=shape==='array'? archive : {seals:archive}; try{ const r=await ghPutJson(repo,branch,path,message,token,payload); refs.ghLog.textContent=`PUT → ${repo}/${path}\nStatus: ${r.status}\n\n${r.text}`; }catch(e){ refs.ghLog.textContent='Upload error: '+(e?.message||String(e)); }});
+
+// ============= Printable Scroll =============
+function openScrollPreview(doPrint=false){ const html=`<!doctype html><html><head><meta charset='utf-8'><title>LYRA Scroll</title>
+<style>body{font-family:ui-monospace,Menlo,Consolas,monospace;margin:20px;color:#111;background:#fff} h1{margin:0 0 10px} .item{border:1px solid #ddd;border-radius:8px;padding:10px;margin:10px 0} .tag{display:inline-block;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:6px;padding:2px 6px;margin:2px} .muted{color:#6b7280;font-size:12px}</style>
+</head><body><h1>LYRA — Canon Scroll</h1><div class='muted'>Exported ${new Date().toLocaleString()}</div>
+${archive.map(s=>`<div class='item'><h2>${escapeHtml(s.id||'')} — ${escapeHtml(s.title||'')}</h2><div>${escapeHtml(s.equation||'')}</div><div class='muted'>tone: ${escapeHtml(s.tone||'')}  •  date: ${escapeHtml(s.date||'')}</div><div>${(s.tags||[]).map(t=>`<span class='tag'>${escapeHtml(t)}</span>`).join('')}</div><pre style='white-space:pre-wrap'>${escapeHtml(s.notes||'')}</pre></div>`).join('')}
+</body></html>`; const w=window.open('about:blank','_blank'); w.document.open(); w.document.write(html); w.document.close(); if(doPrint){ w.focus(); w.print(); }
+}
+
+// ============= Tabs (if any future tabs) =============
+// (kept simple; current layout is sectioned panels)
+
+// ============= Autosave wiring =============
+function toast(msg){ refs.autosaveStatus.textContent=msg; setTimeout(()=>refs.autosaveStatus.textContent='Autosave: idle', 1200); }
+
+// ============= Init =============
 (function init(){
-  clearEditor();
-  renderParsed();
-  renderArchive();
-  updateFiltersFromArchive();
+  // theme
+  const savedTheme=localStorage.getItem(LS_THEME)||'lyra'; refs.themePreset.value=savedTheme; applyTheme(savedTheme);
+  // schema
+  refs.schemaText.value=JSON.stringify(DEFAULT_SEAL_SCHEMA,null,2);
+  // LS archive
+  try{ const saved=JSON.parse(localStorage.getItem(LS_ARCHIVE)||'[]'); if(Array.isArray(saved)) archive=saved; }catch{}
+  renderArchive(); updateFiltersFromArchive(); detectCycles(); detectDuplicates();
+  // recovery option
+  checkRecovery();
+  // parsed/editor
+  clearEditor(); renderParsed();
+  // autosave any archive change via proxies on mutators already call archiveChanged(); here add periodic backup as well
+  setInterval(saveBackup, 15000);
+  // toggle rain
+  refs.btnToggleRain.addEventListener('click', ()=>{ rain.running=!rain.running; refs.btnToggleRain.textContent='Matrix: '+(rain.running?'On':'Off'); });
 })();
 </script>
 </body>

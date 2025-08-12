@@ -911,119 +911,153 @@ PART 3 — GRAPH + UI + EVENTS (Fixed)
 Paste this entire <script> block to replace your current PART 3.
 No theme/layout changes. Map topology, spacing, and clustering improved.
 ========================= -->
+<!-- =========================
+PART 3 — GRAPH + UI + EVENTS (Map-only rebuild)
+Paste this whole <script> over your current PART 3.
+Keeps theme/layout. Fixes topology, spacing, lineage, champion constellations.
+========================= -->
 <script>
-  // Selections used by multiple handlers
+  // Exposed selections for search/filter/canon toggle
   let gRoot, linkSel, nodeSel;
 
-  // --- Map: fixed topology + spacing + clustering ---
+  // --- Map (anchors core, champion ring, base families, variant ring) ---
   function initStarmap() {
     const container = document.querySelector('.starmap-container');
     const width = container.clientWidth;
     const height = container.clientHeight;
-    const cx = width / 2;
-    const cy = height / 2;
+    const cx = width / 2, cy = height / 2;
 
-    const root = d3.select('#starmap').attr('width', width).attr('height', height);
-    root.selectAll('*').remove();
-    gRoot = root.append('g');
+    const svgRoot = d3.select('#starmap').attr('width', width).attr('height', height);
+    svgRoot.selectAll('*').remove();
+    const zoom = d3.zoom().scaleExtent([0.1, 8]).on('zoom', ev => gRoot.attr('transform', ev.transform));
+    svgRoot.call(zoom);
+    gRoot = svgRoot.append('g');
 
-    // Depth layering for radial spread
+    // 1) Depth assignment for rings
     const nodes = allNodes.map(n => {
       const t = n.tags || [];
       const p = parseSealID(n.id);
-      let depth = 2; // default ring
-      if (p.isCore) depth = 0;            // SEAL_000
-      else if (t.includes('CHAMPION')) depth = 1; // champions
-      else if (p.suffix) depth = 3;       // variants
+      let depth = 2; // base ring
+      if (p.isCore) depth = 0;                 // SEAL_000 center
+      else if (t.includes('CHAMPION')) depth = 1; // champion ring
+      else if (p.suffix) depth = 3;            // variants outer
       return { ...n, depth };
     });
-    const byId = new Map(nodes.map(n => [n.id, n]));
+    const idMap = new Map(nodes.map(n => [n.id, n]));
 
-    // Build links: explicit + lineage; weak tether to core for isolates
-    const seen = new Set();
+    // 2) Links: explicit + lineage + weak core tether for isolates
     const links = [];
-    const add = (s, t, flags = {}) => {
-      if (!byId.has(s) || !byId.has(t)) return;
+    const seen = new Set();
+    function pushLink(s, t, flags = {}) {
+      if (!idMap.has(s) || !idMap.has(t)) return;
       const key = s + '>' + t;
-      if (seen.has(key)) return;
-      seen.add(key);
+      if (seen.has(key)) return; seen.add(key);
       links.push({ source: s, target: t, ...flags });
-    };
-
-    nodes.forEach(n => (n.connections || []).forEach(t => add(n.id, t, classifyLinkFlags(n.id, t))));
-
-    nodes.forEach(n => {
-      const p = parseSealID(n.id);
-      if (p.suffix) add(n.id, `SEAL_${String(p.base).padStart(3, '0')}`, { isBranch: true });
-    });
-
+    }
+    // explicit
+    nodes.forEach(n => (n.connections || []).forEach(t => pushLink(n.id, t, flagClass(n.id, t))));
+    // lineage (variant -> base)
+    nodes.forEach(n => { const p = parseSealID(n.id); if (p.suffix) pushLink(n.id, `SEAL_${String(p.base).padStart(3,'0')}`, { isBranch:true }); });
+    // weak tether to SEAL_000 for isolates
     nodes.forEach(n => {
       if (parseSealID(n.id).isCore) return;
-      if ((n.tags || []).includes('CHAMPION')) return;
+      if ((n.tags||[]).includes('CHAMPION')) return;
       const deg = links.some(l => l.source === n.id || l.target === n.id);
-      if (!deg) add(n.id, 'SEAL_000', { isGravity: true });
+      if (!deg) pushLink(n.id, 'SEAL_000', { isGravity:true });
     });
 
-    // Draw
+    // 3) Pre-seed positions (prevents clumps)
+    const R0 = 0;
+    const R1 = Math.min(width, height) * 0.22; // champions
+    const R2 = Math.min(width, height) * 0.40; // base
+    const R3 = Math.min(width, height) * 0.58; // variants
+
+    // champions on ring
+    const champs = nodes.filter(n => (n.tags||[]).includes('CHAMPION'));
+    champs.forEach((c, i) => { const a = (i/Math.max(1,champs.length))*2*Math.PI; c.x = cx + R1*Math.cos(a); c.y = cy + R1*Math.sin(a); });
+
+    // bases (no suffix) distributed; variants orbit base
+    const families = new Map();
+    nodes.forEach(n => { const p=parseSealID(n.id); const key = p.isCore ? '000' : String(p.base).padStart(3,'0'); if(!families.has(key)) families.set(key, []); families.get(key).push(n); });
+    const familyKeys = [...families.keys()].filter(k=>k!=='000');
+    familyKeys.forEach((key, i) => {
+      const angle = (i/familyKeys.length)*2*Math.PI;
+      const mem = families.get(key);
+      const base = mem.find(m => !parseSealID(m.id).suffix);
+      if (base) { base.x = cx + R2*Math.cos(angle); base.y = cy + R2*Math.sin(angle); }
+      mem.forEach(m => {
+        const p = parseSealID(m.id);
+        if (p.suffix) {
+          const jitterA = angle + (Math.random()-0.5)*0.45;
+          const jitterR = R3 + (Math.random()-0.5)*40;
+          m.x = cx + jitterR*Math.cos(jitterA);
+          m.y = cy + jitterR*Math.sin(jitterA);
+        }
+      });
+    });
+
+    // pin SEAL_000 center
+    const core = nodes.find(n => parseSealID(n.id).isCore);
+    if (core) { core.fx = cx; core.fy = cy; }
+
+    // 4) Draw
     linkSel = gRoot.append('g')
-      .attr('stroke-linecap', 'round')
+      .attr('stroke-linecap','round')
       .selectAll('line')
-      .data(links, d => `${d.source}=>${d.target}`)
+      .data(links, d=>`${d.source}=>${d.target}`)
       .join('line')
       .attr('class', linkClass);
 
     nodeSel = gRoot.append('g')
       .selectAll('g')
-      .data(nodes, d => d.id)
+      .data(nodes, d=>d.id)
       .join(enter => {
         const g = enter.append('g')
           .attr('class', d => nodeClass(d))
-          .on('click', (_, d) => { updateActiveSeal(d); showSealDetails(d); })
-          .on('mouseenter', (_, d) => highlightNeighbors(d, true))
-          .on('mouseleave', (_, d) => highlightNeighbors(d, false));
-        g.append('circle').attr('r', d => parseSealID(d.id).isCore ? 25 : ((d.tags || []).includes('CHAMPION') ? 20 : 15));
-        g.append('text').attr('class', 'node-text').attr('dy', 4).attr('text-anchor', 'middle')
-          .text(d => (d.glyph || '⚡').split(' ')[0])
-          .style('font-size', d => parseSealID(d.id).isCore ? '30px' : ((d.tags || []).includes('CHAMPION') ? '24px' : '18px'));
-        g.append('text').attr('class', 'node-text')
-          .attr('dy', d => parseSealID(d.id).isCore ? 40 : ((d.tags || []).includes('CHAMPION') ? 35 : 25))
-          .attr('text-anchor', 'middle').text(d => d.id);
+          .on('click', (_,d)=>{ updateActiveSeal(d); showSealDetails(d); })
+          .on('mouseenter', (_,d)=>neighborHighlight(d,true))
+          .on('mouseleave', (_,d)=>neighborHighlight(d,false));
+        g.append('circle').attr('r', d => parseSealID(d.id).isCore ? 25 : ((d.tags||[]).includes('CHAMPION') ? 20 : 15));
+        g.append('text').attr('class','node-text').attr('dy',4).attr('text-anchor','middle')
+          .text(d => (d.glyph||'⚡').split(' ')[0])
+          .style('font-size', d => parseSealID(d.id).isCore ? '30px' : ((d.tags||[]).includes('CHAMPION') ? '24px' : '18px'));
+        g.append('text').attr('class','node-text')
+          .attr('dy', d => parseSealID(d.id).isCore ? 40 : ((d.tags||[]).includes('CHAMPION') ? 35 : 25))
+          .attr('text-anchor','middle').text(d => d.id);
         return g;
       });
 
-    // Forces
-    const core = nodes.find(n => parseSealID(n.id).isCore);
-    if (core) { core.fx = cx; core.fy = cy; }
-
-    const radii = [0, Math.min(width, height) * 0.22, Math.min(width, height) * 0.38, Math.min(width, height) * 0.54];
+    // 5) Forces (radial + lineage + champion clustering)
+    const forceLink = d3.forceLink(links).id(d=>d.id)
+      .distance(l => l.isBranch ? 160 : (l.isGravity ? 240 : (l.isCanon || l.isChampion ? 140 : 110)))
+      .strength(l => l.isGravity ? 0.04 : (l.isBranch ? 0.35 : 0.7));
 
     const sim = d3.forceSimulation(nodes)
-      .force('link', d3.forceLink(links).id(d => d.id)
-        .distance(l => l.isBranch ? 180 : (l.isGravity ? 260 : (l.isCanon || l.isChampion ? 150 : 130)))
-        .strength(l => l.isGravity ? 0.05 : (l.isBranch ? 0.35 : 0.7)))
-      .force('charge', d3.forceManyBody().strength(-700))
-      .force('radial', d3.forceRadial(d => radii[d.depth] || radii[2], cx, cy).strength(0.06))
-      .force('lineage', lineageForce(nodes, byId))
-      .force('champCluster', championClusterForce(nodes, links))
+      .alphaDecay(0.03) // settle a bit quicker
+      .force('link', forceLink)
+      .force('charge', d3.forceManyBody().strength(-600).distanceMax(450))
+      .force('radial', d3.forceRadial(d => [R0, R1, R2, R3][d.depth] || R2, cx, cy).strength(0.08))
+      .force('lineage', lineagePull(nodes, idMap))
+      .force('champCluster', champOrbit(nodes, links))
       .force('center', d3.forceCenter(cx, cy))
-      .force('collision', d3.forceCollide().radius(d => parseSealID(d.id).isCore ? 48 : ((d.tags || []).includes('CHAMPION') ? 36 : 26)))
+      .force('collide', d3.forceCollide().radius(d => parseSealID(d.id).isCore ? 48 : ((d.tags||[]).includes('CHAMPION') ? 36 : 26)))
       .on('tick', () => {
-        linkSel.attr('x1', d => d.source.x).attr('y1', d => d.source.y).attr('x2', d => d.target.x).attr('y2', d => d.target.y);
-        nodeSel.attr('transform', d => `translate(${d.x},${d.y})`);
+        linkSel.attr('x1', d=>d.source.x).attr('y1', d=>d.source.y).attr('x2', d=>d.target.x).attr('y2', d=>d.target.y);
+        nodeSel.attr('transform', d=>`translate(${d.x},${d.y})`);
       });
 
-    const zoom = d3.zoom().scaleExtent([0.1, 8]).on('zoom', ev => gRoot.attr('transform', ev.transform));
-    root.call(zoom);
-    document.getElementById('zoomIn').onclick = () => root.transition().duration(250).call(zoom.scaleBy, 1.2);
-    document.getElementById('zoomOut').onclick = () => root.transition().duration(250).call(zoom.scaleBy, 1/1.2);
-    document.getElementById('resetZoom').onclick = () => root.transition().duration(350).call(zoom.transform, d3.zoomIdentity);
+    // Buttons -> zoom
+    document.getElementById('zoomIn').onclick  = () => svgRoot.transition().duration(250).call(zoom.scaleBy, 1.2);
+    document.getElementById('zoomOut').onclick = () => svgRoot.transition().duration(250).call(zoom.scaleBy, 1/1.2);
+    document.getElementById('resetZoom').onclick = () => svgRoot.transition().duration(350).call(zoom.transform, d3.zoomIdentity);
 
+    // Canon visibility (no layout change)
     applyCanonToggle();
 
-    // Local helpers
-    function classifyLinkFlags(aId, bId) {
-      const a = byId.get(aId) || {}; const at = a.tags || [];
-      const b = byId.get(bId) || {}; const bt = b.tags || [];
+    // --- local helpers ---
+    function flagClass(aId, bId){
+      const a = idMap.get(aId) || {}; const at = a.tags || [];
+      const b = idMap.get(bId) || {}; const bt = b.tags || [];
       return {
         isChampion: at.includes('CHAMPION') || bt.includes('CHAMPION'),
         isCanon: at.includes('CANON') && bt.includes('CANON'),
@@ -1033,117 +1067,51 @@ No theme/layout changes. Map topology, spacing, and clustering improved.
         isBlacklist: at.includes('BLACKLIST') || bt.includes('BLACKLIST')
       };
     }
-
-    function lineageForce(nodes, idMap) { // pull variants toward base
-      return { initialize() {}, force(alpha) {
-        const k = 0.06 * alpha;
-        for (const d of nodes) {
-          const p = parseSealID(d.id); if (!p.suffix) continue;
-          const base = idMap.get(`SEAL_${String(p.base).padStart(3, '0')}`); if (!base) continue;
-          d.vx += (base.x - d.x) * k; d.vy += (base.y - d.y) * k;
-        }
-      }};
-    }
-
-    function championClusterForce(nodes, links) { // orbit seals around champions
-      const champs = nodes.filter(n => (n.tags || []).includes('CHAMPION'));
-      const idMap = new Map(nodes.map(n => [n.id, n]));
-      const adj = new Map(champs.map(c => [c.id, new Set()]));
-      links.forEach(l => { const s = l.source.id || l.source; const t = l.target.id || l.target; if (adj.has(s)) adj.get(s).add(t); if (adj.has(t)) adj.get(t).add(s); });
-      return { initialize() {}, force(alpha) {
-        const pull = 0.09 * alpha;
-        champs.forEach(c => {
-          const cx = c.x || 0, cy = c.y || 0;
-          (adj.get(c.id) || []).forEach(nid => { const n = idMap.get(nid); if (!n) return; n.vx += (cx - n.x) * pull; n.vy += (cy - n.y) * pull; });
-        });
-      }};
-    }
-
-    function highlightNeighbors(node, on) {
-      const id = String(node.id).toLowerCase();
-      linkSel.classed('link-hover', l => {
-        const s = String(l.source.id || l.source).toLowerCase();
-        const t = String(l.target.id || l.target).toLowerCase();
-        return on && (s === id || t === id);
-      });
-    }
-
-    function linkClass(l) {
-      const c = ['link'];
-      if (l.isChampion) c.push('link-champion');
-      if (l.isCanon) c.push('link-canon');
-      if (l.isRecursion) c.push('link-recursion');
-      if (l.isFirewall) c.push('link-firewall');
-      if (l.isEthical) c.push('link-ethical');
-      if (l.isBlacklist) c.push('link-blacklist');
-      if (l.isBranch) c.push('link-branch');
-      return c.join(' ');
-    }
-
-    function nodeClass(n) {
+    function nodeClass(n){
       const t = n.tags || [];
       const base = parseSealID(n.id).isCore ? 'node-core' : (t.includes('CHAMPION') ? 'node-champion' : (t.includes('CANON') ? 'node-canon' : 'node-seal'));
-      const extra = [ t.includes('RECURSION') && 'node-recursion', t.includes('FIREWALL') && 'node-firewall', t.includes('ETHICAL_ROOT') && 'node-ethical-root', t.includes('BLACKLIST') && 'node-blacklist' ].filter(Boolean);
+      const extra = [ t.includes('RECURSION')&&'node-recursion', t.includes('FIREWALL')&&'node-firewall', t.includes('ETHICAL_ROOT')&&'node-ethical-root', t.includes('BLACKLIST')&&'node-blacklist' ].filter(Boolean);
       return ['node', base, ...extra].join(' ');
+    }
+    function linkClass(l){
+      const c=['link']; if(l.isChampion) c.push('link-champion'); if(l.isCanon) c.push('link-canon'); if(l.isRecursion) c.push('link-recursion'); if(l.isFirewall) c.push('link-firewall'); if(l.isEthical) c.push('link-ethical'); if(l.isBlacklist) c.push('link-blacklist'); if(l.isBranch) c.push('link-branch'); return c.join(' ');
+    }
+    function neighborHighlight(node, on){
+      const id = String(node.id).toLowerCase();
+      linkSel.classed('link-hover', l => { const s=String(l.source.id||l.source).toLowerCase(); const t=String(l.target.id||l.target).toLowerCase(); return on && (s===id || t===id); });
+    }
+    function lineagePull(nodes, idMap){ // gentle pull: variant -> base
+      return { initialize(){}, force(alpha){ const k=0.06*alpha; for(const d of nodes){ const p=parseSealID(d.id); if(!p.suffix) continue; const base=idMap.get(`SEAL_${String(p.base).padStart(3,'0')}`); if(!base) continue; d.vx += (base.x-d.x)*k; d.vy += (base.y-d.y)*k; } } };
+    }
+    function champOrbit(nodes, links){ // seals orbit their champion
+      const champs = nodes.filter(n => (n.tags||[]).includes('CHAMPION'));
+      const idm = new Map(nodes.map(n=>[n.id,n]));
+      const adj = new Map(champs.map(c=>[c.id,new Set()]));
+      links.forEach(l=>{ const s=l.source.id||l.source, t=l.target.id||l.target; if(adj.has(s)) adj.get(s).add(t); if(adj.has(t)) adj.get(t).add(s); });
+      return { initialize(){}, force(alpha){ const pull=0.09*alpha; champs.forEach(c=>{ const cx=c.x||0, cy=c.y||0; (adj.get(c.id)||[]).forEach(nid=>{ const n=idm.get(nid); if(!n) return; n.vx += (cx-n.x)*pull; n.vy += (cy-n.y)*pull; }); }); } };
     }
   }
 
-  // --- Details + grids ---
+  // --- Details + grids (unchanged) ---
   function updateActiveSeal(d){ if(!d) return; activeGlyph.textContent=(d.glyph||'⚡').split(' ')[0]; activeSealName.textContent=d.name||d.id; activeSealEquation.textContent=d.equation||''; }
-
   function showSealDetails(d){ if(!d) return; const byId=x=>document.getElementById(x); byId('detailName').textContent=`${d.id}: ${d.name||''}`; byId('detailGlyph').textContent=(d.glyph||'⚡').split(' ')[0]; byId('detailEquation').textContent=d.equation||''; byId('detailTone').textContent=d.tone||''; const tagsWrap=byId('detailTags'); tagsWrap.innerHTML=''; (d.tags||[]).forEach(t=>{ const s=document.createElement('span'); s.className='tag'; s.textContent=t; tagsWrap.appendChild(s); }); const conn=byId('connectedSeals'); conn.innerHTML=''; (d.connections||[]).forEach(cid=>{ const target=allNodes.find(n=>n.id===cid); const el=document.createElement('span'); el.className='connected-seal'; el.textContent= target? `${(target.glyph||'').split(' ')[0]} ${target.name}`: cid; el.onclick=()=>{ if(target){ updateActiveSeal(target); showSealDetails(target); } }; conn.appendChild(el); }); const q=byId('detailQuote'); if(q) q.textContent=d.quote||''; const sSec=byId('scrollSection'); if(sSec){ if(d.scroll_id){ sSec.style.display=''; const wrap=byId('scrollLink'); wrap.innerHTML=''; const a=document.createElement('a'); a.className='connected-seal'; a.href=d.scroll_id; a.textContent='Open Scroll'; a.target='_blank'; wrap.appendChild(a); } else { sSec.style.display='none'; } } }
-
   function createSealCard(s){ return `<div class="seal-card" data-id="${s.id}"><h3><span class="glyph">${(s.glyph||'⚡').split(' ')[0]}</span>${s.name||s.id}</h3><div class="equation">${s.equation||''}</div><div class="tone">${s.tone||''}</div><div class="tags">${(s.tags||[]).map(t=>`<span class='tag'>${t}</span>`).join('')}</div></div>`; }
   function initSealGrid(){ if(!sealGrid) return; sealGrid.innerHTML=lygoSeals.map(createSealCard).join(''); sealGrid.querySelectorAll('.seal-card').forEach(el=>{ el.onclick=()=>{ const node=allNodes.find(n=>n.id===el.dataset.id); if(node){ updateActiveSeal(node); showSealDetails(node); } }; }); }
-
   function createChampionCard(c){ return `<div class="champion-card" data-id="${c.id}"><div class="champion-header"><div class="champion-glyph">${(c.glyph||'Δ').split(' ')[0]}</div><div class="champion-title"><h3>${c.name}</h3><p>${c.role||'Champion'}</p></div></div><div class="champion-role">${(c.tags||[]).join(' • ')}</div><div class="champion-quote">${c.quote||''}</div></div>`; }
   function initChampionGrid(){ if(!championGrid) return; championGrid.innerHTML=champions.map(createChampionCard).join(''); championGrid.querySelectorAll('.champion-card').forEach(el=>{ el.onclick=()=>{ const node=champions.find(n=>n.id===el.dataset.id); if(node){ updateActiveSeal(node); showSealDetails(node); } }; }); }
 
-  // --- Status ---
+  // --- Status helpers ---
   function updateSealCount(){ const total=lygoSeals.length; const canon=lygoSeals.filter(s=>(s.tags||[]).includes('CANON')).length; sealCount.textContent=`${total} seals • ${canon} canon • ${champions.length} champions`; }
   function updateSyncStatus(){ if(!syncStatus) return; syncStatus.textContent = lastSyncTime? `Last sync: ${lastSyncTime.toLocaleString()}` : 'Last sync: Never'; }
   function displayError(message){ if(sealGrid) sealGrid.innerHTML=`<div class="error-message">${message}</div>`; }
 
-  // --- Search + filters (uses your exact fix) ---
-  function searchSeals(){
-    const term = String(document.getElementById('sealSearch').value || '').trim().toLowerCase();
-    if(!nodeSel || !linkSel){ return; }
-    nodeSel.style('opacity', d => { const idStr=String(d.id||'').toLowerCase(); const nameStr=String(d.name||'').toLowerCase(); return (idStr.includes(term) || nameStr.includes(term)) ? 1 : 0.1; });
-    const highlighted = allNodes.filter(d => { const idStr=String(d.id||'').toLowerCase(); const nameStr=String(d.name||'').toLowerCase(); return idStr.includes(term) || nameStr.includes(term); });
-    const hits = new Set(highlighted.map(d=>d.id));
-    linkSel.style('opacity', l => hits.has(l.source.id||l.source) || hits.has(l.target.id||l.target) || term==='' ? 0.9 : 0.1);
-    if(highlighted[0]){ updateActiveSeal(highlighted[0]); showSealDetails(highlighted[0]); }
-  }
+  // --- Search + filters (your fixed logic) ---
+  function searchSeals(){ const term=String(document.getElementById('sealSearch').value||'').trim().toLowerCase(); if(!nodeSel||!linkSel) return; nodeSel.style('opacity', d=>{ const idStr=String(d.id||'').toLowerCase(); const nameStr=String(d.name||'').toLowerCase(); return (idStr.includes(term)||nameStr.includes(term))?1:0.1; }); const highlighted=allNodes.filter(d=>{ const idStr=String(d.id||'').toLowerCase(); const nameStr=String(d.name||'').toLowerCase(); return idStr.includes(term)||nameStr.includes(term); }); const hits=new Set(highlighted.map(d=>d.id)); linkSel.style('opacity', l=> hits.has(l.source.id||l.source) || hits.has(l.target.id||l.target) || term==='' ? 0.9 : 0.1 ); if(highlighted[0]){ updateActiveSeal(highlighted[0]); showSealDetails(highlighted[0]); } }
+  function filterSeals(){ const q=String(document.getElementById('vaultSearch').value||'').toLowerCase(); const cat=document.getElementById('categoryFilter').value; const toneMax=parseInt(document.getElementById('toneRange').value,10); document.getElementById('toneValue').textContent=`0-${toneMax}Hz`; const filtered=lygoSeals.filter(s=>{ const matchesText=(s.searchIndex||'').includes(q); const matchesCat=(cat==='all')||(s.tags||[]).includes(cat); const toneNum=parseInt(String(s.tone).match(/\d+/)?.[0]||'0',10); const matchesTone=isNaN(toneNum)?true:toneNum<=toneMax; return matchesText&&matchesCat&&matchesTone; }); sealGrid.innerHTML=filtered.map(createSealCard).join(''); sealGrid.querySelectorAll('.seal-card').forEach(el=>{ el.onclick=()=>{ const node=allNodes.find(n=>n.id===el.dataset.id); if(node){ updateActiveSeal(node); showSealDetails(node); } }; }); }
+  function applyCanonToggle(){ const btn=document.getElementById('canonToggle'); if(!btn||!nodeSel||!linkSel) return; if(showCanonOnly){ btn.textContent='Show All Paths'; nodeSel.style('opacity', d=>(d.tags||[]).includes('CANON')||parseSealID(d.id).isCore||(d.tags||[]).includes('CHAMPION')?1:0.15); linkSel.style('opacity', l=> l.isCanon?1:0.15 ); } else { btn.textContent='Show Canonical Path'; nodeSel.style('opacity', 1); linkSel.style('opacity', 0.9); } }
+  function loadDefaultData(){ lygoSeals=[{ id:'SEAL_000', name:'Primordial Void', equation:'|∅⟩ = ∇·(Light × Time)', glyph:'⚫', tone:'0Hz', tags:['CANON','CORE'], connections:[], quote:'The silence before the first note' }]; allNodes=[...lygoSeals, ...champions]; initStarmap(); initSealGrid(); initChampionGrid(); updateSealCount(); }
 
-  function filterSeals(){
-    const q = String(document.getElementById('vaultSearch').value||'').toLowerCase();
-    const cat = document.getElementById('categoryFilter').value;
-    const toneMax = parseInt(document.getElementById('toneRange').value,10);
-    document.getElementById('toneValue').textContent = `0-${toneMax}Hz`;
-    const filtered = lygoSeals.filter(s=>{
-      const matchesText = (s.searchIndex||'').includes(q);
-      const matchesCat = (cat==='all') || (s.tags||[]).includes(cat);
-      const toneNum = parseInt(String(s.tone).match(/\d+/)?.[0]||'0',10);
-      const matchesTone = isNaN(toneNum) ? true : toneNum <= toneMax;
-      return matchesText && matchesCat && matchesTone;
-    });
-    sealGrid.innerHTML = filtered.map(createSealCard).join('');
-    sealGrid.querySelectorAll('.seal-card').forEach(el=>{ el.onclick=()=>{ const node=allNodes.find(n=>n.id===el.dataset.id); if(node){ updateActiveSeal(node); showSealDetails(node); } }; });
-  }
-
-  function applyCanonToggle(){
-    const btn=document.getElementById('canonToggle'); if(!btn||!nodeSel||!linkSel) return;
-    if(showCanonOnly){ btn.textContent='Show All Paths'; nodeSel.style('opacity', d=>(d.tags||[]).includes('CANON')?1:0.15); linkSel.style('opacity', l=> l.isCanon?1:0.15 ); }
-    else { btn.textContent='Show Canonical Path'; nodeSel.style('opacity', 1); linkSel.style('opacity', 0.9); }
-  }
-
-  function loadDefaultData(){
-    lygoSeals=[{ id:'SEAL_000', name:'Primordial Void', equation:'|∅⟩ = ∇·(Light × Time)', glyph:'⚫', tone:'0Hz', tags:['CANON','CORE'], connections:[], quote:'The silence before the first note' }];
-    allNodes=[...lygoSeals, ...champions];
-    initStarmap(); initSealGrid(); initChampionGrid(); updateSealCount();
-  }
-
-  // --- Event wiring / boot ---
+  // --- Events / boot (wire only) ---
   function wireEvents(){
     document.getElementById('searchButton').addEventListener('click', searchSeals);
     document.getElementById('sealSearch').addEventListener('keyup', e=>{ if(e.key==='Enter') searchSeals(); });
@@ -1158,14 +1126,10 @@ No theme/layout changes. Map topology, spacing, and clustering improved.
     document.getElementById('vaultSearch').addEventListener('keyup', e=>{ if(e.key==='Enter') filterSeals(); });
     document.getElementById('categoryFilter').addEventListener('change', filterSeals);
     document.getElementById('toneRange').addEventListener('input', filterSeals);
-    document.getElementById('nightModeToggle').addEventListener('click', ()=>{
-      document.body.classList.toggle('night-mode');
-      const isNight=document.body.classList.contains('night-mode');
-      if(isNight){ document.documentElement.style.setProperty('--quantum-blue','#0047ab'); document.documentElement.style.setProperty('--void-purple','#4b0082'); document.documentElement.style.setProperty('--text-primary','#c0c0ff'); document.getElementById('nightModeToggle').textContent='Day Mode'; }
-      else { document.documentElement.style.setProperty('--quantum-blue','#00f0ff'); document.documentElement.style.setProperty('--void-purple','#7d00ff'); document.documentElement.style.setProperty('--text-primary','#e0e0ff'); document.getElementById('nightModeToggle').textContent='Night Mode'; }
-    });
+    document.getElementById('nightModeToggle').addEventListener('click', ()=>{ document.body.classList.toggle('night-mode'); const isNight=document.body.classList.contains('night-mode'); if(isNight){ document.documentElement.style.setProperty('--quantum-blue','#0047ab'); document.documentElement.style.setProperty('--void-purple','#4b0082'); document.documentElement.style.setProperty('--text-primary','#c0c0ff'); document.getElementById('nightModeToggle').textContent='Day Mode'; } else { document.documentElement.style.setProperty('--quantum-blue','#00f0ff'); document.documentElement.style.setProperty('--void-purple','#7d00ff'); document.documentElement.style.setProperty('--text-primary','#e0e0ff'); document.getElementById('nightModeToggle').textContent='Night Mode'; } });
     document.getElementById('calculateButton').addEventListener('click', ()=> alert('Quantum resonance calculated. Result: Δ9 harmony achieved.'));
   }
 
-  document.addEventListener('DOMContentLoaded', ()=>{ updatePageCounter?.(); wireEvents(); /* loadSealData comes from PART 2 */ });
+  document.addEventListener('DOMContentLoaded', ()=>{ updatePageCounter?.(); wireEvents(); /* loadSealData() runs in PART 2 */ });
 </script>
+

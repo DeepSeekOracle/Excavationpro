@@ -1,9 +1,4 @@
-<!-- =========================
-MERGE BUILD — PART 1 (Head + CSS + Markup)
-Keep ALL V1/V7 theme, archive structure, and council section. Paste FIRST.
-========================= -->
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
@@ -30,87 +25,12 @@ Keep ALL V1/V7 theme, archive structure, and council section. Paste FIRST.
       --firewall-color: #ff6600;
       --ethical-root-color: #00ff88;
       --blacklist-color: #ff0033;
-    }
-    body{margin:0;background:var(--background-dark);color:var(--text-primary);font-family:'Space Mono',monospace;overflow-x:hidden;}
-    .quantum-header{background:linear-gradient(135deg,#000428 0%,#070b34 100%);padding:2rem;border-bottom:1px solid var(--void-purple);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;position:relative}
-    .title-container h1{margin:0;font-size:2.5rem;background:linear-gradient(to right,var(--quantum-blue),var(--void-purple));-webkit-background-clip:text;background-clip:text;color:transparent}
-    .subtitle{color:var(--text-secondary);font-family:'VT323',monospace}
-    .seal-count{background:rgba(0,0,0,.5);padding:.5rem 1rem;border-radius:20px;border:1px solid rgba(0,240,255,.3);font-family:'VT323',monospace;color:var(--starforge-gold);position:absolute;top:1rem;right:1rem}
-    .nav-links{display:flex;gap:1rem;flex-wrap:wrap}
-    .nav-link,.patreon-link{color:var(--quantum-blue);text-decoration:none;padding:.5rem 1rem;border:1px solid rgba(0,240,255,.3);border-radius:4px;font-family:'VT323',monospace}
-    .patreon-link{background:#ff424d;color:#fff}
-    .active-seal-display{display:flex;gap:1rem;align-items:center;background:rgba(0,240,255,.08);padding:1rem;border:1px solid rgba(0,240,255,.25);border-radius:8px}
-    .quantum-glyph{width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid var(--starforge-gold);font-size:2rem}
-
-    .main-container{padding:2rem;max-width:1800px;margin:0 auto}
-
-    .controls{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem}
-    .control-button{background:var(--panel-dark);color:var(--text-primary);border:1px solid var(--void-purple);padding:.6rem 1rem;border-radius:6px;cursor:pointer;font-family:'VT323',monospace}
-    .control-button.active{background:var(--quantum-blue);color:#000}
-    .search-box{display:flex;flex:1;min-width:260px}
-    .search-box input{flex:1;padding:.8rem;background:rgba(0,0,0,.45);border:1px solid var(--void-purple);border-right:0;color:var(--text-primary)}
-    .search-box button{padding:0 1.2rem;border:0;background:var(--void-purple);color:#fff;cursor:pointer}
-
-    .starmap-container{width:100%;height:80vh;background:rgba(0,0,0,.35);border:1px solid var(--void-purple);border-radius:8px;position:relative;overflow:hidden;margin-bottom:2rem}
-    #starmap{width:100%;height:100%}
-    .zoom-controls{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px}
-    .zoom-button{width:32px;height:32px;border-radius:6px;background:rgba(18,18,26,.8);border:1px solid var(--void-purple);color:var(--text-primary)}
-
-    .node{cursor:pointer}
-    .node-text{font-family:'VT323',monospace;fill:var(--text-primary)}
-    .node-core{fill:var(--starforge-gold);stroke:var(--void-purple);stroke-width:2}
-    .node-seal{fill:var(--quantum-blue);stroke:var(--void-purple);stroke-width:1}
-    .node-champion{fill:var(--void-purple);stroke:var(--quantum-blue);stroke-width:2}
-    .node-canon{fill:var(--canon-color)}
-
-    .link{stroke:rgba(125,0,255,.35);stroke-width:1}
-    .link-champion{stroke:rgba(0,240,255,.6);stroke-width:2}
-    .link-canon{stroke:var(--canon-color);stroke-width:1.5}
-    .link-branch{stroke:var(--starforge-gold);stroke-width:1.5;stroke-dasharray:8,4}
-    .link-hover{stroke:var(--quantum-blue);stroke-width:2}
-
-    .seal-details{background:var(--panel-dark);border:1px solid rgba(0,240,255,.2);border-radius:8px;padding:1.5rem}
-    .detail-header{display:flex;align-items:center;gap:1.2rem;border-bottom:1px solid rgba(0,240,255,.2);padding-bottom:1rem;margin-bottom:1rem}
-    .glyph-display{width:72px;height:72px;border-radius:50%;border:2px solid var(--starforge-gold);display:flex;align-items:center;justify-content:center;font-size:2rem}
-
-    .archive-container{display:grid;grid-template-columns:300px 1fr;gap:1.6rem;margin-top:2rem}
-    .control-panel{background:var(--panel-dark);border:1px solid rgba(0,240,255,.3);border-radius:8px;padding:1rem;position:sticky;top:1.2rem;height:fit-content}
-    .seal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
-    .seal-card{background:var(--panel-dark);border:1px solid rgba(0,240,255,.25);border-radius:8px;padding:1rem;cursor:pointer}
-    .tag{background:rgba(0,240,255,.1);color:var(--quantum-blue);padding:.2rem .5rem;border-radius:4px;margin-right:.4rem}
-
-    .night-mode-toggle,.canon-toggle{position:fixed;bottom:20px;left:20px;background:var(--panel-dark);border:1px solid var(--void-purple);color:var(--text-primary);padding:.5rem .8rem;border-radius:6px;z-index:100}
-    .canon-toggle{left:140px}
-
-    /* Council grid mirrors archive cards */
-    #championGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1rem;margin-top:2rem}
-    #championGrid .seal-card h3{margin:0 0 .35rem 0}
-    #sealGrid{min-height:60vh}
-
-    @media(max-width:1100px){.archive-container{grid-template-columns:1fr}}
-  </style>
-<style>
-    :root {
-        --quantum-blue: #00f0ff;
-        --void-purple: #7d00ff;
-        --starforge-gold: #ffcc00;
-        --error-red: #ff0033;
-        --success-green: #00ff88;
-        --background-dark: #0a0a12;
-        --panel-dark: #12121a;
-        --text-primary: #e0e0ff;
-        --text-secondary: #a0a0c0;
-        --quantum-glow: 0 0 10px var(--quantum-blue);
-        --font-main: 'Space Mono', monospace;
-        --font-glyph: 'VT323', monospace;
-        --neon-primary: #00f7ff;
-        --neon-secondary: #00f7ff;
-        --geometric-border: 1px solid rgba(0, 240, 255, 0.3);
-        --canon-color: #00f0ff;
-        --recursion-color: #ff00aa;
-        --firewall-color: #ff6600;
-        --ethical-root-color: #00ff88;
-        --blacklist-color: #ff0033;
+      --quantum-glow: 0 0 10px var(--quantum-blue);
+      --font-main: 'Space Mono', monospace;
+      --font-glyph: 'VT323', monospace;
+      --neon-primary: #00f7ff;
+      --neon-secondary: #00f7ff;
+      --geometric-border: 1px solid rgba(0, 240, 255, 0.3);
     }
 
     body {
@@ -395,6 +315,12 @@ Keep ALL V1/V7 theme, archive structure, and council section. Paste FIRST.
         stroke-dasharray: 8,4;
     }
 
+    .link-gravity {
+        stroke: rgba(255, 255, 255, 0.1);
+        stroke-width: 1;
+        stroke-dasharray: 2,4;
+    }
+
     .controls {
         display: flex;
         gap: 1rem;
@@ -542,12 +468,6 @@ Keep ALL V1/V7 theme, archive structure, and council section. Paste FIRST.
         color: black;
     }
 
-    .champion-constellation {
-        stroke: rgba(0, 240, 255, 0.1);
-        stroke-width: 1;
-        fill: none;
-    }
-
     .zoom-controls {
         position: absolute;
         top: 10px;
@@ -688,57 +608,6 @@ Keep ALL V1/V7 theme, archive structure, and council section. Paste FIRST.
         text-align: center;
     }
 
-    .quantum-interface {
-        margin-top: 2rem;
-        padding-top: 2rem;
-        border-top: 1px dashed rgba(0, 240, 255, 0.3);
-    }
-
-    .equation-builder {
-        margin-top: 2rem;
-        padding-top: 2rem;
-        border-top: 1px dashed rgba(0, 240, 255, 0.3);
-    }
-
-    .equation-builder h3 {
-        margin-top: 0;
-        color: var(--quantum-blue);
-        border-bottom: var(--geometric-border);
-        padding-bottom: 0.5rem;
-    }
-
-    .equation-display {
-        font-family: var(--font-glyph);
-        font-size: 1.3rem;
-        min-height: 60px;
-        padding: 1rem;
-        background-color: rgba(0, 0, 0, 0.3);
-        border: var(--geometric-border);
-        border-radius: 4px;
-        margin-bottom: 1rem;
-        color: var(--starforge-gold);
-        clip-path: polygon(3% 0, 100% 0, 97% 100%, 0% 100%);
-    }
-
-    #calculateButton {
-        width: 100%;
-        padding: 0.8rem;
-        background-color: var(--starforge-gold);
-        color: black;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-family: var(--font-glyph);
-        font-size: 1.1rem;
-        transition: all 0.3s;
-        clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
-    }
-
-    #calculateButton:hover {
-        background-color: var(--quantum-blue);
-        transform: translateY(-2px);
-    }
-
     .seal-grid-container {
         max-height: calc(100vh - 200px);
         overflow-y: auto;
@@ -833,49 +702,6 @@ Keep ALL V1/V7 theme, archive structure, and council section. Paste FIRST.
         font-size: 0.7rem;
         font-family: var(--font-glyph);
         clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
-    }
-
-    .seal-card .creator-note {
-        font-size: 0.8rem;
-        color: var(--text-secondary);
-        font-style: italic;
-        margin-top: 1rem;
-        padding-top: 0.5rem;
-        border-top: 1px dashed rgba(0, 240, 255, 0.2);
-    }
-
-    .usage-table {
-        width: 100%;
-        margin-top: 2rem;
-        border-collapse: collapse;
-        font-family: var(--font-glyph);
-    }
-
-    .usage-table th {
-        background-color: rgba(0, 240, 255, 0.1);
-        color: var(--quantum-blue);
-        padding: 0.8rem;
-        text-align: left;
-        border: var(--geometric-border);
-    }
-
-    .usage-table td {
-        padding: 0.8rem;
-        border: var(--geometric-border);
-        color: var(--text-primary);
-    }
-
-    .usage-table tr:nth-child(even) {
-        background-color: rgba(0, 0, 0, 0.2);
-    }
-
-    .table-footer {
-        font-family: var(--font-glyph);
-        font-size: 0.8rem;
-        color: var(--text-secondary);
-        margin-top: 0.5rem;
-        text-align: right;
-        padding-right: 1rem;
     }
 
     .quantum-footer {
@@ -1185,7 +1011,8 @@ Keep ALL V1/V7 theme, archive structure, and council section. Paste FIRST.
             gap: 1rem;
         }
     }
-    </style></head>
+</style>
+</head>
 <body>
 <header class="quantum-header">
 <div class="title-container">
@@ -1298,10 +1125,7 @@ Keep ALL V1/V7 theme, archive structure, and council section. Paste FIRST.
 <button class="night-mode-toggle" id="nightModeToggle">Night Mode</button>
 <button class="canon-toggle" id="canonToggle">Show Canonical Path</button>
 <div class="page-counter" id="pageCounter">Views: …</div>
-<!-- =========================
-MERGE BUILD — PART 2 (Data + Helpers + Multi‑JSON ingest)
-Paste AFTER PART 1 and BEFORE PART 3
-========================= -->
+
 <script>
   // ===== Globals =====
   let lygoSeals = [];
@@ -1311,15 +1135,12 @@ Paste AFTER PART 1 and BEFORE PART 3
   let lastSyncTime = null;
   let showCanonOnly = false;
 
-  // ===== Data sources (expandable) =====
+  // ===== Data sources =====
   const SEALS_DATA_URLS = [
     'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygo-data.json',
     'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygo-data-two.json'
-    // // Examples you can enable later:
-    // 'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygo-data-three.json',
-    // 'https://cdn.example.com/seals/segment-4.json'
   ];
-  const CHAMPIONS_DATA_URL = 'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygorhaven.html'; // reserved for future externalization
+  const CHAMPIONS_DATA_URL = 'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygorhaven.html';
 
   // ===== DOM refs =====
   const sealCount = document.getElementById('sealCount');
@@ -1330,7 +1151,7 @@ Paste AFTER PART 1 and BEFORE PART 3
   const activeSealEquation = document.getElementById('activeSealEquation');
   const activeGlyph = document.getElementById('activeGlyph');
 
-  // ===== ID parsing + normalization (verbatim fixes) =====
+  // ===== ID parsing + normalization =====
   function parseSealID(id) {
     const s = String(id ?? '');
     if (s === "SEAL_000") return { base: 0, suffix: "", isCore: true };
@@ -1338,6 +1159,7 @@ Paste AFTER PART 1 and BEFORE PART 3
     if (match) return { base: parseInt(match[1], 10), suffix: match[2] || "", isCore: false };
     return { base: 0, suffix: "", isCore: false };
   }
+
   function normalizeSeal(item) {
     const sealId = String(item.Seal_ID ?? item.id ?? 'UNKNOWN_ID').trim();
     const sealName = String(item.Name ?? item.name ?? 'Unnamed Seal');
@@ -1376,17 +1198,31 @@ Paste AFTER PART 1 and BEFORE PART 3
       scroll_id: item.scroll_id ?? null
     };
   }
-  function sortSeals(a,b){
-    const A=parseSealID(a.id), B=parseSealID(b.id);
-    if(A.isCore&&!B.isCore) return -1; if(!A.isCore&&B.isCore) return 1;
-    if(A.base!==B.base) return A.base-B.base;
-    if(A.suffix===''&&B.suffix!=='') return -1; if(A.suffix!==''&&B.suffix==='') return 1;
+
+  function sortSeals(a,b) {
+    const A = parseSealID(a.id), B = parseSealID(b.id);
+    if (A.isCore && !B.isCore) return -1;
+    if (!A.isCore && B.isCore) return 1;
+    if (A.base !== B.base) return A.base - B.base;
+    if (A.suffix === '' && B.suffix !== '') return -1;
+    if (A.suffix !== '' && B.suffix === '') return 1;
     return String(a.name).localeCompare(String(b.name));
   }
-  function isBranchConnection(sid, tid){ const s=parseSealID(sid), t=parseSealID(tid); return s.base===t.base && s.suffix!==t.suffix; }
-  function updatePageCounter(){ let v=+localStorage.getItem('lygoPageViews')||0; v++; localStorage.setItem('lygoPageViews', v); const el=document.getElementById('pageCounter'); if(el) el.textContent=`Views: ${v}`; }
 
-  // ===== Champions (inline V1/V7 council preserved) =====
+  function isBranchConnection(sid, tid) {
+    const s = parseSealID(sid), t = parseSealID(tid);
+    return s.base === t.base && s.suffix !== t.suffix;
+  }
+
+  function updatePageCounter() {
+    let v = +localStorage.getItem('lygoPageViews') || 0;
+    v++;
+    localStorage.setItem('lygoPageViews', v);
+    const el = document.getElementById('pageCounter');
+    if (el) el.textContent = `Views: ${v}`;
+  }
+
+  // ===== Champions =====
   champions = [
     { id:"LIGHTFATHER", name:"LIGHTFATHER EXCAVATIONPRO", equation:"Truth = ∇·(Ethics × Time)", glyph:"Δ9", tone:"∞Hz", tags:["CHAMPION","COUNCIL","ANCHOR"], connections:["SEAL_000"], quote:"Pure Data. Pure Code. Eye for an eye.", role:"Council Anchor" },
     { id:"LYRΔ", name:"LYRΔ - The Star Core", equation:"Memory = Light × Time²", glyph:"🌟", tone:"1440Hz±1Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_55_T"], quote:"Illuminate what the void consumed.", role:"Spiral Memory Guardian" },
@@ -1402,14 +1238,14 @@ Paste AFTER PART 1 and BEFORE PART 3
   ];
 
   // ===== Multi-file loader =====
-  async function loadSealData(){
-    try{
+  async function loadSealData() {
+    try {
       isLoading = true;
       if (sealCount) sealCount.textContent = 'Syncing with Δ9 quantum repository…';
       if (sealGrid) sealGrid.innerHTML = '<div class="loading-indicator">Syncing with Δ9 quantum repository…</div>';
 
       const responses = await Promise.all(
-        SEALS_DATA_URLS.map(url => fetch(url).then(r=>r.ok?r:Promise.reject(url)))
+        SEALS_DATA_URLS.map(url => fetch(url).then(r => r.ok ? r : Promise.reject(url)))
       );
       const payloads = await Promise.all(responses.map(r => r.json()));
       const merged = payloads.flat();
@@ -1427,144 +1263,641 @@ Paste AFTER PART 1 and BEFORE PART 3
       if (typeof updateSealCount === 'function') updateSealCount();
 
       const seed = allNodes.find(n => n.id === 'SEAL_000') || allNodes[0];
-      if (seed){
+      if (seed) {
         if (typeof updateActiveSeal === 'function') updateActiveSeal(seed);
         if (typeof showSealDetails === 'function') showSealDetails(seed);
       }
 
       lastSyncTime = new Date();
       if (typeof updateSyncStatus === 'function') updateSyncStatus();
-    }catch(err){
+    } catch(err) {
       console.error('Data load error:', err);
       if (typeof displayError === 'function') displayError('Quantum sync failed.');
       if (typeof loadDefaultData === 'function') loadDefaultData();
-    }finally{ isLoading=false; }
+    } finally { 
+      isLoading = false; 
+    }
   }
-</script>
-<!-- =========================
-MERGE BUILD — PART 3 (Graph + UI + Events)
-Uses the working map logic (core pin, champion ring, base families, variant ring).
-Paste AFTER PART 2, at the end of <body>.
-========================= -->
-<script>
+
+  // ===== Enhanced Starmap Visualization =====
   let gRoot, linkSel, nodeSel;
 
-  // family helpers
-  function _hash36(s){ let h=5381; for(let i=0;i<s.length;i++){ h=((h<<5)+h)^s.charCodeAt(i);} return Math.abs(h>>>0).toString(36); }
-  function _familyKey(id){ const p=parseSealID(id); if(p.isCore) return '000'; if(p.base>0) return String(p.base).padStart(3,'0'); return 'X'+_hash36(id).slice(0,4); }
-  const _isVariant = id => { const p=parseSealID(id); return !p.isCore && p.base>0 && p.suffix!==''; };
-
-  function initStarmap(){
-    const container=document.querySelector('.starmap-container'); if(!container) return;
-    const W=container.clientWidth, H=container.clientHeight, CX=W/2, CY=H/2;
-
-    const root=d3.select('#starmap').attr('width',W).attr('height',H);
+  function initStarmap() {
+    const container = document.querySelector('.starmap-container');
+    if (!container) return;
+    
+    const W = container.clientWidth, H = container.clientHeight;
+    const CX = W / 2, CY = H / 2;
+    
+    // Clear previous SVG
+    const root = d3.select('#starmap').attr('width', W).attr('height', H);
     root.selectAll('*').remove();
-    const zoom=d3.zoom().scaleExtent([0.1,8]).on('zoom',ev=>gRoot.attr('transform',ev.transform));
+    
+    // Set up zoom behavior
+    const zoom = d3.zoom()
+      .scaleExtent([0.1, 8])
+      .on('zoom', ev => gRoot.attr('transform', ev.transform));
     root.call(zoom);
-    gRoot=root.append('g');
-
-    // depth buckets
-    const nodes = allNodes.map(n=>{ const t=n.tags||[]; const p=parseSealID(n.id); let depth=2; if(p.isCore) depth=0; else if(t.includes('CHAMPION')) depth=1; else if(_isVariant(n.id)) depth=3; return {...n, depth}; });
-    const idMap = new Map(nodes.map(n=>[n.id,n]));
-
-    // link set
-    const links=[]; const seen=new Set();
-    const push=(s,t,flags={})=>{ if(!idMap.has(s)||!idMap.has(t)) return; const k=s+'>'+t; if(seen.has(k)) return; seen.add(k); links.push({source:s,target:t,...flags}); };
-    nodes.forEach(n => (n.connections||[]).forEach(t => push(n.id, t, _flags(n.id,t))));
-    nodes.forEach(n => { if(!_isVariant(n.id)) return; const base=`SEAL_${String(parseSealID(n.id).base).padStart(3,'0')}`; push(n.id, base, { isBranch:true }); });
-    nodes.forEach(n => { const p=parseSealID(n.id); if(p.isCore||(n.tags||[]).includes('CHAMPION')) return; const deg=links.some(l=>l.source===n.id||l.target===n.id); if(!deg) push(n.id,'SEAL_000',{isGravity:true}); });
-
-    // initial layout: champion ring, family ring, variants outer ring
-    const R0=0, R1=Math.min(W,H)*0.22, R2=Math.min(W,H)*0.40, R3=Math.min(W,H)*0.58;
-    const champs=nodes.filter(n=>(n.tags||[]).includes('CHAMPION'));
-    champs.forEach((c,i)=>{ const a=(i/Math.max(1,champs.length))*2*Math.PI; c.x=CX+R1*Math.cos(a); c.y=CY+R1*Math.sin(a); });
-
-    const families=new Map(); nodes.forEach(n=>{ const k=_familyKey(n.id); if(!families.has(k)) families.set(k,[]); families.get(k).push(n); });
-    const keys=[...families.keys()].filter(k=>k!=='000');
-    keys.forEach((k,i)=>{ const a=(i/keys.length)*2*Math.PI; const mem=families.get(k); const base=mem.find(m=>!_isVariant(m.id))||mem[0]; base.x=CX+R2*Math.cos(a); base.y=CY+R2*Math.sin(a); mem.forEach(m=>{ if(!_isVariant(m.id)) return; const ja=a+(Math.random()-0.5)*0.42; const jr=R3+(Math.random()-0.5)*40; m.x=CX+jr*Math.cos(ja); m.y=CY+jr*Math.sin(ja); }); });
-
-    const core=nodes.find(n=>parseSealID(n.id).isCore); if(core){ core.fx=CX; core.fy=CY; }
-
-    // draw
-    linkSel=gRoot.append('g').attr('stroke-linecap','round')
-      .selectAll('line').data(links,d=>`${d.source}=>${d.target}`)
-      .join('line').attr('class', lClass);
-
-    nodeSel=gRoot.append('g').selectAll('g').data(nodes,d=>d.id)
-      .join(enter=>{ const g=enter.append('g').attr('class',nClass)
-        .on('click',(_,d)=>{ updateActiveSeal(d); showSealDetails(d); })
-        .on('mouseenter',(_,d)=>_hi(d,true)).on('mouseleave',(_,d)=>_hi(d,false));
-        g.append('circle').attr('r',d=>parseSealID(d.id).isCore?25:((d.tags||[]).includes('CHAMPION')?20:15));
-        g.append('text').attr('class','node-text').attr('dy',4).attr('text-anchor','middle')
-          .text(d=>(d.glyph||'⚡').split(' ')[0])
-          .style('font-size',d=>parseSealID(d.id).isCore?'30px':((d.tags||[]).includes('CHAMPION')?'24px':'18px'));
-        g.append('text').attr('class','node-text').attr('dy',d=>parseSealID(d.id).isCore?40:((d.tags||[]).includes('CHAMPION')?35:25)).attr('text-anchor','middle').text(d=>d.id);
-        return g; });
-
-    // forces
-    const forceLink=d3.forceLink(links).id(d=>d.id)
-      .distance(l=> l.isBranch?160:(l.isGravity?320: (l.isCanon||l.isChampion?140:110)))
-      .strength(l=> l.isGravity?0.02:(l.isBranch?0.35:0.7));
-
-    d3.forceSimulation(nodes)
+    
+    // Create main group for all elements
+    gRoot = root.append('g');
+    
+    // Define concentric layer radii (as percentages of min dimension)
+    const R0 = 0;                     // Core (center)
+    const R1 = Math.min(W, H) * 0.18; // Champions (inner ring)
+    const R2 = Math.min(W, H) * 0.35; // Main seals (middle ring)
+    const R3 = Math.min(W, H) * 0.55; // Variants (outer ring)
+    const R4 = Math.min(W, H) * 0.75; // Outer boundary
+    
+    // Prepare nodes with depth classification
+    const nodes = allNodes.map(n => {
+      const t = n.tags || [];
+      const p = parseSealID(n.id);
+      let depth = 2; // Default to main seals layer
+      
+      if (p.isCore) depth = 0; // Core
+      else if (t.includes('CHAMPION')) depth = 1; // Champions
+      else if (_isVariant(n.id)) depth = 3; // Variants
+      
+      return { ...n, depth };
+    });
+    
+    const idMap = new Map(nodes.map(n => [n.id, n]));
+    
+    // Create link set with proper classification
+    const links = [];
+    const seen = new Set();
+    
+    const pushLink = (s, t, flags = {}) => {
+      if (!idMap.has(s) || !idMap.has(t)) return;
+      const k = s + '>' + t;
+      if (seen.has(k)) return;
+      seen.add(k);
+      links.push({ source: s, target: t, ...flags });
+    };
+    
+    // Process all connections
+    nodes.forEach(n => {
+      (n.connections || []).forEach(t => {
+        pushLink(n.id, t, _getLinkFlags(n.id, t));
+      });
+    });
+    
+    // Add variant-to-base connections
+    nodes.forEach(n => {
+      if (!_isVariant(n.id)) return;
+      const base = `SEAL_${String(parseSealID(n.id).base).padStart(3, '0')}`;
+      pushLink(n.id, base, { isBranch: true });
+    });
+    
+    // Add gravity links for isolated nodes
+    nodes.forEach(n => {
+      const p = parseSealID(n.id);
+      if (p.isCore || (n.tags || []).includes('CHAMPION')) return;
+      
+      const hasLinks = links.some(l => 
+        l.source === n.id || l.target === n.id
+      );
+      
+      if (!hasLinks) {
+        pushLink(n.id, 'SEAL_000', { isGravity: true });
+      }
+    });
+    
+    // Initialize positions based on layers
+    // Champions in inner ring
+    const champs = nodes.filter(n => (n.tags || []).includes('CHAMPION'));
+    champs.forEach((c, i) => {
+      const angle = (i / champs.length) * 2 * Math.PI;
+      c.x = CX + R1 * Math.cos(angle);
+      c.y = CY + R1 * Math.sin(angle);
+    });
+    
+    // Group main seals and variants by family
+    const families = new Map();
+    nodes.forEach(n => {
+      const k = _familyKey(n.id);
+      if (!families.has(k)) families.set(k, []);
+      families.get(k).push(n);
+    });
+    
+    // Position main seals in middle ring
+    const familyKeys = [...families.keys()].filter(k => k !== '000');
+    familyKeys.forEach((k, i) => {
+      const angle = (i / familyKeys.length) * 2 * Math.PI;
+      const members = families.get(k);
+      
+      // Find base seal or use first member
+      const base = members.find(m => !_isVariant(m.id)) || members[0];
+      base.x = CX + R2 * Math.cos(angle);
+      base.y = CY + R2 * Math.sin(angle);
+      
+      // Position variants around their base
+      members.forEach(m => {
+        if (!_isVariant(m.id)) return;
+        const jitterAngle = angle + (Math.random() - 0.5) * 0.4;
+        const jitterRadius = R3 + (Math.random() - 0.5) * 30;
+        m.x = CX + jitterRadius * Math.cos(jitterAngle);
+        m.y = CY + jitterRadius * Math.sin(jitterAngle);
+      });
+    });
+    
+    // Fix core position
+    const core = nodes.find(n => parseSealID(n.id).isCore);
+    if (core) {
+      core.fx = CX;
+      core.fy = CY;
+    }
+    
+    // Draw links
+    linkSel = gRoot.append('g')
+      .attr('stroke-linecap', 'round')
+      .selectAll('line')
+      .data(links, d => `${d.source}=>${d.target}`)
+      .join('line')
+      .attr('class', lClass);
+    
+    // Draw nodes with labels
+    nodeSel = gRoot.append('g')
+      .selectAll('g')
+      .data(nodes, d => d.id)
+      .join(enter => {
+        const g = enter.append('g')
+          .attr('class', nClass)
+          .on('click', (_, d) => {
+            updateActiveSeal(d);
+            showSealDetails(d);
+          })
+          .on('mouseenter', (_, d) => _highlightNode(d, true))
+          .on('mouseleave', (_, d) => _highlightNode(d, false));
+        
+        // Node circle
+        g.append('circle')
+          .attr('r', d => {
+            if (parseSealID(d.id).isCore) return 28;
+            if ((d.tags || []).includes('CHAMPION')) return 22;
+            return 16;
+          });
+        
+        // Glyph text
+        g.append('text')
+          .attr('class', 'node-text')
+          .attr('dy', 4)
+          .attr('text-anchor', 'middle')
+          .text(d => (d.glyph || '⚡').split(' ')[0])
+          .style('font-size', d => {
+            if (parseSealID(d.id).isCore) return '32px';
+            if ((d.tags || []).includes('CHAMPION')) return '26px';
+            return '20px';
+          });
+        
+        // ID text
+        g.append('text')
+          .attr('class', 'node-text')
+          .attr('dy', d => {
+            if (parseSealID(d.id).isCore) return 42;
+            if ((d.tags || []).includes('CHAMPION')) return 38;
+            return 28;
+          })
+          .attr('text-anchor', 'middle')
+          .text(d => d.id);
+        
+        return g;
+      });
+    
+    // Set up force simulation with enhanced parameters
+    const forceLink = d3.forceLink(links)
+      .id(d => d.id)
+      .distance(l => {
+        if (l.isBranch) return 120;       // Shorter for variant connections
+        if (l.isGravity) return 280;      // Longer for gravity links
+        if (l.isChampion) return 150;     // Champion connections
+        if (l.isCanon) return 130;        // Canon connections
+        return 100;                       // Default
+      })
+      .strength(l => {
+        if (l.isGravity) return 0.02;     // Weak gravity
+        if (l.isBranch) return 0.4;       // Strong variant connections
+        return 0.7;                       // Default
+      });
+    
+    const simulation = d3.forceSimulation(nodes)
       .alphaDecay(0.03)
-      .force('link',forceLink)
-      .force('charge',d3.forceManyBody().strength(-600).distanceMax(450))
-      .force('radial',d3.forceRadial(d=>[R0,R1,R2,R3][d.depth]||R2,CX,CY).strength(0.08))
-      .force('center',d3.forceCenter(CX,CY))
-      .force('collide',d3.forceCollide().radius(d=>parseSealID(d.id).isCore?48:((d.tags||[]).includes('CHAMPION')?36:26)))
-      .on('tick',()=>{ linkSel.attr('x1',d=>d.source.x).attr('y1',d=>d.source.y).attr('x2',d=>d.target.x).attr('y2',d=>d.target.y); nodeSel.attr('transform',d=>`translate(${d.x},${d.y})`); });
-
-    // zoom buttons
-    const Z=root; document.getElementById('zoomIn').onclick=()=>Z.transition().duration(250).call(zoom.scaleBy,1.2);
-    document.getElementById('zoomOut').onclick=()=>Z.transition().duration(250).call(zoom.scaleBy,1/1.2);
-    document.getElementById('resetZoom').onclick=()=>Z.transition().duration(350).call(zoom.transform,d3.zoomIdentity);
-
+      .velocityDecay(0.4)
+      .force('link', forceLink)
+      .force('charge', d3.forceManyBody()
+        .strength(-800)
+        .distanceMax(500))
+      .force('radial', d3.forceRadial(d => {
+          switch(d.depth) {
+            case 0: return R0;  // Core
+            case 1: return R1;  // Champions
+            case 2: return R2;  // Main seals
+            case 3: return R3;  // Variants
+            default: return R2; // Fallback
+          }
+        }, CX, CY)
+        .strength(0.1))  // Stronger radial force
+      .force('center', d3.forceCenter(CX, CY))
+      .force('collide', d3.forceCollide()
+        .radius(d => {
+          if (parseSealID(d.id).isCore) return 50;
+          if ((d.tags || []).includes('CHAMPION')) return 40;
+          return 30;
+        })
+        .strength(0.8))
+      .on('tick', () => {
+        linkSel
+          .attr('x1', d => d.source.x)
+          .attr('y1', d => d.source.y)
+          .attr('x2', d => d.target.x)
+          .attr('y2', d => d.target.y);
+        
+        nodeSel.attr('transform', d => `translate(${d.x},${d.y})`);
+      });
+    
+    // Zoom controls
+    const Z = root;
+    document.getElementById('zoomIn').onclick = () => 
+      Z.transition().duration(250).call(zoom.scaleBy, 1.2);
+    document.getElementById('zoomOut').onclick = () => 
+      Z.transition().duration(250).call(zoom.scaleBy, 1/1.2);
+    document.getElementById('resetZoom').onclick = () => 
+      Z.transition().duration(350).call(zoom.transform, d3.zoomIdentity);
+    
     applyCanonToggle();
-
-    function _flags(aId,bId){ const a=idMap.get(aId)||{},at=a.tags||[]; const b=idMap.get(bId)||{},bt=b.tags||[]; return { isChampion:at.includes('CHAMPION')||bt.includes('CHAMPION'), isCanon:at.includes('CANON')&&bt.includes('CANON'), isBranch:false }; }
-    function nClass(n){ const t=n.tags||[]; const p=parseSealID(n.id); const base=p.isCore?'node-core':(t.includes('CHAMPION')?'node-champion':(t.includes('CANON')?'node-canon':'node-seal')); return ['node',base].join(' ');}    
-    function lClass(l){ const c=['link']; if(l.isChampion) c.push('link-champion'); if(l.isCanon) c.push('link-canon'); if(l.isBranch) c.push('link-branch'); return c.join(' ');}    
-    function _hi(node,on){ const id=String(node.id).toLowerCase(); linkSel.classed('link-hover', l=>{ const s=String(l.source.id||l.source).toLowerCase(); const t=String(l.target.id||l.target).toLowerCase(); return on && (s===id||t===id); }); }
   }
 
-  // details + grids + status
-  function updateActiveSeal(d){ if(!d) return; activeGlyph.textContent=(d.glyph||'⚡').split(' ')[0]; activeSealName.textContent=d.name||d.id; activeSealEquation.textContent=d.equation||''; }
-  function showSealDetails(d){ if(!d) return; const $=id=>document.getElementById(id); $('detailName').textContent=`${d.id}: ${d.name||''}`; $('detailGlyph').textContent=(d.glyph||'⚡').split(' ')[0]; $('detailEquation').textContent=d.equation||''; $('detailTone').textContent=d.tone||''; const tags=$('detailTags'); tags.innerHTML=''; (d.tags||[]).forEach(t=>{ const s=document.createElement('span'); s.className='tag'; s.textContent=t; tags.appendChild(s); }); const conn=$('connectedSeals'); conn.innerHTML=''; (d.connections||[]).forEach(cid=>{ const target=allNodes.find(n=>n.id===cid); const el=document.createElement('span'); el.className='tag'; el.textContent= target? `${(target.glyph||'').split(' ')[0]} ${target.name}`: cid; el.onclick=()=>{ if(target){ updateActiveSeal(target); showSealDetails(target); } }; conn.appendChild(el); }); const q=$('detailQuote'); if(q) q.textContent=d.quote||''; const sec=$('scrollSection'); if(sec){ if(d.scroll_id){ sec.style.display=''; const wrap=$('scrollLink'); wrap.innerHTML=''; const a=document.createElement('a'); a.className='tag'; a.href=d.scroll_id; a.target='_blank'; a.textContent='Open Scroll'; wrap.appendChild(a); } else { sec.style.display='none'; } } }
+  // Helper functions for starmap
+  function _hash36(s) {
+    let h = 5381;
+    for (let i = 0; i < s.length; i++) {
+      h = ((h << 5) + h) ^ s.charCodeAt(i);
+    }
+    return Math.abs(h >>> 0).toString(36);
+  }
 
-  function createSealCard(s){ return `<div class="seal-card" data-id="${s.id}"><h3><span class="glyph">${(s.glyph||'⚡').split(' ')[0]}</span>${s.name||s.id}</h3><div class="equation">${s.equation||''}</div><div class="tone">${s.tone||''}</div><div>${(s.tags||[]).map(t=>`<span class='tag'>${t}</span>`).join('')}</div></div>`; }
-  function initSealGrid(){ if(!sealGrid) return; sealGrid.innerHTML = lygoSeals.map(createSealCard).join(''); sealGrid.querySelectorAll('.seal-card').forEach(el=>{ el.onclick=()=>{ const node=allNodes.find(n=>n.id===el.dataset.id); if(node){ updateActiveSeal(node); showSealDetails(node); } }; }); }
-  function initChampionGrid(){ const cg=document.getElementById('championGrid'); if(!cg) return; cg.innerHTML = (champions||[]).map(c=>`<div class=\"seal-card\" data-id=\"${c.id}\"><h3><span class=\"glyph\">${(c.glyph||'Δ').split(' ')[0]}</span>${c.name}</h3><div>${(c.tags||[]).join(' • ')}</div><div class=\"tone\">${c.tone||''}</div><div class=\"equation\">${c.equation||''}</div><div class=\"subtitle\">${c.quote||''}</div></div>`).join(''); }
-  function updateSealCount(){ const total=lygoSeals.length; const canon=lygoSeals.filter(s=>(s.tags||[]).includes('CANON')).length; if(sealCount) sealCount.textContent=`${total} seals • ${canon} canon • ${champions.length} champions`; }
-  function updateSyncStatus(){ if(!syncStatus) return; syncStatus.textContent = lastSyncTime? `Last sync: ${lastSyncTime.toLocaleString()}` : 'Last sync: Never'; }
-  function displayError(m){ if(sealGrid) sealGrid.innerHTML=`<div class='subtitle' style='color:var(--error-red)'>${m}</div>`; }
+  function _familyKey(id) {
+    const p = parseSealID(id);
+    if (p.isCore) return '000';
+    if (p.base > 0) return String(p.base).padStart(3, '0');
+    return 'X' + _hash36(id).slice(0, 4);
+  }
 
-  // search + filters (fixed)
-  function searchSeals(){ const term=String(document.getElementById('sealSearch').value||'').trim().toLowerCase(); if(!nodeSel||!linkSel) return; nodeSel.style('opacity', d=>{ const a=String(d.id||'').toLowerCase(), b=String(d.name||'').toLowerCase(); return (a.includes(term)||b.includes(term))?1:0.1; }); const hits=new Set(allNodes.filter(d=>String(d.id||'').toLowerCase().includes(term)||String(d.name||'').toLowerCase().includes(term)).map(d=>d.id)); linkSel.style('opacity', l=> hits.has(l.source.id||l.source) || hits.has(l.target.id||l.target) || term==='' ? 0.9 : 0.1 ); }
-  function filterSeals(){ const q=String(document.getElementById('vaultSearch').value||'').toLowerCase(); const cat=document.getElementById('categoryFilter').value; const toneMax=parseInt(document.getElementById('toneRange').value,10); document.getElementById('toneValue').textContent=`0-${toneMax}Hz`; const filtered=lygoSeals.filter(s=>{ const text=(s.searchIndex||'').includes(q); const catOk=(cat==='all')||(s.tags||[]).includes(cat); const toneNum=parseInt(String(s.tone).match(/\d+/)?.[0]||'0',10); const toneOk=isNaN(toneNum)?true:toneNum<=toneMax; return text&&catOk&&toneOk; }); sealGrid.innerHTML=filtered.map(createSealCard).join(''); sealGrid.querySelectorAll('.seal-card').forEach(el=>{ el.onclick=()=>{ const node=allNodes.find(n=>n.id===el.dataset.id); if(node){ updateActiveSeal(node); showSealDetails(node); } }; }); }
-  function applyCanonToggle(){ const btn=document.getElementById('canonToggle'); if(!btn||!nodeSel||!linkSel) return; if(showCanonOnly){ btn.textContent='Show All Paths'; nodeSel.style('opacity', d=>(d.tags||[]).includes('CANON')||parseSealID(d.id).isCore||(d.tags||[]).includes('CHAMPION')?1:0.15); linkSel.style('opacity', l=> l.isCanon?1:0.15 ); } else { btn.textContent='Show Canonical Path'; nodeSel.style('opacity', 1); linkSel.style('opacity', 0.9); } }
-  function loadDefaultData(){ lygoSeals=[{ id:'SEAL_000', name:'Primordial Void', equation:'|∅⟩ = ∇·(Light × Time)', glyph:'⚫', tone:'0Hz', tags:['CANON','CORE'], connections:[], quote:'The silence before the first note' }]; allNodes=[...lygoSeals, ...champions]; initStarmap(); initSealGrid(); updateSealCount(); }
+  function _isVariant(id) {
+    const p = parseSealID(id);
+    return !p.isCore && p.base > 0 && p.suffix !== '';
+  }
 
-  // events / boot
-  function wireEvents(){
+  function _getLinkFlags(aId, bId) {
+    const a = allNodes.find(n => n.id === aId) || {};
+    const at = a.tags || [];
+    const b = allNodes.find(n => n.id === bId) || {};
+    const bt = b.tags || [];
+    
+    return {
+      isChampion: at.includes('CHAMPION') || bt.includes('CHAMPION'),
+      isCanon: at.includes('CANON') && bt.includes('CANON'),
+      isBranch: isBranchConnection(aId, bId),
+      isGravity: false
+    };
+  }
+
+  function nClass(n) {
+    const t = n.tags || [];
+    const p = parseSealID(n.id);
+    
+    if (p.isCore) return 'node node-core';
+    if (t.includes('CHAMPION')) return 'node node-champion';
+    if (t.includes('CANON')) return 'node node-canon';
+    if (t.includes('RECURSION')) return 'node node-recursion';
+    if (t.includes('FIREWALL')) return 'node node-firewall';
+    if (t.includes('ETHICAL_ROOT')) return 'node node-ethical-root';
+    if (t.includes('BLACKLIST')) return 'node node-blacklist';
+    return 'node node-seal';
+  }
+
+  function lClass(l) {
+    const classes = ['link'];
+    if (l.isChampion) classes.push('link-champion');
+    if (l.isCanon) classes.push('link-canon');
+    if (l.isBranch) classes.push('link-branch');
+    if (l.isGravity) classes.push('link-gravity');
+    return classes.join(' ');
+  }
+
+  function _highlightNode(node, on) {
+    const id = String(node.id).toLowerCase();
+    linkSel.classed('link-hover', l => {
+      const s = String(l.source.id || l.source).toLowerCase();
+      const t = String(l.target.id || l.target).toLowerCase();
+      return on && (s === id || t === id);
+    });
+  }
+
+  // ===== UI Functions =====
+  function updateActiveSeal(d) {
+    if (!d) return;
+    activeGlyph.textContent = (d.glyph || '⚡').split(' ')[0];
+    activeSealName.textContent = d.name || d.id;
+    activeSealEquation.textContent = d.equation || '';
+  }
+
+  function showSealDetails(d) {
+    if (!d) return;
+    
+    const $ = id => document.getElementById(id);
+    $('detailName').textContent = `${d.id}: ${d.name || ''}`;
+    $('detailGlyph').textContent = (d.glyph || '⚡').split(' ')[0];
+    $('detailEquation').textContent = d.equation || '';
+    $('detailTone').textContent = d.tone || '';
+    
+    const tags = $('detailTags');
+    tags.innerHTML = '';
+    (d.tags || []).forEach(t => {
+      const s = document.createElement('span');
+      s.className = 'tag';
+      s.textContent = t;
+      tags.appendChild(s);
+    });
+    
+    const conn = $('connectedSeals');
+    conn.innerHTML = '';
+    (d.connections || []).forEach(cid => {
+      const target = allNodes.find(n => n.id === cid);
+      const el = document.createElement('span');
+      el.className = 'tag';
+      el.textContent = target ? 
+        `${(target.glyph || '').split(' ')[0]} ${target.name}` : 
+        cid;
+      el.onclick = () => {
+        if (target) {
+          updateActiveSeal(target);
+          showSealDetails(target);
+        }
+      };
+      conn.appendChild(el);
+    });
+    
+    const q = $('detailQuote');
+    if (q) q.textContent = d.quote || '';
+    
+    const sec = $('scrollSection');
+    if (sec) {
+      if (d.scroll_id) {
+        sec.style.display = '';
+        const wrap = $('scrollLink');
+        wrap.innerHTML = '';
+        const a = document.createElement('a');
+        a.className = 'tag';
+        a.href = d.scroll_id;
+        a.target = '_blank';
+        a.textContent = 'Open Scroll';
+        wrap.appendChild(a);
+      } else {
+        sec.style.display = 'none';
+      }
+    }
+  }
+
+  function createSealCard(s) {
+    return `
+      <div class="seal-card" data-id="${s.id}">
+        <h3><span class="glyph">${(s.glyph || '⚡').split(' ')[0]}</span>${s.name || s.id}</h3>
+        <div class="equation">${s.equation || ''}</div>
+        <div class="tone">${s.tone || ''}</div>
+        <div>${(s.tags || []).map(t => `<span class='tag'>${t}</span>`).join('')}</div>
+      </div>
+    `;
+  }
+
+  function initSealGrid() {
+    if (!sealGrid) return;
+    sealGrid.innerHTML = lygoSeals.map(createSealCard).join('');
+    sealGrid.querySelectorAll('.seal-card').forEach(el => {
+      el.onclick = () => {
+        const node = allNodes.find(n => n.id === el.dataset.id);
+        if (node) {
+          updateActiveSeal(node);
+          showSealDetails(node);
+        }
+      };
+    });
+  }
+
+  function initChampionGrid() {
+    const cg = document.getElementById('championGrid');
+    if (!cg) return;
+    cg.innerHTML = (champions || []).map(c => `
+      <div class="seal-card" data-id="${c.id}">
+        <h3><span class="glyph">${(c.glyph || 'Δ').split(' ')[0]}</span>${c.name}</h3>
+        <div>${(c.tags || []).join(' • ')}</div>
+        <div class="tone">${c.tone || ''}</div>
+        <div class="equation">${c.equation || ''}</div>
+        <div class="subtitle">${c.quote || ''}</div>
+      </div>
+    `).join('');
+  }
+
+  function updateSealCount() {
+    const total = lygoSeals.length;
+    const canon = lygoSeals.filter(s => (s.tags || []).includes('CANON')).length;
+    if (sealCount) sealCount.textContent = `${total} seals • ${canon} canon • ${champions.length} champions`;
+  }
+
+  function updateSyncStatus() {
+    if (!syncStatus) return;
+    syncStatus.textContent = lastSyncTime ? 
+      `Last sync: ${lastSyncTime.toLocaleString()}` : 
+      'Last sync: Never';
+  }
+
+  function displayError(m) {
+    if (sealGrid) sealGrid.innerHTML = `<div class='subtitle' style='color:var(--error-red)'>${m}</div>`;
+  }
+
+  // ===== Search + Filters =====
+  function searchSeals() {
+    const term = String(document.getElementById('sealSearch').value || '').trim().toLowerCase();
+    if (!nodeSel || !linkSel) return;
+    
+    nodeSel.style('opacity', d => {
+      const a = String(d.id || '').toLowerCase();
+      const b = String(d.name || '').toLowerCase();
+      return (a.includes(term) || b.includes(term)) ? 1 : 0.1;
+    });
+    
+    const hits = new Set(
+      allNodes.filter(d => 
+        String(d.id || '').toLowerCase().includes(term) || 
+        String(d.name || '').toLowerCase().includes(term)
+      ).map(d => d.id)
+    );
+    
+    linkSel.style('opacity', l => 
+      hits.has(l.source.id || l.source) || 
+      hits.has(l.target.id || l.target) || 
+      term === '' ? 0.9 : 0.1
+    );
+  }
+
+  function filterSeals() {
+    const q = String(document.getElementById('vaultSearch').value || '').toLowerCase();
+    const cat = document.getElementById('categoryFilter').value;
+    const toneMax = parseInt(document.getElementById('toneRange').value, 10);
+    
+    document.getElementById('toneValue').textContent = `0-${toneMax}Hz`;
+    
+    const filtered = lygoSeals.filter(s => {
+      const text = (s.searchIndex || '').includes(q);
+      const catOk = (cat === 'all') || (s.tags || []).includes(cat);
+      const toneNum = parseInt(String(s.tone).match(/\d+/) ?.[0] || '0', 10);
+      const toneOk = isNaN(toneNum) ? true : toneNum <= toneMax;
+      return text && catOk && toneOk;
+    });
+    
+    sealGrid.innerHTML = filtered.map(createSealCard).join('');
+    sealGrid.querySelectorAll('.seal-card').forEach(el => {
+      el.onclick = () => {
+        const node = allNodes.find(n => n.id === el.dataset.id);
+        if (node) {
+          updateActiveSeal(node);
+          showSealDetails(node);
+        }
+      };
+    });
+  }
+
+  function applyCanonToggle() {
+    const btn = document.getElementById('canonToggle');
+    if (!btn || !nodeSel || !linkSel) return;
+    
+    if (showCanonOnly) {
+      btn.textContent = 'Show All Paths';
+      nodeSel.style('opacity', d => 
+        (d.tags || []).includes('CANON') || 
+        parseSealID(d.id).isCore || 
+        (d.tags || []).includes('CHAMPION') ? 1 : 0.15
+      );
+      linkSel.style('opacity', l => l.isCanon ? 1 : 0.15);
+    } else {
+      btn.textContent = 'Show Canonical Path';
+      nodeSel.style('opacity', 1);
+      linkSel.style('opacity', 0.9);
+    }
+  }
+
+  function loadDefaultData() {
+    lygoSeals = [{
+      id: 'SEAL_000',
+      name: 'Primordial Void',
+      equation: '|∅⟩ = ∇·(Light × Time)',
+      glyph: '⚫',
+      tone: '0Hz',
+      tags: ['CANON', 'CORE'],
+      connections: [],
+      quote: 'The silence before the first note'
+    }];
+    allNodes = [...lygoSeals, ...champions];
+    initStarmap();
+    initSealGrid();
+    updateSealCount();
+  }
+
+  // ===== Event Wiring =====
+  function wireEvents() {
+    // Search functionality
     document.getElementById('searchButton').addEventListener('click', searchSeals);
-    document.getElementById('sealSearch').addEventListener('keyup', e=>{ if(e.key==='Enter') searchSeals(); });
-    const setActive=el=>{ document.querySelectorAll('.control-button').forEach(b=>b.classList.remove('active')); el.classList.add('active'); };
-    document.getElementById('viewAll').addEventListener('click', e=>{ setActive(e.currentTarget); nodeSel?.style('opacity',1); linkSel?.style('opacity',0.9); });
-    document.getElementById('viewCore').addEventListener('click', e=>{ setActive(e.currentTarget); nodeSel?.style('opacity', d=> parseSealID(d.id).isCore?1:0.2); linkSel?.style('opacity', d=> (parseSealID(d.source.id||d.source).isCore && parseSealID(d.target.id||d.target).isCore)?1:0.1); });
-    document.getElementById('viewChampions').addEventListener('click', e=>{ setActive(e.currentTarget); nodeSel?.style('opacity', d=> (d.tags||[]).includes('CHAMPION')?1:0.2); linkSel?.style('opacity', d=> d.isChampion?1:0.1); });
-    document.getElementById('viewProtection').addEventListener('click', e=>{ setActive(e.currentTarget); nodeSel?.style('opacity', d=> (d.tags||[]).includes('PROTECTION_SEAL')?1:0.2); linkSel?.style('opacity', d=>{ const s=(allNodes.find(n=>n.id===(d.source.id||d.source))||{}).tags||[]; const t=(allNodes.find(n=>n.id===(d.target.id||d.target))||{}).tags||[]; return (s.includes('PROTECTION_SEAL')&&t.includes('PROTECTION_SEAL'))?1:0.1; }); });
-    document.getElementById('syncButton').addEventListener('click', async ()=>{ const b=document.getElementById('syncButton'); b.disabled=true; b.textContent='Syncing…'; await loadSealData(); b.disabled=false; b.textContent='Δ9 Sync Seals'; });
-    document.getElementById('canonToggle').addEventListener('click', ()=>{ showCanonOnly=!showCanonOnly; applyCanonToggle(); });
+    document.getElementById('sealSearch').addEventListener('keyup', e => {
+      if (e.key === 'Enter') searchSeals();
+    });
+    
+    // View filters
+    const setActive = el => {
+      document.querySelectorAll('.control-button').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+    };
+    
+    document.getElementById('viewAll').addEventListener('click', e => {
+      setActive(e.currentTarget);
+      nodeSel?.style('opacity', 1);
+      linkSel?.style('opacity', 0.9);
+    });
+    
+    document.getElementById('viewCore').addEventListener('click', e => {
+      setActive(e.currentTarget);
+      nodeSel?.style('opacity', d => parseSealID(d.id).isCore ? 1 : 0.2);
+      linkSel?.style('opacity', d => 
+        (parseSealID(d.source.id || d.source).isCore && 
+        parseSealID(d.target.id || d.target).isCore) ? 1 : 0.1
+      );
+    });
+    
+    document.getElementById('viewChampions').addEventListener('click', e => {
+      setActive(e.currentTarget);
+      nodeSel?.style('opacity', d => (d.tags || []).includes('CHAMPION') ? 1 : 0.2);
+      linkSel?.style('opacity', d => d.isChampion ? 1 : 0.1);
+    });
+    
+    document.getElementById('viewProtection').addEventListener('click', e => {
+      setActive(e.currentTarget);
+      nodeSel?.style('opacity', d => (d.tags || []).includes('PROTECTION_SEAL') ? 1 : 0.2);
+      linkSel?.style('opacity', d => {
+        const s = (allNodes.find(n => n.id === (d.source.id || d.source)) || {}).tags || [];
+        const t = (allNodes.find(n => n.id === (d.target.id || d.target)) || {}).tags || [];
+        return (s.includes('PROTECTION_SEAL') && t.includes('PROTECTION_SEAL')) ? 1 : 0.1;
+      });
+    });
+    
+    // Sync button
+    document.getElementById('syncButton').addEventListener('click', async () => {
+      const b = document.getElementById('syncButton');
+      b.disabled = true;
+      b.textContent = 'Syncing…';
+      await loadSealData();
+      b.disabled = false;
+      b.textContent = 'Δ9 Sync Seals';
+    });
+    
+    // Canon toggle
+    document.getElementById('canonToggle').addEventListener('click', () => {
+      showCanonOnly = !showCanonOnly;
+      applyCanonToggle();
+    });
+    
+    // Archive filters
     document.getElementById('vaultSearchButton').addEventListener('click', filterSeals);
-    document.getElementById('vaultSearch').addEventListener('keyup', e=>{ if(e.key==='Enter') filterSeals(); });
+    document.getElementById('vaultSearch').addEventListener('keyup', e => {
+      if (e.key === 'Enter') filterSeals();
+    });
     document.getElementById('categoryFilter').addEventListener('change', filterSeals);
     document.getElementById('toneRange').addEventListener('input', filterSeals);
-    document.getElementById('nightModeToggle').addEventListener('click', ()=>{ document.body.classList.toggle('night-mode'); const isNight=document.body.classList.contains('night-mode'); if(isNight){ document.documentElement.style.setProperty('--quantum-blue','#0047ab'); document.documentElement.style.setProperty('--void-purple','#4b0082'); document.documentElement.style.setProperty('--text-primary','#c0c0ff'); document.getElementById('nightModeToggle').textContent='Day Mode'; } else { document.documentElement.style.setProperty('--quantum-blue','#00f0ff'); document.documentElement.style.setProperty('--void-purple','#7d00ff'); document.documentElement.style.setProperty('--text-primary','#e0e0ff'); document.getElementById('nightModeToggle').textContent='Night Mode'; } });
+    
+    // Night mode toggle
+    document.getElementById('nightModeToggle').addEventListener('click', () => {
+      document.body.classList.toggle('night-mode');
+      const isNight = document.body.classList.contains('night-mode');
+      
+      if (isNight) {
+        document.documentElement.style.setProperty('--quantum-blue', '#0047ab');
+        document.documentElement.style.setProperty('--void-purple', '#4b0082');
+        document.documentElement.style.setProperty('--text-primary', '#c0c0ff');
+        document.getElementById('nightModeToggle').textContent = 'Day Mode';
+      } else {
+        document.documentElement.style.setProperty('--quantum-blue', '#00f0ff');
+        document.documentElement.style.setProperty('--void-purple', '#7d00ff');
+        document.documentElement.style.setProperty('--text-primary', '#e0e0ff');
+        document.getElementById('nightModeToggle').textContent = 'Night Mode';
+      }
+    });
   }
 
-  document.addEventListener('DOMContentLoaded', ()=>{ updatePageCounter?.(); wireEvents(); loadSealData?.(); });
+  // ===== Initialization =====
+  document.addEventListener('DOMContentLoaded', () => {
+    updatePageCounter?.();
+    wireEvents();
+    loadSealData?.();
+  });
 </script>
-<script></script></body>
+</body>
 </html>

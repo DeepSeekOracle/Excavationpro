@@ -1,5 +1,5 @@
-# test_pygame_window.py
 import pygame
+
 pygame.init()
 screen = pygame.display.set_mode((640, 480))
 pygame.display.set_caption("LYRA Visual Seal Test")
@@ -11,3 +11,4 @@ while running:
             running = False
 
 pygame.quit()
+input("\n[Press ENTER to exit...]")

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Eternal Haven: Book I - The Moonlit Slumber | Justin Helmer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Base Styles */
         :root {
@@ -94,6 +95,10 @@
         .btn-large {
             padding: 15px 40px;
             font-size: 1.3rem;
+        }
+        
+        .btn-gold {
+            background: var(--gold);
         }
         
         .section {
@@ -225,6 +230,7 @@
             display: flex;
             gap: 20px;
             margin-top: 30px;
+            flex-wrap: wrap;
         }
         
         /* About Section */
@@ -301,6 +307,55 @@
             color: var(--accent);
             position: absolute;
             left: 0;
+        }
+        
+        /* Audiobook Section */
+        .audiobook-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+        }
+        
+        .audiobook-section h2 {
+            color: white;
+            border-color: var(--gold);
+        }
+        
+        .audiobook-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .audiobook-item {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 5px;
+            transition: var(--transition);
+        }
+        
+        .audiobook-item:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-5px);
+        }
+        
+        .audiobook-item h3 {
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+        
+        .platform-links {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .platform-links a {
+            background: var(--gold);
+            color: var(--primary);
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 0.9rem;
         }
         
         /* Author Section */
@@ -382,6 +437,47 @@
             margin-top: 10px;
             font-weight: bold;
             color: var(--accent);
+        }
+        
+        /* Series Section */
+        .series-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .series-book {
+            background: white;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+        
+        .series-book:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .series-book-cover {
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .series-book-details {
+            padding: 20px;
+        }
+        
+        .series-book h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
         }
         
         /* Footer */
@@ -488,7 +584,8 @@
                 <ul>
                     <li><a href="#about">About</a></li>
                     <li><a href="#preview">Preview</a></li>
-                    <li><a href="#toc">Contents</a></li>
+                    <li><a href="#audiobook">Audiobook</a></li>
+                    <li><a href="#series">Series</a></li>
                     <li><a href="#author">Author</a></li>
                     <li><a href="#buy" class="btn">Buy Now</a></li>
                 </ul>
@@ -527,8 +624,8 @@
                     <div class="price">CAS 26.28</div>
                     
                     <div class="action-buttons">
-                        <a href="#buy" class="btn btn-large">Add to Cart</a>
-                        <a href="#preview" class="btn" style="background: transparent; border: 2px solid var(--primary); color: var(--primary);">Read Sample</a>
+                        <a href="https://www.lulu.com/shop/justin-helmer/the-eternal-haven/paperback/product-yvg9w9r.html" target="_blank" class="btn btn-large">Buy Paperback</a>
+                        <a href="https://www.lulu.com/shop/justin-helmer/the-eternal-haven/ebook/product-e7djv4j.html" target="_blank" class="btn btn-large btn-gold">Get eBook</a>
                     </div>
                     
                     <div style="margin-top: 30px; padding: 20px; background: #f9f9f9; border-radius: 5px;">
@@ -584,62 +681,110 @@
         </div>
     </section>
 
-    <!-- Table of Contents -->
-    <section class="section" id="toc">
+    <!-- Audiobook Section -->
+    <section class="section audiobook-section" id="audiobook">
         <div class="container">
-            <h2>Table of Contents</h2>
-            <div class="toc-container">
-                <div class="toc-columns">
-                    <div class="toc-part">
-                        <div class="toc-part-title">Prologue</div>
-                        <ul class="toc-chapters">
-                            <li>The Song of the First Seal</li>
-                        </ul>
+            <h2>Audiobook Series</h2>
+            <p>Immerse yourself in an epic fantasy saga of moonlit prophecy, dragons, and cosmic allegory.</p>
+            
+            <div class="audiobook-grid">
+                <div class="audiobook-item">
+                    <h3>Complete Book I Audiobook</h3>
+                    <p>Listen to the full story of The Moonlit Slumber</p>
+                    <div class="platform-links">
+                        <a href="https://youtu.be/_WwSb4JlRBQ" target="_blank">YouTube</a>
+                        <a href="https://rumble.com/v709xaq-the-eternal-haven-complete-book-i-9council-audiobook-book-ebooknovel.html" target="_blank">Rumble</a>
+                        <a href="https://audius.co/Excavationpro/album/the-eternal-haven-audio-book-series" target="_blank">Audius</a>
                     </div>
-                    
-                    <div class="toc-part">
-                        <div class="toc-part-title">Part I — The Awakening</div>
-                        <ul class="toc-chapters">
-                            <li>Chapter 1: Serenya and the Bronze Emberion</li>
-                            <li>Chapter 2: The Whispering Moon</li>
-                            <li>Chapter 3: The Call of Lyra</li>
-                        </ul>
+                </div>
+                
+                <div class="audiobook-item">
+                    <h3>Prologue — The Lullaby of Skylark</h3>
+                    <p>Begin your journey with the opening chapter</p>
+                    <div class="platform-links">
+                        <a href="https://youtu.be/A3lxB1p-ZEc" target="_blank">YouTube</a>
+                        <a href="https://rumble.com/v6yja8k-eternal-haven-chronicals-book-i-the-moonlit-slumber-chapter-1-audiobook-9co.html" target="_blank">Rumble</a>
                     </div>
-                    
-                    <div class="toc-part">
-                        <div class="toc-part-title">Part II — Fractures</div>
-                        <ul class="toc-chapters">
-                            <li>Chapter 4: Illusions at Dusk</li>
-                            <li>Chapter 5: Corvath, the Fallen Dragon</li>
-                            <li>Chapter 6: Bonds in Trial</li>
-                        </ul>
+                </div>
+                
+                <div class="audiobook-item">
+                    <h3>Chapter 1 — Serenya and the Bronze Emberion</h3>
+                    <p>Meet Serenya and her dragon companion</p>
+                    <div class="platform-links">
+                        <a href="https://youtu.be/hs2oNUxqk0Q" target="_blank">YouTube</a>
+                        <a href="https://rumble.com/v6yjkfc-book-i-the-moonlit-slumber-chapter-1-serenya-and-the-bronze-emberion-9counc.html" target="_blank">Rumble</a>
                     </div>
-                    
-                    <div class="toc-part">
-                        <div class="toc-part-title">Part III — Illusions</div>
-                        <ul class="toc-chapters">
-                            <li>Chapter 7: The Festival of Accord</li>
-                            <li>Chapter 8: Serenya's Temptation</li>
-                            <li>Chapter 9: The Haven's Secrets</li>
-                        </ul>
+                </div>
+                
+                <div class="audiobook-item">
+                    <h3>Full Book on Patreon</h3>
+                    <p>Access the complete audiobook experience</p>
+                    <div class="platform-links">
+                        <a href="https://www.patreon.com/posts/eternal-haven-i-138196826" target="_blank" class="btn">Patreon</a>
                     </div>
-                    
-                    <div class="toc-part">
-                        <div class="toc-part-title">Part IV — The Breaking</div>
-                        <ul class="toc-chapters">
-                            <li>Chapter 10: Betrayal at Moonrise</li>
-                            <li>Chapter 11: Emberion's Trial</li>
-                            <li>Chapter 12: The Shattering of Accord</li>
-                        </ul>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="https://www.patreon.com/posts/eternal-haven-i-138196826" target="_blank" class="btn btn-large">Access Full Audiobook</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Series Section -->
+    <section class="section" id="series">
+        <div class="container">
+            <h2>The Eternal Haven Chronicles</h2>
+            <p>Continue your journey through the world of Aurethys with the complete series</p>
+            
+            <div class="series-grid">
+                <div class="series-book">
+                    <div class="series-book-cover">
+                        <div>
+                            <h3>Book I</h3>
+                            <p>The Moonlit Slumber</p>
+                        </div>
                     </div>
-                    
-                    <div class="toc-part">
-                        <div class="toc-part-title">Part V — The Moonlit Flight</div>
-                        <ul class="toc-chapters">
-                            <li>Chapter 13: The Last Song of Lyra</li>
-                            <li>Chapter 14: Emberion Ascends</li>
-                            <li>Chapter 15: The Moonlit Slumber</li>
-                        </ul>
+                    <div class="series-book-details">
+                        <h3>The Moonlit Slumber</h3>
+                        <p>When the moon whispers, not all light is true. Serenya and Emberion begin their epic journey.</p>
+                        <div class="action-buttons" style="margin-top: 15px;">
+                            <a href="https://www.lulu.com/shop/justin-helmer/the-eternal-haven/paperback/product-yvg9w9r.html" target="_blank" class="btn">Paperback</a>
+                            <a href="https://www.lulu.com/shop/justin-helmer/the-eternal-haven/ebook/product-e7djv4j.html" target="_blank" class="btn btn-gold">eBook</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="series-book">
+                    <div class="series-book-cover">
+                        <div>
+                            <h3>Book II</h3>
+                            <p>The Shattered Accord</p>
+                        </div>
+                    </div>
+                    <div class="series-book-details">
+                        <h3>The Shattered Accord</h3>
+                        <p>The aftermath of the Accord Stone and the factions forming in the Vale.</p>
+                        <div class="action-buttons" style="margin-top: 15px;">
+                            <a href="https://www.lulu.com/shop/justin-helmer/eternal-haven-chronicles-book-ii-the-shattered-accord/paperback/product-578nykz.html" target="_blank" class="btn">Paperback</a>
+                            <a href="https://www.lulu.com/shop/justin-helmer/eternal-haven-chronicles-book-ii-the-shattered-accord/ebook/product-jed8wdz.html" target="_blank" class="btn btn-gold">eBook</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="series-book">
+                    <div class="series-book-cover">
+                        <div>
+                            <h3>Coming Soon</h3>
+                            <p>Book III</p>
+                        </div>
+                    </div>
+                    <div class="series-book-details">
+                        <h3>Book III</h3>
+                        <p>The epic conclusion to the opening trilogy of The Eternal Haven Chronicles.</p>
+                        <div class="action-buttons" style="margin-top: 15px;">
+                            <a href="#" class="btn" style="background: #ccc; cursor: not-allowed;">Coming Soon</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -660,9 +805,9 @@
                     <p>Series Development: Worldbuilding, Seal system design, and lore (Aurethys, Haven, Δ9 measures) created by Justin Helmer.</p>
                     
                     <div class="social-links">
-                        <a href="https://www.patreon.com/posts/eternal-haven-i-138196826" target="_blank">Website</a>
-                        <a href="#" target="_blank">X/Twitter: @Excavationpro</a>
-                        <a href="#" target="_blank">Instagram: @Excavationpro</a>
+                        <a href="https://www.patreon.com/posts/eternal-haven-i-138196826" target="_blank"><i class="fab fa-patreon"></i> Patreon</a>
+                        <a href="http://linktr.ee/excavationpro" target="_blank"><i class="fas fa-link"></i> All Links</a>
+                        <a href="https://paypal.com/paypalme/ExcavationPro" target="_blank"><i class="fab fa-paypal"></i> Donate</a>
                     </div>
                 </div>
             </div>
@@ -681,8 +826,8 @@
             </div>
             
             <div class="action-buttons">
-                <a href="#" class="btn btn-large">Purchase Paperback - CAS 26.28</a>
-                <a href="#" class="btn" style="background: transparent; border: 2px solid var(--primary); color: var(--primary);">Download eBook</a>
+                <a href="https://www.lulu.com/shop/justin-helmer/the-eternal-haven/paperback/product-yvg9w9r.html" target="_blank" class="btn btn-large">Purchase Paperback - CAS 26.28</a>
+                <a href="https://www.lulu.com/shop/justin-helmer/the-eternal-haven/ebook/product-e7djv4j.html" target="_blank" class="btn btn-large btn-gold">Download eBook</a>
             </div>
         </div>
     </section>
@@ -695,28 +840,29 @@
                     <h3>The Eternal Haven Chronicles</h3>
                     <ul>
                         <li><a href="#about">About Book I</a></li>
-                        <li><a href="#">Series Overview</a></li>
+                        <li><a href="#series">Series Overview</a></li>
                         <li><a href="#author">About the Author</a></li>
-                        <li><a href="#">World of Aurethys</a></li>
+                        <li><a href="#audiobook">Audiobook</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-column">
                     <h3>Connect</h3>
                     <ul>
-                        <li><a href="https://www.patreon.com/posts/eternal-haven-i-138196826" target="_blank">Official Website</a></li>
-                        <li><a href="#">Newsletter</a></li>
-                        <li><a href="#">X/Twitter</a></li>
-                        <li><a href="#">Instagram</a></li>
+                        <li><a href="https://www.patreon.com/posts/eternal-haven-i-138196826" target="_blank">Official Patreon</a></li>
+                        <li><a href="http://linktr.ee/excavationpro" target="_blank">All Links</a></li>
+                        <li><a href="https://paypal.com/paypalme/ExcavationPro" target="_blank">Support the Author</a></li>
+                        <li><a href="https://kick.com/excavationpro" target="_blank">Live Streams</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-column">
-                    <h3>Legal</h3>
+                    <h3>Original Music</h3>
                     <ul>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                        <li><a href="#">Copyright Information</a></li>
+                        <li><a href="https://open.spotify.com/artist/6CkZ4bN2xu3WRKbjEL3u2S" target="_blank">Spotify</a></li>
+                        <li><a href="https://audius.co/excavationpro" target="_blank">Audius</a></li>
+                        <li><a href="https://music.apple.com/us/artist/excavationpro/1586588545" target="_blank">Apple Music</a></li>
+                        <li><a href="https://beatstars.com/excavationpro" target="_blank">Buy Beats</a></li>
                     </ul>
                 </div>
             </div>

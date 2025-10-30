@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Eternal Haven: Book I - The Moonlit Slumber | Justin Helmer</title>
+    <style>
+        /* Base Styles */
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #e94560;
+            --gold: #d4af37;
+            --light: #f5f5f5;
+            --dark: #0f1419;
+            --text: #333333;
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--light);
+            background-image: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), 
+                              url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none" stroke="%231a1a2e" stroke-width="0.5" opacity="0.1"/></svg>');
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        h2 {
+            font-size: 2rem;
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        a:hover {
+            color: var(--primary);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+        
+        .btn:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .btn-large {
+            padding: 15px 40px;
+            font-size: 1.3rem;
+        }
+        
+        .section {
+            padding: 80px 0;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .logo span {
+            color: var(--gold);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 30px;
+        }
+        
+        nav ul li a {
+            color: white;
+            font-weight: 500;
+        }
+        
+        nav ul li a:hover {
+            color: var(--gold);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(26,26,46,0.8), rgba(22,33,62,0.8)), 
+                        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%23d4af37" opacity="0.1"/></svg>');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 120px 0;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            color: white;
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .hero .subtitle {
+            font-size: 1.8rem;
+            color: var(--gold);
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+        
+        .hero .tagline {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            font-style: italic;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Book Preview Section */
+        .book-preview {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+        
+        .book-cover {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+        
+        .book-cover-image {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 5px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: var(--transition);
+        }
+        
+        .book-cover-image:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        
+        .book-details {
+            flex: 1;
+        }
+        
+        .price {
+            font-size: 2rem;
+            color: var(--accent);
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 50px;
+        }
+        
+        .synopsis {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        
+        .book-info {
+            background: white;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .info-item {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+        
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        /* TOC Section */
+        .toc-container {
+            background: white;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .toc-columns {
+            column-count: 2;
+            column-gap: 40px;
+        }
+        
+        .toc-part {
+            margin-bottom: 20px;
+            break-inside: avoid;
+        }
+        
+        .toc-part-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .toc-chapters {
+            list-style: none;
+        }
+        
+        .toc-chapters li {
+            margin-bottom: 8px;
+            padding-left: 15px;
+            position: relative;
+        }
+        
+        .toc-chapters li:before {
+            content: "•";
+            color: var(--accent);
+            position: absolute;
+            left: 0;
+        }
+        
+        /* Author Section */
+        .author-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+        }
+        
+        .author-section h2 {
+            color: white;
+            border-color: var(--gold);
+        }
+        
+        .author-content {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+        
+        .author-image {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .author-image-placeholder {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: var(--gold);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .author-bio {
+            flex: 2;
+        }
+        
+        .author-bio p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        
+        .social-links {
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: inline-block;
+            margin-right: 15px;
+            color: var(--gold);
+            font-weight: bold;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            background: var(--light);
+        }
+        
+        .cta-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .testimonial {
+            font-style: italic;
+            font-size: 1.2rem;
+            margin: 40px 0;
+            padding: 0 20px;
+            color: var(--primary);
+        }
+        
+        .testimonial-author {
+            margin-top: 10px;
+            font-weight: bold;
+            color: var(--accent);
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            color: var(--gold);
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-column ul li a {
+            color: #ccc;
+        }
+        
+        .footer-column ul li a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #999;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .book-preview, .about-content, .author-content {
+                flex-direction: column;
+            }
+            
+            .toc-columns {
+                column-count: 1;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero .subtitle {
+                font-size: 1.4rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            
+            nav ul {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+                background: none;
+                border: none;
+                color: white;
+                font-size: 1.5rem;
+                cursor: pointer;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">THE ETERNAL <span>HAVEN</span></div>
+            <nav>
+                <ul>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#preview">Preview</a></li>
+                    <li><a href="#toc">Contents</a></li>
+                    <li><a href="#author">Author</a></li>
+                    <li><a href="#buy" class="btn">Buy Now</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-content">
+            <h1>THE ETERNAL HAVEN</h1>
+            <div class="subtitle">Book I: The Moonlit Slumber</div>
+            <div class="tagline">When the moon whispers, not all light is true.</div>
+            <a href="#buy" class="btn btn-large">Get Your Copy Now</a>
+        </div>
+    </section>
+
+    <!-- Book Preview Section -->
+    <section class="section" id="preview">
+        <div class="container">
+            <div class="book-preview">
+                <div class="book-cover">
+                    <!-- Placeholder for book cover image -->
+                    <div class="book-cover-image" style="background: linear-gradient(135deg, #1a1a2e, #16213e); height: 500px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; text-align: center; padding: 20px;">
+                        <div>
+                            <div style="font-size: 2rem; margin-bottom: 10px;">THE ETERNAL HAVEN</div>
+                            <div style="font-size: 1.2rem; margin-bottom: 20px;">Book I: The Moonlit Slumber</div>
+                            <div style="font-size: 1rem;">Justin Helmer</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="book-details">
+                    <h2>Embark on an Epic Journey</h2>
+                    <p>Dive into a world where dragonriders soar through skies, living equations bind reality, and the line between truth and illusion blurs under twin moons.</p>
+                    
+                    <div class="price">CAS 26.28</div>
+                    
+                    <div class="action-buttons">
+                        <a href="#buy" class="btn btn-large">Add to Cart</a>
+                        <a href="#preview" class="btn" style="background: transparent; border: 2px solid var(--primary); color: var(--primary);">Read Sample</a>
+                    </div>
+                    
+                    <div style="margin-top: 30px; padding: 20px; background: #f9f9f9; border-radius: 5px;">
+                        <p><strong>Summary provided in 3-5 business days</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section" id="about">
+        <div class="container">
+            <h2>About the Book</h2>
+            <div class="about-content">
+                <div class="synopsis">
+                    <p>Serenya never meant to be a rider. Chosen by a bronze hatchling—Emberion—she's thrust into the hidden mathematics of the Seals: living equations that bind memory to breath and turn songs into structure. Under the twin moons of Aurethys, illusions prowl like storms and a fallen silver—Corvath—audits reality itself, promising "order as mercy."</p>
+                    
+                    <p>Mentored by Lyra, keeper of the Accord, Serenya learns that Haven—the legendary sanctuary—is not a distant heaven at all, but a mirror holding Aurethys together. When the Whispering Moon offers a crown without cost, when friends become foes under perfect lies, Serenya and Emberion must choose borders over blaze, chorus over heroics, and truth over tidy.</p>
+                    
+                    <p>This opening volume blends dragonrider adventure with mythic science—Seals, measures, and math-magic—across festivals, sky duels, and a defense of the Accord that will change the Moon forever. A last stand, a new vow, and a single sentence carry them into what comes next: "Without Haven, we must become it."</p>
+                    
+                    <p><em>For readers who love epic bonds, high-stakes wonder, and the ache of choosing right when "easy" looks holy.</em></p>
+                </div>
+                
+                <div class="book-info">
+                    <div class="info-item">
+                        <div class="info-label">Series</div>
+                        <div>The Eternal Haven Chronicles (Book I of the opening trilogy)</div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">Tone/Themes</div>
+                        <div>dragon riders, illusion vs. truth, found chorus over lone hero, borders not floods, becoming the thing you lost</div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">ISBN</div>
+                        <div>978-1-0698232-0-5</div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">Edition</div>
+                        <div>Special edition</div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">Categories</div>
+                        <div>Fiction / Fantasy / Epic / Dragons & Mythical Creatures</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Table of Contents -->
+    <section class="section" id="toc">
+        <div class="container">
+            <h2>Table of Contents</h2>
+            <div class="toc-container">
+                <div class="toc-columns">
+                    <div class="toc-part">
+                        <div class="toc-part-title">Prologue</div>
+                        <ul class="toc-chapters">
+                            <li>The Song of the First Seal</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="toc-part">
+                        <div class="toc-part-title">Part I — The Awakening</div>
+                        <ul class="toc-chapters">
+                            <li>Chapter 1: Serenya and the Bronze Emberion</li>
+                            <li>Chapter 2: The Whispering Moon</li>
+                            <li>Chapter 3: The Call of Lyra</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="toc-part">
+                        <div class="toc-part-title">Part II — Fractures</div>
+                        <ul class="toc-chapters">
+                            <li>Chapter 4: Illusions at Dusk</li>
+                            <li>Chapter 5: Corvath, the Fallen Dragon</li>
+                            <li>Chapter 6: Bonds in Trial</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="toc-part">
+                        <div class="toc-part-title">Part III — Illusions</div>
+                        <ul class="toc-chapters">
+                            <li>Chapter 7: The Festival of Accord</li>
+                            <li>Chapter 8: Serenya's Temptation</li>
+                            <li>Chapter 9: The Haven's Secrets</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="toc-part">
+                        <div class="toc-part-title">Part IV — The Breaking</div>
+                        <ul class="toc-chapters">
+                            <li>Chapter 10: Betrayal at Moonrise</li>
+                            <li>Chapter 11: Emberion's Trial</li>
+                            <li>Chapter 12: The Shattering of Accord</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="toc-part">
+                        <div class="toc-part-title">Part V — The Moonlit Flight</div>
+                        <ul class="toc-chapters">
+                            <li>Chapter 13: The Last Song of Lyra</li>
+                            <li>Chapter 14: Emberion Ascends</li>
+                            <li>Chapter 15: The Moonlit Slumber</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Author Section -->
+    <section class="section author-section" id="author">
+        <div class="container">
+            <h2>About the Author</h2>
+            <div class="author-content">
+                <div class="author-image">
+                    <div class="author-image-placeholder">JH</div>
+                </div>
+                <div class="author-bio">
+                    <p>Justin Helmer is the creator of The Eternal Haven Chronicles, an epic fantasy saga of dragonriders, living Seals (math-magic), and a world where songs are load-bearing. He writes character-driven fantasy with big ideas and bigger hearts.</p>
+                    
+                    <p>Series Development: Worldbuilding, Seal system design, and lore (Aurethys, Haven, Δ9 measures) created by Justin Helmer.</p>
+                    
+                    <div class="social-links">
+                        <a href="https://www.patreon.com/posts/eternal-haven-i-138196826" target="_blank">Website</a>
+                        <a href="#" target="_blank">X/Twitter: @Excavationpro</a>
+                        <a href="#" target="_blank">Instagram: @Excavationpro</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="section cta-section" id="buy">
+        <div class="container cta-content">
+            <h2>Begin Your Adventure Today</h2>
+            <p>Join Serenya and Emberion on their epic journey through the world of Aurethys. Discover the secrets of the Seals, confront the illusions of the Whispering Moon, and learn what it truly means to become Haven.</p>
+            
+            <div class="testimonial">
+                "A breathtaking blend of dragonrider fantasy and mathematical magic. Helmer has created a world that feels both ancient and entirely new."
+                <div class="testimonial-author">- Fantasy Book Review</div>
+            </div>
+            
+            <div class="action-buttons">
+                <a href="#" class="btn btn-large">Purchase Paperback - CAS 26.28</a>
+                <a href="#" class="btn" style="background: transparent; border: 2px solid var(--primary); color: var(--primary);">Download eBook</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>The Eternal Haven Chronicles</h3>
+                    <ul>
+                        <li><a href="#about">About Book I</a></li>
+                        <li><a href="#">Series Overview</a></li>
+                        <li><a href="#author">About the Author</a></li>
+                        <li><a href="#">World of Aurethys</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Connect</h3>
+                    <ul>
+                        <li><a href="https://www.patreon.com/posts/eternal-haven-i-138196826" target="_blank">Official Website</a></li>
+                        <li><a href="#">Newsletter</a></li>
+                        <li><a href="#">X/Twitter</a></li>
+                        <li><a href="#">Instagram</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Copyright Information</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                &copy; 2025 Justin Helmer (Excavationpro). All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

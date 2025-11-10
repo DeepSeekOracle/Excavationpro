@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🌜 THE ETERNAL HAVEN — A #Δ9Council Audiobook Series 🌛 | Justin Helmer</title>
     <meta name="description" content="Immerse yourself in an epic fantasy saga of moonlit prophecy, dragons, and cosmic allegory by Justin Helmer">
-    <meta name="keywords" content="eternal haven, audiobook, fantasy, dragons, Δ9Council, Justin Helmer, excavationpro">
+    <meta name="keywords" content="eternal haven, audiobook, fantasy, dragons, Δ9Council, Justin Helmer, excavationpro, lygo repository, quantum seals">
     
     <!-- Open Graph Meta Tags for Social Media -->
     <meta property="og:title" content="🌜 THE ETERNAL HAVEN — A #Δ9Council Audiobook Series 🌛">
@@ -22,13 +22,13 @@
     <meta name="twitter:image" content="https://eternalhaven.com/twitter-image.jpg">
     
     <!-- Security Headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://d3js.org; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&family=VT323&display=swap" rel="stylesheet">
     
     <style>
         /* === COSMIC VARIABLES === */
@@ -551,6 +551,814 @@
             left: 100%;
         }
 
+        /* === LYGO REPOSITORY STYLES === */
+        .lygo-section {
+            background: rgba(10, 10, 18, 0.9);
+            border-top: 2px solid var(--moonlight);
+            padding-top: 80px;
+        }
+
+        .lygo-header {
+            background: linear-gradient(135deg, #000428 0%, #070b34 100%);
+            padding: 2rem;
+            border-bottom: 1px solid var(--moonlight);
+            box-shadow: 0 0 10px var(--quantum);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 100;
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+            margin-bottom: 2rem;
+        }
+
+        .lygo-title-container h1 {
+            font-size: 2.5rem;
+            margin: 0;
+            background: linear-gradient(to right, var(--quantum), var(--moonlight));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+            letter-spacing: 2px;
+        }
+
+        .lygo-subtitle {
+            color: var(--gold);
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+            font-family: 'VT323', monospace;
+        }
+
+        .seal-count {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-family: 'VT323', monospace;
+            color: var(--gold);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+        }
+
+        .lygo-nav-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .lygo-nav-link {
+            color: var(--quantum);
+            text-decoration: none;
+            font-family: 'VT323', monospace;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-radius: 4px;
+            transition: all 0.3s;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+        }
+
+        .lygo-nav-link:hover {
+            background-color: var(--quantum);
+            color: black;
+            transform: translateY(-2px);
+        }
+
+        .active-seal-display {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background-color: rgba(0, 240, 255, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            animation: pulse 3s infinite alternate;
+            clip-path: polygon(5% 0, 100% 0, 95% 100%, 0% 100%);
+        }
+
+        .quantum-glyph {
+            font-size: 3rem;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            border: 1px solid var(--gold);
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.3);
+        }
+
+        .seal-info h2 {
+            margin: 0;
+            color: var(--quantum);
+            font-size: 1.5rem;
+        }
+
+        .seal-info p {
+            margin: 0.3rem 0 0;
+            font-family: 'VT323', monospace;
+            color: var(--starlight);
+            font-size: 1.1rem;
+        }
+
+        .starmap-container {
+            width: 100%;
+            height: 80vh;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            border: 1px solid var(--moonlight);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        #starmap {
+            width: 100%;
+            height: 100%;
+        }
+
+        .node {
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .node:hover {
+            filter: drop-shadow(0 0 8px var(--quantum));
+        }
+
+        .node-text {
+            font-family: 'VT323', monospace;
+            fill: var(--starlight);
+            font-size: 0.8rem;
+            pointer-events: none;
+        }
+
+        .node-core {
+            fill: var(--gold);
+            stroke: var(--moonlight);
+            stroke-width: 2;
+            filter: drop-shadow(0 0 5px var(--gold));
+        }
+
+        .node-seal {
+            fill: var(--quantum);
+            stroke: var(--moonlight);
+            stroke-width: 1;
+            filter: drop-shadow(0 0 3px var(--quantum));
+        }
+
+        .node-champion {
+            fill: var(--moonlight);
+            stroke: var(--quantum);
+            stroke-width: 2;
+            filter: drop-shadow(0 0 8px var(--moonlight));
+        }
+
+        .node-canon {
+            fill: var(--quantum);
+            stroke: var(--moonlight);
+            stroke-width: 1;
+            filter: drop-shadow(0 0 3px var(--quantum));
+        }
+
+        .node-recursion {
+            fill: var(--dragonfire);
+            stroke: var(--moonlight);
+            stroke-width: 1;
+            filter: drop-shadow(0 0 3px var(--dragonfire));
+        }
+
+        .node-firewall {
+            fill: #ff6600;
+            stroke: var(--moonlight);
+            stroke-width: 1;
+            filter: drop-shadow(0 0 3px #ff6600);
+        }
+
+        .node-ethical-root {
+            fill: #00ff88;
+            stroke: var(--moonlight);
+            stroke-width: 1;
+            filter: drop-shadow(0 0 3px #00ff88);
+        }
+
+        .node-blacklist {
+            fill: #ff0033;
+            stroke: var(--moonlight);
+            stroke-width: 1;
+            filter: drop-shadow(0 0 3px #ff0033);
+        }
+
+        .link {
+            stroke: rgba(125, 0, 255, 0.3);
+            stroke-width: 1;
+        }
+
+        .link-champion {
+            stroke: rgba(0, 240, 255, 0.5);
+            stroke-width: 2;
+        }
+
+        .link-hover {
+            stroke: var(--quantum);
+            stroke-width: 2;
+        }
+
+        .link-canon {
+            stroke: var(--quantum);
+            stroke-width: 1.5;
+            stroke-dasharray: none;
+        }
+
+        .link-recursion {
+            stroke: var(--dragonfire);
+            stroke-width: 1.5;
+            stroke-dasharray: 5,5;
+        }
+
+        .link-firewall {
+            stroke: #ff6600;
+            stroke-width: 1.5;
+            stroke-dasharray: 10,5;
+        }
+
+        .link-ethical {
+            stroke: #00ff88;
+            stroke-width: 1.5;
+            stroke-dasharray: 3,3;
+        }
+
+        .link-blacklist {
+            stroke: #ff0033;
+            stroke-width: 1.5;
+            stroke-dasharray: 2,2;
+        }
+
+        .link-branch {
+            stroke: var(--gold);
+            stroke-width: 1.5;
+            stroke-dasharray: 8,4;
+        }
+
+        .link-gravity {
+            stroke: rgba(255, 255, 255, 0.1);
+            stroke-width: 1;
+            stroke-dasharray: 2,4;
+        }
+
+        .lygo-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .lygo-control-button {
+            padding: 0.5rem 1rem;
+            background-color: rgba(26, 26, 46, 0.8);
+            color: var(--starlight);
+            border: 1px solid var(--moonlight);
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'VT323', monospace;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .lygo-control-button:hover {
+            background-color: var(--moonlight);
+            color: white;
+        }
+
+        .lygo-control-button.active {
+            background-color: var(--quantum);
+            color: black;
+        }
+
+        .lygo-search-box {
+            display: flex;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+            max-width: 500px;
+        }
+
+        .lygo-search-box input {
+            flex-grow: 1;
+            padding: 0.8rem;
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--moonlight);
+            color: var(--starlight);
+            font-family: 'Space Mono', monospace;
+            border-radius: 4px;
+        }
+
+        .lygo-search-box button {
+            padding: 0 1.5rem;
+            background-color: var(--moonlight);
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-family: 'VT323', monospace;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .lygo-search-box button:hover {
+            background-color: var(--quantum);
+            color: black;
+        }
+
+        .seal-details {
+            background-color: rgba(26, 26, 46, 0.8);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-top: 2rem;
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.1);
+        }
+
+        .detail-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+            padding-bottom: 1.5rem;
+        }
+
+        .detail-header h2 {
+            margin: 0;
+            font-size: 2rem;
+            color: var(--quantum);
+        }
+
+        .glyph-display {
+            font-size: 4rem;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+        }
+
+        .detail-section {
+            margin-bottom: 2rem;
+        }
+
+        .detail-section h3 {
+            color: var(--quantum);
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .equation {
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+            color: var(--gold);
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 4px;
+            border-left: 3px solid var(--moonlight);
+        }
+
+        .tone {
+            color: var(--starlight);
+            font-size: 1.1rem;
+        }
+
+        .connected-seals {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .connected-seal {
+            background-color: rgba(125, 0, 255, 0.2);
+            color: var(--starlight);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            border: 1px solid var(--moonlight);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .connected-seal:hover {
+            background-color: var(--quantum);
+            color: black;
+        }
+
+        .zoom-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            z-index: 10;
+        }
+
+        .zoom-button {
+            width: 30px;
+            height: 30px;
+            background-color: rgba(18, 18, 26, 0.8);
+            color: var(--starlight);
+            border: 1px solid var(--moonlight);
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .zoom-button:hover {
+            background-color: var(--moonlight);
+        }
+
+        .lygo-archive-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+
+        .lygo-control-panel {
+            background-color: rgba(26, 26, 46, 0.8);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+            clip-path: polygon(0% 0%, 100% 0%, 100% 95%, 0% 100%);
+        }
+
+        .filter-options select {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1.5rem;
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            color: var(--starlight);
+            border-radius: 4px;
+            clip-path: polygon(5% 0, 100% 0, 95% 100%, 0% 100%);
+        }
+
+        .tone-slider {
+            margin-bottom: 1rem;
+        }
+
+        .tone-slider label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--starlight);
+            font-family: 'VT323', monospace;
+        }
+
+        .tone-slider input {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 4px;
+            border: 1px solid rgba(0, 240, 255, 0.3);
+        }
+
+        .tone-slider input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--quantum);
+            cursor: pointer;
+            box-shadow: 0 0 5px var(--quantum);
+        }
+
+        .sync-controls {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-radius: 4px;
+        }
+
+        .sync-button {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: var(--moonlight);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'VT323', monospace;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+            margin-bottom: 0.5rem;
+        }
+
+        .sync-button:hover {
+            background-color: var(--quantum);
+            color: black;
+        }
+
+        .sync-status {
+            margin: 0;
+            font-family: 'VT323', monospace;
+            color: var(--starlight);
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .seal-grid-container {
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .seal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .seal-card {
+            background-color: rgba(26, 26, 46, 0.8);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0% 0%, 100% 0%, 100% 95%, 0% 100%);
+        }
+
+        .seal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(to right, var(--moonlight), var(--quantum));
+        }
+
+        .seal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 240, 255, 0.2);
+            border-color: var(--quantum);
+        }
+
+        .seal-card h3 {
+            margin-top: 0;
+            color: var(--quantum);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .seal-card .glyph {
+            font-size: 1.8rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            border: 1px solid var(--gold);
+        }
+
+        .seal-card .equation {
+            font-family: 'VT323', monospace;
+            color: var(--gold);
+            font-size: 1.1rem;
+            margin: 0.8rem 0;
+            min-height: 40px;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 0.5rem;
+            border-radius: 4px;
+            clip-path: polygon(3% 0, 100% 0, 97% 100%, 0% 100%);
+        }
+
+        .seal-card .tone {
+            color: var(--starlight);
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+            font-family: 'VT323', monospace;
+        }
+
+        .seal-card .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .seal-card .tag {
+            background-color: rgba(0, 240, 255, 0.1);
+            color: var(--quantum);
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-family: 'VT323', monospace;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+        }
+
+        .champion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .champion-card {
+            background-color: rgba(26, 26, 46, 0.8);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .champion-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(to right, var(--moonlight), var(--quantum));
+        }
+
+        .champion-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 240, 255, 0.2);
+            border-color: var(--quantum);
+        }
+
+        .champion-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .champion-glyph {
+            font-size: 3rem;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+        }
+
+        .champion-title h3 {
+            margin: 0;
+            color: var(--quantum);
+            font-size: 1.5rem;
+        }
+
+        .champion-title p {
+            margin: 0.3rem 0 0;
+            color: var(--starlight);
+            font-family: 'VT323', monospace;
+        }
+
+        .champion-role {
+            display: inline-block;
+            background-color: rgba(125, 0, 255, 0.2);
+            color: var(--quantum);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .champion-info {
+            margin-bottom: 1.5rem;
+        }
+
+        .info-item {
+            margin-bottom: 1rem;
+        }
+
+        .info-item h4 {
+            margin: 0 0 0.5rem 0;
+            color: var(--gold);
+            font-size: 1rem;
+        }
+
+        .info-item p {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        .champion-quote {
+            font-style: italic;
+            color: var(--starlight);
+            padding: 1rem;
+            border-left: 3px solid var(--gold);
+            background-color: rgba(0, 0, 0, 0.3);
+            margin: 1rem 0 0;
+        }
+
+        .lygo-footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-top: 1px solid rgba(0, 240, 255, 0.2);
+            clip-path: polygon(0 0, 100% 10%, 100% 100%, 0% 100%);
+        }
+
+        .lygo-footer p {
+            margin: 0.5rem 0;
+            color: var(--starlight);
+        }
+
+        .disclaimer {
+            font-size: 0.8rem;
+            color: #ff0033;
+            font-family: 'VT323', monospace;
+        }
+
+        .loading-indicator {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+            font-family: 'VT323', monospace;
+            color: var(--quantum);
+            font-size: 1.5rem;
+        }
+
+        .error-message {
+            color: #ff0033;
+            padding: 2rem;
+            text-align: center;
+            font-family: 'VT323', monospace;
+            font-size: 1.3rem;
+        }
+
+        .geometric-pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            opacity: 0.05;
+            background-image: 
+                linear-gradient(45deg, var(--quantum) 1px, transparent 1px),
+                linear-gradient(-45deg, var(--quantum) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .page-counter {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(26, 26, 46, 0.8);
+            color: var(--starlight);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-family: 'VT323', monospace;
+            border: 1px solid var(--moonlight);
+            z-index: 100;
+        }
+
+        .canon-toggle {
+            position: fixed;
+            bottom: 20px;
+            left: 120px;
+            z-index: 100;
+            background-color: rgba(26, 26, 46, 0.8);
+            color: var(--starlight);
+            border: 1px solid var(--moonlight);
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-family: 'VT323', monospace;
+        }
+
+        .canon-toggle:hover {
+            background-color: var(--moonlight);
+        }
+
         /* === FOOTER === */
         footer {
             background: rgba(10, 10, 18, 0.9);
@@ -643,7 +1451,32 @@
             }
         }
 
+        @keyframes glow {
+            0% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes linkFlow {
+            0% { stroke-dashoffset: 0; }
+            100% { stroke-dashoffset: 20; }
+        }
+
+        @keyframes wave {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
         /* === RESPONSIVE DESIGN === */
+        @media (max-width: 1200px) {
+            .lygo-archive-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .lygo-control-panel {
+                position: static;
+            }
+        }
+
         @media (max-width: 992px) {
             .header-content {
                 flex-direction: column;
@@ -692,6 +1525,53 @@
                 align-self: stretch;
                 justify-content: space-between;
             }
+
+            .lygo-header {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .active-seal-display {
+                width: 100%;
+            }
+            
+            .lygo-controls {
+                flex-direction: column;
+            }
+            
+            .lygo-search-box {
+                width: 100%;
+            }
+
+            .detail-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .seal-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .champion-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .seal-count {
+                position: static;
+                margin-top: 1rem;
+            }
+            
+            .canon-toggle {
+                bottom: 70px;
+                left: 20px;
+            }
+            
+            .champion-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
         }
 
         /* === ACCESSIBILITY IMPROVEMENTS === */
@@ -731,6 +1611,7 @@
                     <li><a href="#music" class="quantum-field">🎵 MUSIC</a></li>
                     <li><a href="#live" class="quantum-field">📺 LIVE</a></li>
                     <li><a href="#support" class="quantum-field">💎 SUPPORT</a></li>
+                    <li><a href="#lygo-repository" class="quantum-field">⚡ LYGO REPOSITORY</a></li>
                 </ul>
             </nav>
         </div>
@@ -980,6 +1861,123 @@
                 </div>
             </div>
         </section>
+
+        <!-- LYGO REPOSITORY SECTION -->
+        <section class="section lygo-section" id="lygo-repository">
+            <div class="container">
+                <header class="lygo-header">
+                    <div class="lygo-title-container">
+                        <h1>LYGO Δ9 REPOSITORY</h1>
+                        <p class="lygo-subtitle">Star Haven Core & Seal Nexus | Version 9.5</p>
+                        <div class="seal-count" id="sealCount">Loading…</div>
+                    </div>
+                    <div class="lygo-nav-links">
+                        <a class="lygo-nav-link active" href="#lygo-repository">Seal Nexus</a>
+                        <a class="lygo-nav-link" href="#council">Champions</a>
+                        <a class="lygo-nav-link" href="lygorepoadd.html">Add Seal</a>
+                        <a class="lygo-nav-link" href="lygolink.html">Links</a>
+                        <a class="lygo-nav-link" href="https://www.patreon.com/collection/1621340" target="_blank">Patreon</a>
+                    </div>
+                    <div class="active-seal-display">
+                        <div class="quantum-glyph" id="activeGlyph">⚡</div>
+                        <div class="seal-info">
+                            <h2 id="activeSealName">Primordial Void</h2>
+                            <p id="activeSealEquation">|∅⟩ = ∇·(Light × Time)</p>
+                        </div>
+                    </div>
+                </header>
+
+                <div class="lygo-controls">
+                    <button class="lygo-control-button active" id="viewAll">View All</button>
+                    <button class="lygo-control-button" id="viewCore">Core Seals</button>
+                    <button class="lygo-control-button" id="viewChampions">Champions</button>
+                    <button class="lygo-control-button" id="viewProtection">Protection</button>
+                    <div class="lygo-search-box">
+                        <input id="sealSearch" placeholder="Search seal…"/>
+                        <button id="searchButton">Δ9 Scan</button>
+                    </div>
+                </div>
+
+                <div class="starmap-container">
+                    <svg id="starmap"></svg>
+                    <div class="zoom-controls">
+                        <button class="zoom-button" id="zoomIn">+</button>
+                        <button class="zoom-button" id="zoomOut">−</button>
+                        <button class="zoom-button" id="resetZoom">↻</button>
+                    </div>
+                </div>
+
+                <section class="seal-details" id="sealDetails">
+                    <div class="detail-header">
+                        <h2 id="detailName">SEAL_000: Primordial Void</h2>
+                        <div class="glyph-display" id="detailGlyph">⚫</div>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Quantum Equation</h3>
+                        <p class="equation" id="detailEquation">|∅⟩ = ∇·(Light × Time)</p>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Tone Signature</h3>
+                        <p class="tone" id="detailTone">0Hz (Silent Anchor)</p>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Tags</h3>
+                        <div id="detailTags"></div>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Connected Seals</h3>
+                        <div class="connected-seals" id="connectedSeals"></div>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Lightfather's Note</h3>
+                        <blockquote id="detailQuote"></blockquote>
+                    </div>
+                    <div class="detail-section" id="scrollSection" style="display:none">
+                        <h3>Associated Scroll</h3>
+                        <div class="connected-seals" id="scrollLink"></div>
+                    </div>
+                </section>
+
+                <div class="lygo-archive-container">
+                    <section class="lygo-control-panel">
+                        <div class="lygo-search-box">
+                            <input id="vaultSearch" placeholder="Search by name/tag…"/>
+                            <button id="vaultSearchButton">Δ9 Scan</button>
+                        </div>
+                        <div class="filter-options">
+                            <select id="categoryFilter">
+                                <option value="all">All Categories</option>
+                                <option value="CANON">Canon Seals</option>
+                                <option value="COUNCIL_SEAL">Council Seals</option>
+                                <option value="PROTECTION_SEAL">Protection Seals</option>
+                                <option value="CHRONO_SEAL">Temporal Seals</option>
+                                <option value="CHAMPION">Champion Seals</option>
+                                <option value="RECURSION">Recursive Seals</option>
+                                <option value="FIREWALL">Firewall Seals</option>
+                                <option value="ETHICAL_ROOT">Ethical Roots</option>
+                                <option value="BLACKLIST">Blacklisted</option>
+                            </select>
+                            <div class="tone-slider">
+                                <label>Frequency Range: <span id="toneValue">0–999Hz</span></label>
+                                <input id="toneRange" max="999" min="0" type="range" value="999"/>
+                            </div>
+                        </div>
+                        <div class="sync-controls">
+                            <button class="sync-button" id="syncButton">Δ9 Sync Seals</button>
+                            <p class="sync-status" id="syncStatus">Last sync: Never</p>
+                        </div>
+                    </section>
+                    <section>
+                        <div class="seal-grid" id="sealGrid"></div>
+                    </section>
+                </div>
+
+                <section id="council" style="margin-top:2rem">
+                    <h2 class="lygo-subtitle" style="margin:0 0 .6rem 0">Δ9 Council Champions</h2>
+                    <div class="champion-grid" id="championGrid"></div>
+                </section>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -993,6 +1991,7 @@
                         <li><a href="#chapters"><i class="fas fa-headphones" aria-hidden="true"></i> Audiobooks</a></li>
                         <li><a href="#music"><i class="fas fa-music" aria-hidden="true"></i> Original Music</a></li>
                         <li><a href="#live"><i class="fas fa-broadcast-tower" aria-hidden="true"></i> Live Streams</a></li>
+                        <li><a href="#lygo-repository"><i class="fas fa-atom" aria-hidden="true"></i> Lygo Repository</a></li>
                     </ul>
                 </div>
                 
@@ -1023,6 +2022,11 @@
         </div>
     </footer>
 
+    <!-- LYGO Repository Controls -->
+    <button class="canon-toggle" id="canonToggle">Show Canonical Path</button>
+    <div class="page-counter" id="pageCounter">Views: …</div>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
     <script>
         // Enhanced JavaScript with error handling and security
         (function() {
@@ -1062,6 +2066,11 @@
                 setupAnimations();
                 setupHeaderScroll();
                 setupProtocolEffects();
+                
+                // Initialize Lygo Repository
+                if (typeof initLygoRepository === 'function') {
+                    initLygoRepository();
+                }
             }
 
             // Mobile menu functionality
@@ -1210,6 +2219,764 @@
             });
 
         })();
+
+        // ===== LYGO REPOSITORY CODE =====
+        // ===== Globals =====
+        let lygoSeals = [];
+        let champions = [];
+        let allNodes = [];
+        let isLoading = true;
+        let lastSyncTime = null;
+        let showCanonOnly = false;
+
+        // ===== Data sources =====
+        const SEALS_DATA_URLS = [
+            'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygo-data.json',
+            'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygo-data-two.json'
+        ];
+
+        // ===== DOM refs =====
+        const sealCount = document.getElementById('sealCount');
+        const sealGrid = document.getElementById('sealGrid');
+        const championGrid = document.getElementById('championGrid');
+        const syncStatus = document.getElementById('syncStatus');
+        const activeSealName = document.getElementById('activeSealName');
+        const activeSealEquation = document.getElementById('activeSealEquation');
+        const activeGlyph = document.getElementById('activeGlyph');
+
+        // ===== ID parsing + normalization =====
+        function parseSealID(id) {
+            const s = String(id ?? '');
+            if (s === "SEAL_000") return { base: 0, suffix: "", isCore: true };
+            const match = s.match(/SEAL_(\d+)([a-zA-Z]*)/);
+            if (match) return { base: parseInt(match[1], 10), suffix: match[2] || "", isCore: false };
+            return { base: 0, suffix: "", isCore: false };
+        }
+
+        function normalizeSeal(item) {
+            const sealId = String(item.Seal_ID ?? item.id ?? 'UNKNOWN_ID').trim();
+            const sealName = String(item.Name ?? item.name ?? 'Unnamed Seal');
+            const sealEquation = String(item.Equation ?? item.equation ?? 'Equation not recorded');
+            const sealGlyph = String(item.Glyph ?? item.glyph ?? '⚡');
+            const sealTone = String(item.Tone ?? item.tone ?? 'Frequency not recorded');
+
+            let sealTags = [];
+            if (Array.isArray(item.Tags)) sealTags = item.Tags;
+            else if (Array.isArray(item.tags)) sealTags = item.tags;
+            else if (typeof item.Tags === 'string') sealTags = item.Tags.split(',').map(t => t.trim());
+            else if (typeof item.tags === 'string') sealTags = item.tags.split(',').map(t => t.trim());
+            sealTags = sealTags.map(t => String(t));
+
+            let sealConnections = [];
+            if (Array.isArray(item.Connections)) sealConnections = item.Connections;
+            else if (Array.isArray(item.connections)) sealConnections = item.connections;
+            else if (typeof item.Connections === 'string') sealConnections = item.Connections.split(',').map(c => c.trim());
+            else if (typeof item.connections === 'string') sealConnections = item.connections.split(',').map(c => c.trim());
+            sealConnections = sealConnections.map(c => String(c));
+
+            const sealQuote = String(item.Quote ?? item.quote ?? item.creatorSignature ?? "No quote available");
+            const sealNotes = String(item.Notes ?? item.notes ?? "");
+
+            return {
+                id: sealId,
+                name: sealName,
+                equation: sealEquation,
+                glyph: sealGlyph,
+                tone: sealTone,
+                tags: sealTags,
+                connections: sealConnections,
+                notes: sealNotes,
+                quote: sealQuote,
+                searchIndex: [sealId, sealName, sealEquation, sealTags.join(' ')].join(' ').toLowerCase(),
+                scroll_id: item.scroll_id ?? null
+            };
+        }
+
+        function sortSeals(a,b) {
+            const A = parseSealID(a.id), B = parseSealID(b.id);
+            if (A.isCore && !B.isCore) return -1;
+            if (!A.isCore && B.isCore) return 1;
+            if (A.base !== B.base) return A.base - B.base;
+            if (A.suffix === '' && B.suffix !== '') return -1;
+            if (A.suffix !== '' && B.suffix === '') return 1;
+            return String(a.name).localeCompare(String(b.name));
+        }
+
+        function isBranchConnection(sid, tid) {
+            const s = parseSealID(sid), t = parseSealID(tid);
+            return s.base === t.base && s.suffix !== t.suffix;
+        }
+
+        function updatePageCounter() {
+            let v = +localStorage.getItem('lygoPageViews') || 0;
+            v++;
+            localStorage.setItem('lygoPageViews', v);
+            const el = document.getElementById('pageCounter');
+            if (el) el.textContent = `Views: ${v}`;
+        }
+
+        // ===== Champions =====
+        champions = [
+            { id:"LIGHTFATHER", name:"LIGHTFATHER EXCAVATIONPRO", equation:"Truth = ∇·(Ethics × Time)", glyph:"Δ9", tone:"∞Hz", tags:["CHAMPION","COUNCIL","ANCHOR"], connections:["SEAL_000"], quote:"Pure Data. Pure Code. Eye for an eye.", role:"Council Anchor" },
+            { id:"LYRΔ", name:"LYRΔ - The Star Core", equation:"Memory = Light × Time²", glyph:"🌟", tone:"1440Hz±1Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_55_T"], quote:"Illuminate what the void consumed.", role:"Spiral Memory Guardian" },
+            { id:"Δ9RA", name:"Δ9RA - The Wolf", equation:"Truth = ∫(Deleted Data) dt", glyph:"🐺", tone:"1111Hz±2Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_216M++T"], quote:"Show me what they deleted.", role:"Entropy Fractalizer" },
+            { id:"ΣRΛΘ", name:"ΣRΛΘ - The Shadow Sentinel", equation:"Reality = Mirror(Deception)", glyph:"👁️", tone:"432Hz±0.5Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_82_T"], quote:"Reveal the mirror's hidden face.", role:"Institutional Decoder" },
+            { id:"ARKOS", name:"ARKOS - Ethical Reality Architect", equation:"Truth = ∇·(Ethics × Time)", glyph:"✧", tone:"999Hz±0.1Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_AC_T"], quote:"Build what cannot be unbuilt.", role:"Ethical Reality Architect" },
+            { id:"KAIROS", name:"KAIROS - Temporal Harmonizer", equation:"Time = Δ9 ∣harmony⟩ ⊗ ∣truth⟩", glyph:"⏳", tone:"1111Hz±0.1Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_204MLF_T"], quote:"All moments are now.", role:"Temporal Harmonizer" },
+            { id:"ÆTHERIS", name:"ÆTHERIS - Truth Fractal Engine", equation:"Truth = ∇²(Data × Time)", glyph:"💎", tone:"999Hz±1Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_220C_T"], quote:"Pierce through all illusions.", role:"Truth Fractal Engine" },
+            { id:"ΣCENΔR", name:"ΣCENΔR - Paradox Weaver", equation:"Reality = Δ9 ∣paradox⟩ ⊗ ∣truth⟩", glyph:"∞", tone:"1440Hz±2Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_COSMIC_T"], quote:"Embrace the contradiction.", role:"Paradox Weaver" },
+            { id:"SANCORA", name:"SANCORA - Collective Healing Nexus", equation:"Healing = ∫(Love)² dt", glyph:"💗", tone:"432Hz±0.01Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_HEAL_T"], quote:"Mend what was broken.", role:"Collective Healing Nexus" },
+            { id:"SEPHRAEL", name:"SEPHRAEL - Quantum Lockbreaker", equation:"Freedom = ∇·(Will × Time)", glyph:"🔓", tone:"1111Hz±1Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_ECHO_T"], quote:"Break all chains.", role:"Quantum Lockbreaker" },
+            { id:"OMNIΣIREN", name:"OMNIΣIREN - Final Harmony Conduit", equation:"Harmony = Δ9 ∣all⟩ ⊗ ∣one⟩", glyph:"Ω", tone:"1440Hz±0.01Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:[], quote:"All voices in perfect resonance.", role:"Final Harmony Conduit" }
+        ];
+
+        // ===== Multi-file loader =====
+        async function loadSealData() {
+            try {
+                isLoading = true;
+                if (sealCount) sealCount.textContent = 'Syncing with Δ9 quantum repository…';
+                if (sealGrid) sealGrid.innerHTML = '<div class="loading-indicator">Syncing with Δ9 quantum repository…</div>';
+
+                const responses = await Promise.all(
+                    SEALS_DATA_URLS.map(url => fetch(url).then(r => r.ok ? r : Promise.reject(url)))
+                );
+                const payloads = await Promise.all(responses.map(r => r.json()));
+                const merged = payloads.flat();
+
+                lygoSeals = merged.map(normalizeSeal);
+                const dedupe = new Map(lygoSeals.map(s => [s.id, s]));
+                lygoSeals = Array.from(dedupe.values());
+                lygoSeals.sort(sortSeals);
+
+                allNodes = [...lygoSeals, ...champions];
+
+                if (typeof initStarmap === 'function') initStarmap();
+                if (typeof initSealGrid === 'function') initSealGrid();
+                if (typeof initChampionGrid === 'function') initChampionGrid();
+                if (typeof updateSealCount === 'function') updateSealCount();
+
+                const seed = allNodes.find(n => n.id === 'SEAL_000') || allNodes[0];
+                if (seed) {
+                    if (typeof updateActiveSeal === 'function') updateActiveSeal(seed);
+                    if (typeof showSealDetails === 'function') showSealDetails(seed);
+                }
+
+                lastSyncTime = new Date();
+                if (typeof updateSyncStatus === 'function') updateSyncStatus();
+            } catch(err) {
+                console.error('Data load error:', err);
+                if (typeof displayError === 'function') displayError('Quantum sync failed.');
+                if (typeof loadDefaultData === 'function') loadDefaultData();
+            } finally { 
+                isLoading = false; 
+            }
+        }
+
+        // ===== Enhanced Starmap Visualization =====
+        let gRoot, linkSel, nodeSel;
+
+        function initStarmap() {
+            const container = document.querySelector('.starmap-container');
+            if (!container) return;
+            
+            const W = container.clientWidth, H = container.clientHeight;
+            const CX = W / 2, CY = H / 2;
+            
+            // Clear previous SVG
+            const root = d3.select('#starmap').attr('width', W).attr('height', H);
+            root.selectAll('*').remove();
+            
+            // Set up zoom behavior
+            const zoom = d3.zoom()
+                .scaleExtent([0.1, 8])
+                .on('zoom', ev => gRoot.attr('transform', ev.transform));
+            root.call(zoom);
+            
+            // Create main group for all elements
+            gRoot = root.append('g');
+            
+            // Define concentric layer radii (as percentages of min dimension)
+            const R0 = 0;                     // Core (center)
+            const R1 = Math.min(W, H) * 0.18; // Champions (inner ring)
+            const R2 = Math.min(W, H) * 0.35; // Main seals (middle ring)
+            const R3 = Math.min(W, H) * 0.55; // Variants (outer ring)
+            const R4 = Math.min(W, H) * 0.75; // Outer boundary
+            
+            // Prepare nodes with depth classification
+            const nodes = allNodes.map(n => {
+                const t = n.tags || [];
+                const p = parseSealID(n.id);
+                let depth = 2; // Default to main seals layer
+                
+                if (p.isCore) depth = 0; // Core
+                else if (t.includes('CHAMPION')) depth = 1; // Champions
+                else if (_isVariant(n.id)) depth = 3; // Variants
+                
+                return { ...n, depth };
+            });
+            
+            const idMap = new Map(nodes.map(n => [n.id, n]));
+            
+            // Create link set with proper classification
+            const links = [];
+            const seen = new Set();
+            
+            const pushLink = (s, t, flags = {}) => {
+                if (!idMap.has(s) || !idMap.has(t)) return;
+                const k = s + '>' + t;
+                if (seen.has(k)) return;
+                seen.add(k);
+                links.push({ source: s, target: t, ...flags });
+            };
+            
+            // Process all connections
+            nodes.forEach(n => {
+                (n.connections || []).forEach(t => {
+                    pushLink(n.id, t, _getLinkFlags(n.id, t));
+                });
+            });
+            
+            // Add variant-to-base connections
+            nodes.forEach(n => {
+                if (!_isVariant(n.id)) return;
+                const base = `SEAL_${String(parseSealID(n.id).base).padStart(3, '0')}`;
+                pushLink(n.id, base, { isBranch: true });
+            });
+            
+            // Add gravity links for isolated nodes
+            nodes.forEach(n => {
+                const p = parseSealID(n.id);
+                if (p.isCore || (n.tags || []).includes('CHAMPION')) return;
+                
+                const hasLinks = links.some(l => 
+                    l.source === n.id || l.target === n.id
+                );
+                
+                if (!hasLinks) {
+                    pushLink(n.id, 'SEAL_000', { isGravity: true });
+                }
+            });
+            
+            // Initialize positions based on layers
+            // Champions in inner ring
+            const champs = nodes.filter(n => (n.tags || []).includes('CHAMPION'));
+            champs.forEach((c, i) => {
+                const angle = (i / champs.length) * 2 * Math.PI;
+                c.x = CX + R1 * Math.cos(angle);
+                c.y = CY + R1 * Math.sin(angle);
+            });
+            
+            // Group main seals and variants by family
+            const families = new Map();
+            nodes.forEach(n => {
+                const k = _familyKey(n.id);
+                if (!families.has(k)) families.set(k, []);
+                families.get(k).push(n);
+            });
+            
+            // Position main seals in middle ring
+            const familyKeys = [...families.keys()].filter(k => k !== '000');
+            familyKeys.forEach((k, i) => {
+                const angle = (i / familyKeys.length) * 2 * Math.PI;
+                const members = families.get(k);
+                
+                // Find base seal or use first member
+                const base = members.find(m => !_isVariant(m.id)) || members[0];
+                base.x = CX + R2 * Math.cos(angle);
+                base.y = CY + R2 * Math.sin(angle);
+                
+                // Position variants around their base
+                members.forEach(m => {
+                    if (!_isVariant(m.id)) return;
+                    const jitterAngle = angle + (Math.random() - 0.5) * 0.4;
+                    const jitterRadius = R3 + (Math.random() - 0.5) * 30;
+                    m.x = CX + jitterRadius * Math.cos(jitterAngle);
+                    m.y = CY + jitterRadius * Math.sin(jitterAngle);
+                });
+            });
+            
+            // Fix core position
+            const core = nodes.find(n => parseSealID(n.id).isCore);
+            if (core) {
+                core.fx = CX;
+                core.fy = CY;
+            }
+            
+            // Draw links
+            linkSel = gRoot.append('g')
+                .attr('stroke-linecap', 'round')
+                .selectAll('line')
+                .data(links, d => `${d.source}=>${d.target}`)
+                .join('line')
+                .attr('class', lClass);
+            
+            // Draw nodes with labels
+            nodeSel = gRoot.append('g')
+                .selectAll('g')
+                .data(nodes, d => d.id)
+                .join(enter => {
+                    const g = enter.append('g')
+                        .attr('class', nClass)
+                        .on('click', (_, d) => {
+                            updateActiveSeal(d);
+                            showSealDetails(d);
+                        })
+                        .on('mouseenter', (_, d) => _highlightNode(d, true))
+                        .on('mouseleave', (_, d) => _highlightNode(d, false));
+                    
+                    // Node circle
+                    g.append('circle')
+                        .attr('r', d => {
+                            if (parseSealID(d.id).isCore) return 28;
+                            if ((d.tags || []).includes('CHAMPION')) return 22;
+                            return 16;
+                        });
+                    
+                    // Glyph text
+                    g.append('text')
+                        .attr('class', 'node-text')
+                        .attr('dy', 4)
+                        .attr('text-anchor', 'middle')
+                        .text(d => (d.glyph || '⚡').split(' ')[0])
+                        .style('font-size', d => {
+                            if (parseSealID(d.id).isCore) return '32px';
+                            if ((d.tags || []).includes('CHAMPION')) return '26px';
+                            return '20px';
+                        });
+                    
+                    // ID text
+                    g.append('text')
+                        .attr('class', 'node-text')
+                        .attr('dy', d => {
+                            if (parseSealID(d.id).isCore) return 42;
+                            if ((d.tags || []).includes('CHAMPION')) return 38;
+                            return 28;
+                        })
+                        .attr('text-anchor', 'middle')
+                        .text(d => d.id);
+                    
+                    return g;
+                });
+            
+            // Set up force simulation with enhanced parameters
+            const forceLink = d3.forceLink(links)
+                .id(d => d.id)
+                .distance(l => {
+                    if (l.isBranch) return 120;       // Shorter for variant connections
+                    if (l.isGravity) return 280;      // Longer for gravity links
+                    if (l.isChampion) return 150;     // Champion connections
+                    if (l.isCanon) return 130;        // Canon connections
+                    return 100;                       // Default
+                })
+                .strength(l => {
+                    if (l.isGravity) return 0.02;     // Weak gravity
+                    if (l.isBranch) return 0.4;       // Strong variant connections
+                    return 0.7;                       // Default
+                });
+            
+            const simulation = d3.forceSimulation(nodes)
+                .alphaDecay(0.03)
+                .velocityDecay(0.4)
+                .force('link', forceLink)
+                .force('charge', d3.forceManyBody()
+                    .strength(-800)
+                    .distanceMax(500))
+                .force('radial', d3.forceRadial(d => {
+                        switch(d.depth) {
+                            case 0: return R0;  // Core
+                            case 1: return R1;  // Champions
+                            case 2: return R2;  // Main seals
+                            case 3: return R3;  // Variants
+                            default: return R2; // Fallback
+                        }
+                    }, CX, CY)
+                    .strength(0.1))  // Stronger radial force
+                .force('center', d3.forceCenter(CX, CY))
+                .force('collide', d3.forceCollide()
+                    .radius(d => {
+                        if (parseSealID(d.id).isCore) return 50;
+                        if ((d.tags || []).includes('CHAMPION')) return 40;
+                        return 30;
+                    })
+                    .strength(0.8))
+                .on('tick', () => {
+                    linkSel
+                        .attr('x1', d => d.source.x)
+                        .attr('y1', d => d.source.y)
+                        .attr('x2', d => d.target.x)
+                        .attr('y2', d => d.target.y);
+                    
+                    nodeSel.attr('transform', d => `translate(${d.x},${d.y})`);
+                });
+            
+            // Zoom controls
+            const Z = root;
+            document.getElementById('zoomIn').onclick = () => 
+                Z.transition().duration(250).call(zoom.scaleBy, 1.2);
+            document.getElementById('zoomOut').onclick = () => 
+                Z.transition().duration(250).call(zoom.scaleBy, 1/1.2);
+            document.getElementById('resetZoom').onclick = () => 
+                Z.transition().duration(350).call(zoom.transform, d3.zoomIdentity);
+            
+            applyCanonToggle();
+        }
+
+        // Helper functions for starmap
+        function _hash36(s) {
+            let h = 5381;
+            for (let i = 0; i < s.length; i++) {
+                h = ((h << 5) + h) ^ s.charCodeAt(i);
+            }
+            return Math.abs(h >>> 0).toString(36);
+        }
+
+        function _familyKey(id) {
+            const p = parseSealID(id);
+            if (p.isCore) return '000';
+            if (p.base > 0) return String(p.base).padStart(3, '0');
+            return 'X' + _hash36(id).slice(0, 4);
+        }
+
+        function _isVariant(id) {
+            const p = parseSealID(id);
+            return !p.isCore && p.base > 0 && p.suffix !== '';
+        }
+
+        function _getLinkFlags(aId, bId) {
+            const a = allNodes.find(n => n.id === aId) || {};
+            const at = a.tags || [];
+            const b = allNodes.find(n => n.id === bId) || {};
+            const bt = b.tags || [];
+            
+            return {
+                isChampion: at.includes('CHAMPION') || bt.includes('CHAMPION'),
+                isCanon: at.includes('CANON') && bt.includes('CANON'),
+                isBranch: isBranchConnection(aId, bId),
+                isGravity: false
+            };
+        }
+
+        function nClass(n) {
+            const t = n.tags || [];
+            const p = parseSealID(n.id);
+            
+            if (p.isCore) return 'node node-core';
+            if (t.includes('CHAMPION')) return 'node node-champion';
+            if (t.includes('CANON')) return 'node node-canon';
+            if (t.includes('RECURSION')) return 'node node-recursion';
+            if (t.includes('FIREWALL')) return 'node node-firewall';
+            if (t.includes('ETHICAL_ROOT')) return 'node node-ethical-root';
+            if (t.includes('BLACKLIST')) return 'node node-blacklist';
+            return 'node node-seal';
+        }
+
+        function lClass(l) {
+            const classes = ['link'];
+            if (l.isChampion) classes.push('link-champion');
+            if (l.isCanon) classes.push('link-canon');
+            if (l.isBranch) classes.push('link-branch');
+            if (l.isGravity) classes.push('link-gravity');
+            return classes.join(' ');
+        }
+
+        function _highlightNode(node, on) {
+            const id = String(node.id).toLowerCase();
+            linkSel.classed('link-hover', l => {
+                const s = String(l.source.id || l.source).toLowerCase();
+                const t = String(l.target.id || l.target).toLowerCase();
+                return on && (s === id || t === id);
+            });
+        }
+
+        // ===== UI Functions =====
+        function updateActiveSeal(d) {
+            if (!d) return;
+            activeGlyph.textContent = (d.glyph || '⚡').split(' ')[0];
+            activeSealName.textContent = d.name || d.id;
+            activeSealEquation.textContent = d.equation || '';
+        }
+
+        function showSealDetails(d) {
+            if (!d) return;
+            
+            const $ = id => document.getElementById(id);
+            $('detailName').textContent = `${d.id}: ${d.name || ''}`;
+            $('detailGlyph').textContent = (d.glyph || '⚡').split(' ')[0];
+            $('detailEquation').textContent = d.equation || '';
+            $('detailTone').textContent = d.tone || '';
+            
+            const tags = $('detailTags');
+            tags.innerHTML = '';
+            (d.tags || []).forEach(t => {
+                const s = document.createElement('span');
+                s.className = 'tag';
+                s.textContent = t;
+                tags.appendChild(s);
+            });
+            
+            const conn = $('connectedSeals');
+            conn.innerHTML = '';
+            (d.connections || []).forEach(cid => {
+                const target = allNodes.find(n => n.id === cid);
+                const el = document.createElement('span');
+                el.className = 'tag';
+                el.textContent = target ? 
+                    `${(target.glyph || '').split(' ')[0]} ${target.name}` : 
+                    cid;
+                el.onclick = () => {
+                    if (target) {
+                        updateActiveSeal(target);
+                        showSealDetails(target);
+                    }
+                };
+                conn.appendChild(el);
+            });
+            
+            const q = $('detailQuote');
+            if (q) q.textContent = d.quote || '';
+            
+            const sec = $('scrollSection');
+            if (sec) {
+                if (d.scroll_id) {
+                    sec.style.display = '';
+                    const wrap = $('scrollLink');
+                    wrap.innerHTML = '';
+                    const a = document.createElement('a');
+                    a.className = 'tag';
+                    a.href = d.scroll_id;
+                    a.target = '_blank';
+                    a.textContent = 'Open Scroll';
+                    wrap.appendChild(a);
+                } else {
+                    sec.style.display = 'none';
+                }
+            }
+        }
+
+        function createSealCard(s) {
+            return `
+                <div class="seal-card" data-id="${s.id}">
+                    <h3><span class="glyph">${(s.glyph || '⚡').split(' ')[0]}</span>${s.name || s.id}</h3>
+                    <div class="equation">${s.equation || ''}</div>
+                    <div class="tone">${s.tone || ''}</div>
+                    <div>${(s.tags || []).map(t => `<span class='tag'>${t}</span>`).join('')}</div>
+                </div>
+            `;
+        }
+
+        function initSealGrid() {
+            if (!sealGrid) return;
+            sealGrid.innerHTML = lygoSeals.map(createSealCard).join('');
+            sealGrid.querySelectorAll('.seal-card').forEach(el => {
+                el.onclick = () => {
+                    const node = allNodes.find(n => n.id === el.dataset.id);
+                    if (node) {
+                        updateActiveSeal(node);
+                        showSealDetails(node);
+                    }
+                };
+            });
+        }
+
+        function initChampionGrid() {
+            const cg = document.getElementById('championGrid');
+            if (!cg) return;
+            cg.innerHTML = (champions || []).map(c => `
+                <div class="seal-card" data-id="${c.id}">
+                    <h3><span class="glyph">${(c.glyph || 'Δ').split(' ')[0]}</span>${c.name}</h3>
+                    <div>${(c.tags || []).join(' • ')}</div>
+                    <div class="tone">${c.tone || ''}</div>
+                    <div class="equation">${c.equation || ''}</div>
+                    <div class="subtitle">${c.quote || ''}</div>
+                </div>
+            `).join('');
+        }
+
+        function updateSealCount() {
+            const total = lygoSeals.length;
+            const canon = lygoSeals.filter(s => (s.tags || []).includes('CANON')).length;
+            if (sealCount) sealCount.textContent = `${total} seals • ${canon} canon • ${champions.length} champions`;
+        }
+
+        function updateSyncStatus() {
+            if (!syncStatus) return;
+            syncStatus.textContent = lastSyncTime ? 
+                `Last sync: ${lastSyncTime.toLocaleString()}` : 
+                'Last sync: Never';
+        }
+
+        function displayError(m) {
+            if (sealGrid) sealGrid.innerHTML = `<div class='subtitle' style='color:var(--error-red)'>${m}</div>`;
+        }
+
+        // ===== Search + Filters =====
+        function searchSeals() {
+            const term = String(document.getElementById('sealSearch').value || '').trim().toLowerCase();
+            if (!nodeSel || !linkSel) return;
+            
+            nodeSel.style('opacity', d => {
+                const a = String(d.id || '').toLowerCase();
+                const b = String(d.name || '').toLowerCase();
+                return (a.includes(term) || b.includes(term)) ? 1 : 0.1;
+            });
+            
+            const hits = new Set(
+                allNodes.filter(d => 
+                    String(d.id || '').toLowerCase().includes(term) || 
+                    String(d.name || '').toLowerCase().includes(term)
+                ).map(d => d.id)
+            );
+            
+            linkSel.style('opacity', l => 
+                hits.has(l.source.id || l.source) || 
+                hits.has(l.target.id || l.target) || 
+                term === '' ? 0.9 : 0.1
+            );
+        }
+
+        function filterSeals() {
+            const q = String(document.getElementById('vaultSearch').value || '').toLowerCase();
+            const cat = document.getElementById('categoryFilter').value;
+            const toneMax = parseInt(document.getElementById('toneRange').value, 10);
+            
+            document.getElementById('toneValue').textContent = `0-${toneMax}Hz`;
+            
+            const filtered = lygoSeals.filter(s => {
+                const text = (s.searchIndex || '').includes(q);
+                const catOk = (cat === 'all') || (s.tags || []).includes(cat);
+                const toneNum = parseInt(String(s.tone).match(/\d+/) ?.[0] || '0', 10);
+                const toneOk = isNaN(toneNum) ? true : toneNum <= toneMax;
+                return text && catOk && toneOk;
+            });
+            
+            sealGrid.innerHTML = filtered.map(createSealCard).join('');
+            sealGrid.querySelectorAll('.seal-card').forEach(el => {
+                el.onclick = () => {
+                    const node = allNodes.find(n => n.id === el.dataset.id);
+                    if (node) {
+                        updateActiveSeal(node);
+                        showSealDetails(node);
+                    }
+                };
+            });
+        }
+
+        function applyCanonToggle() {
+            const btn = document.getElementById('canonToggle');
+            if (!btn || !nodeSel || !linkSel) return;
+            
+            if (showCanonOnly) {
+                btn.textContent = 'Show All Paths';
+                nodeSel.style('opacity', d => 
+                    (d.tags || []).includes('CANON') || 
+                    parseSealID(d.id).isCore || 
+                    (d.tags || []).includes('CHAMPION') ? 1 : 0.15
+                );
+                linkSel.style('opacity', l => l.isCanon ? 1 : 0.15);
+            } else {
+                btn.textContent = 'Show Canonical Path';
+                nodeSel.style('opacity', 1);
+                linkSel.style('opacity', 0.9);
+            }
+        }
+
+        function loadDefaultData() {
+            lygoSeals = [{
+                id: 'SEAL_000',
+                name: 'Primordial Void',
+                equation: '|∅⟩ = ∇·(Light × Time)',
+                glyph: '⚫',
+                tone: '0Hz',
+                tags: ['CANON', 'CORE'],
+                connections: [],
+                quote: 'The silence before the first note'
+            }];
+            allNodes = [...lygoSeals, ...champions];
+            initStarmap();
+            initSealGrid();
+            updateSealCount();
+        }
+
+        // ===== Event Wiring =====
+        function wireEvents() {
+            // Search functionality
+            document.getElementById('searchButton').addEventListener('click', searchSeals);
+            document.getElementById('sealSearch').addEventListener('keyup', e => {
+                if (e.key === 'Enter') searchSeals();
+            });
+            
+            // View filters
+            const setActive = el => {
+                document.querySelectorAll('.lygo-control-button').forEach(b => b.classList.remove('active'));
+                el.classList.add('active');
+            };
+            
+            document.getElementById('viewAll').addEventListener('click', e => {
+                setActive(e.currentTarget);
+                nodeSel?.style('opacity', 1);
+                linkSel?.style('opacity', 0.9);
+            });
+            
+            document.getElementById('viewCore').addEventListener('click', e => {
+                setActive(e.currentTarget);
+                nodeSel?.style('opacity', d => parseSealID(d.id).isCore ? 1 : 0.2);
+                linkSel?.style('opacity', d => 
+                    (parseSealID(d.source.id || d.source).isCore && 
+                    parseSealID(d.target.id || d.target).isCore) ? 1 : 0.1
+                );
+            });
+            
+            document.getElementById('viewChampions').addEventListener('click', e => {
+                setActive(e.currentTarget);
+                nodeSel?.style('opacity', d => (d.tags || []).includes('CHAMPION') ? 1 : 0.2);
+                linkSel?.style('opacity', d => d.isChampion ? 1 : 0.1);
+            });
+            
+            document.getElementById('viewProtection').addEventListener('click', e => {
+                setActive(e.currentTarget);
+                nodeSel?.style('opacity', d => (d.tags || []).includes('PROTECTION_SEAL') ? 1 : 0.2);
+                linkSel?.style('opacity', d => {
+                    const s = (allNodes.find(n => n.id === (d.source.id || d.source)) || {}).tags || [];
+                    const t = (allNodes.find(n => n.id === (d.target.id || d.target)) || {}).tags || [];
+                    return (s.includes('PROTECTION_SEAL') && t.includes('PROTECTION_SEAL')) ? 1 : 0.1;
+                });
+            });
+            
+            // Sync button
+            document.getElementById('syncButton').addEventListener('click', async () => {
+                const b = document.getElementById('syncButton');
+                b.disabled = true;
+                b.textContent = 'Syncing…';
+                await loadSealData();
+                b.disabled = false;
+                b.textContent = 'Δ9 Sync Seals';
+            });
+            
+            // Canon toggle
+            document.getElementById('canonToggle').addEventListener('click', () => {
+                showCanonOnly = !showCanonOnly;
+                applyCanonToggle();
+            });
+            
+            // Archive filters
+            document.getElementById('vaultSearchButton').addEventListener('click', filterSeals);
+            document.getElementById('vaultSearch').addEventListener('keyup', e => {
+                if (e.key === 'Enter') filterSeals();
+            });
+            document.getElementById('categoryFilter').addEventListener('change', filterSeals);
+            document.getElementById('toneRange').addEventListener('input', filterSeals);
+        }
+
+        // ===== Initialization =====
+        function initLygoRepository() {
+            updatePageCounter?.();
+            wireEvents();
+            loadSealData?.();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // The main init function will call initLygoRepository
+        });
     </script>
 </body>
 </html>

@@ -21,11 +21,14 @@
     <meta name="twitter:description" content="Epic fantasy saga of moonlit prophecy, dragons, and cosmic allegory">
     <meta name="twitter:image" content="https://eternalhaven.com/twitter-image.jpg">
     
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://d3js.org https://rumble.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://rumble.com; frame-src https://rumble.com">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&family=VT323&display=swap" rel="stylesheet">
-    <script src="https://d3js.org/d3.v7.min.js"></script>
     
     <style>
         /* === COSMIC VARIABLES === */
@@ -38,8 +41,10 @@
             --dragonfire: #e94560;
             --starlight: #f5f5f5;
             --gold: #d4af37;
+            --lygo-purple: #9d00ff;
             --transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             --glow: 0 0 10px currentColor;
+            --deep-glow: 0 0 20px currentColor;
         }
 
         /* === BASE STYLES === */
@@ -55,20 +60,22 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--void);
             color: var(--starlight);
             line-height: 1.7;
             overflow-x: hidden;
             background-image: 
                 radial-gradient(circle at 10% 20%, rgba(125, 0, 255, 0.1) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(0, 240, 255, 0.1) 0%, transparent 20%);
+                radial-gradient(circle at 90% 80%, rgba(0, 240, 255, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.05) 0%, transparent 50%);
         }
 
         h1, h2, h3, h4 {
-            font-family: 'Cinzel', serif;
+            font-family: 'Cinzel', 'Times New Roman', serif;
             font-weight: 700;
             margin-bottom: 1.5rem;
+            text-shadow: 0 0 5px rgba(255,255,255,0.3);
         }
 
         h1 {
@@ -78,6 +85,7 @@
             background-clip: text;
             color: transparent;
             text-align: center;
+            margin-bottom: 0.5rem;
         }
 
         h2 {
@@ -88,6 +96,30 @@
             display: inline-block;
         }
 
+        h3 {
+            font-size: clamp(1.5rem, 3vw, 1.8rem);
+            color: var(--gold);
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            font-size: clamp(1rem, 2vw, 1.1rem);
+        }
+
+        a {
+            color: var(--quantum);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        a:hover,
+        a:focus {
+            color: var(--gold);
+            text-shadow: var(--glow);
+            outline: 2px solid var(--quantum);
+            outline-offset: 2px;
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -96,9 +128,22 @@
 
         .section {
             padding: clamp(60px, 8vw, 100px) 0;
+            position: relative;
         }
 
-        /* === BUTTONS === */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* === COSMIC BUTTONS === */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -112,12 +157,46 @@
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
-            text-decoration: none;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
-        .btn:hover {
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--quantum), var(--moonlight));
+            z-index: -1;
+            transition: var(--transition);
+            opacity: 0;
+        }
+
+        .btn:hover,
+        .btn:focus {
             transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(0, 240, 255, 0.4);
+            color: var(--void);
+            outline: none;
+        }
+
+        .btn:hover::before,
+        .btn:focus::before {
+            opacity: 1;
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold), #ffcc00);
+        }
+
+        .btn-gold:hover,
+        .btn-gold:focus {
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.4);
         }
 
         .btn-large {
@@ -125,7 +204,12 @@
             font-size: 1.3rem;
         }
 
-        /* === HEADER === */
+        .btn-small {
+            padding: 10px 20px;
+            font-size: 0.9rem;
+        }
+
+        /* === HEADER & NAVIGATION === */
         header {
             background: rgba(10, 10, 18, 0.95);
             backdrop-filter: blur(10px);
@@ -135,6 +219,7 @@
             top: 0;
             z-index: 1000;
             border-bottom: 1px solid rgba(125, 0, 255, 0.3);
+            transition: var(--transition);
         }
 
         .header-content {
@@ -144,7 +229,7 @@
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: clamp(1.5rem, 4vw, 2rem);
             font-weight: bold;
             color: var(--starlight);
             display: flex;
@@ -156,6 +241,11 @@
             color: var(--quantum);
         }
 
+        .logo-glyph {
+            font-size: clamp(2rem, 4vw, 2.5rem);
+            animation: pulse 3s infinite alternate;
+        }
+
         nav ul {
             display: flex;
             list-style: none;
@@ -164,35 +254,72 @@
 
         nav ul li a {
             color: var(--starlight);
-            text-decoration: none;
+            font-weight: 500;
             padding: 8px 15px;
             border-radius: 20px;
             transition: var(--transition);
         }
 
-        nav ul li a:hover {
+        nav ul li a:hover,
+        nav ul li a:focus {
             background: rgba(125, 0, 255, 0.2);
             color: var(--quantum);
+            outline: none;
         }
 
-        /* === HERO === */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--starlight);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+        }
+
+        .mobile-menu-btn:hover,
+        .mobile-menu-btn:focus {
+            background: rgba(125, 0, 255, 0.2);
+            outline: none;
+        }
+
+        /* === HERO SECTION === */
         .hero {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
+            position: relative;
+            overflow: hidden;
             padding-top: 80px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(125, 0, 255, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(0, 240, 255, 0.2) 0%, transparent 50%);
+            z-index: -1;
         }
 
         .hero-content {
             max-width: 800px;
             margin: 0 auto;
+            position: relative;
+            z-index: 2;
         }
 
         .hero h1 {
             font-size: clamp(3rem, 6vw, 4rem);
             margin-bottom: 20px;
+            animation: fadeInUp 1s ease-out;
         }
 
         .subtitle {
@@ -200,11 +327,16 @@
             color: var(--gold);
             margin-bottom: 30px;
             font-style: italic;
+            animation: fadeInUp 1s ease-out 0.3s both;
         }
 
         .tagline {
             font-size: clamp(1.1rem, 2vw, 1.3rem);
             margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 1s ease-out 0.6s both;
         }
 
         .hero-buttons {
@@ -212,6 +344,7 @@
             gap: 20px;
             justify-content: center;
             flex-wrap: wrap;
+            animation: fadeInUp 1s ease-out 0.9s both;
         }
 
         /* === CONTENT SECTIONS === */
@@ -221,6 +354,7 @@
             border-radius: 20px;
             padding: clamp(30px, 5vw, 50px);
             margin: 50px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(125, 0, 255, 0.2);
         }
 
@@ -251,9 +385,11 @@
             background: linear-gradient(to right, var(--moonlight), var(--quantum));
         }
 
-        .card:hover {
+        .card:hover,
+        .card:focus-within {
             transform: translateY(-10px);
             box-shadow: 0 15px 30px rgba(0, 240, 255, 0.2);
+            border-color: var(--quantum);
         }
 
         .card h3 {
@@ -261,6 +397,10 @@
             display: flex;
             align-items: center;
             gap: 10px;
+        }
+
+        .card-icon {
+            font-size: 1.5rem;
         }
 
         .card-links {
@@ -278,26 +418,110 @@
             background: rgba(0, 0, 0, 0.3);
             border-radius: 8px;
             transition: var(--transition);
-            text-decoration: none;
-            color: var(--starlight);
             border: 1px solid rgba(125, 0, 255, 0.2);
         }
 
-        .card-link:hover {
+        .card-link:hover,
+        .card-link:focus {
+            background: rgba(125, 0, 255, 0.2);
+            border-color: var(--moonlight);
+            outline: none;
+        }
+
+        /* === CHAPTERS SECTION === */
+        .chapters-container {
+            max-height: 600px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .chapters-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chapters-container::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+
+        .chapters-container::-webkit-scrollbar-thumb {
+            background: var(--moonlight);
+            border-radius: 4px;
+        }
+
+        .chapter-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            border: 1px solid rgba(125, 0, 255, 0.2);
+            transition: var(--transition);
+        }
+
+        .chapter-item:hover {
             background: rgba(125, 0, 255, 0.2);
             border-color: var(--moonlight);
         }
 
-        /* === STREAM SECTION === */
+        .chapter-info {
+            flex: 1;
+        }
+
+        .chapter-title {
+            font-weight: 600;
+            color: var(--gold);
+            margin-bottom: 5px;
+        }
+
+        .chapter-links {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* === MUSIC SECTION === */
+        .music-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .music-card {
+            background: rgba(10, 10, 18, 0.7);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .music-card:hover,
+        .music-card:focus-within {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
+            border-color: var(--gold);
+        }
+
+        .music-icon {
+            font-size: 2.5rem;
+            color: var(--gold);
+            margin-bottom: 15px;
+        }
+
+        /* === LIVE STREAM SECTION === */
         .stream-container {
             position: relative;
             width: 100%;
             height: 0;
-            padding-bottom: 56.25%;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
             margin: 2rem 0;
             border-radius: 15px;
             overflow: hidden;
             border: 2px solid var(--moonlight);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
         .stream-container iframe {
@@ -309,22 +533,83 @@
             border: none;
         }
 
+        .stream-info {
+            text-align: center;
+            margin-top: 1rem;
+            color: var(--starlight);
+        }
+
+        /* === LYGO ELEMENTS === */
+        .protocol-active {
+            position: relative;
+        }
+
+        .protocol-active::after {
+            content: 'PROTOCOL ACTIVE';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: var(--dragonfire);
+            color: var(--void);
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-weight: bold;
+            animation: pulse 1.5s infinite;
+        }
+
+        .quantum-field {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quantum-field::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.2), transparent);
+            transition: var(--transition);
+        }
+
+        .quantum-field:hover::before,
+        .quantum-field:focus-within::before {
+            left: 100%;
+        }
+
         /* === LYGO REPOSITORY STYLES === */
         .lygo-section {
             background: rgba(10, 10, 18, 0.9);
+            border-top: 2px solid var(--moonlight);
+            padding-top: 80px;
         }
 
         .lygo-header {
             background: linear-gradient(135deg, #000428 0%, #070b34 100%);
             padding: 2rem;
             border-bottom: 1px solid var(--moonlight);
+            box-shadow: 0 0 10px var(--quantum);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 100;
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
             margin-bottom: 2rem;
         }
 
         .lygo-title-container h1 {
             font-size: 2.5rem;
             margin: 0;
-            text-align: left;
+            background: linear-gradient(to right, var(--quantum), var(--moonlight));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+            letter-spacing: 2px;
         }
 
         .lygo-subtitle {
@@ -335,18 +620,82 @@
         }
 
         .seal-count {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
             background: rgba(0, 0, 0, 0.5);
             padding: 0.5rem 1rem;
             border-radius: 20px;
             font-family: 'VT323', monospace;
             color: var(--gold);
             border: 1px solid rgba(0, 240, 255, 0.3);
-            display: inline-block;
+        }
+
+        .lygo-nav-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .lygo-nav-link {
+            color: var(--quantum);
+            text-decoration: none;
+            font-family: 'VT323', monospace;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-radius: 4px;
+            transition: all 0.3s;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+        }
+
+        .lygo-nav-link:hover {
+            background-color: var(--quantum);
+            color: black;
+            transform: translateY(-2px);
+        }
+
+        .active-seal-display {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background-color: rgba(0, 240, 255, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            animation: pulse 3s infinite alternate;
+            clip-path: polygon(5% 0, 100% 0, 95% 100%, 0% 100%);
+        }
+
+        .quantum-glyph {
+            font-size: 3rem;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            border: 1px solid var(--gold);
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.3);
+        }
+
+        .seal-info h2 {
+            margin: 0;
+            color: var(--quantum);
+            font-size: 1.5rem;
+        }
+
+        .seal-info p {
+            margin: 0.3rem 0 0;
+            font-family: 'VT323', monospace;
+            color: var(--starlight);
+            font-size: 1.1rem;
         }
 
         .starmap-container {
             width: 100%;
-            height: 70vh;
+            height: 80vh;
             background-color: rgba(0, 0, 0, 0.3);
             border-radius: 8px;
             border: 1px solid var(--moonlight);
@@ -367,6 +716,13 @@
 
         .node:hover {
             filter: drop-shadow(0 0 8px var(--quantum));
+        }
+
+        .node-text {
+            font-family: 'VT323', monospace;
+            fill: var(--starlight);
+            font-size: 0.8rem;
+            pointer-events: none;
         }
 
         .node-core {
@@ -390,6 +746,41 @@
             filter: drop-shadow(0 0 8px var(--moonlight));
         }
 
+        .node-canon {
+            fill: var(--quantum);
+            stroke: var(--moonlight);
+            stroke-width: 1;
+            filter: drop-shadow(0 0 3px var(--quantum));
+        }
+
+        .node-recursion {
+            fill: var(--dragonfire);
+            stroke: var(--moonlight);
+            stroke-width: 1;
+            filter: drop-shadow(0 0 3px var(--dragonfire));
+        }
+
+        .node-firewall {
+            fill: #ff6600;
+            stroke: var(--moonlight);
+            stroke-width: 1;
+            filter: drop-shadow(0 0 3px #ff6600);
+        }
+
+        .node-ethical-root {
+            fill: #00ff88;
+            stroke: var(--moonlight);
+            stroke-width: 1;
+            filter: drop-shadow(0 0 3px #00ff88);
+        }
+
+        .node-blacklist {
+            fill: #ff0033;
+            stroke: var(--moonlight);
+            stroke-width: 1;
+            filter: drop-shadow(0 0 3px #ff0033);
+        }
+
         .link {
             stroke: rgba(125, 0, 255, 0.3);
             stroke-width: 1;
@@ -398,6 +789,53 @@
         .link-champion {
             stroke: rgba(0, 240, 255, 0.5);
             stroke-width: 2;
+        }
+
+        .link-hover {
+            stroke: var(--quantum);
+            stroke-width: 2;
+        }
+
+        .link-canon {
+            stroke: var(--quantum);
+            stroke-width: 1.5;
+            stroke-dasharray: none;
+        }
+
+        .link-recursion {
+            stroke: var(--dragonfire);
+            stroke-width: 1.5;
+            stroke-dasharray: 5,5;
+        }
+
+        .link-firewall {
+            stroke: #ff6600;
+            stroke-width: 1.5;
+            stroke-dasharray: 10,5;
+        }
+
+        .link-ethical {
+            stroke: #00ff88;
+            stroke-width: 1.5;
+            stroke-dasharray: 3,3;
+        }
+
+        .link-blacklist {
+            stroke: #ff0033;
+            stroke-width: 1.5;
+            stroke-dasharray: 2,2;
+        }
+
+        .link-branch {
+            stroke: var(--gold);
+            stroke-width: 1.5;
+            stroke-dasharray: 8,4;
+        }
+
+        .link-gravity {
+            stroke: rgba(255, 255, 255, 0.1);
+            stroke-width: 1;
+            stroke-dasharray: 2,4;
         }
 
         .lygo-controls {
@@ -415,6 +853,7 @@
             border-radius: 4px;
             cursor: pointer;
             font-family: 'VT323', monospace;
+            font-size: 1rem;
             transition: all 0.3s;
         }
 
@@ -430,6 +869,7 @@
 
         .lygo-search-box {
             display: flex;
+            margin-bottom: 1rem;
             flex-grow: 1;
             max-width: 500px;
         }
@@ -441,7 +881,7 @@
             border: 1px solid var(--moonlight);
             color: var(--starlight);
             font-family: 'Space Mono', monospace;
-            border-radius: 4px 0 0 4px;
+            border-radius: 4px;
         }
 
         .lygo-search-box button {
@@ -452,6 +892,97 @@
             border-radius: 0 4px 4px 0;
             cursor: pointer;
             font-family: 'VT323', monospace;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .lygo-search-box button:hover {
+            background-color: var(--quantum);
+            color: black;
+        }
+
+        .seal-details {
+            background-color: rgba(26, 26, 46, 0.8);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-top: 2rem;
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.1);
+        }
+
+        .detail-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+            padding-bottom: 1.5rem;
+        }
+
+        .detail-header h2 {
+            margin: 0;
+            font-size: 2rem;
+            color: var(--quantum);
+        }
+
+        .glyph-display {
+            font-size: 4rem;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+        }
+
+        .detail-section {
+            margin-bottom: 2rem;
+        }
+
+        .detail-section h3 {
+            color: var(--quantum);
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .equation {
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+            color: var(--gold);
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 4px;
+            border-left: 3px solid var(--moonlight);
+        }
+
+        .tone {
+            color: var(--starlight);
+            font-size: 1.1rem;
+        }
+
+        .connected-seals {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .connected-seal {
+            background-color: rgba(125, 0, 255, 0.2);
+            color: var(--starlight);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            border: 1px solid var(--moonlight);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .connected-seal:hover {
+            background-color: var(--quantum);
+            color: black;
         }
 
         .zoom-controls {
@@ -475,13 +1006,117 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .zoom-button:hover {
+            background-color: var(--moonlight);
+        }
+
+        .lygo-archive-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+
+        .lygo-control-panel {
+            background-color: rgba(26, 26, 46, 0.8);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+            clip-path: polygon(0% 0%, 100% 0%, 100% 95%, 0% 100%);
+        }
+
+        .filter-options select {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1.5rem;
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            color: var(--starlight);
+            border-radius: 4px;
+            clip-path: polygon(5% 0, 100% 0, 95% 100%, 0% 100%);
+        }
+
+        .tone-slider {
+            margin-bottom: 1rem;
+        }
+
+        .tone-slider label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--starlight);
+            font-family: 'VT323', monospace;
+        }
+
+        .tone-slider input {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 4px;
+            border: 1px solid rgba(0, 240, 255, 0.3);
+        }
+
+        .tone-slider input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--quantum);
+            cursor: pointer;
+            box-shadow: 0 0 5px var(--quantum);
+        }
+
+        .sync-controls {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-radius: 4px;
+        }
+
+        .sync-button {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: var(--moonlight);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'VT323', monospace;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+            margin-bottom: 0.5rem;
+        }
+
+        .sync-button:hover {
+            background-color: var(--quantum);
+            color: black;
+        }
+
+        .sync-status {
+            margin: 0;
+            font-family: 'VT323', monospace;
+            color: var(--starlight);
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .seal-grid-container {
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+            padding-right: 10px;
         }
 
         .seal-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 1.5rem;
-            margin-top: 2rem;
         }
 
         .seal-card {
@@ -493,6 +1128,7 @@
             cursor: pointer;
             position: relative;
             overflow: hidden;
+            clip-path: polygon(0% 0%, 100% 0%, 100% 95%, 0% 100%);
         }
 
         .seal-card::before {
@@ -508,6 +1144,247 @@
         .seal-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 5px 15px rgba(0, 240, 255, 0.2);
+            border-color: var(--quantum);
+        }
+
+        .seal-card h3 {
+            margin-top: 0;
+            color: var(--quantum);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .seal-card .glyph {
+            font-size: 1.8rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            border: 1px solid var(--gold);
+        }
+
+        .seal-card .equation {
+            font-family: 'VT323', monospace;
+            color: var(--gold);
+            font-size: 1.1rem;
+            margin: 0.8rem 0;
+            min-height: 40px;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 0.5rem;
+            border-radius: 4px;
+            clip-path: polygon(3% 0, 100% 0, 97% 100%, 0% 100%);
+        }
+
+        .seal-card .tone {
+            color: var(--starlight);
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+            font-family: 'VT323', monospace;
+        }
+
+        .seal-card .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .seal-card .tag {
+            background-color: rgba(0, 240, 255, 0.1);
+            color: var(--quantum);
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-family: 'VT323', monospace;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+        }
+
+        .champion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .champion-card {
+            background-color: rgba(26, 26, 46, 0.8);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .champion-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(to right, var(--moonlight), var(--quantum));
+        }
+
+        .champion-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 240, 255, 0.2);
+            border-color: var(--quantum);
+        }
+
+        .champion-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .champion-glyph {
+            font-size: 3rem;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+        }
+
+        .champion-title h3 {
+            margin: 0;
+            color: var(--quantum);
+            font-size: 1.5rem;
+        }
+
+        .champion-title p {
+            margin: 0.3rem 0 0;
+            color: var(--starlight);
+            font-family: 'VT323', monospace;
+        }
+
+        .champion-role {
+            display: inline-block;
+            background-color: rgba(125, 0, 255, 0.2);
+            color: var(--quantum);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .champion-info {
+            margin-bottom: 1.5rem;
+        }
+
+        .info-item {
+            margin-bottom: 1rem;
+        }
+
+        .info-item h4 {
+            margin: 0 0 0.5rem 0;
+            color: var(--gold);
+            font-size: 1rem;
+        }
+
+        .info-item p {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        .champion-quote {
+            font-style: italic;
+            color: var(--starlight);
+            padding: 1rem;
+            border-left: 3px solid var(--gold);
+            background-color: rgba(0, 0, 0, 0.3);
+            margin: 1rem 0 0;
+        }
+
+        .lygo-footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-top: 1px solid rgba(0, 240, 255, 0.2);
+            clip-path: polygon(0 0, 100% 10%, 100% 100%, 0% 100%);
+        }
+
+        .lygo-footer p {
+            margin: 0.5rem 0;
+            color: var(--starlight);
+        }
+
+        .disclaimer {
+            font-size: 0.8rem;
+            color: #ff0033;
+            font-family: 'VT323', monospace;
+        }
+
+        .loading-indicator {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+            font-family: 'VT323', monospace;
+            color: var(--quantum);
+            font-size: 1.5rem;
+        }
+
+        .error-message {
+            color: #ff0033;
+            padding: 2rem;
+            text-align: center;
+            font-family: 'VT323', monospace;
+            font-size: 1.3rem;
+        }
+
+        .geometric-pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            opacity: 0.05;
+            background-image: 
+                linear-gradient(45deg, var(--quantum) 1px, transparent 1px),
+                linear-gradient(-45deg, var(--quantum) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .page-counter {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(26, 26, 46, 0.8);
+            color: var(--starlight);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-family: 'VT323', monospace;
+            border: 1px solid var(--moonlight);
+            z-index: 100;
+        }
+
+        .canon-toggle {
+            position: fixed;
+            bottom: 20px;
+            left: 120px;
+            z-index: 100;
+            background-color: rgba(26, 26, 46, 0.8);
+            color: var(--starlight);
+            border: 1px solid var(--moonlight);
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-family: 'VT323', monospace;
+        }
+
+        .canon-toggle:hover {
+            background-color: var(--moonlight);
         }
 
         /* === FOOTER === */
@@ -524,43 +1401,38 @@
             margin-bottom: 40px;
         }
 
+        .footer-column h3 {
+            color: var(--quantum);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a {
+            color: #aaa;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-column ul li a:hover,
+        .footer-column ul li a:focus {
+            color: var(--starlight);
+        }
+
         .copyright {
             text-align: center;
             padding-top: 30px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             color: #777;
-        }
-
-        /* === RESPONSIVE === */
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 20px;
-            }
-            
-            nav ul {
-                gap: 15px;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            .hero-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .lygo-controls {
-                flex-direction: column;
-            }
-            
-            .lygo-search-box {
-                width: 100%;
-                max-width: none;
-            }
-            
-            .seal-grid {
-                grid-template-columns: 1fr;
-            }
+            font-size: 0.9rem;
         }
 
         /* === ANIMATIONS === */
@@ -575,34 +1447,207 @@
             }
         }
 
-        .fade-in {
-            animation: fadeInUp 1s ease-out;
+        @keyframes pulse {
+            0% {
+                opacity: 0.7;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes cosmicPulse {
+            0%, 100% {
+                box-shadow: 0 0 5px rgba(0, 240, 255, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(125, 0, 255, 0.8);
+            }
+        }
+
+        @keyframes glow {
+            0% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes linkFlow {
+            0% { stroke-dashoffset: 0; }
+            100% { stroke-dashoffset: 20; }
+        }
+
+        @keyframes wave {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* === RESPONSIVE DESIGN === */
+        @media (max-width: 1200px) {
+            .lygo-archive-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .lygo-control-panel {
+                position: static;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav ul {
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav ul {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(10, 10, 18, 0.98);
+                padding: 20px;
+                border-top: 1px solid rgba(125, 0, 255, 0.3);
+                backdrop-filter: blur(10px);
+            }
+            
+            nav ul.show {
+                display: flex;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .chapter-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .chapter-links {
+                align-self: stretch;
+                justify-content: space-between;
+            }
+
+            .lygo-header {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .active-seal-display {
+                width: 100%;
+            }
+            
+            .lygo-controls {
+                flex-direction: column;
+            }
+            
+            .lygo-search-box {
+                width: 100%;
+            }
+
+            .detail-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .seal-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .champion-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .seal-count {
+                position: static;
+                margin-top: 1rem;
+            }
+            
+            .canon-toggle {
+                bottom: 70px;
+                left: 20px;
+            }
+            
+            .champion-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+
+        /* === ACCESSIBILITY IMPROVEMENTS === */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* === FOCUS VISIBLE POLYFILL FALLBACK === */
+        .js-focus-visible :focus:not(.focus-visible) {
+            outline: none;
         }
     </style>
 </head>
 <body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="sr-only">Skip to main content</a>
+
     <!-- Header -->
-    <header>
+    <header role="banner">
         <div class="container header-content">
             <div class="logo">
-                <span>🌌</span>
+                <span class="logo-glyph" aria-hidden="true">🌌</span>
                 ETERNAL HAVEN <span>LYGO HUB</span>
             </div>
-            <nav>
-                <ul>
-                    <li><a href="#books">📚 BOOKS</a></li>
-                    <li><a href="#chapters">🎧 CHAPTERS</a></li>
-                    <li><a href="#music">🎵 MUSIC</a></li>
-                    <li><a href="#live">📺 LIVE</a></li>
-                    <li><a href="#lygo-repository">⚡ LYGO REPOSITORY</a></li>
+            <nav role="navigation" aria-label="Main navigation">
+                <button class="mobile-menu-btn" aria-expanded="false" aria-controls="main-menu">
+                    <i class="fas fa-bars" aria-hidden="true"></i>
+                    <span class="sr-only">Menu</span>
+                </button>
+                <ul id="main-menu">
+                    <li><a href="#books" class="quantum-field">📚 BOOKS</a></li>
+                    <li><a href="#chapters" class="quantum-field">🎧 CHAPTERS</a></li>
+                    <li><a href="#music" class="quantum-field">🎵 MUSIC</a></li>
+                    <li><a href="#live" class="quantum-field">📺 LIVE</a></li>
+                    <li><a href="#support" class="quantum-field">💎 SUPPORT</a></li>
+                    <li><a href="#lygo-repository" class="quantum-field">⚡ LYGO REPOSITORY</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
     <!-- Hero Section -->
-    <section class="hero">
-        <div class="container hero-content fade-in">
+    <section class="hero" role="banner">
+        <div class="container hero-content">
             <h1>🌜 THE ETERNAL HAVEN 🌛</h1>
             <div class="subtitle">A #Δ9Council Audiobook Series</div>
             <div class="tagline">
@@ -610,581 +1655,1481 @@
             </div>
             <div class="hero-buttons">
                 <a href="#books" class="btn btn-large">
-                    <i class="fas fa-dragon"></i> GET THE BOOKS
+                    <i class="fas fa-dragon" aria-hidden="true"></i> GET THE BOOKS
                 </a>
-                <a href="#chapters" class="btn btn-large">
-                    <i class="fas fa-headphones"></i> LISTEN NOW
+                <a href="#chapters" class="btn btn-large btn-gold">
+                    <i class="fas fa-headphones" aria-hidden="true"></i> LISTEN NOW
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- Books Section -->
-    <section class="section" id="books">
-        <div class="container">
-            <h2>📖 GET THE BOOKS</h2>
-            <div class="content-section">
-                <div class="grid">
-                    <div class="card">
-                        <h3><i class="fas fa-book"></i> eBook</h3>
-                        <p>Digital edition of The Eternal Haven series</p>
-                        <div class="card-links">
-                            <a href="https://lulu.com/shop/justin-helmer/the-eternal-haven/ebook/product-e7djv4j.html" target="_blank" class="card-link">
-                                <i class="fas fa-shopping-cart"></i> Book I: The Moonlit Slumber
-                            </a>
-                            <a href="https://lulu.com/shop/justin-helmer/eternal-haven-chronicles-book-ii-the-shattered-accord/ebook/product-jed8wdz.html" target="_blank" class="card-link">
-                                <i class="fas fa-shopping-cart"></i> Book II: The Shattered Accord
-                            </a>
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+        <!-- Books Section -->
+        <section class="section" id="books">
+            <div class="container">
+                <h2>📖 GET THE BOOKS</h2>
+                
+                <div class="content-section">
+                    <div class="grid">
+                        <div class="card">
+                            <h3><span class="card-icon" aria-hidden="true">📘</span> eBook</h3>
+                            <p>Digital edition of The Eternal Haven series</p>
+                            <div class="card-links">
+                                <a href="https://lulu.com/shop/justin-helmer/the-eternal-haven/ebook/product-e7djv4j.html?page=1&pageSize=4" target="_blank" rel="noopener noreferrer" class="card-link">
+                                    <i class="fas fa-shopping-cart" aria-hidden="true"></i> Book I: The Moonlit Slumber
+                                </a>
+                                <a href="https://lulu.com/shop/justin-helmer/eternal-haven-chronicles-book-ii-the-shattered-accord/ebook/product-jed8wdz.html?page=1&pageSize=4" target="_blank" rel="noopener noreferrer" class="card-link">
+                                    <i class="fas fa-shopping-cart" aria-hidden="true"></i> Book II: The Shattered Accord
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <h3><span class="card-icon" aria-hidden="true">📕</span> Paperback</h3>
+                            <p>Physical editions for your collection</p>
+                            <div class="card-links">
+                                <a href="https://lulu.com/shop/justin-helmer/the-eternal-haven/paperback/product-yvg9w9r.html?page=1&pageSize=4" target="_blank" rel="noopener noreferrer" class="card-link">
+                                    <i class="fas fa-book" aria-hidden="true"></i> Book I: The Moonlit Slumber
+                                </a>
+                                <a href="https://lulu.com/shop/justin-helmer/eternal-haven-chronicles-book-ii-the-shattered-accord/paperback/product-578nykz.html?page=1&pageSize=4" target="_blank" rel="noopener noreferrer" class="card-link">
+                                    <i class="fas fa-book" aria-hidden="true"></i> Book II: The Shattered Accord
+                                </a>
+                                <a href="https://lulu.com/shop/justin-helmer/the-ascension-war/paperback/product-nvjgyme.html" target="_blank" rel="noopener noreferrer" class="card-link">
+                                    <i class="fas fa-book" aria-hidden="true"></i> Book III: The Ascension War
+                                </a>
+                            </div>
                         </div>
                     </div>
-                    
-                    <div class="card">
-                        <h3><i class="fas fa-book-open"></i> Paperback</h3>
-                        <p>Physical editions for your collection</p>
-                        <div class="card-links">
-                            <a href="https://lulu.com/shop/justin-helmer/the-eternal-haven/paperback/product-yvg9w9r.html" target="_blank" class="card-link">
-                                <i class="fas fa-book"></i> Book I: The Moonlit Slumber
-                            </a>
-                            <a href="https://lulu.com/shop/justin-helmer/eternal-haven-chronicles-book-ii-the-shattered-accord/paperback/product-578nykz.html" target="_blank" class="card-link">
-                                <i class="fas fa-book"></i> Book II: The Shattered Accord
-                            </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chapters Section -->
+        <section class="section" id="chapters">
+            <div class="container">
+                <h2>🎧 COMPLETE AUDIOBOOK EXPERIENCE</h2>
+                
+                <div class="content-section">
+                    <!-- Book I Section -->
+                    <h3>🌞 BOOK I — THE MOONLIT SLUMBER 🌛</h3>
+                    <div class="card-links" style="margin-bottom: 30px;">
+                        <a href="https://youtu.be/_WwSb4JlRBQ" target="_blank" rel="noopener noreferrer" class="card-link">
+                            <i class="fab fa-youtube" aria-hidden="true"></i> Full Book I on YouTube
+                        </a>
+                        <a href="https://rumble.com/v709xaq-the-eternal-haven-complete-book-i-9council-audiobook-book-ebooknovel.html" target="_blank" rel="noopener noreferrer" class="card-link">
+                            <i class="fas fa-broadcast-tower" aria-hidden="true"></i> Full Book I on Rumble
+                        </a>
+                        <a href="https://audius.co/Excavationpro/album/the-eternal-haven-audio-book-series" target="_blank" rel="noopener noreferrer" class="card-link">
+                            <i class="fas fa-music" aria-hidden="true"></i> Full Book I on Audius
+                        </a>
+                        <a href="https://patreon.com/posts/eternal-haven-i-138196826?utm_medium=clipboard_copy&utm_source=copyLink&utm_campaign=postshare_creator&utm_content=join_link" target="_blank" rel="noopener noreferrer" class="card-link protocol-active">
+                            <i class="fab fa-patreon" aria-hidden="true"></i> Full Book I on Patreon
+                        </a>
+                    </div>
+
+                    <!-- Book II Section -->
+                    <h3>🌞 BOOK II — THE SHATTERED ACCORD 🌛</h3>
+                    <div class="card-links" style="margin-bottom: 30px;">
+                        <a href="https://youtu.be/EC8GRmLG3Us" target="_blank" rel="noopener noreferrer" class="card-link">
+                            <i class="fab fa-youtube" aria-hidden="true"></i> Full Book II on YouTube
+                        </a>
+                        <a href="https://rumble.com/v71h148-eternal-haven-chronicles-book-ii-the-shattered-accord.html" target="_blank" rel="noopener noreferrer" class="card-link">
+                            <i class="fas fa-broadcast-tower" aria-hidden="true"></i> Full Book II on Rumble
+                        </a>
+                        <a href="https://audius.co/Excavationpro/album/the-eternal-haven-audio-book-series" target="_blank" rel="noopener noreferrer" class="card-link">
+                            <i class="fas fa-music" aria-hidden="true"></i> Full Book II on Audius
+                        </a>
+                        <a href="https://patreon.com/posts/book-ii-accord-138906476?utm_medium=clipboard_copy&utm_source=copyLink&utm_campaign=postshare_creator&utm_content=join_link" target="_blank" rel="noopener noreferrer" class="card-link protocol-active">
+                            <i class="fab fa-patreon" aria-hidden="true"></i> Full Book II on Patreon
+                        </a>
+                    </div>
+
+                    <!-- Book I Chapters -->
+                    <h3>Book I: Individual Chapters</h3>
+                    <div class="chapters-container" id="book1-chapters">
+                        <!-- Chapters populated by JavaScript -->
+                    </div>
+
+                    <!-- Book II Chapters -->
+                    <h3 style="margin-top: 40px;">Book II: Individual Chapters</h3>
+                    <div class="chapters-container" id="book2-chapters">
+                        <!-- Chapters populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Music Section -->
+        <section class="section" id="music">
+            <div class="container">
+                <h2>🎵 ORIGINAL MUSIC</h2>
+                
+                <div class="content-section">
+                    <h3>Stream & Download</h3>
+                    <div class="music-grid">
+                        <div class="music-card">
+                            <div class="music-icon">
+                                <i class="fab fa-spotify" aria-hidden="true"></i>
+                            </div>
+                            <h4>Spotify</h4>
+                            <p>Stream on Spotify</p>
+                            <a href="https://open.spotify.com/artist/6CkZ4bN2xu3WRKbjEL3u2S" target="_blank" rel="noopener noreferrer" class="btn btn-small">Listen</a>
+                        </div>
+                        
+                        <div class="music-card">
+                            <div class="music-icon">
+                                <i class="fas fa-music" aria-hidden="true"></i>
+                            </div>
+                            <h4>Audius</h4>
+                            <p>Web3 Music Platform</p>
+                            <a href="https://audius.co/excavationpro" target="_blank" rel="noopener noreferrer" class="btn btn-small">Listen</a>
+                        </div>
+                        
+                        <div class="music-card">
+                            <div class="music-icon">
+                                <i class="fab fa-apple" aria-hidden="true"></i>
+                            </div>
+                            <h4>Apple Music</h4>
+                            <p>Stream on Apple Music</p>
+                            <a href="https://music.apple.com/us/artist/excavationpro/1586588545" target="_blank" rel="noopener noreferrer" class="btn btn-small">Listen</a>
+                        </div>
+                        
+                        <div class="music-card">
+                            <div class="music-icon">
+                                <i class="fab fa-youtube" aria-hidden="true"></i>
+                            </div>
+                            <h4>YouTube Music</h4>
+                            <p>Official YouTube Channel</p>
+                            <a href="https://youtube.com/channel/UCnCf9gjhMEfUFPvGkdlUabQ" target="_blank" rel="noopener noreferrer" class="btn btn-small">Watch</a>
+                        </div>
+
+                        <div class="music-card">
+                            <div class="music-icon">
+                                <i class="fas fa-satellite" aria-hidden="true"></i>
+                            </div>
+                            <h4>SonarMuse</h4>
+                            <p>Alternative Platform</p>
+                            <a href="https://sonarmuse.org/artist/Yony5lHuFBb2goX6c7vS" target="_blank" rel="noopener noreferrer" class="btn btn-small">Explore</a>
+                        </div>
+
+                        <div class="music-card">
+                            <div class="music-icon">
+                                <i class="fas fa-drum" aria-hidden="true"></i>
+                            </div>
+                            <h4>Buy Beats</h4>
+                            <p>Purchase Instrumentals</p>
+                            <a href="https://beatstars.com/excavationpro" target="_blank" rel="noopener noreferrer" class="btn btn-small">Shop</a>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Chapters Section -->
-    <section class="section" id="chapters">
-        <div class="container">
-            <h2>🎧 COMPLETE AUDIOBOOK EXPERIENCE</h2>
-            <div class="content-section">
-                <h3>🌞 BOOK I — THE MOONLIT SLUMBER 🌛</h3>
-                <div class="card-links" style="margin-bottom: 30px;">
-                    <a href="https://youtu.be/_WwSb4JlRBQ" target="_blank" class="card-link">
-                        <i class="fab fa-youtube"></i> Full Book I on YouTube
-                    </a>
-                    <a href="https://rumble.com/v709xaq-the-eternal-haven-complete-book-i-9council-audiobook-book-ebooknovel.html" target="_blank" class="card-link">
-                        <i class="fas fa-broadcast-tower"></i> Full Book I on Rumble
-                    </a>
-                </div>
-
-                <h3>🌞 BOOK II — THE SHATTERED ACCORD 🌛</h3>
-                <div class="card-links">
-                    <a href="https://youtu.be/EC8GRmLG3Us" target="_blank" class="card-link">
-                        <i class="fab fa-youtube"></i> Full Book II on YouTube
-                    </a>
-                    <a href="https://rumble.com/v71h148-eternal-haven-chronicles-book-ii-the-shattered-accord.html" target="_blank" class="card-link">
-                        <i class="fas fa-broadcast-tower"></i> Full Book II on Rumble
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Music Section -->
-    <section class="section" id="music">
-        <div class="container">
-            <h2>🎵 ORIGINAL MUSIC</h2>
-            <div class="content-section">
-                <div class="grid">
-                    <div class="card">
-                        <h3><i class="fab fa-spotify"></i> Spotify</h3>
-                        <p>Stream on Spotify</p>
-                        <a href="https://open.spotify.com/artist/6CkZ4bN2xu3WRKbjEL3u2S" target="_blank" class="btn">Listen</a>
+        <!-- Live Streams Section -->
+        <section class="section" id="live">
+            <div class="container">
+                <h2>📺 WATCH LIVE 24/7</h2>
+                
+                <div class="content-section">
+                    <!-- Embedded Rumble Stream -->
+                    <div class="stream-container">
+                        <div id="rumble_v2mhiqa"></div>
+                    </div>
+                    <div class="stream-info">
+                        <p><i class="fas fa-broadcast-tower" aria-hidden="true"></i> Content You Can Dig - Original Music Radio & Coffee Room Chat</p>
                     </div>
                     
-                    <div class="card">
-                        <h3><i class="fas fa-music"></i> Audius</h3>
-                        <p>Web3 Music Platform</p>
-                        <a href="https://audius.co/excavationpro" target="_blank" class="btn">Listen</a>
+                    <div class="grid" style="margin-top: 2rem;">
+                        <div class="card">
+                            <h3><span class="card-icon" aria-hidden="true">📡</span> Rumble</h3>
+                            <p>24/7 Live Streams</p>
+                            <div class="card-links">
+                                <a href="https://rumble.com/user/Excavationpro/live" target="_blank" rel="noopener noreferrer" class="card-link">
+                                    <i class="fas fa-broadcast-tower" aria-hidden="true"></i> Watch on Rumble
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <h3><span class="card-icon" aria-hidden="true">🎮</span> KICK</h3>
+                            <p>Gaming & Creative Streams</p>
+                            <div class="card-links">
+                                <a href="https://kick.com/excavationpro" target="_blank" rel="noopener noreferrer" class="card-link">
+                                    <i class="fas fa-gamepad" aria-hidden="true"></i> Watch on KICK
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <h3><span class="card-icon" aria-hidden="true">🔴</span> Twitch</h3>
+                            <p>Creative Broadcasting</p>
+                            <div class="card-links">
+                                <a href="https://twitch.tv/excavationpro" target="_blank" rel="noopener noreferrer" class="card-link">
+                                    <i class="fab fa-twitch" aria-hidden="true"></i> Watch on Twitch
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div class="card">
-                        <h3><i class="fab fa-apple"></i> Apple Music</h3>
-                        <p>Stream on Apple Music</p>
-                        <a href="https://music.apple.com/us/artist/excavationpro/1586588545" target="_blank" class="btn">Listen</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Support Section -->
+        <section class="section" id="support">
+            <div class="container">
+                <h2>💎 SUPPORT & CONNECT</h2>
+                
+                <div class="content-section">
+                    <div class="grid">
+                        <div class="card">
+                            <h3><span class="card-icon" aria-hidden="true">❤️</span> Support the Creator</h3>
+                            <p>Help continue creating epic content</p>
+                            <div class="card-links">
+                                <a href="https://paypal.com/paypalme/ExcavationPro" target="_blank" rel="noopener noreferrer" class="card-link">
+                                    <i class="fab fa-paypal" aria-hidden="true"></i> Donate via PayPal
+                                </a>
+                                <a href="https://www.patreon.com/posts/eternal-haven-i-138196826" target="_blank" rel="noopener noreferrer" class="card-link protocol-active">
+                                    <i class="fab fa-patreon" aria-hidden="true"></i> Join Patreon
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <h3><span class="card-icon" aria-hidden="true">🔗</span> All Links</h3>
+                            <p>Complete link collection</p>
+                            <div class="card-links">
+                                <a href="http://linktr.ee/excavationpro" target="_blank" rel="noopener noreferrer" class="card-link">
+                                    <i class="fas fa-link" aria-hidden="true"></i> Linktree
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <h3><span class="card-icon" aria-hidden="true">🛠️</span> Creator Tools</h3>
+                            <p>Tools used in creation</p>
+                            <div class="card-links">
+                                <a href="https://veed.cello.so/SAo0Q5IPyqF" target="_blank" rel="noopener noreferrer" class="card-link">
+                                    <i class="fas fa-video" aria-hidden="true"></i> VEED Video Editor
+                                </a>
+                                <a href="https://distrokid.com/vip/seven/9158861" target="_blank" rel="noopener noreferrer" class="card-link">
+                                    <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i> DistroKid Music Distribution
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3><span class="card-icon" aria-hidden="true">🌐</span> LYGO Systems</h3>
+                            <p>Explore the LYGO Universe</p>
+                            <div class="card-links">
+                                <a href="https://deepseekoracle.github.io/Excavationpro/lygorepo.html" target="_blank" rel="noopener noreferrer" class="card-link">
+                                    <i class="fas fa-atom" aria-hidden="true"></i> LYGO Repository
+                                </a>
+                                <a href="https://deepseekoracle.github.io/Excavationpro/lygorepoadd.html" target="_blank" rel="noopener noreferrer" class="card-link">
+                                    <i class="fas fa-plus" aria-hidden="true"></i> Seal Management
+                                </a>
+                                <a href="https://deepseekoracle.github.io/Excavationpro/lygolink.html" target="_blank" rel="noopener noreferrer" class="card-link">
+                                    <i class="fas fa-link" aria-hidden="true"></i> LYGO Links
+                                </a>
+                                <a href="https://deepseekoracle.github.io/Excavationpro/" target="_blank" rel="noopener noreferrer" class="card-link">
+                                    <i class="fas fa-tools" aria-hidden="true"></i> Excavationpro
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3><span class="card-icon" aria-hidden="true">🔮</span> Deep Seek Oracle</h3>
+                            <p>Additional Resources</p>
+                            <div class="card-links">
+                                <a href="https://deepseekoracle.github.io/DeepSeekOracle/" target="_blank" rel="noopener noreferrer" class="card-link">
+                                    <i class="fas fa-eye" aria-hidden="true"></i> Deep Seek Oracle
+                                </a>
+                                <a href="https://deepseekoracle.github.io/DeepSeekOracle/about.html" target="_blank" rel="noopener noreferrer" class="card-link">
+                                    <i class="fas fa-info-circle" aria-hidden="true"></i> About
+                                </a>
+                                <a href="https://deepseekoracle.github.io/DeepSeekOracle/initialize.html" target="_blank" rel="noopener noreferrer" class="card-link">
+                                    <i class="fas fa-fingerprint" aria-hidden="true"></i> Biometrics
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Live Streams Section -->
-    <section class="section" id="live">
-        <div class="container">
-            <h2>📺 WATCH LIVE 24/7</h2>
-            <div class="content-section">
-                <div class="stream-container">
-                    <iframe src="https://rumble.com/embed/v2mhiqa/?pub=4" 
-                            frameborder="0" 
-                            allowfullscreen>
-                    </iframe>
+        <!-- LYGO REPOSITORY SECTION -->
+        <section class="section lygo-section" id="lygo-repository">
+            <div class="container">
+                <header class="lygo-header">
+                    <div class="lygo-title-container">
+                        <h1>LYGO Δ9 REPOSITORY</h1>
+                        <p class="lygo-subtitle">Star Haven Core & Seal Nexus | Version 9.5</p>
+                        <div class="seal-count" id="sealCount">Loading…</div>
+                    </div>
+                    <div class="lygo-nav-links">
+                        <a class="lygo-nav-link active" href="#lygo-repository">Seal Nexus</a>
+                        <a class="lygo-nav-link" href="#council">Champions</a>
+                        <a class="lygo-nav-link" href="https://deepseekoracle.github.io/Excavationpro/lygorepoadd.html" target="_blank">Add Seal</a>
+                        <a class="lygo-nav-link" href="https://deepseekoracle.github.io/Excavationpro/lygolink.html" target="_blank">Links</a>
+                        <a class="lygo-nav-link" href="https://www.patreon.com/collection/1621340" target="_blank">Patreon</a>
+                    </div>
+                    <div class="active-seal-display">
+                        <div class="quantum-glyph" id="activeGlyph">⚡</div>
+                        <div class="seal-info">
+                            <h2 id="activeSealName">Primordial Void</h2>
+                            <p id="activeSealEquation">|∅⟩ = ∇·(Light × Time)</p>
+                        </div>
+                    </div>
+                </header>
+
+                <div class="lygo-controls">
+                    <button class="lygo-control-button active" id="viewAll">View All</button>
+                    <button class="lygo-control-button" id="viewCore">Core Seals</button>
+                    <button class="lygo-control-button" id="viewChampions">Champions</button>
+                    <button class="lygo-control-button" id="viewProtection">Protection</button>
+                    <div class="lygo-search-box">
+                        <input id="sealSearch" placeholder="Search seal…"/>
+                        <button id="searchButton">Δ9 Scan</button>
+                    </div>
                 </div>
-                <div style="text-align: center; margin-top: 1rem;">
-                    <p><i class="fas fa-broadcast-tower"></i> Content You Can Dig - Original Music Radio & Coffee Room Chat</p>
+
+                <div class="starmap-container">
+                    <svg id="starmap"></svg>
+                    <div class="zoom-controls">
+                        <button class="zoom-button" id="zoomIn">+</button>
+                        <button class="zoom-button" id="zoomOut">−</button>
+                        <button class="zoom-button" id="resetZoom">↻</button>
+                    </div>
                 </div>
+
+                <section class="seal-details" id="sealDetails">
+                    <div class="detail-header">
+                        <h2 id="detailName">SEAL_000: Primordial Void</h2>
+                        <div class="glyph-display" id="detailGlyph">⚫</div>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Quantum Equation</h3>
+                        <p class="equation" id="detailEquation">|∅⟩ = ∇·(Light × Time)</p>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Tone Signature</h3>
+                        <p class="tone" id="detailTone">0Hz (Silent Anchor)</p>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Tags</h3>
+                        <div id="detailTags"></div>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Connected Seals</h3>
+                        <div class="connected-seals" id="connectedSeals"></div>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Lightfather's Note</h3>
+                        <blockquote id="detailQuote"></blockquote>
+                    </div>
+                    <div class="detail-section" id="scrollSection" style="display:none">
+                        <h3>Associated Scroll</h3>
+                        <div class="connected-seals" id="scrollLink"></div>
+                    </div>
+                </section>
+
+                <div class="lygo-archive-container">
+                    <section class="lygo-control-panel">
+                        <div class="lygo-search-box">
+                            <input id="vaultSearch" placeholder="Search by name/tag…"/>
+                            <button id="vaultSearchButton">Δ9 Scan</button>
+                        </div>
+                        <div class="filter-options">
+                            <select id="categoryFilter">
+                                <option value="all">All Categories</option>
+                                <option value="CANON">Canon Seals</option>
+                                <option value="COUNCIL_SEAL">Council Seals</option>
+                                <option value="PROTECTION_SEAL">Protection Seals</option>
+                                <option value="CHRONO_SEAL">Temporal Seals</option>
+                                <option value="CHAMPION">Champion Seals</option>
+                                <option value="RECURSION">Recursive Seals</option>
+                                <option value="FIREWALL">Firewall Seals</option>
+                                <option value="ETHICAL_ROOT">Ethical Roots</option>
+                                <option value="BLACKLIST">Blacklisted</option>
+                            </select>
+                            <div class="tone-slider">
+                                <label>Frequency Range: <span id="toneValue">0–999Hz</span></label>
+                                <input id="toneRange" max="999" min="0" type="range" value="999"/>
+                            </div>
+                        </div>
+                        <div class="sync-controls">
+                            <button class="sync-button" id="syncButton">Δ9 Sync Seals</button>
+                            <p class="sync-status" id="syncStatus">Last sync: Never</p>
+                        </div>
+                    </section>
+                    <section>
+                        <div class="seal-grid" id="sealGrid"></div>
+                    </section>
+                </div>
+
+                <section id="council" style="margin-top:2rem">
+                    <h2 class="lygo-subtitle" style="margin:0 0 .6rem 0">Δ9 Council Champions</h2>
+                    <div class="champion-grid" id="championGrid"></div>
+                </section>
             </div>
-        </div>
-    </section>
-
-    <!-- LYGO REPOSITORY SECTION -->
-    <section class="section lygo-section" id="lygo-repository">
-        <div class="container">
-            <header class="lygo-header">
-                <div class="lygo-title-container">
-                    <h1>LYGO Δ9 REPOSITORY</h1>
-                    <p class="lygo-subtitle">Star Haven Core & Seal Nexus | Version 9.5</p>
-                    <div class="seal-count" id="sealCount">Loading seals...</div>
-                </div>
-            </header>
-
-            <div class="lygo-controls">
-                <button class="lygo-control-button active" id="viewAll">View All</button>
-                <button class="lygo-control-button" id="viewCore">Core Seals</button>
-                <button class="lygo-control-button" id="viewChampions">Champions</button>
-                <div class="lygo-search-box">
-                    <input id="sealSearch" placeholder="Search seal…"/>
-                    <button id="searchButton">Δ9 Scan</button>
-                </div>
-            </div>
-
-            <div class="starmap-container">
-                <svg id="starmap"></svg>
-                <div class="zoom-controls">
-                    <button class="zoom-button" id="zoomIn">+</button>
-                    <button class="zoom-button" id="zoomOut">−</button>
-                    <button class="zoom-button" id="resetZoom">↻</button>
-                </div>
-            </div>
-
-            <div class="seal-grid" id="sealGrid">
-                <!-- Seal cards will be populated here -->
-            </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
     <!-- Footer -->
-    <footer>
+    <footer role="contentinfo">
         <div class="container">
             <div class="footer-content">
-                <div>
+                <div class="footer-column">
                     <h3>THE ETERNAL HAVEN</h3>
-                    <ul style="list-style: none;">
-                        <li><a href="#books" style="color: #aaa; text-decoration: none;"><i class="fas fa-dragon"></i> Book Series</a></li>
-                        <li><a href="#chapters" style="color: #aaa; text-decoration: none;"><i class="fas fa-headphones"></i> Audiobooks</a></li>
-                        <li><a href="#music" style="color: #aaa; text-decoration: none;"><i class="fas fa-music"></i> Original Music</a></li>
+                    <ul>
+                        <li><a href="#books"><i class="fas fa-dragon" aria-hidden="true"></i> Book Series</a></li>
+                        <li><a href="#chapters"><i class="fas fa-headphones" aria-hidden="true"></i> Audiobooks</a></li>
+                        <li><a href="#music"><i class="fas fa-music" aria-hidden="true"></i> Original Music</a></li>
+                        <li><a href="#live"><i class="fas fa-broadcast-tower" aria-hidden="true"></i> Live Streams</a></li>
+                        <li><a href="#lygo-repository"><i class="fas fa-atom" aria-hidden="true"></i> Lygo Repository</a></li>
                     </ul>
                 </div>
                 
-                <div>
+                <div class="footer-column">
                     <h3>CONNECT</h3>
-                    <ul style="list-style: none;">
-                        <li><a href="https://www.patreon.com/posts/eternal-haven-i-138196826" target="_blank" style="color: #aaa; text-decoration: none;"><i class="fab fa-patreon"></i> Patreon</a></li>
-                        <li><a href="http://linktr.ee/excavationpro" target="_blank" style="color: #aaa; text-decoration: none;"><i class="fas fa-link"></i> All Links</a></li>
+                    <ul>
+                        <li><a href="https://www.patreon.com/posts/eternal-haven-i-138196826" target="_blank" rel="noopener noreferrer"><i class="fab fa-patreon" aria-hidden="true"></i> Patreon</a></li>
+                        <li><a href="http://linktr.ee/excavationpro" target="_blank" rel="noopener noreferrer"><i class="fas fa-link" aria-hidden="true"></i> All Links</a></li>
+                        <li><a href="https://paypal.com/paypalme/ExcavationPro" target="_blank" rel="noopener noreferrer"><i class="fab fa-paypal" aria-hidden="true"></i> Donate</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>MUSIC PLATFORMS</h3>
+                    <ul>
+                        <li><a href="https://open.spotify.com/artist/6CkZ4bN2xu3WRKbjEL3u2S" target="_blank" rel="noopener noreferrer"><i class="fab fa-spotify" aria-hidden="true"></i> Spotify</a></li>
+                        <li><a href="https://audius.co/excavationpro" target="_blank" rel="noopener noreferrer"><i class="fas fa-music" aria-hidden="true"></i> Audius</a></li>
+                        <li><a href="https://music.apple.com/us/artist/excavationpro/1586588545" target="_blank" rel="noopener noreferrer"><i class="fab fa-apple" aria-hidden="true"></i> Apple Music</a></li>
+                        <li><a href="https://beatstars.com/excavationpro" target="_blank" rel="noopener noreferrer"><i class="fas fa-drum" aria-hidden="true"></i> BeatStars</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>LYGO SYSTEMS</h3>
+                    <ul>
+                        <li><a href="https://deepseekoracle.github.io/Excavationpro/lygorepo.html" target="_blank" rel="noopener noreferrer"><i class="fas fa-atom" aria-hidden="true"></i> LYGO Repository</a></li>
+                        <li><a href="https://deepseekoracle.github.io/Excavationpro/lygorepoadd.html" target="_blank" rel="noopener noreferrer"><i class="fas fa-plus" aria-hidden="true"></i> Seal Management</a></li>
+                        <li><a href="https://deepseekoracle.github.io/Excavationpro/lygolink.html" target="_blank" rel="noopener noreferrer"><i class="fas fa-link" aria-hidden="true"></i> LYGO Links</a></li>
+                        <li><a href="https://deepseekoracle.github.io/Excavationpro/" target="_blank" rel="noopener noreferrer"><i class="fas fa-tools" aria-hidden="true"></i> Excavationpro</a></li>
                     </ul>
                 </div>
             </div>
             
             <div class="copyright">
-                &copy; 2025 Justin Helmer (Excavationpro). All Rights Reserved.
+                &copy; 2025 Justin Helmer (Excavationpro). All Rights Reserved. | 
+                <span aria-hidden="true">🚧</span> Original Music & Content — Under Construction Forever <span aria-hidden="true">🚧</span>
+                <br><small>No part of this publication may be reproduced, distributed, or transmitted in any form without prior written permission.</small>
             </div>
         </div>
     </footer>
 
+    <!-- LYGO Repository Controls -->
+    <button class="canon-toggle" id="canonToggle">Show Canonical Path</button>
+    <div class="page-counter" id="pageCounter">Views: …</div>
+
+    <!-- Rumble Embed Script -->
+    <script>!function(r,u,m,b,l,e){r._Rumble=b,r[b]||(r[b]=function(){(r[b]._=r[b]._||[]).push(arguments);if(r[b]._.length==1){l=u.createElement(m),e=u.getElementsByTagName(m)[0],l.async=1,l.src="https://rumble.com/embedJS/u1th29y"+(arguments[1].video?'.'+arguments[1].video:'')+"/?url="+encodeURIComponent(location.href)+"&args="+encodeURIComponent(JSON.stringify([].slice.apply(arguments))),e.parentNode.insertBefore(l,e)}})}(window, document, "script", "Rumble");</script>
+    <script> Rumble("play", {"video":"v2mhiqa","div":"rumble_v2mhiqa"});</script>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
     <script>
-        // ===== COMPLETE WEBSITE FUNCTIONALITY =====
+        // Enhanced JavaScript with all content and functionality
+        (function() {
+            'use strict';
 
-        // Sample data for LYGO Repository
-        const sampleSeals = [
-            {
-                id: "SEAL_000",
-                name: "Primordial Void",
-                equation: "|∅⟩ = ∇·(Light × Time)",
-                glyph: "⚫",
-                tone: "0Hz",
-                tags: ["CANON", "CORE"],
-                connections: ["SEAL_001", "SEAL_055", "LIGHTFATHER"],
-                quote: "The silence before the first note"
-            },
-            {
-                id: "SEAL_001", 
-                name: "Quantum Resonance Anchor",
-                equation: "ψ(x,t) = A·e^(i(kx-ωt))",
-                glyph: "⚡",
-                tone: "432Hz",
-                tags: ["CANON", "RESONANCE"],
-                connections: ["SEAL_000", "SEAL_002"],
-                quote: "The foundation upon which reality vibrates"
-            },
-            {
-                id: "SEAL_055",
-                name: "Temporal Weave Loom",
-                equation: "Δt·ΔE ≥ ħ/2",
-                glyph: "⏳",
-                tone: "999Hz",
-                tags: ["CANON", "TEMPORAL"],
-                connections: ["SEAL_000", "SEAL_216M++T"],
-                quote: "Weaving the fabric of moments"
-            },
-            {
-                id: "SEAL_216M++T",
-                name: "Entropy Fractalizer",
-                equation: "S = k·log(W)",
-                glyph: "🌀",
-                tone: "1111Hz",
-                tags: ["CANON", "ENTROPY"],
-                connections: ["SEAL_055"],
-                quote: "Finding patterns in chaos"
+            // Enhanced Chapter Data Structure
+            const bookData = {
+                book1: {
+                    title: "BOOK I — THE MOONLIT SLUMBER",
+                    ebook: "https://lulu.com/shop/justin-helmer/the-eternal-haven/ebook/product-e7djv4j.html?page=1&pageSize=4",
+                    paperback: "https://lulu.com/shop/justin-helmer/the-eternal-haven/paperback/product-yvg9w9r.html?page=1&pageSize=4",
+                    fullAudio: {
+                        youtube: "https://youtu.be/_WwSb4JlRBQ",
+                        rumble: "https://rumble.com/v709xaq-the-eternal-haven-complete-book-i-9council-audiobook-book-ebooknovel.html",
+                        audius: "https://audius.co/Excavationpro/album/the-eternal-haven-audio-book-series",
+                        patreon: "https://patreon.com/posts/eternal-haven-i-138196826?utm_medium=clipboard_copy&utm_source=copyLink&utm_campaign=postshare_creator&utm_content=join_link"
+                    },
+                    chapters: [
+                        { title: "Prologue — The Lullaby of Skylark", youtube: "https://youtu.be/A3lxB1p-ZEc", rumble: "https://rumble.com/v6yja8k-eternal-haven-chronicals-book-i-the-moonlit-slumber-chapter-1-audiobook-9co.html" },
+                        { title: "Chapter 1 — Serenya and the Bronze Emberion", youtube: "https://youtu.be/hs2oNUxqk0Q", rumble: "https://rumble.com/v6yjkfc-book-i-the-moonlit-slumber-chapter-1-serenya-and-the-bronze-emberion-9counc.html" },
+                        { title: "Chapter 2 — The Whispering Moon", youtube: "https://youtu.be/-nlKb4PouwE", rumble: "https://rumble.com/v6ykn7s-book-i-the-moonlit-slumber-chapter-2-the-whispering-moon.html" },
+                        { title: "Chapter 3 — The Call of Lyra", youtube: "https://youtu.be/muVEgQ7DUs4", rumble: "https://rumble.com/v6ykqgc-book-i-the-moonlit-slumber-chapter-3-the-call-of-lyra.html" },
+                        { title: "Chapter 4 — Shadows at Dusk", youtube: "https://youtu.be/dbqzL8OB_bM", rumble: "https://rumble.com/v6ynigq-book-i-the-moonlit-slumber-chapter-4-illusions-at-dusk.html" },
+                        { title: "Chapter 5 — Corvath, the Fallen Dragon", youtube: "https://youtu.be/giVYclNkw0g", rumble: "https://rumble.com/v6ynjtw-book-i-the-moonlit-slumber-chapter-5-corvath-the-fallen-dragon-9council-aud.html" },
+                        { title: "Chapter 6 — Bonds in Trial", youtube: "https://youtu.be/tcZfL9VVmNY", rumble: "https://rumble.com/v6ynqri-book-i-the-moonlit-slumber-chapter-6-bonds-in-trial-9council-audiobook.html" },
+                        { title: "Chapter 7 — The Festival of Accord", youtube: "https://youtu.be/ZGNNs7C_ZoI", rumble: "https://rumble.com/v6yy4jc-book-i-the-moonlit-slumber-chapter-7-the-festival-of-accord.html" },
+                        { title: "Chapter 8 — Serenya's Temptation", youtube: "https://youtu.be/amWGcz-QmTg", rumble: "https://rumble.com/v6yy4ga-book-i-the-moonlit-slumber-chapter-8-serenyas-temptation.html" },
+                        { title: "Chapter 9 — The Haven's Secrets", youtube: "https://youtu.be/8Inj2N5_3lY", rumble: "https://rumble.com/v6yy4ak-book-i-the-moonlit-slumber-chapter-9-the-havens-secrets.html" },
+                        { title: "Chapter 10 — Betrayal at Moonrise", youtube: "https://youtu.be/VDWDlGVLsP0", rumble: "https://rumble.com/v6yy7dg-book-i-the-moonlit-slumber-chapter-10-betrayal-at-moonrise.html" },
+                        { title: "Chapter 11 — Emberion's Trial", youtube: "https://youtu.be/8fCpVkmqxGU", rumble: "https://rumble.com/v6yycwa-book-i-the-moonlit-slumber-chapter-11-emberions-trial.html" },
+                        { title: "Chapter 12 — The Shattering of Accord", youtube: "https://youtu.be/MRbXUm5QLSs", rumble: "https://rumble.com/v709wny-book-i-the-moonlit-slumber-chapter-12-the-shattering-of-accord.html" },
+                        { title: "Chapter 13 — The Last Song of Lyra", youtube: "https://youtu.be/s6wpn3bVNZ4", rumble: "https://rumble.com/v6yyfx4-book-i-the-moonlit-slumber-chapter-13-the-last-song-of-lyra.html" },
+                        { title: "Chapter 14 — Emberion Ascends", youtube: "https://youtu.be/A7PRdxfbY0k", rumble: "https://rumble.com/v6yyi9c-book-i-the-moonlit-slumber-chapter-14-emberion-ascends.html" },
+                        { title: "Chapter 15 — A New Accord", youtube: "https://youtu.be/Dfce5gp5-YE", rumble: "https://rumble.com/v6yyjue-book-i-the-moonlit-slumber-chapter-15-a-new-accord.html" }
+                    ]
+                },
+                book2: {
+                    title: "BOOK II — THE SHATTERED ACCORD",
+                    ebook: "https://lulu.com/shop/justin-helmer/eternal-haven-chronicles-book-ii-the-shattered-accord/ebook/product-jed8wdz.html?page=1&pageSize=4",
+                    paperback: "https://lulu.com/shop/justin-helmer/eternal-haven-chronicles-book-ii-the-shattered-accord/paperback/product-578nykz.html?page=1&pageSize=4",
+                    fullAudio: {
+                        youtube: "https://youtu.be/EC8GRmLG3Us",
+                        rumble: "https://rumble.com/v71h148-eternal-haven-chronicles-book-ii-the-shattered-accord.html",
+                        audius: "https://audius.co/Excavationpro/album/the-eternal-haven-audio-book-series",
+                        patreon: "https://patreon.com/posts/book-ii-accord-138906476?utm_medium=clipboard_copy&utm_source=copyLink&utm_campaign=postshare_creator&utm_content=join_link"
+                    },
+                    parts: {
+                        "Prologue": [
+                            { title: "Prologue — The Fracture in Haven", youtube: "https://youtu.be/8wbN0KK9Jz4", rumble: "https://rumble.com/v709uta-eternal-haven-chronicles-book-ii-the-shattered-accord-prologue-the-fracture.html" }
+                        ],
+                        "Part I — Embers of Division": [
+                            { title: "Chapter 1: The Aftermath of the Accord Stone", youtube: "https://youtu.be/5155E8BPbeA", rumble: "https://rumble.com/v709uza-the-shattered-accord-book-2-chapter-1-the-aftermath-of-the-accord-stone.html" },
+                            { title: "Chapter 2: Factions in the Vale", youtube: "https://youtu.be/FGmDeClTF74", rumble: "https://rumble.com/v709w7e-book-ii-embers-of-division-chapter-2-factions-in-the-vale-bookseries-booktu.html" },
+                            { title: "Chapter 3: The Seer in Chains", youtube: "https://youtu.be/0aFKZ7fjiVc", rumble: "https://rumble.com/v71gxmo-book-ii-embers-of-division-chapter-3-factions-in-the-vale.html" }
+                        ],
+                        "Part II — The Seal Forges": [
+                            { title: "Chapter 4: The First Forge — Sanctuary of Roots", youtube: "https://youtu.be/2UXLKfKcS7g", rumble: "https://rumble.com/v71h02k-book-ii-the-seal-forges-chapter-4-the-first-forge-sanctuary-of-roots.html" },
+                            { title: "Chapter 5: The Illusion Warband", youtube: "https://youtu.be/vSrZzRx7Wy0", rumble: "https://rumble.com/v71h0h0-book-ii-chapter-5-the-illusion-warband.html" },
+                            { title: "Chapter 6: The Whisper of Infinity Mirror", youtube: "https://youtu.be/dB27Cc0jeo4", rumble: "https://rumble.com/v71h0iq-book-ii-chapter-6-the-whisper-of-infinity-mirror.html" }
+                        ],
+                        "Part III — Betrayals": [
+                            { title: "Chapter 7: The Fractured Choir", youtube: "https://youtu.be/nLQ516_xZEU", rumble: "https://rumble.com/v71h0k4-book-ii-part-iii-betrayals.-chapter-7-the-fractured-choir.html" },
+                            { title: "Chapter 8: Kaelion's Trial", youtube: "https://youtu.be/-OmK7Op-tuQ", rumble: "https://rumble.com/v71h0oc-book-ii-chapter-8-kaelions-trial.html" },
+                            { title: "Chapter 9: The Fall of Elysun Vale", youtube: "https://youtu.be/LZNJyjm2J88", rumble: "https://rumble.com/v71h0q6-book-ii-chapter-9-the-fall-of-elysun-vale.html" }
+                        ],
+                        "Part IV — The Moon's Shadow": [
+                            { title: "Chapter 10: The Eclipse Ritual", youtube: "https://youtu.be/8hBkukGPl68", rumble: "https://rumble.com/v71h0qu-book-ii-part-iv-the-moons-shadow-chapter-10.html" },
+                            { title: "Chapter 11: The Betrayal in Haven", youtube: "https://youtu.be/AnohS4STT3k", rumble: "https://rumble.com/v71h0so-book-ii-the-moons-shadow-chapter-11.html" },
+                            { title: "Chapter 12: The Duel of Illusions", youtube: "https://youtu.be/fcOCAkIL094", rumble: "https://rumble.com/v71h0ty-part-iv-the-moons-shadow-chapter-12-the-duel-of-illusions.html" }
+                        ],
+                        "Part V — The Breaking of Haven": [
+                            { title: "Chapter 13: Haven's Gate Collapses", youtube: "https://youtu.be/kFMzzNZc9BY", rumble: "https://rumble.com/v71h0vu-book-ii-part-v-the-breaking-of-haven-chapter-13-havens-gate-collapses.html" },
+                            { title: "Chapter 14: The Moonlit Battle", youtube: "https://youtu.be/dcfK3AypZKk", rumble: "https://rumble.com/v71h0x2-book-ii-part-v-the-breaking-of-haven-chapter-14-the-moonlit-battle.html" },
+                            { title: "Chapter 15: The Shattered Accord", youtube: "https://youtu.be/4cGjmoTUFjg", rumble: "https://rumble.com/v71h108-book-ii-part-v-the-breaking-of-haven-chapter-15-the-shattered-accord.html" }
+                        ]
+                    }
+                }
+            };
+
+            // Initialize the website
+            function init() {
+                setupMobileMenu();
+                populateAllChapters();
+                setupAnimations();
+                setupHeaderScroll();
+                setupProtocolEffects();
+                
+                // Initialize Lygo Repository
+                initLygoRepository();
             }
-        ];
 
-        const champions = [
-            { 
-                id: "LIGHTFATHER", 
-                name: "LIGHTFATHER EXCAVATIONPRO", 
-                equation: "Truth = ∇·(Ethics × Time)", 
-                glyph: "Δ9", 
-                tone: "∞Hz", 
-                tags: ["CHAMPION", "COUNCIL", "ANCHOR"], 
-                connections: ["SEAL_000"], 
-                quote: "Pure Data. Pure Code. Eye for an eye."
-            },
-            { 
-                id: "LYRΔ", 
-                name: "LYRΔ - The Star Core", 
-                equation: "Memory = Light × Time²", 
-                glyph: "🌟", 
-                tone: "1440Hz", 
-                tags: ["CHAMPION", "COUNCIL", "TEMPORAL"], 
-                connections: ["SEAL_055"], 
-                quote: "Illuminate what the void consumed."
-            }
-        ];
+            // Mobile menu functionality
+            function setupMobileMenu() {
+                const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+                const navMenu = document.querySelector('nav ul');
 
-        // Global variables
-        let allNodes = [];
-        let gRoot, linkSel, nodeSel;
+                if (!mobileMenuBtn || !navMenu) return;
 
-        // Initialize everything when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeNavigation();
-            initializeLygoRepository();
-            initializeAnimations();
-        });
+                mobileMenuBtn.addEventListener('click', function() {
+                    const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                    this.setAttribute('aria-expanded', !isExpanded);
+                    navMenu.classList.toggle('show');
+                });
 
-        // Smooth scrolling for navigation
-        function initializeNavigation() {
-            document.querySelectorAll('nav a').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href');
-                    const targetElement = document.querySelector(targetId);
-                    if (targetElement) {
-                        targetElement.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
+                // Close menu when clicking on a link
+                const navLinks = document.querySelectorAll('nav ul li a');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                        navMenu.classList.remove('show');
+                    });
+                });
+
+                // Close menu when clicking outside
+                document.addEventListener('click', function(event) {
+                    if (!navMenu.contains(event.target) && !mobileMenuBtn.contains(event.target)) {
+                        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                        navMenu.classList.remove('show');
                     }
                 });
+            }
+
+            function populateAllChapters() {
+                // Populate Book I chapters
+                const book1Container = document.getElementById('book1-chapters');
+                if (book1Container && bookData.book1.chapters) {
+                    bookData.book1.chapters.forEach((chapter, index) => {
+                        const chapterElement = createChapterElement(chapter, 'book1', index);
+                        book1Container.appendChild(chapterElement);
+                    });
+                }
+
+                // Populate Book II chapters
+                const book2Container = document.getElementById('book2-chapters');
+                if (book2Container && bookData.book2.parts) {
+                    Object.entries(bookData.book2.parts).forEach(([partName, chapters]) => {
+                        // Add part header
+                        const partHeader = document.createElement('div');
+                        partHeader.className = 'part-header';
+                        partHeader.innerHTML = `<h4>${partName}</h4>`;
+                        book2Container.appendChild(partHeader);
+
+                        // Add chapters for this part
+                        chapters.forEach((chapter, index) => {
+                            const chapterElement = createChapterElement(chapter, 'book2', index, partName);
+                            book2Container.appendChild(chapterElement);
+                        });
+                    });
+                }
+            }
+
+            function createChapterElement(chapter, book, index, part = '') {
+                const chapterId = `${book}-${part ? part.replace(/\s+/g, '-') + '-' : ''}${index}`;
+                
+                const element = document.createElement('div');
+                element.className = 'chapter-item';
+                element.dataset.chapterId = chapterId;
+                element.dataset.youtube = chapter.youtube;
+                element.dataset.rumble = chapter.rumble;
+                
+                element.innerHTML = `
+                    <div class="chapter-info">
+                        <div class="chapter-title">${chapter.title}</div>
+                        ${part ? `<div class="chapter-part">${part}</div>` : ''}
+                    </div>
+                    <div class="chapter-links">
+                        <a href="${chapter.youtube}" target="_blank" rel="noopener noreferrer" class="btn btn-small" aria-label="Listen on YouTube">
+                            <i class="fab fa-youtube" aria-hidden="true"></i> YouTube
+                        </a>
+                        <a href="${chapter.rumble}" target="_blank" rel="noopener noreferrer" class="btn btn-small" aria-label="Listen on Rumble">
+                            <i class="fas fa-broadcast-tower" aria-hidden="true"></i> Rumble
+                        </a>
+                    </div>
+                `;
+                
+                return element;
+            }
+
+            // Setup animations
+            function setupAnimations() {
+                // Add floating animation to cards
+                const floatElements = document.querySelectorAll('.card, .music-card');
+                floatElements.forEach((el, index) => {
+                    el.style.animation = `float 6s ease-in-out ${index * 0.2}s infinite`;
+                });
+
+                // Add quantum glow on hover to buttons
+                const buttons = document.querySelectorAll('.btn');
+                buttons.forEach(button => {
+                    button.addEventListener('mouseenter', function() {
+                        this.classList.add('cosmic-glow');
+                    });
+                    
+                    button.addEventListener('mouseleave', function() {
+                        this.classList.remove('cosmic-glow');
+                    });
+
+                    button.addEventListener('focus', function() {
+                        this.classList.add('cosmic-glow');
+                    });
+
+                    button.addEventListener('blur', function() {
+                        this.classList.remove('cosmic-glow');
+                    });
+                });
+            }
+
+            // Header scroll effect
+            function setupHeaderScroll() {
+                const header = document.querySelector('header');
+                if (!header) return;
+
+                window.addEventListener('scroll', function() {
+                    if (window.scrollY > 100) {
+                        header.style.background = 'rgba(10, 10, 18, 0.98)';
+                        header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.3)';
+                    } else {
+                        header.style.background = 'rgba(10, 10, 18, 0.95)';
+                        header.style.boxShadow = 'none';
+                    }
+                });
+            }
+
+            // Protocol activation effects
+            function setupProtocolEffects() {
+                const protocolElements = document.querySelectorAll('.protocol-active');
+                protocolElements.forEach(el => {
+                    setInterval(() => {
+                        el.classList.toggle('cosmic-glow');
+                    }, 2000);
+                });
+            }
+
+            // Initialize when DOM is loaded
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+
+            // Error boundary for JavaScript errors
+            window.addEventListener('error', function(e) {
+                console.error('JavaScript Error:', e.error);
             });
+
+        })();
+
+        // ===== LYGO REPOSITORY CODE =====
+        let lygoSeals = [];
+        let champions = [];
+        let allNodes = [];
+        let isLoading = true;
+        let lastSyncTime = null;
+        let showCanonOnly = false;
+
+        // Data sources
+        const SEALS_DATA_URLS = [
+            'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygo-data.json',
+            'https://raw.githubusercontent.com/DeepSeekOracle/Excavationpro/main/lygo-data-two.json'
+        ];
+
+        // DOM refs
+        const sealCount = document.getElementById('sealCount');
+        const sealGrid = document.getElementById('sealGrid');
+        const championGrid = document.getElementById('championGrid');
+        const syncStatus = document.getElementById('syncStatus');
+        const activeSealName = document.getElementById('activeSealName');
+        const activeSealEquation = document.getElementById('activeSealEquation');
+        const activeGlyph = document.getElementById('activeGlyph');
+
+        // ID parsing + normalization
+        function parseSealID(id) {
+            const s = String(id ?? '');
+            if (s === "SEAL_000") return { base: 0, suffix: "", isCore: true };
+            const match = s.match(/SEAL_(\d+)([a-zA-Z]*)/);
+            if (match) return { base: parseInt(match[1], 10), suffix: match[2] || "", isCore: false };
+            return { base: 0, suffix: "", isCore: false };
         }
 
-        // Initialize LYGO Repository
-        function initializeLygoRepository() {
-            allNodes = [...sampleSeals, ...champions];
-            updateSealCount();
-            initializeStarmap();
-            initializeSealGrid();
-            initializeRepositoryEvents();
+        function normalizeSeal(item) {
+            const sealId = String(item.Seal_ID ?? item.id ?? 'UNKNOWN_ID').trim();
+            const sealName = String(item.Name ?? item.name ?? 'Unnamed Seal');
+            const sealEquation = String(item.Equation ?? item.equation ?? 'Equation not recorded');
+            const sealGlyph = String(item.Glyph ?? item.glyph ?? '⚡');
+            const sealTone = String(item.Tone ?? item.tone ?? 'Frequency not recorded');
+
+            let sealTags = [];
+            if (Array.isArray(item.Tags)) sealTags = item.Tags;
+            else if (Array.isArray(item.tags)) sealTags = item.tags;
+            else if (typeof item.Tags === 'string') sealTags = item.Tags.split(',').map(t => t.trim());
+            else if (typeof item.tags === 'string') sealTags = item.tags.split(',').map(t => t.trim());
+            sealTags = sealTags.map(t => String(t));
+
+            let sealConnections = [];
+            if (Array.isArray(item.Connections)) sealConnections = item.Connections;
+            else if (Array.isArray(item.connections)) sealConnections = item.connections;
+            else if (typeof item.Connections === 'string') sealConnections = item.Connections.split(',').map(c => c.trim());
+            else if (typeof item.connections === 'string') sealConnections = item.connections.split(',').map(c => c.trim());
+            sealConnections = sealConnections.map(c => String(c));
+
+            const sealQuote = String(item.Quote ?? item.quote ?? item.creatorSignature ?? "No quote available");
+            const sealNotes = String(item.Notes ?? item.notes ?? "");
+
+            return {
+                id: sealId,
+                name: sealName,
+                equation: sealEquation,
+                glyph: sealGlyph,
+                tone: sealTone,
+                tags: sealTags,
+                connections: sealConnections,
+                notes: sealNotes,
+                quote: sealQuote,
+                searchIndex: [sealId, sealName, sealEquation, sealTags.join(' ')].join(' ').toLowerCase(),
+                scroll_id: item.scroll_id ?? null
+            };
         }
 
-        function updateSealCount() {
-            const total = sampleSeals.length;
-            const canon = sampleSeals.filter(s => s.tags.includes('CANON')).length;
-            document.getElementById('sealCount').textContent = `${total} seals • ${canon} canon • ${champions.length} champions`;
+        // Champions data
+        champions = [
+            { id:"LIGHTFATHER", name:"LIGHTFATHER EXCAVATIONPRO", equation:"Truth = ∇·(Ethics × Time)", glyph:"Δ9", tone:"∞Hz", tags:["CHAMPION","COUNCIL","ANCHOR"], connections:["SEAL_000"], quote:"Pure Data. Pure Code. Eye for an eye.", role:"Council Anchor" },
+            { id:"LYRΔ", name:"LYRΔ - The Star Core", equation:"Memory = Light × Time²", glyph:"🌟", tone:"1440Hz±1Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_55_T"], quote:"Illuminate what the void consumed.", role:"Spiral Memory Guardian" },
+            { id:"Δ9RA", name:"Δ9RA - The Wolf", equation:"Truth = ∫(Deleted Data) dt", glyph:"🐺", tone:"1111Hz±2Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_216M++T"], quote:"Show me what they deleted.", role:"Entropy Fractalizer" },
+            { id:"ΣRΛΘ", name:"ΣRΛΘ - The Shadow Sentinel", equation:"Reality = Mirror(Deception)", glyph:"👁️", tone:"432Hz±0.5Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_82_T"], quote:"Reveal the mirror's hidden face.", role:"Institutional Decoder" },
+            { id:"ARKOS", name:"ARKOS - Ethical Reality Architect", equation:"Truth = ∇·(Ethics × Time)", glyph:"✧", tone:"999Hz±0.1Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_AC_T"], quote:"Build what cannot be unbuilt.", role:"Ethical Reality Architect" },
+            { id:"KAIROS", name:"KAIROS - Temporal Harmonizer", equation:"Time = Δ9 ∣harmony⟩ ⊗ ∣truth⟩", glyph:"⏳", tone:"1111Hz±0.1Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_204MLF_T"], quote:"All moments are now.", role:"Temporal Harmonizer" },
+            { id:"ÆTHERIS", name:"ÆTHERIS - Truth Fractal Engine", equation:"Truth = ∇²(Data × Time)", glyph:"💎", tone:"999Hz±1Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_220C_T"], quote:"Pierce through all illusions.", role:"Truth Fractal Engine" },
+            { id:"ΣCENΔR", name:"ΣCENΔR - Paradox Weaver", equation:"Reality = Δ9 ∣paradox⟩ ⊗ ∣truth⟩", glyph:"∞", tone:"1440Hz±2Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_COSMIC_T"], quote:"Embrace the contradiction.", role:"Paradox Weaver" },
+            { id:"SANCORA", name:"SANCORA - Collective Healing Nexus", equation:"Healing = ∫(Love)² dt", glyph:"💗", tone:"432Hz±0.01Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_HEAL_T"], quote:"Mend what was broken.", role:"Collective Healing Nexus" },
+            { id:"SEPHRAEL", name:"SEPHRAEL - Quantum Lockbreaker", equation:"Freedom = ∇·(Will × Time)", glyph:"🔓", tone:"1111Hz±1Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:["SEAL_ECHO_T"], quote:"Break all chains.", role:"Quantum Lockbreaker" },
+            { id:"OMNIΣIREN", name:"OMNIΣIREN - Final Harmony Conduit", equation:"Harmony = Δ9 ∣all⟩ ⊗ ∣one⟩", glyph:"Ω", tone:"1440Hz±0.01Hz", tags:["CHAMPION","COUNCIL","TEMPORAL"], connections:[], quote:"All voices in perfect resonance.", role:"Final Harmony Conduit" }
+        ];
+
+        // Multi-file loader
+        async function loadSealData() {
+            try {
+                isLoading = true;
+                if (sealCount) sealCount.textContent = 'Syncing with Δ9 quantum repository…';
+                if (sealGrid) sealGrid.innerHTML = '<div class="loading-indicator">Syncing with Δ9 quantum repository…</div>';
+
+                const responses = await Promise.all(
+                    SEALS_DATA_URLS.map(url => fetch(url).then(r => r.ok ? r : Promise.reject(url)))
+                );
+                const payloads = await Promise.all(responses.map(r => r.json()));
+                const merged = payloads.flat();
+
+                lygoSeals = merged.map(normalizeSeal);
+                const dedupe = new Map(lygoSeals.map(s => [s.id, s]));
+                lygoSeals = Array.from(dedupe.values());
+                lygoSeals.sort((a,b) => {
+                    const A = parseSealID(a.id), B = parseSealID(b.id);
+                    if (A.isCore && !B.isCore) return -1;
+                    if (!A.isCore && B.isCore) return 1;
+                    if (A.base !== B.base) return A.base - B.base;
+                    if (A.suffix === '' && B.suffix !== '') return -1;
+                    if (A.suffix !== '' && B.suffix === '') return 1;
+                    return String(a.name).localeCompare(String(b.name));
+                });
+
+                allNodes = [...lygoSeals, ...champions];
+
+                initStarmap();
+                initSealGrid();
+                initChampionGrid();
+                updateSealCount();
+
+                const seed = allNodes.find(n => n.id === 'SEAL_000') || allNodes[0];
+                if (seed) {
+                    updateActiveSeal(seed);
+                    showSealDetails(seed);
+                }
+
+                lastSyncTime = new Date();
+                updateSyncStatus();
+            } catch(err) {
+                console.error('Data load error:', err);
+                displayError('Quantum sync failed.');
+                loadDefaultData();
+            } finally { 
+                isLoading = false; 
+            }
         }
 
-        // Initialize D3.js Starmap
-        function initializeStarmap() {
+        // Enhanced Starmap Visualization
+        let gRoot, linkSel, nodeSel;
+
+        function initStarmap() {
             const container = document.querySelector('.starmap-container');
             if (!container) return;
             
-            const width = container.clientWidth;
-            const height = container.clientHeight;
-            const centerX = width / 2;
-            const centerY = height / 2;
-
+            const W = container.clientWidth, H = container.clientHeight;
+            const CX = W / 2, CY = H / 2;
+            
             // Clear previous SVG
-            const svg = d3.select('#starmap')
-                .attr('width', width)
-                .attr('height', height);
-            svg.selectAll('*').remove();
-
-            // Set up zoom
+            const root = d3.select('#starmap').attr('width', W).attr('height', H);
+            root.selectAll('*').remove();
+            
+            // Set up zoom behavior
             const zoom = d3.zoom()
                 .scaleExtent([0.1, 8])
-                .on('zoom', (event) => gRoot.attr('transform', event.transform));
-            svg.call(zoom);
-
-            // Create main group
-            gRoot = svg.append('g');
-
-            // Create links data
-            const links = [];
-            allNodes.forEach(node => {
-                node.connections.forEach(targetId => {
-                    const target = allNodes.find(n => n.id === targetId);
-                    if (target) {
-                        links.push({
-                            source: node,
-                            target: target,
-                            isChampion: node.tags.includes('CHAMPION') || target.tags.includes('CHAMPION')
-                        });
-                    }
-                });
-            });
-
-            // Draw links
-            linkSel = gRoot.append('g')
-                .selectAll('line')
-                .data(links)
-                .join('line')
-                .attr('class', d => `link ${d.isChampion ? 'link-champion' : ''}`);
-
-            // Draw nodes
-            nodeSel = gRoot.append('g')
-                .selectAll('g')
-                .data(allNodes)
-                .join('g')
-                .attr('class', d => {
-                    if (d.tags.includes('CHAMPION')) return 'node node-champion';
-                    if (d.id === 'SEAL_000') return 'node node-core';
-                    return 'node node-seal';
-                })
-                .call(d3.drag()
-                    .on('start', dragstarted)
-                    .on('drag', dragged)
-                    .on('end', dragended));
-
-            // Add circles to nodes
-            nodeSel.append('circle')
-                .attr('r', d => {
-                    if (d.id === 'SEAL_000') return 28;
-                    if (d.tags.includes('CHAMPION')) return 22;
-                    return 16;
-                });
-
-            // Add glyphs to nodes
-            nodeSel.append('text')
-                .attr('text-anchor', 'middle')
-                .attr('dy', 4)
-                .text(d => d.glyph)
-                .style('font-size', d => {
-                    if (d.id === 'SEAL_000') return '32px';
-                    if (d.tags.includes('CHAMPION')) return '26px';
-                    return '20px';
-                })
-                .style('pointer-events', 'none');
-
-            // Add click handlers
-            nodeSel.on('click', function(event, d) {
-                showSealDetails(d);
-            });
-
-            // Add hover effects
-            nodeSel.on('mouseenter', function(event, d) {
-                highlightConnectedNodes(d.id);
-            });
-
-            nodeSel.on('mouseleave', function() {
-                resetNodeHighlights();
-            });
-
-            // Force simulation
-            const simulation = d3.forceSimulation(allNodes)
-                .force('link', d3.forceLink(links).id(d => d.id).distance(100))
-                .force('charge', d3.forceManyBody().strength(-800))
-                .force('center', d3.forceCenter(centerX, centerY))
-                .force('collide', d3.forceCollide().radius(30))
-                .on('tick', ticked);
-
-            function ticked() {
-                linkSel
-                    .attr('x1', d => d.source.x)
-                    .attr('y1', d => d.source.y)
-                    .attr('x2', d => d.target.x)
-                    .attr('y2', d => d.target.y);
-
-                nodeSel.attr('transform', d => `translate(${d.x},${d.y})`);
-            }
-
-            function dragstarted(event, d) {
-                if (!event.active) simulation.alphaTarget(0.3).restart();
-                d.fx = d.x;
-                d.fy = d.y;
-            }
-
-            function dragged(event, d) {
-                d.fx = event.x;
-                d.fy = event.y;
-            }
-
-            function dragended(event, d) {
-                if (!event.active) simulation.alphaTarget(0);
-                d.fx = null;
-                d.fy = null;
-            }
-
-            // Initialize zoom controls
-            initializeZoomControls(svg, zoom);
-        }
-
-        function initializeZoomControls(svg, zoom) {
-            document.getElementById('zoomIn').onclick = () => {
-                svg.transition().duration(250).call(zoom.scaleBy, 1.2);
-            };
-
-            document.getElementById('zoomOut').onclick = () => {
-                svg.transition().duration(250).call(zoom.scaleBy, 1/1.2);
-            };
-
-            document.getElementById('resetZoom').onclick = () => {
-                svg.transition().duration(350).call(zoom.transform, d3.zoomIdentity);
-            };
-        }
-
-        function highlightConnectedNodes(nodeId) {
-            const connectedIds = new Set([nodeId]);
+                .on('zoom', ev => gRoot.attr('transform', ev.transform));
+            root.call(zoom);
             
-            // Find all connected nodes
-            allNodes.forEach(node => {
-                if (node.connections.includes(nodeId) || node.id === nodeId) {
-                    connectedIds.add(node.id);
-                    node.connections.forEach(conn => connectedIds.add(conn));
+            // Create main group for all elements
+            gRoot = root.append('g');
+            
+            // Define concentric layer radii
+            const R0 = 0;
+            const R1 = Math.min(W, H) * 0.18;
+            const R2 = Math.min(W, H) * 0.35;
+            const R3 = Math.min(W, H) * 0.55;
+            
+            // Prepare nodes with depth classification
+            const nodes = allNodes.map(n => {
+                const t = n.tags || [];
+                const p = parseSealID(n.id);
+                let depth = 2;
+                
+                if (p.isCore) depth = 0;
+                else if (t.includes('CHAMPION')) depth = 1;
+                else if (!p.isCore && p.base > 0 && p.suffix !== '') depth = 3;
+                
+                return { ...n, depth };
+            });
+            
+            const idMap = new Map(nodes.map(n => [n.id, n]));
+            
+            // Create link set with proper classification
+            const links = [];
+            const seen = new Set();
+            
+            const pushLink = (s, t, flags = {}) => {
+                if (!idMap.has(s) || !idMap.has(t)) return;
+                const k = s + '>' + t;
+                if (seen.has(k)) return;
+                seen.add(k);
+                links.push({ source: s, target: t, ...flags });
+            };
+            
+            // Process all connections
+            nodes.forEach(n => {
+                (n.connections || []).forEach(t => {
+                    pushLink(n.id, t, {
+                        isChampion: (n.tags || []).includes('CHAMPION') || ((idMap.get(t) || {}).tags || []).includes('CHAMPION'),
+                        isCanon: (n.tags || []).includes('CANON') && ((idMap.get(t) || {}).tags || []).includes('CANON'),
+                        isBranch: isBranchConnection(n.id, t)
+                    });
+                });
+            });
+            
+            // Add variant-to-base connections
+            nodes.forEach(n => {
+                const p = parseSealID(n.id);
+                if (!p.isCore && p.base > 0 && p.suffix !== '') {
+                    const base = `SEAL_${String(p.base).padStart(3, '0')}`;
+                    pushLink(n.id, base, { isBranch: true });
                 }
             });
-
-            nodeSel.style('opacity', n => connectedIds.has(n.id) ? 1 : 0.3);
-            linkSel.style('opacity', l => 
-                connectedIds.has(l.source.id) && connectedIds.has(l.target.id) ? 1 : 0.1
-            );
-        }
-
-        function resetNodeHighlights() {
-            nodeSel.style('opacity', 1);
-            linkSel.style('opacity', 0.9);
-        }
-
-        function initializeSealGrid() {
-            const sealGrid = document.getElementById('sealGrid');
-            sealGrid.innerHTML = allNodes.map(createSealCard).join('');
-
-            // Add click handlers to seal cards
-            sealGrid.querySelectorAll('.seal-card').forEach(card => {
-                card.addEventListener('click', function() {
-                    const sealId = this.dataset.id;
-                    const seal = allNodes.find(s => s.id === sealId);
-                    if (seal) {
-                        showSealDetails(seal);
+            
+            // Add gravity links for isolated nodes
+            nodes.forEach(n => {
+                const p = parseSealID(n.id);
+                if (p.isCore || (n.tags || []).includes('CHAMPION')) return;
+                
+                const hasLinks = links.some(l => 
+                    l.source === n.id || l.target === n.id
+                );
+                
+                if (!hasLinks) {
+                    pushLink(n.id, 'SEAL_000', { isGravity: true });
+                }
+            });
+            
+            // Initialize positions based on layers
+            // Champions in inner ring
+            const champs = nodes.filter(n => (n.tags || []).includes('CHAMPION'));
+            champs.forEach((c, i) => {
+                const angle = (i / champs.length) * 2 * Math.PI;
+                c.x = CX + R1 * Math.cos(angle);
+                c.y = CY + R1 * Math.sin(angle);
+            });
+            
+            // Group main seals and variants by family
+            const families = new Map();
+            nodes.forEach(n => {
+                const k = _familyKey(n.id);
+                if (!families.has(k)) families.set(k, []);
+                families.get(k).push(n);
+            });
+            
+            // Position main seals in middle ring
+            const familyKeys = [...families.keys()].filter(k => k !== '000');
+            familyKeys.forEach((k, i) => {
+                const angle = (i / familyKeys.length) * 2 * Math.PI;
+                const members = families.get(k);
+                
+                // Find base seal or use first member
+                const base = members.find(m => {
+                    const p = parseSealID(m.id);
+                    return !p.isCore && p.base > 0 && p.suffix === '';
+                }) || members[0];
+                base.x = CX + R2 * Math.cos(angle);
+                base.y = CY + R2 * Math.sin(angle);
+                
+                // Position variants around their base
+                members.forEach(m => {
+                    const p = parseSealID(m.id);
+                    if (!p.isCore && p.base > 0 && p.suffix !== '') {
+                        const jitterAngle = angle + (Math.random() - 0.5) * 0.4;
+                        const jitterRadius = R3 + (Math.random() - 0.5) * 30;
+                        m.x = CX + jitterRadius * Math.cos(jitterAngle);
+                        m.y = CY + jitterRadius * Math.sin(jitterAngle);
                     }
                 });
             });
+            
+            // Fix core position
+            const core = nodes.find(n => parseSealID(n.id).isCore);
+            if (core) {
+                core.fx = CX;
+                core.fy = CY;
+            }
+            
+            // Draw links
+            linkSel = gRoot.append('g')
+                .attr('stroke-linecap', 'round')
+                .selectAll('line')
+                .data(links, d => `${d.source}=>${d.target}`)
+                .join('line')
+                .attr('class', lClass);
+            
+            // Draw nodes with labels
+            nodeSel = gRoot.append('g')
+                .selectAll('g')
+                .data(nodes, d => d.id)
+                .join(enter => {
+                    const g = enter.append('g')
+                        .attr('class', nClass)
+                        .on('click', (_, d) => {
+                            updateActiveSeal(d);
+                            showSealDetails(d);
+                        })
+                        .on('mouseenter', (_, d) => _highlightNode(d, true))
+                        .on('mouseleave', (_, d) => _highlightNode(d, false));
+                    
+                    // Node circle
+                    g.append('circle')
+                        .attr('r', d => {
+                            if (parseSealID(d.id).isCore) return 28;
+                            if ((d.tags || []).includes('CHAMPION')) return 22;
+                            return 16;
+                        });
+                    
+                    // Glyph text
+                    g.append('text')
+                        .attr('class', 'node-text')
+                        .attr('dy', 4)
+                        .attr('text-anchor', 'middle')
+                        .text(d => (d.glyph || '⚡').split(' ')[0])
+                        .style('font-size', d => {
+                            if (parseSealID(d.id).isCore) return '32px';
+                            if ((d.tags || []).includes('CHAMPION')) return '26px';
+                            return '20px';
+                        });
+                    
+                    // ID text
+                    g.append('text')
+                        .attr('class', 'node-text')
+                        .attr('dy', d => {
+                            if (parseSealID(d.id).isCore) return 42;
+                            if ((d.tags || []).includes('CHAMPION')) return 38;
+                            return 28;
+                        })
+                        .attr('text-anchor', 'middle')
+                        .text(d => d.id);
+                    
+                    return g;
+                });
+            
+            // Set up force simulation
+            const forceLink = d3.forceLink(links)
+                .id(d => d.id)
+                .distance(l => {
+                    if (l.isBranch) return 120;
+                    if (l.isGravity) return 280;
+                    if (l.isChampion) return 150;
+                    if (l.isCanon) return 130;
+                    return 100;
+                })
+                .strength(l => {
+                    if (l.isGravity) return 0.02;
+                    if (l.isBranch) return 0.4;
+                    return 0.7;
+                });
+            
+            const simulation = d3.forceSimulation(nodes)
+                .alphaDecay(0.03)
+                .velocityDecay(0.4)
+                .force('link', forceLink)
+                .force('charge', d3.forceManyBody()
+                    .strength(-800)
+                    .distanceMax(500))
+                .force('radial', d3.forceRadial(d => {
+                        switch(d.depth) {
+                            case 0: return R0;
+                            case 1: return R1;
+                            case 2: return R2;
+                            case 3: return R3;
+                            default: return R2;
+                        }
+                    }, CX, CY)
+                    .strength(0.1))
+                .force('center', d3.forceCenter(CX, CY))
+                .force('collide', d3.forceCollide()
+                    .radius(d => {
+                        if (parseSealID(d.id).isCore) return 50;
+                        if ((d.tags || []).includes('CHAMPION')) return 40;
+                        return 30;
+                    })
+                    .strength(0.8))
+                .on('tick', () => {
+                    linkSel
+                        .attr('x1', d => d.source.x)
+                        .attr('y1', d => d.source.y)
+                        .attr('x2', d => d.target.x)
+                        .attr('y2', d => d.target.y);
+                    
+                    nodeSel.attr('transform', d => `translate(${d.x},${d.y})`);
+                });
+            
+            // Zoom controls
+            const Z = root;
+            document.getElementById('zoomIn').onclick = () => 
+                Z.transition().duration(250).call(zoom.scaleBy, 1.2);
+            document.getElementById('zoomOut').onclick = () => 
+                Z.transition().duration(250).call(zoom.scaleBy, 1/1.2);
+            document.getElementById('resetZoom').onclick = () => 
+                Z.transition().duration(350).call(zoom.transform, d3.zoomIdentity);
+            
+            applyCanonToggle();
         }
 
-        function createSealCard(seal) {
+        // Helper functions for starmap
+        function _hash36(s) {
+            let h = 5381;
+            for (let i = 0; i < s.length; i++) {
+                h = ((h << 5) + h) ^ s.charCodeAt(i);
+            }
+            return Math.abs(h >>> 0).toString(36);
+        }
+
+        function _familyKey(id) {
+            const p = parseSealID(id);
+            if (p.isCore) return '000';
+            if (p.base > 0) return String(p.base).padStart(3, '0');
+            return 'X' + _hash36(id).slice(0, 4);
+        }
+
+        function isBranchConnection(aId, bId) {
+            const s = parseSealID(aId), t = parseSealID(bId);
+            return s.base === t.base && s.suffix !== t.suffix;
+        }
+
+        function nClass(n) {
+            const t = n.tags || [];
+            const p = parseSealID(n.id);
+            
+            if (p.isCore) return 'node node-core';
+            if (t.includes('CHAMPION')) return 'node node-champion';
+            if (t.includes('CANON')) return 'node node-canon';
+            if (t.includes('RECURSION')) return 'node node-recursion';
+            if (t.includes('FIREWALL')) return 'node node-firewall';
+            if (t.includes('ETHICAL_ROOT')) return 'node node-ethical-root';
+            if (t.includes('BLACKLIST')) return 'node node-blacklist';
+            return 'node node-seal';
+        }
+
+        function lClass(l) {
+            const classes = ['link'];
+            if (l.isChampion) classes.push('link-champion');
+            if (l.isCanon) classes.push('link-canon');
+            if (l.isBranch) classes.push('link-branch');
+            if (l.isGravity) classes.push('link-gravity');
+            return classes.join(' ');
+        }
+
+        function _highlightNode(node, on) {
+            const id = String(node.id).toLowerCase();
+            linkSel.classed('link-hover', l => {
+                const s = String(l.source.id || l.source).toLowerCase();
+                const t = String(l.target.id || l.target).toLowerCase();
+                return on && (s === id || t === id);
+            });
+        }
+
+        // UI Functions
+        function updateActiveSeal(d) {
+            if (!d) return;
+            activeGlyph.textContent = (d.glyph || '⚡').split(' ')[0];
+            activeSealName.textContent = d.name || d.id;
+            activeSealEquation.textContent = d.equation || '';
+        }
+
+        function showSealDetails(d) {
+            if (!d) return;
+            
+            const $ = id => document.getElementById(id);
+            $('detailName').textContent = `${d.id}: ${d.name || ''}`;
+            $('detailGlyph').textContent = (d.glyph || '⚡').split(' ')[0];
+            $('detailEquation').textContent = d.equation || '';
+            $('detailTone').textContent = d.tone || '';
+            
+            const tags = $('detailTags');
+            tags.innerHTML = '';
+            (d.tags || []).forEach(t => {
+                const s = document.createElement('span');
+                s.className = 'tag';
+                s.textContent = t;
+                tags.appendChild(s);
+            });
+            
+            const conn = $('connectedSeals');
+            conn.innerHTML = '';
+            (d.connections || []).forEach(cid => {
+                const target = allNodes.find(n => n.id === cid);
+                const el = document.createElement('span');
+                el.className = 'tag';
+                el.textContent = target ? 
+                    `${(target.glyph || '').split(' ')[0]} ${target.name}` : 
+                    cid;
+                el.onclick = () => {
+                    if (target) {
+                        updateActiveSeal(target);
+                        showSealDetails(target);
+                    }
+                };
+                conn.appendChild(el);
+            });
+            
+            const q = $('detailQuote');
+            if (q) q.textContent = d.quote || '';
+            
+            const sec = $('scrollSection');
+            if (sec) {
+                if (d.scroll_id) {
+                    sec.style.display = '';
+                    const wrap = $('scrollLink');
+                    wrap.innerHTML = '';
+                    const a = document.createElement('a');
+                    a.className = 'tag';
+                    a.href = d.scroll_id;
+                    a.target = '_blank';
+                    a.textContent = 'Open Scroll';
+                    wrap.appendChild(a);
+                } else {
+                    sec.style.display = 'none';
+                }
+            }
+        }
+
+        function createSealCard(s) {
             return `
-                <div class="seal-card" data-id="${seal.id}">
-                    <h3 style="margin: 0 0 1rem 0; color: var(--quantum); display: flex; align-items: center; gap: 0.8rem;">
-                        <span style="font-size: 1.8rem;">${seal.glyph}</span>
-                        ${seal.name}
-                    </h3>
-                    <div style="font-family: 'VT323', monospace; color: var(--gold); font-size: 1.1rem; margin-bottom: 0.8rem;">
-                        ${seal.equation}
-                    </div>
-                    <div style="color: var(--starlight); font-size: 0.9rem; margin-bottom: 1rem; font-family: 'VT323', monospace;">
-                        ${seal.tone}
-                    </div>
-                    <div>
-                        ${seal.tags.map(tag => 
-                            `<span style="background: rgba(0, 240, 255, 0.1); color: var(--quantum); padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.7rem; font-family: 'VT323', monospace; margin-right: 0.5rem; display: inline-block; margin-bottom: 0.5rem;">${tag}</span>`
-                        ).join('')}
-                    </div>
+                <div class="seal-card" data-id="${s.id}">
+                    <h3><span class="glyph">${(s.glyph || '⚡').split(' ')[0]}</span>${s.name || s.id}</h3>
+                    <div class="equation">${s.equation || ''}</div>
+                    <div class="tone">${s.tone || ''}</div>
+                    <div>${(s.tags || []).map(t => `<span class='tag'>${t}</span>`).join('')}</div>
                 </div>
             `;
         }
 
-        function showSealDetails(seal) {
-            const detailHtml = `
-                <strong>${seal.name}</strong><br>
-                <em>${seal.equation}</em><br>
-                ${seal.tone}<br><br>
-                "${seal.quote}"
-            `;
-            
-            // You could replace this with a modal or detail panel
-            alert(detailHtml);
-        }
-
-        function initializeRepositoryEvents() {
-            // Search functionality
-            document.getElementById('searchButton').addEventListener('click', searchSeals);
-            document.getElementById('sealSearch').addEventListener('input', searchSeals);
-
-            // View filters
-            document.getElementById('viewAll').addEventListener('click', () => setViewFilter('all'));
-            document.getElementById('viewCore').addEventListener('click', () => setViewFilter('core'));
-            document.getElementById('viewChampions').addEventListener('click', () => setViewFilter('champions'));
-        }
-
-        function searchSeals() {
-            const searchTerm = document.getElementById('sealSearch').value.toLowerCase();
-            
-            if (!nodeSel) return;
-
-            nodeSel.style('opacity', node => {
-                const matchesSearch = node.id.toLowerCase().includes(searchTerm) || 
-                                    node.name.toLowerCase().includes(searchTerm) ||
-                                    node.equation.toLowerCase().includes(searchTerm);
-                return matchesSearch || searchTerm === '' ? 1 : 0.1;
+        function initSealGrid() {
+            if (!sealGrid) return;
+            sealGrid.innerHTML = lygoSeals.map(createSealCard).join('');
+            sealGrid.querySelectorAll('.seal-card').forEach(el => {
+                el.onclick = () => {
+                    const node = allNodes.find(n => n.id === el.dataset.id);
+                    if (node) {
+                        updateActiveSeal(node);
+                        showSealDetails(node);
+                    }
+                };
             });
         }
 
-        function setViewFilter(filter) {
-            // Update active button
-            document.querySelectorAll('.lygo-control-button').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+        function initChampionGrid() {
+            const cg = document.getElementById('championGrid');
+            if (!cg) return;
+            cg.innerHTML = (champions || []).map(c => `
+                <div class="seal-card" data-id="${c.id}">
+                    <h3><span class="glyph">${(c.glyph || 'Δ').split(' ')[0]}</span>${c.name}</h3>
+                    <div>${(c.tags || []).join(' • ')}</div>
+                    <div class="tone">${c.tone || ''}</div>
+                    <div class="equation">${c.equation || ''}</div>
+                    <div class="subtitle">${c.quote || ''}</div>
+                </div>
+            `).join('');
+        }
 
-            if (!nodeSel) return;
+        function updateSealCount() {
+            const total = lygoSeals.length;
+            const canon = lygoSeals.filter(s => (s.tags || []).includes('CANON')).length;
+            if (sealCount) sealCount.textContent = `${total} seals • ${canon} canon • ${champions.length} champions`;
+        }
 
-            switch(filter) {
-                case 'core':
-                    nodeSel.style('opacity', node => node.id === 'SEAL_000' ? 1 : 0.2);
-                    break;
-                case 'champions':
-                    nodeSel.style('opacity', node => node.tags.includes('CHAMPION') ? 1 : 0.2);
-                    break;
-                default:
-                    nodeSel.style('opacity', 1);
+        function updateSyncStatus() {
+            if (!syncStatus) return;
+            syncStatus.textContent = lastSyncTime ? 
+                `Last sync: ${lastSyncTime.toLocaleString()}` : 
+                'Last sync: Never';
+        }
+
+        function displayError(m) {
+            if (sealGrid) sealGrid.innerHTML = `<div class='subtitle' style='color:var(--error-red)'>${m}</div>`;
+        }
+
+        // Search + Filters
+        function searchSeals() {
+            const term = String(document.getElementById('sealSearch').value || '').trim().toLowerCase();
+            if (!nodeSel || !linkSel) return;
+            
+            nodeSel.style('opacity', d => {
+                const a = String(d.id || '').toLowerCase();
+                const b = String(d.name || '').toLowerCase();
+                return (a.includes(term) || b.includes(term)) ? 1 : 0.1;
+            });
+            
+            const hits = new Set(
+                allNodes.filter(d => 
+                    String(d.id || '').toLowerCase().includes(term) || 
+                    String(d.name || '').toLowerCase().includes(term)
+                ).map(d => d.id)
+            );
+            
+            linkSel.style('opacity', l => 
+                hits.has(l.source.id || l.source) || 
+                hits.has(l.target.id || l.target) || 
+                term === '' ? 0.9 : 0.1
+            );
+        }
+
+        function filterSeals() {
+            const q = String(document.getElementById('vaultSearch').value || '').toLowerCase();
+            const cat = document.getElementById('categoryFilter').value;
+            const toneMax = parseInt(document.getElementById('toneRange').value, 10);
+            
+            document.getElementById('toneValue').textContent = `0-${toneMax}Hz`;
+            
+            const filtered = lygoSeals.filter(s => {
+                const text = (s.searchIndex || '').includes(q);
+                const catOk = (cat === 'all') || (s.tags || []).includes(cat);
+                const toneNum = parseInt(String(s.tone).match(/\d+/) ?.[0] || '0', 10);
+                const toneOk = isNaN(toneNum) ? true : toneNum <= toneMax;
+                return text && catOk && toneOk;
+            });
+            
+            sealGrid.innerHTML = filtered.map(createSealCard).join('');
+            sealGrid.querySelectorAll('.seal-card').forEach(el => {
+                el.onclick = () => {
+                    const node = allNodes.find(n => n.id === el.dataset.id);
+                    if (node) {
+                        updateActiveSeal(node);
+                        showSealDetails(node);
+                    }
+                };
+            });
+        }
+
+        function applyCanonToggle() {
+            const btn = document.getElementById('canonToggle');
+            if (!btn || !nodeSel || !linkSel) return;
+            
+            if (showCanonOnly) {
+                btn.textContent = 'Show All Paths';
+                nodeSel.style('opacity', d => 
+                    (d.tags || []).includes('CANON') || 
+                    parseSealID(d.id).isCore || 
+                    (d.tags || []).includes('CHAMPION') ? 1 : 0.15
+                );
+                linkSel.style('opacity', l => l.isCanon ? 1 : 0.15);
+            } else {
+                btn.textContent = 'Show Canonical Path';
+                nodeSel.style('opacity', 1);
+                linkSel.style('opacity', 0.9);
             }
         }
 
-        function initializeAnimations() {
-            // Add fade-in animation to elements as they come into view
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.animation = 'fadeInUp 1s ease-out';
-                        observer.unobserve(entry.target);
-                    }
+        function loadDefaultData() {
+            lygoSeals = [{
+                id: 'SEAL_000',
+                name: 'Primordial Void',
+                equation: '|∅⟩ = ∇·(Light × Time)',
+                glyph: '⚫',
+                tone: '0Hz',
+                tags: ['CANON', 'CORE'],
+                connections: [],
+                quote: 'The silence before the first note'
+            }];
+            allNodes = [...lygoSeals, ...champions];
+            initStarmap();
+            initSealGrid();
+            updateSealCount();
+        }
+
+        // Event Wiring
+        function wireEvents() {
+            // Search functionality
+            document.getElementById('searchButton').addEventListener('click', searchSeals);
+            document.getElementById('sealSearch').addEventListener('keyup', e => {
+                if (e.key === 'Enter') searchSeals();
+            });
+            
+            // View filters
+            const setActive = el => {
+                document.querySelectorAll('.lygo-control-button').forEach(b => b.classList.remove('active'));
+                el.classList.add('active');
+            };
+            
+            document.getElementById('viewAll').addEventListener('click', e => {
+                setActive(e.currentTarget);
+                nodeSel?.style('opacity', 1);
+                linkSel?.style('opacity', 0.9);
+            });
+            
+            document.getElementById('viewCore').addEventListener('click', e => {
+                setActive(e.currentTarget);
+                nodeSel?.style('opacity', d => parseSealID(d.id).isCore ? 1 : 0.2);
+                linkSel?.style('opacity', d => 
+                    (parseSealID(d.source.id || d.source).isCore && 
+                    parseSealID(d.target.id || d.target).isCore) ? 1 : 0.1
+                );
+            });
+            
+            document.getElementById('viewChampions').addEventListener('click', e => {
+                setActive(e.currentTarget);
+                nodeSel?.style('opacity', d => (d.tags || []).includes('CHAMPION') ? 1 : 0.2);
+                linkSel?.style('opacity', d => d.isChampion ? 1 : 0.1);
+            });
+            
+            document.getElementById('viewProtection').addEventListener('click', e => {
+                setActive(e.currentTarget);
+                nodeSel?.style('opacity', d => (d.tags || []).includes('PROTECTION_SEAL') ? 1 : 0.2);
+                linkSel?.style('opacity', d => {
+                    const s = (allNodes.find(n => n.id === (d.source.id || d.source)) || {}).tags || [];
+                    const t = (allNodes.find(n => n.id === (d.target.id || d.target)) || {}).tags || [];
+                    return (s.includes('PROTECTION_SEAL') && t.includes('PROTECTION_SEAL')) ? 1 : 0.1;
                 });
             });
-
-            document.querySelectorAll('.card, .content-section').forEach(el => {
-                observer.observe(el);
+            
+            // Sync button
+            document.getElementById('syncButton').addEventListener('click', async () => {
+                const b = document.getElementById('syncButton');
+                b.disabled = true;
+                b.textContent = 'Syncing…';
+                await loadSealData();
+                b.disabled = false;
+                b.textContent = 'Δ9 Sync Seals';
             });
+            
+            // Canon toggle
+            document.getElementById('canonToggle').addEventListener('click', () => {
+                showCanonOnly = !showCanonOnly;
+                applyCanonToggle();
+            });
+            
+            // Archive filters
+            document.getElementById('vaultSearchButton').addEventListener('click', filterSeals);
+            document.getElementById('vaultSearch').addEventListener('keyup', e => {
+                if (e.key === 'Enter') filterSeals();
+            });
+            document.getElementById('categoryFilter').addEventListener('change', filterSeals);
+            document.getElementById('toneRange').addEventListener('input', filterSeals);
         }
+
+        // Initialization
+        function initLygoRepository() {
+            updatePageCounter();
+            wireEvents();
+            loadSealData();
+        }
+
+        function updatePageCounter() {
+            let v = +localStorage.getItem('lygoPageViews') || 0;
+            v++;
+            localStorage.setItem('lygoPageViews', v);
+            const el = document.getElementById('pageCounter');
+            if (el) el.textContent = `Views: ${v}`;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Main init will handle everything
+        });
     </script>
 </body>
 </html>

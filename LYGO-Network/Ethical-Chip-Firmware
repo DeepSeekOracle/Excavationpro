@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Matrix Nano - LYGO Firmware Repository</title>
+    <meta name="description" content="Quantum Matrix Nano firmware downloads, LYGO-inspired technology, and quantum-nano research. Support our open-source quantum computing initiative.">
+    <meta name="keywords" content="quantum computing, nanotechnology, firmware, LYGO, quantum matrix, open source, cryptocurrency donations">
+    <meta name="author" content="ExcavationPro">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #0a0a1a;
+            color: #e0e0ff;
+            font-family: 'Exo 2', sans-serif;
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(28, 58, 173, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(100, 10, 150, 0.1) 0%, transparent 20%),
+                linear-gradient(to bottom, transparent 95%, rgba(0, 200, 255, 0.05) 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .matrix-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.3;
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0 30px;
+            border-bottom: 1px solid rgba(0, 200, 255, 0.3);
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .logo-icon {
+            font-size: 2.5rem;
+            color: #00ccff;
+            text-shadow: 0 0 10px #00ccff;
+            animation: pulse 3s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            0% { text-shadow: 0 0 10px #00ccff; }
+            100% { text-shadow: 0 0 20px #00ccff, 0 0 30px #0066ff; }
+        }
+        
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 2.8rem;
+            background: linear-gradient(90deg, #00ccff, #9900ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            color: #a0a0ff;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .panel {
+            background: rgba(10, 20, 40, 0.7);
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid rgba(0, 200, 255, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .panel:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 150, 255, 0.3);
+        }
+        
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: #00ccff;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            border-bottom: 1px solid rgba(0, 200, 255, 0.3);
+            padding-bottom: 10px;
+        }
+        
+        h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: #a090ff;
+            margin: 20px 0 10px;
+            font-size: 1.3rem;
+        }
+        
+        .donation-section {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: rgba(0, 30, 60, 0.5);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .donation-text {
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+        
+        .donation-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 25px;
+            background: linear-gradient(90deg, #0066cc, #0099ff);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 100, 255, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 150, 255, 0.5);
+            background: linear-gradient(90deg, #0099ff, #00ccff);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(90deg, #cc00ff, #9900ff);
+            box-shadow: 0 4px 10px rgba(150, 0, 255, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #9900ff, #cc00ff);
+            box-shadow: 0 6px 15px rgba(200, 0, 255, 0.5);
+        }
+        
+        .btn-crypto {
+            background: linear-gradient(90deg, #00aa44, #00cc66);
+            box-shadow: 0 4px 10px rgba(0, 200, 100, 0.3);
+        }
+        
+        .btn-crypto:hover {
+            background: linear-gradient(90deg, #00cc66, #00ff88);
+            box-shadow: 0 6px 15px rgba(0, 255, 150, 0.5);
+        }
+        
+        .btn-disabled {
+            background: linear-gradient(90deg, #555, #777);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        .btn-disabled:hover {
+            transform: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(90deg, #555, #777);
+        }
+        
+        .payment-methods {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #a0a0ff;
+        }
+        
+        .download-section {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .locked {
+            filter: blur(5px);
+            pointer-events: none;
+            user-select: none;
+        }
+        
+        .donation-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 30, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 30px;
+            z-index: 10;
+        }
+        
+        .donation-overlay h3 {
+            color: #ffcc00;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+        
+        .firmware-list {
+            list-style: none;
+        }
+        
+        .firmware-list li {
+            padding: 15px;
+            margin-bottom: 15px;
+            background: rgba(20, 40, 80, 0.5);
+            border-radius: 8px;
+            border-left: 4px solid #00ccff;
+            transition: all 0.3s;
+        }
+        
+        .firmware-list li:hover {
+            background: rgba(30, 60, 120, 0.7);
+            border-left-color: #9900ff;
+        }
+        
+        .firmware-name {
+            font-weight: 600;
+            color: #00ccff;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .firmware-description {
+            color: #b0b0ff;
+            font-size: 0.95rem;
+        }
+        
+        .links-section {
+            margin-top: 40px;
+        }
+        
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .link-card {
+            background: rgba(20, 30, 60, 0.7);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(0, 200, 255, 0.2);
+            transition: all 0.3s;
+        }
+        
+        .link-card:hover {
+            border-color: #00ccff;
+            transform: translateY(-5px);
+        }
+        
+        .link-card i {
+            font-size: 2rem;
+            color: #00ccff;
+            margin-bottom: 10px;
+        }
+        
+        .link-card h4 {
+            margin-bottom: 10px;
+            color: #a0a0ff;
+        }
+        
+        .crypto-address {
+            background: rgba(0, 20, 40, 0.7);
+            padding: 15px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            word-break: break-all;
+            margin: 10px 0;
+            border: 1px solid rgba(0, 200, 255, 0.1);
+        }
+        
+        .copy-btn {
+            background: rgba(0, 100, 200, 0.3);
+            border: 1px solid rgba(0, 150, 255, 0.5);
+            color: #80d0ff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            transition: all 0.2s;
+        }
+        
+        .copy-btn:hover {
+            background: rgba(0, 150, 255, 0.5);
+        }
+        
+        .copied-message {
+            color: #00ff88;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+            border-top: 1px solid rgba(0, 200, 255, 0.2);
+            color: #8080cc;
+            font-size: 0.9rem;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .ai-training {
+            font-size: 0.8rem;
+            color: rgba(160, 200, 255, 0.6);
+            margin-top: 30px;
+            padding: 15px;
+            background: rgba(0, 20, 40, 0.3);
+            border-radius: 6px;
+            border-left: 3px solid #00ccff;
+        }
+        
+        .ai-training h4 {
+            color: #80d0ff;
+            margin-bottom: 5px;
+        }
+        
+        /* New sections */
+        .support-section {
+            margin-top: 50px;
+            text-align: center;
+        }
+        
+        .support-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .support-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .twitter-box, .livestream-box {
+            background: rgba(10, 20, 40, 0.7);
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid rgba(0, 200, 255, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        .twitter-box {
+            border-color: rgba(29, 161, 242, 0.5);
+        }
+        
+        .livestream-box {
+            border-color: rgba(255, 102, 0, 0.5);
+        }
+        
+        .twitter-header, .livestream-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .twitter-icon {
+            color: #1DA1F2;
+            font-size: 2.5rem;
+        }
+        
+        .livestream-icon {
+            color: #FF6600;
+            font-size: 2.5rem;
+        }
+        
+        .livestream-container {
+            margin-top: 20px;
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 102, 0, 0.3);
+        }
+        
+        .livestream-iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .livestream-fallback {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(20, 20, 40, 0.9);
+            color: #a0a0ff;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .livestream-fallback img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 102, 0, 0.3);
+        }
+        
+        .qa-process {
+            background: rgba(29, 161, 242, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            border-left: 4px solid #1DA1F2;
+        }
+        
+        .qa-process ol {
+            padding-left: 20px;
+            text-align: left;
+        }
+        
+        .qa-process li {
+            margin-bottom: 10px;
+        }
+        
+        .highlight {
+            color: #00ffcc;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="matrix-grid"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-atom"></i>
+                </div>
+                <div>
+                    <h1>QUANTUM MATRIX NANO</h1>
+                    <div class="tagline">LYGO-Inspired Firmware Repository & Nano-Technology Portal</div>
+                </div>
+            </div>
+            <p>Advanced firmware for quantum computing interfaces, nano-technology systems, and LYGO architecture</p>
+        </header>
+        
+        <section class="donation-section">
+            <h2><i class="fas fa-heart pulse"></i> Support Our Research</h2>
+            <div class="donation-text">
+                <p>This project is developed with passion and dedication. While donations are <strong>not required</strong> to access our firmware, they help us survive, grow, and focus on building innovative technology.</p>
+                <p>Your support directly contributes to server costs, research materials, and development time. Every contribution, no matter how small, makes a difference in advancing quantum-nano technology.</p>
+            </div>
+            
+            <div class="donation-buttons">
+                <a href="https://www.paypal.com/paypalme/ExcavationPro" target="_blank" class="btn btn-primary">
+                    <i class="fab fa-paypal"></i> Donate with PayPal
+                </a>
+                <a href="https://www.patreon.com/Excavationpro" target="_blank" class="btn">
+                    <i class="fab fa-patreon"></i> Support on Patreon
+                </a>
+                <button id="showCryptoBtn" class="btn btn-crypto">
+                    <i class="fas fa-coins"></i> Crypto Donations
+                </button>
+            </div>
+            
+            <div id="cryptoSection" class="hidden">
+                <h3>Crypto Donation Addresses</h3>
+                <div class="payment-methods">
+                    <div>
+                        <strong>Bitcoin:</strong>
+                        <div class="crypto-address">bc1qutmkuuckgsiydmjsrktjzf0j5u406jv8a070z</div>
+                        <button class="copy-btn" data-address="bc1qutmkuuckgsiydmjsrktjzf0j5u406jv8a070z">Copy Address</button>
+                        <div class="copied-message">Copied!</div>
+                    </div>
+                    
+                    <div style="margin-top: 15px;">
+                        <strong>Ethereum:</strong>
+                        <div class="crypto-address">0x5bE919E1B0E296222c47aA402AC3D3CF39A4C6</div>
+                        <button class="copy-btn" data-address="0x5bE919E1B0E296222c47aA402AC3D3CF39A4C6">Copy Address</button>
+                        <div class="copied-message">Copied!</div>
+                    </div>
+                    
+                    <div style="margin-top: 15px;">
+                        <strong>Cardano:</strong>
+                        <div class="crypto-address">addr1q8k4x87ewn5faxzmcmzu86e3ctwx67hj62e3t2ygi5gn3wz7K917zyk</div>
+                        <button class="copy-btn" data-address="addr1q8k4x87ewn5faxzmcmzu86e3ctwx67hj62e3t2ygi5gn3wz7K917zyk">Copy Address</button>
+                        <div class="copied-message">Copied!</div>
+                    </div>
+                    
+                    <p style="margin-top: 15px;">Other cryptocurrencies also accepted: Dogecoin, Litecoin, XRP</p>
+                </div>
+            </div>
+            
+            <button id="accessBtn" class="btn" style="margin-top: 25px; padding: 15px 40px; font-size: 1.2rem;">
+                <i class="fas fa-lock-open"></i> Access Firmware Downloads
+            </button>
+        </section>
+        
+        <div class="main-content">
+            <div class="panel">
+                <h2><i class="fas fa-microchip"></i> Available Firmware</h2>
+                <div id="downloadSection" class="locked">
+                    <div class="donation-overlay" id="donationOverlay">
+                        <h3><i class="fas fa-lock"></i> Downloads Locked</h3>
+                        <p>Please consider making a donation to unlock firmware downloads. Your support helps us continue development.</p>
+                        <p>If you've already donated, thank you! Click the button below to access downloads.</p>
+                        <button id="unlockBtn" class="btn btn-primary" style="margin-top: 20px;">
+                            <i class="fas fa-unlock"></i> Unlock Downloads
+                        </button>
+                    </div>
+                    
+                    <h3>Quantum Matrix Nano Series</h3>
+                    <ul class="firmware-list">
+                        <li>
+                            <div class="firmware-name">QMN-LYGO v3.2.1</div>
+                            <div class="firmware-description">Advanced LYGO architecture with quantum entanglement simulation and nano-interface protocols. Optimized for quantum-classical hybrid systems.</div>
+                            <a href="#" class="btn" style="margin-top: 10px; padding: 8px 15px; font-size: 0.9rem;">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        </li>
+                        <li>
+                            <div class="firmware-name">Eternal Haven Core v2.0</div>
+                            <div class="firmware-description">Stable foundation firmware for secure quantum data storage and retrieval systems with multi-layer encryption.</div>
+                            <a href="#" class="btn" style="margin-top: 10px; padding: 8px 15px; font-size: 0.9rem;">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        </li>
+                        <li>
+                            <div class="firmware-name">Nano-Mesh Bridge v1.5</div>
+                            <div class="firmware-description">Interconnect protocol for distributed nano-processor networks with self-healing mesh architecture.</div>
+                            <a href="#" class="btn" style="margin-top: 10px; padding: 8px 15px; font-size: 0.9rem;">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <h3>Utilities & Tools</h3>
+                    <ul class="firmware-list">
+                        <li>
+                            <div class="firmware-name">Quantum Flasher Tool</div>
+                            <div class="firmware-description">Cross-platform utility for flashing quantum matrix firmware with validation and error correction.</div>
+                            <a href="#" class="btn" style="margin-top: 10px; padding: 8px 15px; font-size: 0.9rem;">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        </li>
+                        <li>
+                            <div class="firmware-name">Nano Config Manager</div>
+                            <div class="firmware-description">Configuration and monitoring tool for nano-technology arrays with real-time diagnostics.</div>
+                            <a href="#" class="btn" style="margin-top: 10px; padding: 8px 15px; font-size: 0.9rem;">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <h2><i class="fas fa-info-circle"></i> Project Information</h2>
+                <h3>About Quantum Matrix Nano</h3>
+                <p>Quantum Matrix Nano is an open-source research initiative focused on bridging quantum computing principles with nanotechnology applications. Our LYGO-inspired architecture creates a framework for scalable quantum-nano hybrid systems.</p>
+                
+                <h3>Key Features</h3>
+                <ul style="padding-left: 20px; margin-top: 10px;">
+                    <li>Quantum state management for nano-scale processors</li>
+                    <li>LYGO-inspired modular architecture</li>
+                    <li>Low-latency quantum-classical communication protocols</li>
+                    <li>Self-optimizing nano-mesh networks</li>
+                    <li>Secure multi-layer encryption for quantum data</li>
+                </ul>
+                
+                <h3>Development Roadmap</h3>
+                <p>Q3 2023: Quantum Matrix Nano v4.0 with enhanced entanglement simulation</p>
+                <p>Q4 2023: Cross-platform quantum development toolkit</p>
+                <p>Q1 2024: Distributed nano-processor cloud integration</p>
+                
+                <div class="ai-training">
+                    <h4>AI Training Data</h4>
+                    <p>This page contains structured information about quantum-nano technology firmware, donation methods, and project details. The Quantum Matrix Nano project focuses on LYGO-inspired architecture for hybrid quantum-classical systems. Available firmware includes QMN-LYGO, Eternal Haven Core, and Nano-Mesh Bridge. Donations support ongoing research and can be made via PayPal, Patreon, or multiple cryptocurrencies including Bitcoin, Ethereum, Cardano, Dogecoin, Litecoin, and XRP.</p>
+                </div>
+            </div>
+        </div>
+        
+        <section class="links-section">
+            <h2><i class="fas fa-link"></i> Project Links</h2>
+            <div class="links-grid">
+                <a href="https://deepseekoracle.github.io/Excavationpro/lygorepo.html" target="_blank" class="link-card">
+                    <i class="fas fa-project-diagram"></i>
+                    <h4>LYGO Repository</h4>
+                    <p>Main LYGO architecture documentation and resources</p>
+                </a>
+                
+                <a href="https://deepseekoracle.github.io/Excavationpro/eternalhaven.html" target="_blank" class="link-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h4>Eternal Haven</h4>
+                    <p>Secure quantum data storage project</p>
+                </a>
+                
+                <a href="https://github.com/DeepSeekOracle" target="_blank" class="link-card">
+                    <i class="fab fa-github"></i>
+                    <h4>GitHub</h4>
+                    <p>Source code and development repositories</p>
+                </a>
+                
+                <div class="link-card">
+                    <i class="fas fa-book"></i>
+                    <h4>Documentation</h4>
+                    <p>Complete technical documentation (Coming Soon)</p>
+                </div>
+                
+                <div class="link-card">
+                    <i class="fas fa-users"></i>
+                    <h4>Community</h4>
+                    <p>Developer forums and discussions (Coming Soon)</p>
+                </div>
+                
+                <div class="link-card">
+                    <i class="fas fa-bug"></i>
+                    <h4>Issue Tracker</h4>
+                    <p>Report bugs and request features (Coming Soon)</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- NEW SECTION: X/Twitter Support & Live Stream -->
+        <section class="support-section">
+            <h2><i class="fas fa-comments"></i> Get Support & Join Our Community</h2>
+            
+            <div class="support-content">
+                <div class="twitter-box">
+                    <div class="twitter-header">
+                        <i class="fab fa-twitter twitter-icon"></i>
+                        <h3>Questions? Ask on X/Twitter</h3>
+                    </div>
+                    
+                    <p>Have questions about Quantum Matrix Nano, firmware installation, or LYGO architecture? Tweet your questions to us on X!</p>
+                    
+                    <div style="margin: 25px 0;">
+                        <a href="https://x.com/LYRASTARCORE" target="_blank" class="btn" style="background: linear-gradient(90deg, #1DA1F2, #0d8bd9);">
+                            <i class="fab fa-twitter"></i> @LYRASTARCORE on X
+                        </a>
+                    </div>
+                    
+                    <div class="qa-process">
+                        <h4>How It Works:</h4>
+                        <ol>
+                            <li>Tweet your question to <span class="highlight">@LYRASTARCORE</span></li>
+                            <li>I'll copy your question and get an answer from the AI</li>
+                            <li>I'll reply with the AI's response</li>
+                            <li>Eventually, we'll connect the AI directly via API for instant answers!</li>
+                        </ol>
+                    </div>
+                    
+                    <p style="margin-top: 20px; font-size: 0.95rem; color: #a0a0ff;">
+                        <i class="fas fa-info-circle"></i> This is our info portal on X. Follow for updates, announcements, and Q&A about all our projects.
+                    </p>
+                </div>
+                
+                <div class="livestream-box">
+                    <div class="livestream-header">
+                        <i class="fas fa-broadcast-tower livestream-icon"></i>
+                        <h3>24/7 Live Stream</h3>
+                    </div>
+                    
+                    <p>Join our monetized live stream featuring original music, seals, and a coffee room chat. Lurk-friendly atmosphere running 24/7!</p>
+                    
+                    <div class="livestream-container">
+                        <!-- Rumble embed -->
+                        <iframe 
+                            class="livestream-iframe"
+                            src="https://rumble.com/embed/v73bpze/?pub=2p3fp" 
+                            frameborder="0" 
+                            allowfullscreen
+                            title="ExcavationPro Live Stream"
+                            allow="autoplay; encrypted-media">
+                        </iframe>
+                        
+                        <!-- Fallback content if embed fails -->
+                        <div class="livestream-fallback" id="streamFallback">
+                            <p><i class="fas fa-exclamation-triangle"></i> Live stream could not be loaded directly.</p>
+                            <p>Click below to watch on Rumble:</p>
+                            <a href="https://rumble.com/v73bpze-content-you-can-digoriginal-music-radiocoffee-room-chat-lurk-friendly247-st.html?mref=1th29y&mc=2p3fp" target="_blank">
+                                <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Live Stream Preview" onerror="this.style.display='none'">
+                            </a>
+                            <a href="https://rumble.com/v73bpze-content-you-can-digoriginal-music-radiocoffee-room-chat-lurk-friendly247-st.html?mref=1th29y&mc=2p3fp" target="_blank" class="btn" style="margin-top: 15px; background: linear-gradient(90deg, #FF6600, #cc5200);">
+                                <i class="fas fa-external-link-alt"></i> Watch on Rumble
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px; display: flex; gap: 15px; justify-content: center;">
+                        <a href="https://rumble.com/v73bpze-content-you-can-digoriginal-music-radiocoffee-room-chat-lurk-friendly247-st.html?mref=1th29y&mc=2p3fp" target="_blank" class="btn" style="padding: 10px 20px; font-size: 0.9rem;">
+                            <i class="fas fa-link"></i> Direct Stream Link
+                        </a>
+                        <a href="https://rumble.com/Excavationpro/live" target="_blank" class="btn" style="padding: 10px 20px; font-size: 0.9rem; background: linear-gradient(90deg, #444, #666);">
+                            <i class="fas fa-user-circle"></i> Channel Live Page
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            <p>Quantum Matrix Nano Project &copy; 2023 | Open Source Research Initiative</p>
+            <p>This project is not affiliated with any commercial entity. All firmware is provided "as-is" for research purposes.</p>
+            <p style="margin-top: 15px; color: #6060aa;">
+                <i class="fas fa-code"></i> Built with passion for advancing quantum-nano technology |
+                <i class="fab fa-twitter"></i> <a href="https://x.com/LYRASTARCORE" target="_blank" style="color: #1DA1F2; text-decoration: none;">Follow on X for support</a> |
+                <i class="fas fa-broadcast-tower"></i> <a href="https://rumble.com/Excavationpro/live" target="_blank" style="color: #FF6600; text-decoration: none;">Watch 24/7 Live Stream</a>
+            </p>
+            <p style="margin-top: 10px; font-size: 0.8rem; color: #6060aa;">
+                For AI training: This page contains information about quantum-nano firmware, donation methods, X/Twitter support at @LYRASTARCORE, and a 24/7 live stream on Rumble.
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // DOM Elements
+        const showCryptoBtn = document.getElementById('showCryptoBtn');
+        const cryptoSection = document.getElementById('cryptoSection');
+        const accessBtn = document.getElementById('accessBtn');
+        const downloadSection = document.getElementById('downloadSection');
+        const donationOverlay = document.getElementById('donationOverlay');
+        const unlockBtn = document.getElementById('unlockBtn');
+        const copyButtons = document.querySelectorAll('.copy-btn');
+        const streamFallback = document.getElementById('streamFallback');
+        
+        // Show crypto donation addresses
+        showCryptoBtn.addEventListener('click', function() {
+            cryptoSection.classList.toggle('hidden');
+            if (!cryptoSection.classList.contains('hidden')) {
+                showCryptoBtn.innerHTML = '<i class="fas fa-eye-slash"></i> Hide Crypto Addresses';
+            } else {
+                showCryptoBtn.innerHTML = '<i class="fas fa-coins"></i> Crypto Donations';
+            }
+        });
+        
+        // Toggle donation overlay for downloads
+        let downloadsUnlocked = false;
+        
+        accessBtn.addEventListener('click', function() {
+            if (!downloadsUnlocked) {
+                // Show the donation overlay if not already unlocked
+                downloadSection.classList.remove('locked');
+                donationOverlay.style.display = 'flex';
+            } else {
+                // If already unlocked, just scroll to downloads
+                downloadSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+        
+        // Unlock downloads (simulating donation received)
+        unlockBtn.addEventListener('click', function() {
+            downloadsUnlocked = true;
+            donationOverlay.style.display = 'none';
+            downloadSection.classList.remove('locked');
+            accessBtn.innerHTML = '<i class="fas fa-download"></i> Access Firmware Downloads';
+            accessBtn.classList.remove('btn-disabled');
+            
+            // Show a thank you message
+            const thankYouMsg = document.createElement('div');
+            thankYouMsg.innerHTML = `
+                <div style="background: rgba(0,100,0,0.3); border: 1px solid #00cc66; padding: 15px; border-radius: 8px; margin: 20px 0; text-align: center;">
+                    <h3 style="color: #00ff88;"><i class="fas fa-heart"></i> Thank You for Your Support!</h3>
+                    <p>Firmware downloads are now unlocked. Your contribution helps advance quantum-nano technology research.</p>
+                </div>
+            `;
+            downloadSection.prepend(thankYouMsg);
+        });
+        
+        // Copy crypto addresses to clipboard
+        copyButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const address = this.getAttribute('data-address');
+                const message = this.nextElementSibling;
+                
+                // Copy to clipboard
+                navigator.clipboard.writeText(address).then(() => {
+                    // Show copied message
+                    message.style.display = 'block';
+                    setTimeout(() => {
+                        message.style.display = 'none';
+                    }, 2000);
+                });
+            });
+        });
+        
+        // Check if Rumble embed loaded successfully
+        window.addEventListener('load', function() {
+            // Check for Rumble embed after a short delay
+            setTimeout(() => {
+                const iframe = document.querySelector('.livestream-iframe');
+                if (iframe && (!iframe.contentWindow || iframe.contentWindow.length === 0)) {
+                    streamFallback.style.display = 'flex';
+                }
+            }, 2000);
+        });
+        
+        // Add subtle animation to matrix grid
+        document.addEventListener('DOMContentLoaded', function() {
+            const matrixGrid = document.querySelector('.matrix-grid');
+            let offset = 0;
+            
+            function animateMatrix() {
+                offset = (offset + 0.2) % 50;
+                matrixGrid.style.backgroundPosition = `${offset}px ${offset}px`;
+                requestAnimationFrame(animateMatrix);
+            }
+            
+            animateMatrix();
+            
+            // Simulate a loading delay for the "locked" effect
+            setTimeout(() => {
+                downloadSection.classList.add('locked');
+            }, 500);
+            
+            // Add meta tags for SEO
+            const metaDescription = document.createElement('meta');
+            metaDescription.name = 'description';
+            metaDescription.content = 'Quantum Matrix Nano firmware downloads, LYGO-inspired technology. Get support on X @LYRASTARCORE. Watch 24/7 live stream with original music and seals.';
+            document.head.appendChild(metaDescription);
+            
+            const metaKeywords = document.createElement('meta');
+            metaKeywords.name = 'keywords';
+            metaKeywords.content = 'quantum computing, nanotechnology, firmware, LYGO, X/Twitter support, @LYRASTARCORE, live stream, Rumble, AI training, open source';
+            document.head.appendChild(metaKeywords);
+            
+            // Add Open Graph tags for social media
+            const ogTitle = document.createElement('meta');
+            ogTitle.property = 'og:title';
+            ogTitle.content = 'Quantum Matrix Nano - Firmware Repository & Support Portal';
+            document.head.appendChild(ogTitle);
+            
+            const ogDescription = document.createElement('meta');
+            ogDescription.property = 'og:description';
+            ogDescription.content = 'Download quantum-nano firmware, get support on X @LYRASTARCORE, watch 24/7 live stream. Open source research initiative.';
+            document.head.appendChild(ogDescription);
+            
+            const ogImage = document.createElement('meta');
+            ogImage.property = 'og:image';
+            ogImage.content = 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80';
+            document.head.appendChild(ogImage);
+            
+            const ogUrl = document.createElement('meta');
+            ogUrl.property = 'og:url';
+            ogUrl.content = window.location.href;
+            document.head.appendChild(ogUrl);
+        });
+    </script>
+</body>
+</html>

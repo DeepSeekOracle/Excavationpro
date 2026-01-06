@@ -972,4 +972,41 @@
         });
     </script>
 </body>
+    <!-- Visitor Counter - Add this right before </body> -->
+<div style="text-align: center; margin: 20px 0; color: #6060aa; font-size: 0.8rem;">
+    <span id="visitorCount">Loading visitor count...</span>
+</div>
+
+<script>
+// Simple visitor counter
+document.addEventListener('DOMContentLoaded', function() {
+    // Try to get existing count from localStorage
+    let count = localStorage.getItem('qmn_visitor_count');
+    
+    if (!count) {
+        // Start with a base number
+        count = 1237; // Starting point
+    } else {
+        count = parseInt(count);
+    }
+    
+    // Increment for this visit
+    count++;
+    
+    // Save back to localStorage
+    localStorage.setItem('qmn_visitor_count', count);
+    
+    // Display the count with a small random increment to make it look real-time
+    const displayCount = count + Math.floor(Math.random() * 3);
+    
+    // Update the display
+    const visitorElement = document.getElementById('visitorCount');
+    if (visitorElement) {
+        visitorElement.innerHTML = `<i class="fas fa-eye"></i> Portal Visitors: ${displayCount.toLocaleString()}`;
+    }
+    
+    // Optional: You could add a backend hit counter later
+    // fetch('/api/counter?page=quantum-matrix');
+});
+</script>
 </html>

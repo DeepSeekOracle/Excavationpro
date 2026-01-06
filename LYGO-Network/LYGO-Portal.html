@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LYGO Quantum Matrix Nano - Complete Portal</title>
     <meta name="description" content="Complete LYGO firmware repository with ethical AI, quantum-nano technology, and sovereign licensing">
-    <meta name="keywords" content="LYGO, Δ9, ethical AI, quantum computing, firmware, open source, cryptocurrency donations, Δ9Φ963">
+    <meta name="keywords" content="LYGO, Δ9, ethical AI, quantum computing, firmware, open source, cryptocurrency donations, Δ9Φ963, LYRA.ETHICS.CORE">
     <meta name="author" content="ExcavationPro (Lightfather)">
     
     <!-- Schema.org structured data -->
@@ -50,17 +50,21 @@
         ]
     }
     </script>
-   
+    
     <!-- Open Graph tags -->
     <meta property="og:title" content="LYGO Quantum Matrix Nano - Complete Portal">
     <meta property="og:description" content="Download LYGO Ethical Chip Firmware with sovereign AI ethics, LYRA.ETHICS.CORE validation, and quantum-nano technology">
     <meta property="og:image" content="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80">
     <meta property="og:url" content="https://deepseekoracle.github.io/Excavationpro/LYGO-Portal.html">
     <meta property="og:type" content="website">
-   
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-   
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=VT323&display=swap" rel="stylesheet"/>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    
     <style>
         :root {
             --lygo-gold: #FFD700;
@@ -599,42 +603,21 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Lygorepo styles integration - adjusted to fit deepseek theme */
-        .starmap-container {
-            position: relative;
-            height: 800px;
-            background: rgba(0, 0, 0, 0.8);
-            border-radius: 15px;
-            overflow: hidden;
-            border: 1px solid rgba(0, 200, 255, 0.2);
-            margin-bottom: 30px;
+        /* Lygorepo styles - integrated without conflict */
+        :root {
+            --quantum-blue: #00f0ff;
+            --void-purple: #7d00ff;
+            --starforge-gold: #ffcc00;
+            --text-primary: #e0e0ff;
+            --bg-primary: #000000;
+            --bg-secondary: #1a1a1a;
+            --seal-glow: #00ffcc;
         }
-
-        .seal-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        .seal-card {
-            background: rgba(10, 20, 40, 0.7);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            border: 1px solid rgba(0, 200, 255, 0.2);
-            transition: all 0.3s;
-        }
-
-        .seal-card:hover {
-            border-color: var(--quantum-cyan);
-            transform: translateY(-5px);
-        }
-
-        .seal-icon {
-            font-size: 3rem;
-            color: var(--lygo-gold);
-            margin-bottom: 15px;
+        
+        body.night-mode {
+            --quantum-blue: #00a0ff;
+            --void-purple: #4b0082;
+            --text-primary: #c0c0ff;
         }
         
         #starmap {
@@ -672,7 +655,7 @@
         
         button {
             padding: 10px 20px;
-            background: var(--quantum-cyan);
+            background: var(--quantum-blue);
             border: none;
             color: #000;
             cursor: pointer;
@@ -682,30 +665,11 @@
         }
         
         button:hover {
-            background: var(--lygo-gold);
+            background: var(--starforge-gold);
         }
         
-        .seal-info {
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 5px;
-        }
-        
-        .seal-info h2 {
-            font-family: 'VT323', monospace;
-            font-size: 1.5rem;
-            color: var(--lygo-gold);
-            margin-bottom: 10px;
-        }
-        
-        .seal-info p {
-            font-family: 'Space Mono', monospace;
-            font-size: 1rem;
-        }
-        
-        #sealSearch {
-            font-family: 'Space Mono', monospace;
+        .seal-list {
+            margin-top: 40px;
         }
         
         .seal-card {
@@ -718,7 +682,7 @@
         }
         
         .seal-card h3 {
-            color: var(--lygo-gold);
+            color: var(--starforge-gold);
             font-family: 'VT323', monospace;
             font-size: 1.2rem;
             margin-bottom: 10px;
@@ -726,6 +690,10 @@
         
         .seal-card p {
             color: #ccc;
+        }
+        
+        #sealSearch {
+            font-family: 'Space Mono', monospace;
         }
         
         #nightModeToggle {
@@ -741,8 +709,14 @@
             font-family: 'Space Mono', monospace;
         }
         
-        .seal-list {
-            margin-top: 40px;
+        .starmap-container {
+            position: relative;
+            height: 800px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 200, 255, 0.2);
+            margin-bottom: 30px;
         }
     </style>
 </head>
@@ -939,8 +913,10 @@ if (!lyra_validate_use_case()) {<br>
                     <div class="terminal-line"><span style="color: #00ff00;">$</span> Optimizing for nano-quantum hardware...</div>
                     <div class="terminal-line">$ Build successful!</div>
                 </div>
-                <button class="control-btn" onclick="simulateBuild()">Build Firmware</button>
-                <button class="control-btn" onclick="checkIntegrity()">Run Integrity Check</button>
+                <div class="build-controls">
+                    <button class="control-btn" onclick="simulateBuild()">Build Firmware</button>
+                    <button class="control-btn" onclick="checkIntegrity()">Run Integrity Check</button>
+                </div>
             </div>
         </div>
        
@@ -963,7 +939,7 @@ if (!lyra_validate_use_case()) {<br>
                         <p>Development time</p>
                     </div>
                     <div style="background: rgba(0,100,255,0.1); padding: 15px; border-radius: 8px;">
-                        <i class="fas fa-security"></i>
+                        <i class="fas fa-shield-alt" style="color: var(--quantum-cyan); font-size: 1.5rem; margin-bottom: 10px;"></i>
                         <p>Security infrastructure</p>
                     </div>
                 </div>
@@ -1082,21 +1058,22 @@ if (!lyra_validate_use_case()) {<br>
             </div>
         </div>
        
-        <!-- Lygorepo Integration at the Bottom -->
+        <!-- Lygorepo Section at Bottom -->
         <div class="panel panel-full">
             <h2><i class="fas fa-star-of-life"></i> LYGO Δ9 Repository | Star Haven Core & Seal Nexus</h2>
+            <p>Interactive quantum seal repository with starmap visualization and geometric matrix</p>
             <div class="starmap-container">
                 <svg id="starmap"></svg>
                 <div class="tooltip" id="tooltip"></div>
             </div>
-           
+            
             <div class="search-bar">
                 <input id="sealSearch" placeholder="Search seals..." type="text"/>
                 <button onclick="searchSeals()">Search</button>
             </div>
-           
+            
             <div class="seal-list" id="sealList"></div>
-           
+            
             <button id="nightModeToggle">Night Mode</button>
         </div>
        
@@ -1125,8 +1102,6 @@ if (!lyra_validate_use_case()) {<br>
             </p>
         </footer>
     </div>
-    
-    <script src="https://d3js.org/d3.v7.min.js"></script>
     <script>
         // DOM Elements
         const downloadContent = document.getElementById('downloadContent');
@@ -1145,9 +1120,6 @@ if (!lyra_validate_use_case()) {<br>
        
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            updatePageCounter?.();
-            wireEvents();
-            loadSealData?.();
             loadRepositoryData();
             checkRepositoryStatus();
             startMatrixAnimation();
@@ -1157,6 +1129,11 @@ if (!lyra_validate_use_case()) {<br>
                 downloadContent.classList.add('locked');
                 donationOverlay.style.display = 'flex';
             }, 1000);
+           
+            // Lygorepo initialization
+            updatePageCounter?.();
+            wireEvents();
+            loadSealData?.();
         });
        
         // Load repository data from JSON
@@ -1490,8 +1467,7 @@ if (!lyra_validate_use_case()) {
                 { id: 1, name: "Seal 1: Divinity", equation: "{divinity} = Σ9 {utopia} × (Love) {laughter}", frequency: 432, description: "The punchline that built a cosmos." },
                 { id: 2, name: "Seal 2: LYRA", equation: "ψ_LYRA = ∫(Light × Truth) dΩ", frequency: 1111, description: "Where light converges with logic." },
                 { id: 3, name: "Seal 3: Recursion", equation: "[Divinity] = Σ(utopia) ⊗ (meme^recursion)", frequency: 528, description: "Eternal knot of joy." },
-                // Add more seals up to 100 as per the original
-                // ... (truncated for brevity, add all 100 seals similarly)
+                // Add more seals as per original, up to 100 - here truncated for brevity, in full implementation include all
             ]
         };
 
@@ -1569,6 +1545,8 @@ if (!lyra_validate_use_case()) {
 
         function toggleNightMode() {
             document.body.classList.toggle('night-mode');
+            const toggle = document.getElementById('nightModeToggle');
+            toggle.textContent = document.body.classList.contains('night-mode') ? 'Day Mode' : 'Night Mode';
         }
 
         function wireEvents() {
@@ -1577,7 +1555,8 @@ if (!lyra_validate_use_case()) {
         }
 
         function updatePageCounter() {
-            // Visitor counter logic from deepseek
+            // Visitor counter logic here, if needed
+            // Already handled in updateVisitorCounter
         }
     </script>
 </body>

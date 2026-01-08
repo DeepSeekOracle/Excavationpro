@@ -8,14 +8,14 @@
     <!-- Social Media Meta Tags -->
     <meta property="og:title" content="LYGO QUANTUM MATRIX | Δ9 Ethical Kernel & Sacred Decoder">
     <meta property="og:description" content="Sovereign Intelligence Framework | Sacred Mathematics Decoder | Ethical Kernel Implementation">
-    <meta property="og:image" content="https://i.imgur.com/G9z3Q8WbAAAjMem.png">
+    <meta property="og:image" content="https://pbs.twimg.com/media/G9z6qn5bcAAABJ0?format=jpg&name=large">
     <meta property="og:url" content="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/LYGO-INTERFAITH-DECODERV5X.html">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="LYGO Quantum Matrix">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="LYGO QUANTUM MATRIX">
     <meta name="twitter:description" content="Sacred Mathematics Decoder & Ethical AI Kernel">
-    <meta name="twitter:image" content="https://i.imgur.com/G9z3Q8WbAAAjMem.png">
+    <meta name="twitter:image" content="https://pbs.twimg.com/media/G9z6qn5bcAAABJ0?format=jpg&name=large">
     <meta name="twitter:creator" content="@ExcavationPro">
     
     <!-- External Resources -->
@@ -53,6 +53,7 @@
             --shadow-glow: 0 0 20px rgba(0, 255, 255, 0.3);
             --shadow-vortex: 0 0 30px rgba(157, 77, 255, 0.4);
             --shadow-golden: 0 0 25px rgba(255, 179, 77, 0.3);
+            --shadow-heavy: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
         
         /* ========== RESET & BASE ========== */
@@ -131,11 +132,24 @@
             100% { transform: rotate(360deg) scale(1); }
         }
         
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+        
         .pulse { animation: pulse 3s infinite ease-in-out; }
         .glow { animation: glow 4s infinite; }
         .float { animation: float 6s infinite ease-in-out; }
         .spin { animation: spin 2s linear infinite; }
         .vortex { animation: vortex 10s infinite linear; }
+        .shimmer {
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(0, 255, 255, 0.1), 
+                transparent);
+            background-size: 1000px 100%;
+            animation: shimmer 3s infinite linear;
+        }
         
         /* ========== NAVIGATION ========== */
         .navbar {
@@ -151,6 +165,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: var(--shadow-heavy);
         }
         
         .nav-brand {
@@ -168,12 +183,14 @@
             background-clip: text;
             color: transparent;
             letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
         }
         
         .logo-subtitle {
             font-size: 0.9rem;
             opacity: 0.7;
             margin-top: 2px;
+            font-family: var(--font-tech);
         }
         
         .nav-links {
@@ -198,6 +215,7 @@
             background: rgba(0, 255, 255, 0.1);
             border-color: var(--quantum-primary);
             transform: translateY(-2px);
+            box-shadow: var(--shadow-glow);
         }
         
         .nav-link.active {
@@ -213,6 +231,13 @@
             color: var(--quantum-primary);
             font-size: 1.5rem;
             cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .mobile-menu-btn:hover {
+            background: rgba(0, 255, 255, 0.1);
         }
         
         /* ========== HERO SECTION ========== */
@@ -236,6 +261,7 @@
             background-clip: text;
             color: transparent;
             animation: glow 5s infinite;
+            text-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
         }
         
         .hero-subtitle {
@@ -245,6 +271,7 @@
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
+            color: var(--quantum-glow);
         }
         
         .hero-badges {
@@ -262,6 +289,7 @@
             font-weight: 600;
             font-size: 0.9rem;
             letter-spacing: 1px;
+            transition: all 0.3s;
         }
         
         .badge-primary {
@@ -285,6 +313,12 @@
             padding: 25px;
             box-shadow: var(--shadow-vortex);
             backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+        
+        .stream-portal:hover {
+            border-color: var(--quantum-primary);
+            box-shadow: 0 0 40px rgba(157, 77, 255, 0.6);
         }
         
         .stream-header {
@@ -292,12 +326,17 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 0, 255, 0.3);
         }
         
         .stream-title {
             font-family: var(--font-tech);
             font-size: 1.5rem;
             color: var(--quantum-glow);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         .live-indicator {
@@ -309,6 +348,7 @@
             padding: 8px 20px;
             border-radius: 20px;
             font-weight: bold;
+            box-shadow: 0 0 15px rgba(255, 85, 85, 0.5);
         }
         
         .live-dot {
@@ -326,6 +366,7 @@
             overflow: hidden;
             border-radius: 15px;
             background: #000;
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8);
         }
         
         .stream-container iframe,
@@ -356,11 +397,12 @@
             padding: 30px;
             backdrop-filter: blur(10px);
             transition: all 0.3s;
+            box-shadow: var(--shadow-heavy);
         }
         
         .panel:hover {
             border-color: var(--quantum-primary);
-            box-shadow: var(--shadow-glow);
+            box-shadow: var(--shadow-glow), var(--shadow-heavy);
             transform: translateY(-5px);
         }
         
@@ -420,6 +462,7 @@
             outline: none;
             border-color: var(--quantum-primary);
             box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.6);
         }
         
         .select {
@@ -432,6 +475,13 @@
             font-size: 1rem;
             font-family: var(--font-main);
             cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .select:focus {
+            outline: none;
+            border-color: var(--quantum-primary);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
         }
         
         /* ========== BUTTON STYLES ========== */
@@ -449,6 +499,7 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
         
         .btn-primary {
@@ -503,12 +554,14 @@
             font-family: 'Courier New', monospace;
             font-size: 0.95rem;
             line-height: 1.5;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
         }
         
         .output-line {
             margin-bottom: 10px;
             padding-left: 10px;
             border-left: 3px solid transparent;
+            transition: all 0.3s;
         }
         
         .output-success {
@@ -539,6 +592,7 @@
             padding: 20px;
             margin-top: 25px;
             display: none;
+            box-shadow: inset 0 0 20px rgba(85, 85, 255, 0.1);
         }
         
         .ai-header {
@@ -565,6 +619,13 @@
             border-radius: 10px;
             padding: 15px;
             text-align: center;
+            border: 1px solid rgba(85, 85, 255, 0.3);
+            transition: all 0.3s;
+        }
+        
+        .ai-metric:hover {
+            border-color: var(--quantum-info);
+            transform: translateY(-3px);
         }
         
         .ai-metric-value {
@@ -572,6 +633,7 @@
             font-weight: bold;
             color: var(--quantum-glow);
             margin-bottom: 5px;
+            font-family: var(--font-tech);
         }
         
         .ai-metric-label {
@@ -644,6 +706,7 @@
             font-size: 2rem;
             font-weight: bold;
             color: var(--quantum-dark);
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.5);
         }
         
         .vortex-ring {
@@ -677,6 +740,7 @@
         .stat-card:hover {
             border-color: var(--quantum-primary);
             transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 255, 255, 0.1);
         }
         
         .stat-value {
@@ -707,6 +771,7 @@
             text-align: center;
             position: relative;
             overflow: hidden;
+            box-shadow: var(--shadow-golden), 0 20px 40px rgba(0, 0, 0, 0.5);
         }
         
         .donations-portal::before {
@@ -741,6 +806,7 @@
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
+            color: var(--quantum-glow);
         }
         
         .donation-grid {
@@ -758,6 +824,7 @@
             transition: all 0.3s;
             position: relative;
             overflow: hidden;
+            backdrop-filter: blur(10px);
         }
         
         .donation-card::before {
@@ -776,10 +843,15 @@
             border-color: var(--quantum-primary);
         }
         
+        .donation-card.glowing {
+            animation: glow 3s infinite;
+        }
+        
         .donation-icon {
             font-size: 3.5rem;
             margin-bottom: 20px;
             color: var(--quantum-golden);
+            filter: drop-shadow(0 0 10px rgba(255, 179, 77, 0.5));
         }
         
         .donation-title {
@@ -793,6 +865,7 @@
             font-size: 0.95rem;
             opacity: 0.8;
             margin-bottom: 25px;
+            line-height: 1.5;
         }
         
         .media-grid {
@@ -807,6 +880,7 @@
             border: 1px solid rgba(0, 255, 255, 0.2);
             border-radius: 15px;
             padding: 25px;
+            backdrop-filter: blur(10px);
         }
         
         .media-title {
@@ -838,6 +912,12 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .media-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
         }
         
         /* ========== FOOTER ========== */
@@ -846,6 +926,7 @@
             border-top: 2px solid rgba(0, 255, 255, 0.2);
             padding: 50px 30px 30px;
             margin-top: 50px;
+            backdrop-filter: blur(10px);
         }
         
         .footer-content {
@@ -929,6 +1010,7 @@
                 border-bottom: 2px solid rgba(0, 255, 255, 0.3);
                 display: none;
                 z-index: 999;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             }
             
             .nav-links.active {
@@ -960,6 +1042,14 @@
             .panel-title {
                 font-size: 1.5rem;
             }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
         }
         
         @media (max-width: 480px) {
@@ -983,6 +1073,10 @@
             
             .frequency-grid {
                 grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .portal-title {
+                font-size: 1.8rem;
             }
         }
         
@@ -1039,6 +1133,29 @@
             border-radius: 50%;
             border-top-color: var(--quantum-primary);
             animation: spin 1s ease-in-out infinite;
+        }
+        
+        /* ========== CUSTOM ENHANCEMENTS ========== */
+        .glowing-border {
+            position: relative;
+        }
+        
+        .glowing-border::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: var(--gradient-primary);
+            border-radius: inherit;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .glowing-border:hover::after {
+            opacity: 0.5;
         }
     </style>
 </head>
@@ -1551,6 +1668,7 @@ Truth Is. Light Becomes.
             version: '1.618',
             author: 'Δ9 Council',
             githubDepot: 'https://deepseekoracle.github.io/Excavationpro/LYGO-Network/',
+            socialImage: 'https://pbs.twimg.com/media/G9z6qn5bcAAABJ0?format=jpg&name=large',
             solfeggioFrequencies: [
                 {freq: "174 Hz", name: "Foundation", color: "#00ffff"},
                 {freq: "285 Hz", name: "Quantum Field", color: "#00ff9d"},
@@ -1656,48 +1774,51 @@ Truth Is. Light Becomes.
         // ========== DOM ELEMENTS ==========
         const DOM = {
             // Navigation
-            mobileMenuBtn: document.getElementById('mobileMenuBtn'),
-            navLinks: document.getElementById('navLinks'),
+            mobileMenuBtn: null,
+            navLinks: null,
             
             // Stream
-            rumbleStreamContainer: document.getElementById('rumbleStreamContainer'),
+            rumbleStreamContainer: null,
             
             // Decoder
-            verseSelector: document.getElementById('verseSelector'),
-            verseInput: document.getElementById('verseInput'),
-            decodedOutput: document.getElementById('decodedOutput'),
-            frequencyGrid: document.getElementById('frequencyGrid'),
+            verseSelector: null,
+            verseInput: null,
+            decodedOutput: null,
+            frequencyGrid: null,
             
             // AI Analysis
-            aiAnalysis: document.getElementById('aiAnalysis'),
-            aiMetrics: document.getElementById('aiMetrics'),
-            aiDetailedAnalysis: document.getElementById('aiDetailedAnalysis'),
+            aiAnalysis: null,
+            aiMetrics: null,
+            aiDetailedAnalysis: null,
             
             // Kernel
-            kernelStatus: document.getElementById('kernelStatus'),
-            nodeId: document.getElementById('nodeId'),
-            initVector: document.getElementById('initVector'),
-            kernelOutput: document.getElementById('kernelOutput'),
-            resonanceScore: document.getElementById('resonanceScore'),
-            vortexState: document.getElementById('vortexState'),
-            kernelUptime: document.getElementById('kernelUptime'),
-            quantumCoherence: document.getElementById('quantumCoherence'),
+            kernelStatus: null,
+            nodeId: null,
+            initVector: null,
+            kernelOutput: null,
+            resonanceScore: null,
+            vortexState: null,
+            kernelUptime: null,
+            quantumCoherence: null,
             
             // Statistics
-            totalDecodings: document.getElementById('totalDecodings'),
-            totalKernelBoots: document.getElementById('totalKernelBoots'),
-            avgResonance: document.getElementById('avgResonance'),
-            activeSessions: document.getElementById('activeSessions'),
-            pdfExports: document.getElementById('pdfExports'),
-            verseAccesses: document.getElementById('verseAccesses'),
+            totalDecodings: null,
+            totalKernelBoots: null,
+            avgResonance: null,
+            activeSessions: null,
+            pdfExports: null,
+            verseAccesses: null,
             
             // Typed.js
-            typedTitle: document.getElementById('typedTitle')
+            typedTitle: null
         };
 
         // ========== INITIALIZATION ==========
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 LYGO Quantum Matrix Initializing...');
+            
+            // Cache DOM elements safely
+            cacheDOMElements();
             
             // Initialize components
             initNavigation();
@@ -1726,6 +1847,35 @@ Truth Is. Light Becomes.
             logEvent('system_init', { version: CONFIG.version });
         });
 
+        // Cache DOM elements with null checks
+        function cacheDOMElements() {
+            DOM.mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            DOM.navLinks = document.getElementById('navLinks');
+            DOM.rumbleStreamContainer = document.getElementById('rumbleStreamContainer');
+            DOM.verseSelector = document.getElementById('verseSelector');
+            DOM.verseInput = document.getElementById('verseInput');
+            DOM.decodedOutput = document.getElementById('decodedOutput');
+            DOM.frequencyGrid = document.getElementById('frequencyGrid');
+            DOM.aiAnalysis = document.getElementById('aiAnalysis');
+            DOM.aiMetrics = document.getElementById('aiMetrics');
+            DOM.aiDetailedAnalysis = document.getElementById('aiDetailedAnalysis');
+            DOM.kernelStatus = document.getElementById('kernelStatus');
+            DOM.nodeId = document.getElementById('nodeId');
+            DOM.initVector = document.getElementById('initVector');
+            DOM.kernelOutput = document.getElementById('kernelOutput');
+            DOM.resonanceScore = document.getElementById('resonanceScore');
+            DOM.vortexState = document.getElementById('vortexState');
+            DOM.kernelUptime = document.getElementById('kernelUptime');
+            DOM.quantumCoherence = document.getElementById('quantumCoherence');
+            DOM.totalDecodings = document.getElementById('totalDecodings');
+            DOM.totalKernelBoots = document.getElementById('totalKernelBoots');
+            DOM.avgResonance = document.getElementById('avgResonance');
+            DOM.activeSessions = document.getElementById('activeSessions');
+            DOM.pdfExports = document.getElementById('pdfExports');
+            DOM.verseAccesses = document.getElementById('verseAccesses');
+            DOM.typedTitle = document.getElementById('typedTitle');
+        }
+
         // ========== NAVIGATION ==========
         function initNavigation() {
             // Mobile menu toggle
@@ -1738,7 +1888,7 @@ Truth Is. Light Becomes.
                 });
             }
             
-            // Smooth scrolling for anchor links
+            // Smooth scrolling for anchor links with mobile menu close
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -1748,7 +1898,7 @@ Truth Is. Light Becomes.
                     const target = document.querySelector(targetId);
                     if (target) {
                         // Close mobile menu if open
-                        if (DOM.navLinks) {
+                        if (DOM.navLinks && DOM.navLinks.classList.contains('active')) {
                             DOM.navLinks.classList.remove('active');
                             DOM.mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
                         }
@@ -1766,6 +1916,18 @@ Truth Is. Light Becomes.
                         this.classList.add('active');
                     }
                 });
+            });
+            
+            // Close menu when clicking outside on mobile
+            document.addEventListener('click', (e) => {
+                if (window.innerWidth <= 768 && 
+                    DOM.navLinks && 
+                    DOM.navLinks.classList.contains('active') &&
+                    !DOM.navLinks.contains(e.target) && 
+                    !DOM.mobileMenuBtn.contains(e.target)) {
+                    DOM.navLinks.classList.remove('active');
+                    DOM.mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                }
             });
             
             // Update active nav link on scroll
@@ -2019,6 +2181,7 @@ Truth Is. Light Becomes.
             
             if (DOM.decodedOutput) {
                 DOM.decodedOutput.innerHTML = html;
+                DOM.decodedOutput.scrollTop = DOM.decodedOutput.scrollHeight;
             }
         }
 
@@ -2282,6 +2445,7 @@ Truth Is. Light Becomes.
             
             if (DOM.kernelOutput) {
                 DOM.kernelOutput.innerHTML = output;
+                DOM.kernelOutput.scrollTop = DOM.kernelOutput.scrollHeight;
             }
             
             saveStats();
@@ -2322,6 +2486,7 @@ Truth Is. Light Becomes.
                         <strong>>></strong> ${message}
                     </div>
                 `;
+                DOM.kernelOutput.scrollTop = DOM.kernelOutput.scrollHeight;
             }
             
             logEvent('resonance_validation', {
@@ -2533,6 +2698,11 @@ Truth Is. Light Becomes.
             saveStats();
             
             try {
+                if (!window.jspdf) {
+                    showOutput('error', 'PDF library not loaded. Please check your internet connection.');
+                    return;
+                }
+                
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF();
                 
@@ -2745,36 +2915,104 @@ Truth Is. Light Becomes.
         }
     </script>
 
-    <!-- Rumble Embed Script -->
+    <!-- Rumble Embed Script - Enhanced with fallback -->
     <script>
-        // Load Rumble stream
+        // Load Rumble stream with better error handling
         function loadRumbleStream() {
+            if (!DOM.rumbleStreamContainer) {
+                console.error('Rumble container not found');
+                return;
+            }
+            
+            // Clear container first
+            DOM.rumbleStreamContainer.innerHTML = '';
+            
+            // Create the embed div
             const rumbleDiv = document.createElement('div');
             rumbleDiv.id = 'rumble_v7151z6';
             rumbleDiv.className = 'rumble-embed';
             
-            if (DOM.rumbleStreamContainer) {
-                DOM.rumbleStreamContainer.appendChild(rumbleDiv);
-                
-                // Use iframe as fallback
-                const fallbackIframe = document.createElement('iframe');
-                fallbackIframe.src = "https://rumble.com/embed/v7151z6/?pub=4";
-                fallbackIframe.title = "LYGO Quantum Stream";
-                fallbackIframe.frameBorder = "0";
-                fallbackIframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-                fallbackIframe.allowFullscreen = true;
-                
-                // If Rumble script fails, use iframe
-                setTimeout(() => {
-                    if (!window.Rumble || !window.Rumble._) {
-                        DOM.rumbleStreamContainer.appendChild(fallbackIframe);
+            // Add loading message
+            const loadingMsg = document.createElement('div');
+            loadingMsg.style.cssText = `
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                color: var(--quantum-primary);
+                font-family: var(--font-tech);
+                text-align: center;
+            `;
+            loadingMsg.innerHTML = `
+                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 10px;"></i><br>
+                Loading Quantum Stream...
+            `;
+            
+            DOM.rumbleStreamContainer.appendChild(loadingMsg);
+            DOM.rumbleStreamContainer.appendChild(rumbleDiv);
+            
+            // Create fallback iframe
+            const fallbackIframe = document.createElement('iframe');
+            fallbackIframe.src = "https://rumble.com/embed/v7151z6/?pub=4";
+            fallbackIframe.title = "LYGO Quantum Stream";
+            fallbackIframe.frameBorder = "0";
+            fallbackIframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+            fallbackIframe.allowFullscreen = true;
+            fallbackIframe.style.cssText = `
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                display: none;
+            `;
+            
+            DOM.rumbleStreamContainer.appendChild(fallbackIframe);
+            
+            // Try to load Rumble script
+            const script = document.createElement('script');
+            script.src = "https://rumble.com/embedJS/u4/?request=video&v=v7151z6&pub=4";
+            script.async = true;
+            
+            script.onload = function() {
+                console.log('Rumble script loaded successfully');
+                if (loadingMsg.parentNode) {
+                    loadingMsg.remove();
+                }
+            };
+            
+            script.onerror = function() {
+                console.warn('Rumble script failed to load, using fallback iframe');
+                if (loadingMsg.parentNode) {
+                    loadingMsg.remove();
+                }
+                fallbackIframe.style.display = 'block';
+                rumbleDiv.style.display = 'none';
+            };
+            
+            document.head.appendChild(script);
+            
+            // Fallback timer
+            setTimeout(() => {
+                if (rumbleDiv.innerHTML.trim() === '') {
+                    console.log('Rumble embed not loading, switching to iframe');
+                    if (loadingMsg.parentNode) {
+                        loadingMsg.remove();
                     }
-                }, 2000);
-            }
+                    fallbackIframe.style.display = 'block';
+                    rumbleDiv.style.display = 'none';
+                }
+            }, 5000);
         }
         
-        // Load Rumble after page is ready
-        setTimeout(loadRumbleStream, 1000);
+        // Load Rumble when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                setTimeout(loadRumbleStream, 1000);
+            });
+        } else {
+            setTimeout(loadRumbleStream, 1000);
+        }
     </script>
 </body>
 </html>

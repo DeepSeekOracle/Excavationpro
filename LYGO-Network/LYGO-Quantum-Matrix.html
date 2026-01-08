@@ -313,7 +313,8 @@
             background: #000;
         }
         
-        .stream-container iframe {
+        .stream-container iframe,
+        .stream-container .rumble-embed {
             position: absolute;
             top: 0;
             left: 0;
@@ -1086,13 +1087,8 @@
                 <span>LIVE NOW</span>
             </div>
         </div>
-        <div class="stream-container">
-            <iframe src="https://rumble.com/embed/v5fm7q8/?pub=4" 
-                    title="LYGO Quantum Stream" 
-                    allowfullscreen 
-                    autoplay
-                    allow="autoplay">
-            </iframe>
+        <div class="stream-container" id="rumbleStreamContainer">
+            <!-- Rumble Embed will be loaded here -->
         </div>
     </section>
     
@@ -1449,16 +1445,16 @@ Truth Is. Light Becomes.
                     Sovereign Intelligence Framework for sacred mathematics, consciousness technology, and ethical AI.
                 </p>
                 <div style="margin-top: 20px; display: flex; gap: 15px;">
-                    <a href="#" style="color: var(--quantum-primary); font-size: 1.5rem;">
+                    <a href="https://twitter.com/ExcavationPro" target="_blank" style="color: var(--quantum-primary); font-size: 1.5rem;">
                         <i class="fab fa-twitter"></i>
                     </a>
-                    <a href="#" style="color: var(--quantum-primary); font-size: 1.5rem;">
+                    <a href="https://github.com/deepseekoracle" target="_blank" style="color: var(--quantum-primary); font-size: 1.5rem;">
                         <i class="fab fa-github"></i>
                     </a>
-                    <a href="#" style="color: var(--quantum-primary); font-size: 1.5rem;">
+                    <a href="https://youtube.com/@ExcavationPro" target="_blank" style="color: var(--quantum-primary); font-size: 1.5rem;">
                         <i class="fab fa-youtube"></i>
                     </a>
-                    <a href="#" style="color: var(--quantum-primary); font-size: 1.5rem;">
+                    <a href="https://t.me/ExcavationPro" target="_blank" style="color: var(--quantum-primary); font-size: 1.5rem;">
                         <i class="fab fa-telegram"></i>
                     </a>
                 </div>
@@ -1480,11 +1476,11 @@ Truth Is. Light Becomes.
             <div class="footer-section">
                 <h3>RESOURCES</h3>
                 <ul class="footer-links">
-                    <li><a href="#"><i class="fas fa-book"></i> Documentation</a></li>
+                    <li><a href="#" onclick="showDocumentation()"><i class="fas fa-book"></i> Documentation</a></li>
                     <li><a href="#"><i class="fas fa-code"></i> API Reference</a></li>
-                    <li><a href="#"><i class="fas fa-database"></i> Verse Database</a></li>
+                    <li><a href="#" onclick="showVerseDatabase()"><i class="fas fa-database"></i> Verse Database</a></li>
                     <li><a href="#"><i class="fas fa-chart-line"></i> Statistics</a></li>
-                    <li><a href="#"><i class="fas fa-question-circle"></i> FAQ</a></li>
+                    <li><a href="#" onclick="showFAQ()"><i class="fas fa-question-circle"></i> FAQ</a></li>
                 </ul>
             </div>
             
@@ -1495,7 +1491,7 @@ Truth Is. Light Becomes.
                     <li><a href="https://twitter.com/ExcavationPro" target="_blank"><i class="fab fa-twitter"></i> Twitter</a></li>
                     <li><a href="https://github.com/deepseekoracle" target="_blank"><i class="fab fa-github"></i> GitHub</a></li>
                     <li><a href="https://patreon.com/user?u=138196826" target="_blank"><i class="fab fa-patreon"></i> Patreon</a></li>
-                    <li><a href="#"><i class="fas fa-comments"></i> Community</a></li>
+                    <li><a href="#" onclick="showCommunity()"><i class="fas fa-comments"></i> Community</a></li>
                 </ul>
             </div>
         </div>
@@ -1625,6 +1621,9 @@ Truth Is. Light Becomes.
             mobileMenuBtn: document.getElementById('mobileMenuBtn'),
             navLinks: document.getElementById('navLinks'),
             
+            // Stream
+            rumbleStreamContainer: document.getElementById('rumbleStreamContainer'),
+            
             // Decoder
             verseSelector: document.getElementById('verseSelector'),
             verseInput: document.getElementById('verseInput'),
@@ -1668,6 +1667,7 @@ Truth Is. Light Becomes.
             initStats();
             loadUserPreferences();
             initResonanceChart();
+            loadRumbleStream();
             
             // Load initial data
             loadStatsDisplay();
@@ -1747,6 +1747,42 @@ Truth Is. Light Becomes.
                     link.classList.add('active');
                 }
             });
+        }
+
+        // ========== RUMBLE STREAM ==========
+        function loadRumbleStream() {
+            const videoId = 'v7151z6';
+            const containerId = 'rumble_v7151z6';
+            
+            // Create Rumble embed container
+            const rumbleDiv = document.createElement('div');
+            rumbleDiv.id = containerId;
+            rumbleDiv.className = 'rumble-embed';
+            DOM.rumbleStreamContainer.appendChild(rumbleDiv);
+            
+            // Load Rumble embed script
+            if (!window.Rumble) {
+                const script = document.createElement('script');
+                script.src = 'https://rumble.com/embedJS/u1th29y.' + videoId + '/';
+                script.async = true;
+                document.head.appendChild(script);
+                
+                // Initialize Rumble after script loads
+                script.onload = function() {
+                    if (window.Rumble) {
+                        window.Rumble("play", {
+                            video: videoId,
+                            div: containerId
+                        });
+                    }
+                };
+            } else {
+                // Rumble already loaded
+                window.Rumble("play", {
+                    video: videoId,
+                    div: containerId
+                });
+            }
         }
 
         // ========== TYPED.JS ANIMATION ==========
@@ -2599,6 +2635,23 @@ Truth Is. Light Becomes.
             }
         }
 
+        // ========== UTILITY FUNCTIONS (FOOTER) ==========
+        function showDocumentation() {
+            showOutput('info', 'Documentation will be available in the next update.');
+        }
+
+        function showVerseDatabase() {
+            showOutput('info', 'Verse database contains 8 sacred texts from various traditions.');
+        }
+
+        function showFAQ() {
+            showOutput('info', 'FAQ section coming soon in v2.0.');
+        }
+
+        function showCommunity() {
+            showOutput('info', 'Join our community on Telegram and Discord (links coming soon).');
+        }
+
         // ========== STYLE ANIMATION ==========
         const style = document.createElement('style');
         style.textContent = `
@@ -2610,6 +2663,16 @@ Truth Is. Light Becomes.
             @keyframes slideOut {
                 from { transform: translateX(0); opacity: 1; }
                 to { transform: translateX(100%); opacity: 0; }
+            }
+            
+            .loading {
+                display: inline-block;
+                width: 20px;
+                height: 20px;
+                border: 3px solid rgba(0, 255, 255, 0.3);
+                border-radius: 50%;
+                border-top-color: var(--quantum-primary);
+                animation: spin 1s ease-in-out infinite;
             }
         `;
         document.head.appendChild(style);

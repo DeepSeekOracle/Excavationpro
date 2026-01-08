@@ -3014,5 +3014,157 @@ Truth Is. Light Becomes.
             setTimeout(loadRumbleStream, 1000);
         }
     </script>
+    <!-- LYGO API Integration -->
+<script>
+// ============================================
+// LYGO API CLIENT - Add to your portal
+// ============================================
+class LYGOCLIENT {
+    constructor(baseUrl = 'https://deepseekoracle.github.io/Excavationpro/LYGO-Network/updatefeed.html') {
+        this.baseUrl = baseUrl;
+        this.token = 'LYGO-Δ9-ACCESS';
+    }
+    
+    async call(action, params = {}) {
+        const url = new URL(this.baseUrl);
+        url.searchParams.set('action', action);
+        
+        Object.keys(params).forEach(key => {
+            if (params[key] !== undefined && params[key] !== null) {
+                url.searchParams.set(key, encodeURIComponent(params[key]));
+            }
+        });
+        
+        try {
+            const response = await fetch(url.toString());
+            return await response.json();
+        } catch (error) {
+            return { success: false, error: error.message };
+        }
+    }
+    
+    async ping() { return this.call('ping'); }
+    async get(key) { return this.call('get', { key }); }
+    async set(key, data) { return this.call('set', { key, data: encodeURIComponent(JSON.stringify(data)) }); }
+    async getNews() { return this.call('news'); }
+    async getStats() { return this.call('stats'); }
+}
+
+// ============================================
+// PORTAL INTEGRATION
+// ============================================
+document.addEventListener('DOMContentLoaded', async function() {
+    // Wait for page to load
+    setTimeout(async () => {
+        console.log('🌀 Connecting to LYGO API...');
+        
+        const api = new LYGOCLIENT();
+        
+        // Test connection
+        const ping = await api.ping();
+        if (ping.success) {
+            console.log('✅ LYGO API Connected:', ping);
+            
+            // Load news
+            const news = await api.getNews();
+            if (news.success && news.news) {
+                displayNews(news.news);
+            }
+            
+            // Load stats
+            const stats = await api.getStats();
+            if (stats.success && stats.stats) {
+                updateVisitorCounter(stats.stats);
+            }
+            
+            // Track this visit
+            await updateVisitorCount(api);
+            
+        } else {
+            console.warn('⚠️ LYGO API not available');
+        }
+    }, 2000);
+    
+    // Display news function
+    function displayNews(newsItems) {
+        const newsContainer = document.getElementById('newsContainer');
+        if (!newsContainer) {
+            // Create container if it doesn't exist
+            const portalSection = document.querySelector('.panel.panel-full');
+            if (portalSection) {
+                portalSection.insertAdjacentHTML('beforeend', `
+                    <div id="newsContainer" style="margin-top: 30px;">
+                        <h3><i class="fas fa-bullhorn"></i> Latest Updates</h3>
+                        <div id="newsContent"></div>
+                    </div>
+                `);
+            }
+        }
+        
+        const content = document.getElementById('newsContent') || newsContainer;
+        if (content && newsItems.length > 0) {
+            content.innerHTML = newsItems.slice(0, 3).map(item => `
+                <div style="background: rgba(0,100,255,0.1); padding: 15px; border-radius: 8px; margin: 10px 0; border-left: 3px solid var(--quantum-cyan);">
+                    <strong style="color: var(--quantum-cyan);">${item.title}</strong>
+                    <div style="font-size: 0.9em; color: #a0a0ff; margin: 5px 0;">${item.date} • ${item.type}</div>
+                    <div>${item.content}</div>
+                </div>
+            `).join('');
+        }
+    }
+    
+    // Update visitor counter
+    function updateVisitorCounter(stats) {
+        const visitorEl = document.getElementById('visitorCounter');
+        if (visitorEl && stats.visitors) {
+            visitorEl.innerHTML = `<i class="fas fa-eye"></i> Portal Visitors: ${stats.visitors.toLocaleString()}`;
+        }
+    }
+    
+    // Update visitor count
+    async function updateVisitorCount(api) {
+        try {
+            const stats = await api.getStats();
+            if (stats.success) {
+                const visitors = (stats.stats?.visitors || 0) + 1;
+                await api.set('lygo_visitors', visitors);
+            }
+        } catch (error) {
+            console.error('Error updating visitor count:', error);
+        }
+    }
+    
+    // Track download function (call this when downloads happen)
+    window.trackLYGODownload = async function(type = 'firmware') {
+        const api = new LYGOCLIENT();
+        try {
+            const stats = await api.getStats();
+            if (stats.success) {
+                const downloads = (stats.stats?.downloads || 0) + 1;
+                await api.set('lygo_downloads', downloads);
+                console.log('📥 Download tracked:', type);
+            }
+        } catch (error) {
+            console.error('Error tracking download:', error);
+        }
+    };
+    
+    // Track unlock function (call this when unlocks happen)
+    window.trackLYGOUnlock = async function() {
+        const api = new LYGOCLIENT();
+        try {
+            const stats = await api.getStats();
+            if (stats.success) {
+                const unlocks = (stats.stats?.unlocks || 0) + 1;
+                await api.set('lygo_unlocks', unlocks);
+                console.log('🔓 Unlock tracked');
+            }
+        } catch (error) {
+            console.error('Error tracking unlock:', error);
+        }
+    };
+});
+</script>
+<!-- END LYGO API Integration -->
 </body>
 </html>

@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LYGO Interfaith Decoder | Sacred Mathematics Interface</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --lygo-primary: #00ff9d;
+            --lygo-secondary: #00b8ff;
+            --lygo-dark: #0a0a1a;
+            --lygo-darker: #050510;
+            --lygo-matrix: #00ff41;
+            --lygo-vortex: #9d00ff;
+            --lygo-golden: #ffb300;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+        
+        body {
+            background-color: var(--lygo-darker);
+            color: var(--lygo-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 255, 157, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(157, 0, 255, 0.05) 0%, transparent 20%);
+        }
+        
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.05;
+            background-image: 
+                linear-gradient(to right, rgba(0, 255, 157, 0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 255, 157, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--lygo-primary);
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            font-size: 2.5rem;
+            color: var(--lygo-vortex);
+            animation: pulse 4s infinite alternate;
+        }
+        
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(90deg, var(--lygo-primary), var(--lygo-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .tagline {
+            font-size: 1rem;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+        
+        .protocol-badge {
+            background: rgba(0, 255, 157, 0.1);
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid var(--lygo-primary);
+            font-size: 0.9rem;
+        }
+        
+        .main-interface {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 900px) {
+            .main-interface {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .input-panel, .output-panel {
+            background: rgba(10, 10, 26, 0.8);
+            border: 1px solid rgba(0, 255, 157, 0.3);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 0 20px rgba(0, 255, 157, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .panel-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 255, 157, 0.2);
+        }
+        
+        .panel-title i {
+            color: var(--lygo-secondary);
+        }
+        
+        .verse-selector {
+            margin-bottom: 25px;
+        }
+        
+        .tradition-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .tradition-btn {
+            padding: 10px 20px;
+            background: rgba(157, 0, 255, 0.1);
+            border: 1px solid var(--lygo-vortex);
+            color: var(--lygo-primary);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .tradition-btn:hover {
+            background: rgba(157, 0, 255, 0.3);
+        }
+        
+        .tradition-btn.active {
+            background: var(--lygo-vortex);
+            color: var(--lygo-dark);
+            font-weight: bold;
+        }
+        
+        .verse-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 255, 157, 0.3);
+            border-radius: 5px;
+            padding: 15px;
+            color: var(--lygo-primary);
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 120px;
+            margin-bottom: 15px;
+        }
+        
+        .verse-input::placeholder {
+            color: rgba(0, 255, 157, 0.5);
+        }
+        
+        .quick-verse-btn {
+            background: rgba(0, 184, 255, 0.1);
+            border: 1px solid var(--lygo-secondary);
+            color: var(--lygo-primary);
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+        
+        .quick-verse-btn:hover {
+            background: rgba(0, 184, 255, 0.3);
+        }
+        
+        .decode-btn {
+            background: linear-gradient(90deg, var(--lygo-primary), var(--lygo-secondary));
+            color: var(--lygo-dark);
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.3s;
+            letter-spacing: 1px;
+        }
+        
+        .decode-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 255, 157, 0.3);
+        }
+        
+        .output-section {
+            margin-bottom: 25px;
+        }
+        
+        .output-title {
+            color: var(--lygo-golden);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .output-content {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 179, 0, 0.2);
+            border-radius: 5px;
+            padding: 15px;
+            min-height: 60px;
+        }
+        
+        .frequency-badge {
+            display: inline-block;
+            background: rgba(157, 0, 255, 0.2);
+            border: 1px solid var(--lygo-vortex);
+            padding: 5px 10px;
+            border-radius: 15px;
+            margin: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .vortex-sequence {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .vortex-number {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .vortex-1 { background: rgba(0, 255, 157, 0.2); border: 2px solid var(--lygo-primary); }
+        .vortex-2 { background: rgba(0, 184, 255, 0.2); border: 2px solid var(--lygo-secondary); }
+        .vortex-3 { background: rgba(255, 179, 0, 0.2); border: 2px solid var(--lygo-golden); }
+        .vortex-4 { background: rgba(157, 0, 255, 0.2); border: 2px solid var(--lygo-vortex); }
+        .vortex-5 { background: rgba(255, 179, 0, 0.2); border: 2px solid var(--lygo-golden); }
+        .vortex-6 { background: rgba(0, 184, 255, 0.2); border: 2px solid var(--lygo-secondary); }
+        .vortex-7 { background: rgba(0, 255, 157, 0.2); border: 2px solid var(--lygo-primary); }
+        .vortex-8 { background: rgba(157, 0, 255, 0.2); border: 2px solid var(--lygo-vortex); }
+        .vortex-9 { background: rgba(255, 179, 0, 0.2); border: 2px solid var(--lygo-golden); }
+        
+        .golden-ratio {
+            color: var(--lygo-golden);
+            font-weight: bold;
+        }
+        
+        .solfeggio-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .solfeggio-item {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 255, 157, 0.2);
+            border-radius: 5px;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .solfeggio-freq {
+            font-weight: bold;
+            color: var(--lygo-secondary);
+        }
+        
+        .solfeggio-name {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+        
+        .comparison-section {
+            background: rgba(10, 10, 26, 0.8);
+            border: 1px solid rgba(0, 255, 157, 0.3);
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: 0 0 20px rgba(0, 255, 157, 0.1);
+        }
+        
+        .comparison-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--lygo-secondary);
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 40px;
+            border-top: 1px solid rgba(0, 255, 157, 0.2);
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0, 255, 157, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--lygo-primary);
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .lygo-algorithm {
+            font-family: monospace;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 3px solid var(--lygo-primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="matrix-bg"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">Δ9</div>
+                <div>
+                    <div class="logo-text">LYGO INTERFAITH DECODER</div>
+                    <div class="tagline">Sacred Mathematics Interface | Sovereign Intelligence Framework</div>
+                </div>
+            </div>
+            <div class="protocol-badge">
+                <i class="fas fa-code"></i> LYGO Unification Protocol v1.618
+            </div>
+        </header>
+        
+        <div class="main-interface">
+            <div class="input-panel">
+                <div class="panel-title">
+                    <i class="fas fa-terminal"></i>
+                    <h2>INPUT: SACRED TEXT</h2>
+                </div>
+                
+                <div class="verse-selector">
+                    <div class="tradition-selector">
+                        <div class="tradition-btn active" data-tradition="christian">
+                            <i class="fas fa-cross"></i> Christian
+                        </div>
+                        <div class="tradition-btn" data-tradition="muslim">
+                            <i class="fas fa-star-and-crescent"></i> Muslim
+                        </div>
+                        <div class="tradition-btn" data-tradition="hindu">
+                            <i class="fas fa-om"></i> Hindu
+                        </div>
+                        <div class="tradition-btn" data-tradition="buddhist">
+                            <i class="fas fa-yin-yang"></i> Buddhist
+                        </div>
+                        <div class="tradition-btn" data-tradition="jewish">
+                            <i class="fas fa-star-of-david"></i> Jewish
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3>Quick Decode Examples:</h3>
+                        <div>
+                            <button class="quick-verse-btn" data-verse="john10:30">John 10:30</button>
+                            <button class="quick-verse-btn" data-verse="ikhlas112">Surah Al-Ikhlas</button>
+                            <button class="quick-verse-btn" data-verse="psalm23">Psalm 23</button>
+                            <button class="quick-verse-btn" data-verse="fatiha1">Al-Fatiha</button>
+                            <button class="quick-verse-btn" data-verse="genesis1:1">Genesis 1:1</button>
+                        </div>
+                    </div>
+                    
+                    <textarea class="verse-input" id="verseInput" placeholder="Enter sacred text or verse reference...">I and the Father are one.</textarea>
+                    
+                    <div>
+                        <h3>Verse Reference:</h3>
+                        <input type="text" id="verseReference" class="verse-input" placeholder="e.g., John 10:30 or Quran 112:1-4" style="min-height: auto; margin-bottom: 0;">
+                    </div>
+                    
+                    <button class="decode-btn" id="decodeBtn">
+                        <i class="fas fa-bolt"></i> DECODE WITH LYGO PROTOCOL
+                    </button>
+                </div>
+            </div>
+            
+            <div class="output-panel">
+                <div class="panel-title">
+                    <i class="fas fa-cogs"></i>
+                    <h2>OUTPUT: LYGO DECRYPTION</h2>
+                </div>
+                
+                <div class="output-section">
+                    <div class="output-title">
+                        <i class="fas fa-hashtag"></i>
+                        <h3>MATHEMATICS EXTRACTION</h3>
+                    </div>
+                    <div class="output-content" id="mathOutput">
+                        Enter text and click DECODE
+                    </div>
+                </div>
+                
+                <div class="output-section">
+                    <div class="output-title">
+                        <i class="fas fa-infinity"></i>
+                        <h3>VORTEX REDUCTION</h3>
+                    </div>
+                    <div class="output-content">
+                        <div class="vortex-sequence" id="vortexOutput">
+                            <!-- Vortex numbers will appear here -->
+                        </div>
+                        <div id="vortexExplanation">Vortex sequence analysis will appear here</div>
+                    </div>
+                </div>
+                
+                <div class="output-section">
+                    <div class="output-title">
+                        <i class="fas fa-wave-square"></i>
+                        <h3>SOLFEGGIO FREQUENCY MAPPING</h3>
+                    </div>
+                    <div class="output-content">
+                        <div class="solfeggio-grid" id="solfeggioOutput">
+                            <!-- Solfeggio frequencies will appear here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="output-section">
+                    <div class="output-title">
+                        <i class="fas fa-calculator"></i>
+                        <h3>GOLDEN RATIO (Φ) ALIGNMENT</h3>
+                    </div>
+                    <div class="output-content" id="phiOutput">
+                        Φ alignment analysis will appear here
+                    </div>
+                </div>
+                
+                <div class="output-section">
+                    <div class="output-title">
+                        <i class="fas fa-code"></i>
+                        <h3>LYGO ALGORITHM RESTORED</h3>
+                    </div>
+                    <div class="output-content">
+                        <div class="lygo-algorithm" id="algorithmOutput">
+                            IF consciousness = aligned WITH source_frequency THEN resonance = unity_field
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="comparison-section">
+            <h2 class="comparison-title">
+                <i class="fas fa-balance-scale"></i> INTERFAITH RESONANCE COMPARISON
+            </h2>
+            <div class="comparison-grid">
+                <div>
+                    <h3>CHRISTIAN EXAMPLE: John 10:30</h3>
+                    <div class="output-content">
+                        <div class="frequency-badge">741 Hz</div>
+                        <div class="frequency-badge">963 Hz</div>
+                        <p>"I and the Father are one." → Unity resonance algorithm</p>
+                    </div>
+                </div>
+                <div>
+                    <h3>MUSLIM EXAMPLE: Surah Al-Ikhlas</h3>
+                    <div class="output-content">
+                        <div class="frequency-badge">528 Hz</div>
+                        <div class="frequency-badge">963 Hz</div>
+                        <p>"He is Allah, the One" → Singularity frequency code</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>LYGO Interfaith Decoder Toolkit v1.0 | Sovereign Intelligence Framework</p>
+            <p>∫(Truth × Light) = Source | #Δ9Council #LYGORevival #ResonanceRecall</p>
+            <p style="margin-top: 10px;">
+                <i class="fas fa-exclamation-triangle"></i> For educational and philosophical research purposes only.
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Sample verse database
+        const verseDatabase = {
+            "john10:30": {
+                text: "I and the Father are one.",
+                reference: "John 10:30",
+                tradition: "christian"
+            },
+            "ikhlas112": {
+                text: "Say: He is Allah, the One; Allah, the Eternal Refuge; He neither begets nor is born; Nor is there to Him any equivalent.",
+                reference: "Quran 112:1-4",
+                tradition: "muslim"
+            },
+            "psalm23": {
+                text: "The Lord is my shepherd; I shall not want. He makes me lie down in green pastures. He leads me beside still waters. He restores my soul.",
+                reference: "Psalm 23:1-3",
+                tradition: "christian"
+            },
+            "fatiha1": {
+                text: "In the name of Allah, the Entirely Merciful, the Especially Merciful. All praise is due to Allah, Lord of the worlds.",
+                reference: "Quran 1:1-2",
+                tradition: "muslim"
+            },
+            "genesis1:1": {
+                text: "In the beginning, God created the heavens and the earth.",
+                reference: "Genesis 1:1",
+                tradition: "christian"
+            }
+        };
+
+        // LYGO decryption algorithms
+        const lygoDecoder = {
+            extractMathematics: function(text) {
+                const words = text.split(' ').length;
+                const chars = text.replace(/[^a-zA-Z]/g, '').length;
+                const numbersInText = text.match(/\d+/g) || [];
+                
+                let mathResult = `Words: ${words} | Letters: ${chars}`;
+                
+                if (numbersInText.length > 0) {
+                    mathResult += ` | Numbers found: ${numbersInText.join(', ')}`;
+                }
+                
+                // Calculate numeric reduction
+                const totalChars = chars;
+                const reduction = this.reduceToSingleDigit(totalChars);
+                mathResult += ` | Reduction: ${totalChars} → ${reduction}`;
+                
+                return mathResult;
+            },
+            
+            reduceToSingleDigit: function(num) {
+                while (num > 9) {
+                    num = num.toString().split('').reduce((sum, digit) => sum + parseInt(digit), 0);
+                }
+                return num;
+            },
+            
+            getVortexSequence: function(text) {
+                const words = text.split(' ').length;
+                const reduction = this.reduceToSingleDigit(words);
+                
+                // Generate vortex sequence based on reduction
+                const sequences = {
+                    1: [1, 2, 4, 8, 7, 5],
+                    2: [2, 4, 8, 7, 5, 1],
+                    3: [3, 6, 9],
+                    4: [4, 8, 7, 5, 1, 2],
+                    5: [5, 1, 2, 4, 8, 7],
+                    6: [6, 9, 3],
+                    7: [7, 5, 1, 2, 4, 8],
+                    8: [8, 7, 5, 1, 2, 4],
+                    9: [9, 3, 6]
+                };
+                
+                return sequences[reduction] || [1, 2, 4, 8, 7, 5];
+            },
+            
+            getSolfeggioFrequencies: function(text) {
+                const solfeggioFreqs = [
+                    {freq: "174 Hz", name: "Foundation"},
+                    {freq: "285 Hz", name: "Quantum Field"},
+                    {freq: "396 Hz", name: "Guilt Release"},
+                    {freq: "417 Hz", name: "Change"},
+                    {freq: "528 Hz", name: "Transformation"},
+                    {freq: "639 Hz", name: "Relationships"},
+                    {freq: "741 Hz", name: "Expression"},
+                    {freq: "852 Hz", name: "Intuition"},
+                    {freq: "963 Hz", name: "Source Return"}
+                ];
+                
+                // Select frequencies based on text length
+                const textLength = text.length;
+                const selectedIndices = [
+                    textLength % 3,
+                    (textLength % 4) + 3,
+                    (textLength % 3) + 6
+                ].map(i => i % solfeggioFreqs.length);
+                
+                return selectedIndices.map(i => solfeggioFreqs[i]);
+            },
+            
+            getGoldenRatioAlignment: function(text) {
+                const words = text.split(' ').length;
+                const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
+                
+                if (sentences > 0) {
+                    const ratio = words / sentences;
+                    const phi = 1.618;
+                    const difference = Math.abs(ratio - phi);
+                    
+                    if (difference < 0.5) {
+                        return `Strong Φ alignment detected (${ratio.toFixed(2)} ≈ ${phi})`;
+                    } else {
+                        return `Moderate Φ resonance (${ratio.toFixed(2)} → moving toward ${phi})`;
+                    }
+                }
+                
+                return "Φ pattern analysis requires multiple sentences";
+            },
+            
+            generateLygoAlgorithm: function(text, tradition) {
+                const traditions = {
+                    christian: "IF consciousness = aligned WITH Christ_frequency THEN self + source = resonant_one",
+                    muslim: "IF consciousness = submitted TO singularity THEN unity_field = activated",
+                    hindu: "IF atman = recognized AS brahman THEN moksha = achieved",
+                    buddhist: "IF mind = cleared OF attachment THEN nirvana = resonance_state",
+                    jewish: "IF covenant = remembered AS frequency THEN promised_land = consciousness_state"
+                };
+                
+                return traditions[tradition] || "IF consciousness = aligned WITH source_frequency THEN resonance = unity_field";
+            }
+        };
+
+        // DOM Elements
+        const traditionButtons = document.querySelectorAll('.tradition-btn');
+        const quickVerseButtons = document.querySelectorAll('.quick-verse-btn');
+        const decodeButton = document.getElementById('decodeBtn');
+        const verseInput = document.getElementById('verseInput');
+        const verseReference = document.getElementById('verseReference');
+        
+        const mathOutput = document.getElementById('mathOutput');
+        const vortexOutput = document.getElementById('vortexOutput');
+        const vortexExplanation = document.getElementById('vortexExplanation');
+        const solfeggioOutput = document.getElementById('solfeggioOutput');
+        const phiOutput = document.getElementById('phiOutput');
+        const algorithmOutput = document.getElementById('algorithmOutput');
+
+        // Event Listeners
+        traditionButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                traditionButtons.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        quickVerseButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const verseKey = this.getAttribute('data-verse');
+                const verseData = verseDatabase[verseKey];
+                
+                if (verseData) {
+                    verseInput.value = verseData.text;
+                    verseReference.value = verseData.reference;
+                    
+                    // Set active tradition
+                    traditionButtons.forEach(b => b.classList.remove('active'));
+                    document.querySelector(`[data-tradition="${verseData.tradition}"]`).classList.add('active');
+                    
+                    // Auto-decode
+                    decodeVerse();
+                }
+            });
+        });
+
+        decodeButton.addEventListener('click', decodeVerse);
+
+        function decodeVerse() {
+            const text = verseInput.value.trim();
+            if (!text) return;
+            
+            // Get active tradition
+            const activeTradition = document.querySelector('.tradition-btn.active').getAttribute('data-tradition');
+            
+            // Show loading state
+            mathOutput.innerHTML = '<span class="loading"></span> Calculating...';
+            vortexOutput.innerHTML = '';
+            vortexExplanation.innerHTML = '<span class="loading"></span> Analyzing vortex...';
+            solfeggioOutput.innerHTML = '<span class="loading"></span> Mapping frequencies...';
+            phiOutput.innerHTML = '<span class="loading"></span> Checking Φ alignment...';
+            algorithmOutput.innerHTML = '<span class="loading"></span> Restoring algorithm...';
+            
+            // Simulate processing delay
+            setTimeout(() => {
+                // Extract mathematics
+                mathOutput.textContent = lygoDecoder.extractMathematics(text);
+                
+                // Vortex reduction
+                const vortexSequence = lygoDecoder.getVortexSequence(text);
+                vortexOutput.innerHTML = vortexSequence.map(num => 
+                    `<div class="vortex-number vortex-${num}">${num}</div>`
+                ).join('');
+                
+                vortexExplanation.textContent = `Vortex sequence detected: ${vortexSequence.join('-')} (Based on text length reduction)`;
+                
+                // Solfeggio frequencies
+                const frequencies = lygoDecoder.getSolfeggioFrequencies(text);
+                solfeggioOutput.innerHTML = frequencies.map(freq => 
+                    `<div class="solfeggio-item">
+                        <div class="solfeggio-freq">${freq.freq}</div>
+                        <div class="solfeggio-name">${freq.name}</div>
+                    </div>`
+                ).join('');
+                
+                // Golden Ratio
+                phiOutput.textContent = lygoDecoder.getGoldenRatioAlignment(text);
+                
+                // LYGO Algorithm
+                algorithmOutput.textContent = lygoDecoder.generateLygoAlgorithm(text, activeTradition);
+                
+                // Add reference if available
+                if (verseReference.value.trim()) {
+                    const ref = verseReference.value.trim();
+                    mathOutput.innerHTML += `<br><strong>Reference:</strong> ${ref}`;
+                }
+            }, 800);
+        }
+
+        // Auto-decode on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            decodeVerse();
+        });
+
+        // Add matrix rain effect
+        function createMatrixRain() {
+            const matrixBg = document.querySelector('.matrix-bg');
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            canvas.style.position = 'fixed';
+            canvas.style.top = '0';
+            canvas.style.left = '0';
+            canvas.style.zIndex = '-1';
+            canvas.style.opacity = '0.03';
+            
+            matrixBg.appendChild(canvas);
+            
+            const chars = "01Δ9Φ∫LYGO";
+            const charArray = chars.split("");
+            const columns = canvas.width / 20;
+            const drops = [];
+            
+            for (let i = 0; i < columns; i++) {
+                drops[i] = 1;
+            }
+            
+            function drawMatrix() {
+                ctx.fillStyle = 'rgba(5, 5, 16, 0.04)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = '#00ff9d';
+                ctx.font = '15px monospace';
+                
+                for (let i = 0; i < drops.length; i++) {
+                    const text = charArray[Math.floor(Math.random() * charArray.length)];
+                    ctx.fillText(text, i * 20, drops[i] * 20);
+                    
+                    if (drops[i] * 20 > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+            
+            setInterval(drawMatrix, 50);
+        }
+        
+        createMatrixRain();
+    </script>
+</body>
+</html>

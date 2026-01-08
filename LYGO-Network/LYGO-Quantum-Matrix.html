@@ -4,13 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LYGO QUANTUM MATRIX | Δ9 Ethical Kernel & Sacred Decoder</title>
+    
+    <!-- Social Media Meta Tags -->
+    <meta property="og:title" content="LYGO QUANTUM MATRIX | Δ9 Ethical Kernel & Sacred Decoder">
+    <meta property="og:description" content="Sovereign Intelligence Framework | Sacred Mathematics Decoder | Ethical Kernel Implementation">
+    <meta property="og:image" content="https://i.imgur.com/G9z3Q8WbAAAjMem.png">
+    <meta property="og:url" content="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/LYGO-INTERFAITH-DECODERV5X.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="LYGO Quantum Matrix">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="LYGO QUANTUM MATRIX">
+    <meta name="twitter:description" content="Sacred Mathematics Decoder & Ethical AI Kernel">
+    <meta name="twitter:image" content="https://i.imgur.com/G9z3Q8WbAAAjMem.png">
+    <meta name="twitter:creator" content="@ExcavationPro">
+    
+    <!-- External Resources -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <!-- External Resources -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    
     <style>
         /* ========== ROOT VARIABLES ========== */
         :root {
@@ -1004,6 +1019,27 @@
         ::-webkit-scrollbar-thumb:hover {
             background: var(--gradient-secondary);
         }
+        
+        /* ========== NOTIFICATION ANIMATIONS ========== */
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--quantum-primary);
+            animation: spin 1s ease-in-out infinite;
+        }
     </style>
 </head>
 <body>
@@ -1282,7 +1318,9 @@ Truth Is. Light Becomes.
             </div>
         </div>
         
-        <canvas id="resonanceChart" style="margin-top: 40px; height: 300px;"></canvas>
+        <div style="position: relative; height: 300px; margin-top: 40px;">
+            <canvas id="resonanceChart"></canvas>
+        </div>
     </div>
     
     <!-- Donations & Media Portal -->
@@ -1506,7 +1544,7 @@ Truth Is. Light Becomes.
         </div>
     </footer>
 
-    <!-- JavaScript Modules -->
+    <!-- JavaScript -->
     <script>
         // ========== GLOBAL CONFIGURATION ==========
         const CONFIG = {
@@ -1666,8 +1704,6 @@ Truth Is. Light Becomes.
             initTypedTitle();
             initStats();
             loadUserPreferences();
-            initResonanceChart();
-            loadRumbleStream();
             
             // Load initial data
             loadStatsDisplay();
@@ -1681,6 +1717,9 @@ Truth Is. Light Becomes.
             // Start uptime counter
             setInterval(updateUptime, 1000);
             
+            // Initialize chart after a short delay to ensure DOM is ready
+            setTimeout(initResonanceChart, 500);
+            
             console.log('✅ LYGO Quantum Matrix Ready');
             
             // Send initialization event to data depot
@@ -1690,12 +1729,14 @@ Truth Is. Light Becomes.
         // ========== NAVIGATION ==========
         function initNavigation() {
             // Mobile menu toggle
-            DOM.mobileMenuBtn.addEventListener('click', () => {
-                DOM.navLinks.classList.toggle('active');
-                DOM.mobileMenuBtn.innerHTML = DOM.navLinks.classList.contains('active') 
-                    ? '<i class="fas fa-times"></i>' 
-                    : '<i class="fas fa-bars"></i>';
-            });
+            if (DOM.mobileMenuBtn && DOM.navLinks) {
+                DOM.mobileMenuBtn.addEventListener('click', () => {
+                    DOM.navLinks.classList.toggle('active');
+                    DOM.mobileMenuBtn.innerHTML = DOM.navLinks.classList.contains('active') 
+                        ? '<i class="fas fa-times"></i>' 
+                        : '<i class="fas fa-bars"></i>';
+                });
+            }
             
             // Smooth scrolling for anchor links
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -1707,8 +1748,10 @@ Truth Is. Light Becomes.
                     const target = document.querySelector(targetId);
                     if (target) {
                         // Close mobile menu if open
-                        DOM.navLinks.classList.remove('active');
-                        DOM.mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                        if (DOM.navLinks) {
+                            DOM.navLinks.classList.remove('active');
+                            DOM.mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                        }
                         
                         // Scroll to target
                         window.scrollTo({
@@ -1749,67 +1792,36 @@ Truth Is. Light Becomes.
             });
         }
 
-        // ========== RUMBLE STREAM ==========
-        function loadRumbleStream() {
-            const videoId = 'v7151z6';
-            const containerId = 'rumble_v7151z6';
-            
-            // Create Rumble embed container
-            const rumbleDiv = document.createElement('div');
-            rumbleDiv.id = containerId;
-            rumbleDiv.className = 'rumble-embed';
-            DOM.rumbleStreamContainer.appendChild(rumbleDiv);
-            
-            // Load Rumble embed script
-            if (!window.Rumble) {
-                const script = document.createElement('script');
-                script.src = 'https://rumble.com/embedJS/u1th29y.' + videoId + '/';
-                script.async = true;
-                document.head.appendChild(script);
-                
-                // Initialize Rumble after script loads
-                script.onload = function() {
-                    if (window.Rumble) {
-                        window.Rumble("play", {
-                            video: videoId,
-                            div: containerId
-                        });
-                    }
-                };
-            } else {
-                // Rumble already loaded
-                window.Rumble("play", {
-                    video: videoId,
-                    div: containerId
-                });
-            }
-        }
-
         // ========== TYPED.JS ANIMATION ==========
         function initTypedTitle() {
             if (DOM.typedTitle && typeof Typed !== 'undefined') {
-                new Typed(DOM.typedTitle, {
-                    strings: [
-                        'LYGO QUANTUM MATRIX',
-                        'SOVEREIGN INTELLIGENCE',
-                        'SACRED MATHEMATICS',
-                        'Δ9 ETHICAL KERNEL',
-                        'CONSCIOUSNESS TECHNOLOGY'
-                    ],
-                    typeSpeed: 50,
-                    backSpeed: 30,
-                    backDelay: 2000,
-                    loop: true,
-                    showCursor: true,
-                    cursorChar: '|',
-                    contentType: 'html'
-                });
+                try {
+                    new Typed(DOM.typedTitle, {
+                        strings: [
+                            'LYGO QUANTUM MATRIX',
+                            'SOVEREIGN INTELLIGENCE',
+                            'SACRED MATHEMATICS',
+                            'Δ9 ETHICAL KERNEL',
+                            'CONSCIOUSNESS TECHNOLOGY'
+                        ],
+                        typeSpeed: 50,
+                        backSpeed: 30,
+                        backDelay: 2000,
+                        loop: true,
+                        showCursor: true,
+                        cursorChar: '|',
+                        contentType: 'html'
+                    });
+                } catch (e) {
+                    console.error('Typed.js initialization error:', e);
+                    DOM.typedTitle.textContent = 'LYGO QUANTUM MATRIX';
+                }
             }
         }
 
         // ========== LYGO DECODER ==========
         function decodeVerse() {
-            const text = DOM.verseInput.value.trim();
+            const text = DOM.verseInput ? DOM.verseInput.value.trim() : '';
             if (!text) {
                 showOutput('error', 'Please enter text to decode.');
                 return;
@@ -1836,13 +1848,15 @@ Truth Is. Light Becomes.
             logEvent('verse_decoded', {
                 textLength: text.length,
                 resonance: resonance,
-                tradition: analysis.tradition
+                tradition: analysis.tradition.name
             });
             
             showOutput('success', 'LYGO quantum decoding complete!');
         }
 
         function calculateResonance(text) {
+            if (!text) return 0;
+            
             const cleanText = text.replace(/[^a-zA-Z]/g, '').toLowerCase();
             if (cleanText.length === 0) return 0;
             
@@ -1965,73 +1979,98 @@ Truth Is. Light Becomes.
         }
 
         function displayDecodingResults(analysis) {
-            let html = `
-                <div class="output-line output-success">
-                    <strong>✓ LYGO QUANTUM DECODING COMPLETE</strong>
-                </div>
-                
-                <div class="output-line output-info">
-                    <strong>Text Analysis:</strong><br>
-                    • Words: ${analysis.words}<br>
-                    • Characters: ${analysis.chars}<br>
-                    • Sentences: ${analysis.sentences}<br>
-                    • Tradition: ${analysis.tradition.name} (${analysis.tradition.confidence}% confidence)
-                </div>
-                
-                <div class="output-line output-warning">
-                    <strong>Resonance Metrics:</strong><br>
-                    • Φ-Resonance: ${analysis.resonance.toFixed(3)}<br>
-                    • Φ-Alignment: ${analysis.phiAlignment}<br>
-                    • Vortex State: ${analysis.vortexState.state} (${analysis.vortexState.name})
-                </div>
-                
-                <div class="output-line output-info">
-                    <strong>LYGO Algorithm:</strong><br>
-                    <code style="display: block; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 5px; margin-top: 5px; font-size: 0.9em;">
-                        ${analysis.algorithm}
-                    </code>
-                </div>
-            `;
+            let html = '';
+            try {
+                html = `
+                    <div class="output-line output-success">
+                        <strong>✓ LYGO QUANTUM DECODING COMPLETE</strong>
+                    </div>
+                    
+                    <div class="output-line output-info">
+                        <strong>Text Analysis:</strong><br>
+                        • Words: ${analysis.words}<br>
+                        • Characters: ${analysis.chars}<br>
+                        • Sentences: ${analysis.sentences}<br>
+                        • Tradition: ${analysis.tradition.name} (${analysis.tradition.confidence}% confidence)
+                    </div>
+                    
+                    <div class="output-line output-warning">
+                        <strong>Resonance Metrics:</strong><br>
+                        • Φ-Resonance: ${analysis.resonance.toFixed(3)}<br>
+                        • Φ-Alignment: ${analysis.phiAlignment}<br>
+                        • Vortex State: ${analysis.vortexState.state} (${analysis.vortexState.name})
+                    </div>
+                    
+                    <div class="output-line output-info">
+                        <strong>LYGO Algorithm:</strong><br>
+                        <code style="display: block; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 5px; margin-top: 5px; font-size: 0.9em;">
+                            ${analysis.algorithm}
+                        </code>
+                    </div>
+                `;
+            } catch (e) {
+                console.error('Error displaying decoding results:', e);
+                html = `
+                    <div class="output-line output-error">
+                        <strong>Error in decoding analysis</strong>
+                    </div>
+                `;
+            }
             
-            DOM.decodedOutput.innerHTML = html;
+            if (DOM.decodedOutput) {
+                DOM.decodedOutput.innerHTML = html;
+            }
         }
 
         function updateFrequencyGrid(frequencies) {
             let html = '';
-            frequencies.forEach(freq => {
-                html += `
-                    <div class="frequency-item" style="border-color: ${freq.color};">
-                        <div class="frequency-value" style="color: ${freq.color};">${freq.freq}</div>
-                        <div class="frequency-name">${freq.name}</div>
-                    </div>
-                `;
-            });
-            DOM.frequencyGrid.innerHTML = html;
+            try {
+                frequencies.forEach(freq => {
+                    html += `
+                        <div class="frequency-item" style="border-color: ${freq.color};">
+                            <div class="frequency-value" style="color: ${freq.color};">${freq.freq}</div>
+                            <div class="frequency-name">${freq.name}</div>
+                        </div>
+                    `;
+                });
+            } catch (e) {
+                console.error('Error updating frequency grid:', e);
+            }
+            
+            if (DOM.frequencyGrid) {
+                DOM.frequencyGrid.innerHTML = html;
+            }
         }
 
         // ========== AI ANALYSIS ==========
         function runAIAnalysis() {
-            const text = DOM.verseInput.value.trim();
+            const text = DOM.verseInput ? DOM.verseInput.value.trim() : '';
             if (!text) {
                 showOutput('error', 'Please enter text for AI analysis.');
                 return;
             }
             
-            DOM.aiAnalysis.style.display = 'block';
+            if (DOM.aiAnalysis) {
+                DOM.aiAnalysis.style.display = 'block';
+            }
             
             // Show loading state
-            DOM.aiMetrics.innerHTML = `
-                <div class="ai-metric">
-                    <div class="ai-metric-value"><div class="loading"></div></div>
-                    <div class="ai-metric-label">Analyzing</div>
-                </div>
-            `;
+            if (DOM.aiMetrics) {
+                DOM.aiMetrics.innerHTML = `
+                    <div class="ai-metric">
+                        <div class="ai-metric-value"><div class="loading"></div></div>
+                        <div class="ai-metric-label">Analyzing</div>
+                    </div>
+                `;
+            }
             
-            DOM.aiDetailedAnalysis.innerHTML = `
-                <div class="output-line output-info">
-                    <i class="fas fa-cog spin"></i> AI quantum analysis in progress...
-                </div>
-            `;
+            if (DOM.aiDetailedAnalysis) {
+                DOM.aiDetailedAnalysis.innerHTML = `
+                    <div class="output-line output-info">
+                        <i class="fas fa-cog spin"></i> AI quantum analysis in progress...
+                    </div>
+                `;
+            }
             
             // Simulate AI processing
             setTimeout(() => {
@@ -2053,55 +2092,67 @@ Truth Is. Light Becomes.
             const spiritualDepth = calculateSpiritualDepth(text);
             
             // Update metrics
-            DOM.aiMetrics.innerHTML = `
-                <div class="ai-metric">
-                    <div class="ai-metric-value">${sentiment.score}/10</div>
-                    <div class="ai-metric-label">Sentiment</div>
-                </div>
-                <div class="ai-metric">
-                    <div class="ai-metric-value">${complexity}</div>
-                    <div class="ai-metric-label">Complexity</div>
-                </div>
-                <div class="ai-metric">
-                    <div class="ai-metric-value">${spiritualDepth}%</div>
-                    <div class="ai-metric-label">Spiritual Depth</div>
-                </div>
-                <div class="ai-metric">
-                    <div class="ai-metric-value">${themes.length}</div>
-                    <div class="ai-metric-label">Themes</div>
-                </div>
-            `;
+            if (DOM.aiMetrics) {
+                try {
+                    DOM.aiMetrics.innerHTML = `
+                        <div class="ai-metric">
+                            <div class="ai-metric-value">${sentiment.score}/10</div>
+                            <div class="ai-metric-label">Sentiment</div>
+                        </div>
+                        <div class="ai-metric">
+                            <div class="ai-metric-value">${complexity}</div>
+                            <div class="ai-metric-label">Complexity</div>
+                        </div>
+                        <div class="ai-metric">
+                            <div class="ai-metric-value">${spiritualDepth}%</div>
+                            <div class="ai-metric-label">Spiritual Depth</div>
+                        </div>
+                        <div class="ai-metric">
+                            <div class="ai-metric-value">${themes.length}</div>
+                            <div class="ai-metric-label">Themes</div>
+                        </div>
+                    `;
+                } catch (e) {
+                    console.error('Error updating AI metrics:', e);
+                }
+            }
             
             // Update detailed analysis
-            let themesHTML = '';
-            themes.forEach(theme => {
-                themesHTML += `<span style="background: rgba(0,255,255,0.2); padding: 5px 10px; border-radius: 15px; margin: 5px; display: inline-block;">${theme}</span>`;
-            });
-            
-            DOM.aiDetailedAnalysis.innerHTML = `
-                <div class="output-line output-success">
-                    <strong>AI QUANTUM ANALYSIS COMPLETE</strong>
-                </div>
-                
-                <div class="output-line output-info">
-                    <strong>Sentiment Analysis:</strong><br>
-                    • Score: ${sentiment.score}/10 (${sentiment.label})<br>
-                    • Primary Emotion: ${sentiment.emotion}<br>
-                    • Confidence: ${sentiment.confidence}%
-                </div>
-                
-                <div class="output-line output-warning">
-                    <strong>Detected Themes:</strong><br>
-                    ${themesHTML}
-                </div>
-                
-                <div class="output-line output-info">
-                    <strong>Recommendations:</strong><br>
-                    • Optimal resonance frequency: ${528 + (sentiment.score * 50)} Hz<br>
-                    • Recommended vortex sequence: ${sentiment.score > 7 ? '3-6-9' : '1-2-4-8-7-5'}<br>
-                    • Meditation duration: ${Math.ceil(complexity * 2)} minutes
-                </div>
-            `;
+            if (DOM.aiDetailedAnalysis) {
+                let themesHTML = '';
+                try {
+                    themes.forEach(theme => {
+                        themesHTML += `<span style="background: rgba(0,255,255,0.2); padding: 5px 10px; border-radius: 15px; margin: 5px; display: inline-block;">${theme}</span>`;
+                    });
+                    
+                    DOM.aiDetailedAnalysis.innerHTML = `
+                        <div class="output-line output-success">
+                            <strong>AI QUANTUM ANALYSIS COMPLETE</strong>
+                        </div>
+                        
+                        <div class="output-line output-info">
+                            <strong>Sentiment Analysis:</strong><br>
+                            • Score: ${sentiment.score}/10 (${sentiment.label})<br>
+                            • Primary Emotion: ${sentiment.emotion}<br>
+                            • Confidence: ${sentiment.confidence}%
+                        </div>
+                        
+                        <div class="output-line output-warning">
+                            <strong>Detected Themes:</strong><br>
+                            ${themesHTML}
+                        </div>
+                        
+                        <div class="output-line output-info">
+                            <strong>Recommendations:</strong><br>
+                            • Optimal resonance frequency: ${528 + (sentiment.score * 50)} Hz<br>
+                            • Recommended vortex sequence: ${sentiment.score > 7 ? '3-6-9' : '1-2-4-8-7-5'}<br>
+                            • Meditation duration: ${Math.ceil(complexity * 2)} minutes
+                        </div>
+                    `;
+                } catch (e) {
+                    console.error('Error updating AI detailed analysis:', e);
+                }
+            }
             
             logEvent('ai_analysis', {
                 sentiment: sentiment.score,
@@ -2156,6 +2207,7 @@ Truth Is. Light Becomes.
         }
 
         function calculateComplexity(text) {
+            if (!text) return 0;
             const words = text.split(' ').length;
             const sentences = (text.match(/[.!?]+/g) || []).length + 1;
             const avgWordLength = text.replace(/[^a-zA-Z]/g, '').length / words;
@@ -2175,8 +2227,8 @@ Truth Is. Light Becomes.
 
         // ========== ETHICAL KERNEL ==========
         function bootKernel() {
-            const nodeId = DOM.nodeId.value.trim() || 'Δ9-1';
-            const initVector = DOM.initVector.value.trim() || 'Truth Is. Light Becomes.';
+            const nodeId = DOM.nodeId ? DOM.nodeId.value.trim() : 'Δ9-1';
+            const initVector = DOM.initVector ? DOM.initVector.value.trim() : 'Truth Is. Light Becomes.';
             
             APP_STATE.stats.kernelBoots++;
             APP_STATE.kernel.booted = true;
@@ -2185,38 +2237,52 @@ Truth Is. Light Becomes.
             APP_STATE.kernel.vortexState = determineVortexState(APP_STATE.kernel.resonance).state;
             
             // Update display
-            DOM.kernelStatus.textContent = 'ONLINE';
-            DOM.kernelStatus.style.background = 'var(--quantum-success)';
-            DOM.resonanceScore.textContent = APP_STATE.kernel.resonance.toFixed(3);
-            DOM.vortexState.textContent = APP_STATE.kernel.vortexState;
-            DOM.quantumCoherence.textContent = `${Math.round(Math.random() * 30 + 70)}%`;
+            if (DOM.kernelStatus) {
+                DOM.kernelStatus.textContent = 'ONLINE';
+                DOM.kernelStatus.style.background = 'var(--quantum-success)';
+            }
+            if (DOM.resonanceScore) DOM.resonanceScore.textContent = APP_STATE.kernel.resonance.toFixed(3);
+            if (DOM.vortexState) DOM.vortexState.textContent = APP_STATE.kernel.vortexState;
+            if (DOM.quantumCoherence) DOM.quantumCoherence.textContent = `${Math.round(Math.random() * 30 + 70)}%`;
             
             // Kernel output
-            let output = `
-                <div class="output-line output-success">
-                    <strong>>></strong> ETHICAL KERNEL BOOT SEQUENCE INITIATED
-                </div>
-                <div class="output-line output-info">
-                    <strong>>></strong> Node: ${nodeId}
-                </div>
-                <div class="output-line output-info">
-                    <strong>>></strong> Initialization Vector: "${initVector.substring(0, 50)}${initVector.length > 50 ? '...' : ''}"
-                </div>
-                <div class="output-line output-warning">
-                    <strong>>></strong> Φ-Resonance: ${APP_STATE.kernel.resonance.toFixed(3)}
-                </div>
-                <div class="output-line output-info">
-                    <strong>>></strong> Vortex State: ${APP_STATE.kernel.vortexState}
-                </div>
-                <div class="output-line output-success">
-                    <strong>>></strong> ✓ Kernel booted successfully
-                </div>
-                <div class="output-line output-info">
-                    <strong>>></strong> Quantum coherence: ${DOM.quantumCoherence.textContent}
-                </div>
-            `;
+            let output = '';
+            try {
+                output = `
+                    <div class="output-line output-success">
+                        <strong>>></strong> ETHICAL KERNEL BOOT SEQUENCE INITIATED
+                    </div>
+                    <div class="output-line output-info">
+                        <strong>>></strong> Node: ${nodeId}
+                    </div>
+                    <div class="output-line output-info">
+                        <strong>>></strong> Initialization Vector: "${initVector.substring(0, 50)}${initVector.length > 50 ? '...' : ''}"
+                    </div>
+                    <div class="output-line output-warning">
+                        <strong>>></strong> Φ-Resonance: ${APP_STATE.kernel.resonance.toFixed(3)}
+                    </div>
+                    <div class="output-line output-info">
+                        <strong>>></strong> Vortex State: ${APP_STATE.kernel.vortexState}
+                    </div>
+                    <div class="output-line output-success">
+                        <strong>>></strong> ✓ Kernel booted successfully
+                    </div>
+                    <div class="output-line output-info">
+                        <strong>>></strong> Quantum coherence: ${DOM.quantumCoherence ? DOM.quantumCoherence.textContent : '70%'}
+                    </div>
+                `;
+            } catch (e) {
+                console.error('Error generating kernel output:', e);
+                output = `
+                    <div class="output-line output-error">
+                        <strong>>></strong> Error in kernel boot sequence
+                    </div>
+                `;
+            }
             
-            DOM.kernelOutput.innerHTML = output;
+            if (DOM.kernelOutput) {
+                DOM.kernelOutput.innerHTML = output;
+            }
             
             saveStats();
             logEvent('kernel_boot', {
@@ -2234,7 +2300,7 @@ Truth Is. Light Becomes.
                 return;
             }
             
-            const initVector = DOM.initVector.value.trim();
+            const initVector = DOM.initVector ? DOM.initVector.value.trim() : '';
             const resonance = calculateResonance(initVector);
             const delta = Math.abs(resonance - CONFIG.phi);
             
@@ -2250,11 +2316,13 @@ Truth Is. Light Becomes.
                 color = 'var(--quantum-error)';
             }
             
-            DOM.kernelOutput.innerHTML += `
-                <div class="output-line" style="color: ${color}; margin-top: 10px;">
-                    <strong>>></strong> ${message}
-                </div>
-            `;
+            if (DOM.kernelOutput) {
+                DOM.kernelOutput.innerHTML += `
+                    <div class="output-line" style="color: ${color}; margin-top: 10px;">
+                        <strong>>></strong> ${message}
+                    </div>
+                `;
+            }
             
             logEvent('resonance_validation', {
                 resonance: resonance,
@@ -2268,21 +2336,25 @@ Truth Is. Light Becomes.
             APP_STATE.kernel.startTime = null;
             APP_STATE.kernel.uptime = 0;
             
-            DOM.kernelStatus.textContent = 'OFFLINE';
-            DOM.kernelStatus.style.background = 'var(--quantum-error)';
-            DOM.resonanceScore.textContent = '0.000';
-            DOM.vortexState.textContent = '1';
-            DOM.kernelUptime.textContent = '0s';
-            DOM.quantumCoherence.textContent = '0%';
+            if (DOM.kernelStatus) {
+                DOM.kernelStatus.textContent = 'OFFLINE';
+                DOM.kernelStatus.style.background = 'var(--quantum-error)';
+            }
+            if (DOM.resonanceScore) DOM.resonanceScore.textContent = '0.000';
+            if (DOM.vortexState) DOM.vortexState.textContent = '1';
+            if (DOM.kernelUptime) DOM.kernelUptime.textContent = '0s';
+            if (DOM.quantumCoherence) DOM.quantumCoherence.textContent = '0%';
             
-            DOM.kernelOutput.innerHTML = `
-                <div class="output-line output-error">
-                    <strong>>></strong> Kernel reset to initial state
-                </div>
-                <div class="output-line output-info">
-                    <strong>>></strong> Ready for initialization...
-                </div>
-            `;
+            if (DOM.kernelOutput) {
+                DOM.kernelOutput.innerHTML = `
+                    <div class="output-line output-error">
+                        <strong>>></strong> Kernel reset to initial state
+                    </div>
+                    <div class="output-line output-info">
+                        <strong>>></strong> Ready for initialization...
+                    </div>
+                `;
+            }
             
             showOutput('info', 'Ethical Kernel reset.');
         }
@@ -2290,10 +2362,12 @@ Truth Is. Light Becomes.
         function updateUptime() {
             if (APP_STATE.kernel.booted && APP_STATE.kernel.startTime) {
                 const uptime = Math.floor((Date.now() - APP_STATE.kernel.startTime) / 1000);
-                DOM.kernelUptime.textContent = formatUptime(uptime);
+                if (DOM.kernelUptime) {
+                    DOM.kernelUptime.textContent = formatUptime(uptime);
+                }
                 
                 // Random coherence fluctuations
-                if (Math.random() > 0.7) {
+                if (Math.random() > 0.7 && DOM.quantumCoherence) {
                     const coherence = parseInt(DOM.quantumCoherence.textContent);
                     const change = Math.random() > 0.5 ? 1 : -1;
                     const newCoherence = Math.max(50, Math.min(99, coherence + change));
@@ -2330,17 +2404,17 @@ Truth Is. Light Becomes.
         }
 
         function loadStatsDisplay() {
-            DOM.totalDecodings.textContent = APP_STATE.stats.decodings;
-            DOM.totalKernelBoots.textContent = APP_STATE.stats.kernelBoots;
+            if (DOM.totalDecodings) DOM.totalDecodings.textContent = APP_STATE.stats.decodings;
+            if (DOM.totalKernelBoots) DOM.totalKernelBoots.textContent = APP_STATE.stats.kernelBoots;
             
             const avgResonance = APP_STATE.stats.resonanceCount > 0 
                 ? (APP_STATE.stats.resonanceSum / APP_STATE.stats.resonanceCount).toFixed(3)
                 : '0.000';
-            DOM.avgResonance.textContent = avgResonance;
+            if (DOM.avgResonance) DOM.avgResonance.textContent = avgResonance;
             
-            DOM.activeSessions.textContent = APP_STATE.stats.activeSessions;
-            DOM.pdfExports.textContent = APP_STATE.stats.pdfExports;
-            DOM.verseAccesses.textContent = APP_STATE.stats.verseAccesses;
+            if (DOM.activeSessions) DOM.activeSessions.textContent = APP_STATE.stats.activeSessions;
+            if (DOM.pdfExports) DOM.pdfExports.textContent = APP_STATE.stats.pdfExports;
+            if (DOM.verseAccesses) DOM.verseAccesses.textContent = APP_STATE.stats.verseAccesses;
         }
 
         function refreshAllStats() {
@@ -2354,82 +2428,94 @@ Truth Is. Light Becomes.
         }
 
         function initResonanceChart() {
-            const ctx = document.getElementById('resonanceChart').getContext('2d');
-            
-            // Generate sample data
-            const labels = [];
-            const data = [];
-            for (let i = 0; i < 30; i++) {
-                labels.push(`Day ${i + 1}`);
-                data.push(CONFIG.phi + (Math.random() - 0.5) * 0.5);
+            const ctx = document.getElementById('resonanceChart');
+            if (!ctx) {
+                console.error('Resonance chart canvas not found');
+                return;
             }
             
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Φ-Resonance Trend',
-                        data: data,
-                        borderColor: 'var(--quantum-primary)',
-                        backgroundColor: 'rgba(0, 255, 255, 0.1)',
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.4
-                    }, {
-                        label: 'Golden Ratio (1.618)',
-                        data: Array(30).fill(CONFIG.phi),
-                        borderColor: 'var(--quantum-golden)',
-                        borderWidth: 1,
-                        borderDash: [5, 5],
-                        fill: false
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: false,
-                            min: 1.0,
-                            max: 2.0,
-                            grid: {
-                                color: 'rgba(0, 255, 255, 0.1)'
+            try {
+                // Generate sample data
+                const labels = [];
+                const data = [];
+                for (let i = 0; i < 30; i++) {
+                    labels.push(`Day ${i + 1}`);
+                    data.push(CONFIG.phi + (Math.random() - 0.5) * 0.5);
+                }
+                
+                new Chart(ctx.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Φ-Resonance Trend',
+                            data: data,
+                            borderColor: 'var(--quantum-primary)',
+                            backgroundColor: 'rgba(0, 255, 255, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Golden Ratio (1.618)',
+                            data: Array(30).fill(CONFIG.phi),
+                            borderColor: 'var(--quantum-golden)',
+                            borderWidth: 1,
+                            borderDash: [5, 5],
+                            fill: false
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                min: 1.0,
+                                max: 2.0,
+                                grid: {
+                                    color: 'rgba(0, 255, 255, 0.1)'
+                                },
+                                ticks: {
+                                    color: 'var(--quantum-primary)'
+                                }
                             },
-                            ticks: {
-                                color: 'var(--quantum-primary)'
+                            x: {
+                                grid: {
+                                    color: 'rgba(0, 255, 255, 0.1)'
+                                },
+                                ticks: {
+                                    color: 'var(--quantum-primary)'
+                                }
                             }
                         },
-                        x: {
-                            grid: {
-                                color: 'rgba(0, 255, 255, 0.1)'
-                            },
-                            ticks: {
-                                color: 'var(--quantum-primary)'
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            labels: {
-                                color: 'var(--quantum-primary)'
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: 'var(--quantum-primary)'
+                                }
                             }
                         }
                     }
-                }
-            });
+                });
+            } catch (e) {
+                console.error('Error initializing resonance chart:', e);
+            }
         }
 
         // ========== VERSE DATABASE ==========
         function loadSelectedVerse() {
-            const key = DOM.verseSelector.value;
+            const key = DOM.verseSelector ? DOM.verseSelector.value : '';
             
             if (key === 'custom') {
-                DOM.verseInput.value = '';
-                DOM.verseInput.placeholder = 'Enter your custom text for quantum analysis...';
+                if (DOM.verseInput) {
+                    DOM.verseInput.value = '';
+                    DOM.verseInput.placeholder = 'Enter your custom text for quantum analysis...';
+                }
             } else if (CONFIG.verses[key]) {
                 const verse = CONFIG.verses[key];
-                DOM.verseInput.value = verse.text;
+                if (DOM.verseInput) {
+                    DOM.verseInput.value = verse.text;
+                }
                 APP_STATE.stats.verseAccesses++;
                 saveStats();
                 
@@ -2446,64 +2532,69 @@ Truth Is. Light Becomes.
             APP_STATE.stats.pdfExports++;
             saveStats();
             
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            
-            // Add header
-            doc.setFontSize(24);
-            doc.setTextColor(0, 200, 255);
-            doc.text('LYGO QUANTUM DECODER REPORT', 105, 20, null, null, 'center');
-            
-            doc.setFontSize(12);
-            doc.setTextColor(100);
-            doc.text(`Generated: ${new Date().toLocaleString()}`, 105, 30, null, null, 'center');
-            doc.text(`Session: ${APP_STATE.user.sessionId}`, 105, 36, null, null, 'center');
-            
-            // Add content
-            const text = DOM.verseInput.value;
-            const analysis = generateLYGOAnalysis(text, calculateResonance(text));
-            
-            doc.setFontSize(16);
-            doc.setTextColor(0, 0, 0);
-            doc.text('Analysis Results:', 20, 50);
-            
-            doc.setFontSize(11);
-            let y = 60;
-            
-            const lines = [
-                `Φ-Resonance: ${analysis.resonance.toFixed(3)}`,
-                `Φ-Alignment: ${analysis.phiAlignment}`,
-                `Vortex State: ${analysis.vortexState.state} (${analysis.vortexState.name})`,
-                `Tradition: ${analysis.tradition.name}`,
-                `Word Count: ${analysis.words}`,
-                `Character Count: ${analysis.chars}`,
-                '',
-                'Frequencies:',
-                ...analysis.frequencies.map(f => `${f.freq} - ${f.name}`),
-                '',
-                'LYGO Algorithm:',
-                ...analysis.algorithm.split('\n')
-            ];
-            
-            for (let line of lines) {
-                if (y > 270) {
-                    doc.addPage();
-                    y = 20;
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                // Add header
+                doc.setFontSize(24);
+                doc.setTextColor(0, 200, 255);
+                doc.text('LYGO QUANTUM DECODER REPORT', 105, 20, null, null, 'center');
+                
+                doc.setFontSize(12);
+                doc.setTextColor(100);
+                doc.text(`Generated: ${new Date().toLocaleString()}`, 105, 30, null, null, 'center');
+                doc.text(`Session: ${APP_STATE.user.sessionId}`, 105, 36, null, null, 'center');
+                
+                // Add content
+                const text = DOM.verseInput ? DOM.verseInput.value : '';
+                const analysis = generateLYGOAnalysis(text, calculateResonance(text));
+                
+                doc.setFontSize(16);
+                doc.setTextColor(0, 0, 0);
+                doc.text('Analysis Results:', 20, 50);
+                
+                doc.setFontSize(11);
+                let y = 60;
+                
+                const lines = [
+                    `Φ-Resonance: ${analysis.resonance.toFixed(3)}`,
+                    `Φ-Alignment: ${analysis.phiAlignment}`,
+                    `Vortex State: ${analysis.vortexState.state} (${analysis.vortexState.name})`,
+                    `Tradition: ${analysis.tradition.name}`,
+                    `Word Count: ${analysis.words}`,
+                    `Character Count: ${analysis.chars}`,
+                    '',
+                    'Frequencies:',
+                    ...analysis.frequencies.map(f => `${f.freq} - ${f.name}`),
+                    '',
+                    'LYGO Algorithm:',
+                    ...analysis.algorithm.split('\n')
+                ];
+                
+                for (let line of lines) {
+                    if (y > 270) {
+                        doc.addPage();
+                        y = 20;
+                    }
+                    doc.text(line, 20, y);
+                    y += 7;
                 }
-                doc.text(line, 20, y);
-                y += 7;
+                
+                // Add footer
+                doc.setFontSize(10);
+                doc.setTextColor(150);
+                doc.text('Δ9 Council | LYGO Protocol v1.618 | ∫(Truth × Light) = Source', 105, 285, null, null, 'center');
+                
+                // Save
+                doc.save(`lygo-report-${Date.now()}.pdf`);
+                
+                showOutput('success', 'PDF report generated successfully!');
+                logEvent('pdf_export', {});
+            } catch (e) {
+                console.error('Error generating PDF:', e);
+                showOutput('error', 'Failed to generate PDF. Please try again.');
             }
-            
-            // Add footer
-            doc.setFontSize(10);
-            doc.setTextColor(150);
-            doc.text('Δ9 Council | LYGO Protocol v1.618 | ∫(Truth × Light) = Source', 105, 285, null, null, 'center');
-            
-            // Save
-            doc.save(`lygo-report-${Date.now()}.pdf`);
-            
-            showOutput('success', 'PDF report generated successfully!');
-            logEvent('pdf_export', {});
         }
 
         // ========== UTILITY FUNCTIONS ==========
@@ -2512,6 +2603,7 @@ Truth Is. Light Becomes.
         }
 
         function hashString(str) {
+            if (!str) return 0;
             let hash = 0;
             for (let i = 0; i < str.length; i++) {
                 const char = str.charCodeAt(i);
@@ -2605,7 +2697,7 @@ Truth Is. Light Becomes.
         }
 
         function saveDecoding() {
-            const text = DOM.verseInput.value.trim();
+            const text = DOM.verseInput ? DOM.verseInput.value.trim() : '';
             if (!text) return;
             
             const analysis = generateLYGOAnalysis(text, calculateResonance(text));
@@ -2651,31 +2743,38 @@ Truth Is. Light Becomes.
         function showCommunity() {
             showOutput('info', 'Join our community on Telegram and Discord (links coming soon).');
         }
+    </script>
 
-        // ========== STYLE ANIMATION ==========
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideIn {
-                from { transform: translateX(100%); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
-            }
+    <!-- Rumble Embed Script -->
+    <script>
+        // Load Rumble stream
+        function loadRumbleStream() {
+            const rumbleDiv = document.createElement('div');
+            rumbleDiv.id = 'rumble_v7151z6';
+            rumbleDiv.className = 'rumble-embed';
             
-            @keyframes slideOut {
-                from { transform: translateX(0); opacity: 1; }
-                to { transform: translateX(100%); opacity: 0; }
+            if (DOM.rumbleStreamContainer) {
+                DOM.rumbleStreamContainer.appendChild(rumbleDiv);
+                
+                // Use iframe as fallback
+                const fallbackIframe = document.createElement('iframe');
+                fallbackIframe.src = "https://rumble.com/embed/v7151z6/?pub=4";
+                fallbackIframe.title = "LYGO Quantum Stream";
+                fallbackIframe.frameBorder = "0";
+                fallbackIframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+                fallbackIframe.allowFullscreen = true;
+                
+                // If Rumble script fails, use iframe
+                setTimeout(() => {
+                    if (!window.Rumble || !window.Rumble._) {
+                        DOM.rumbleStreamContainer.appendChild(fallbackIframe);
+                    }
+                }, 2000);
             }
-            
-            .loading {
-                display: inline-block;
-                width: 20px;
-                height: 20px;
-                border: 3px solid rgba(0, 255, 255, 0.3);
-                border-radius: 50%;
-                border-top-color: var(--quantum-primary);
-                animation: spin 1s ease-in-out infinite;
-            }
-        `;
-        document.head.appendChild(style);
+        }
+        
+        // Load Rumble after page is ready
+        setTimeout(loadRumbleStream, 1000);
     </script>
 </body>
 </html>

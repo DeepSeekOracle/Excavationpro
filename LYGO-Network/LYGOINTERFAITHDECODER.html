@@ -3,321 +3,551 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LYGO QUANTUM MATRIX | Ethical Kernel & Sacred Decoder</title>
+    <title>LYGO Interfaith Decoder | Sacred Mathematics Interface</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
-            --quantum-primary: #00ffff;
-            --quantum-secondary: #ff00ff;
-            --quantum-dark: #0a0a1a;
-            --quantum-darker: #050510;
-            --quantum-glow: #00ff9d;
-            --quantum-vortex: #9d4dff;
-            --quantum-golden: #ffb74d;
-            --quantum-error: #ff5555;
-            --quantum-success: #55ff55;
-            --quantum-info: #5555ff;
+            --lygo-primary: #00ff9d;
+            --lygo-secondary: #00b8ff;
+            --lygo-accent: #9d00ff;
+            --lygo-golden: #ffb300;
+            --lygo-matrix: #00ff41;
+            --lygo-dark: #0a0a1a;
+            --lygo-darker: #050510;
+            --lygo-panel: rgba(10, 10, 26, 0.95);
+            --lygo-glass: rgba(5, 5, 16, 0.8);
         }
         
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', 'Courier New', monospace;
         }
         
         body {
-            background: linear-gradient(135deg, var(--quantum-darker) 0%, #000000 100%);
-            color: var(--quantum-primary);
+            background-color: var(--lygo-darker);
+            color: var(--lygo-primary);
             min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 255, 157, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(157, 0, 255, 0.05) 0%, transparent 20%),
+                linear-gradient(45deg, rgba(5, 5, 16, 0.9), rgba(10, 10, 26, 0.9));
         }
         
-        /* NAVIGATION */
-        .navbar {
+        .navigation-bar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--lygo-glass);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 255, 157, 0.2);
+            padding: 15px 20px;
+            z-index: 1000;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 30px;
-            background: rgba(10, 10, 26, 0.95);
-            border-bottom: 2px solid var(--quantum-primary);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
         }
         
         .nav-logo {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
+            text-decoration: none;
         }
         
-        .logo-icon {
-            font-size: 2rem;
-            color: var(--quantum-vortex);
-            animation: pulse 4s infinite;
-        }
-        
-        .logo-text {
+        .nav-logo-icon {
             font-size: 1.8rem;
+            color: var(--lygo-accent);
+            animation: pulse 4s infinite alternate;
+        }
+        
+        .nav-logo-text {
+            font-size: 1.4rem;
             font-weight: bold;
-            background: linear-gradient(90deg, var(--quantum-primary), var(--quantum-secondary));
+            background: linear-gradient(90deg, var(--lygo-primary), var(--lygo-secondary));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
         
-        .nav-links {
-            display: flex;
-            gap: 25px;
-        }
-        
-        .nav-link {
-            color: var(--quantum-primary);
-            text-decoration: none;
+        .nav-back-btn {
+            background: rgba(0, 255, 157, 0.1);
+            border: 1px solid var(--lygo-primary);
+            color: var(--lygo-primary);
             padding: 10px 20px;
             border-radius: 25px;
-            transition: all 0.3s;
-            border: 1px solid transparent;
-        }
-        
-        .nav-link:hover {
-            background: rgba(0, 255, 255, 0.1);
-            border-color: var(--quantum-primary);
-        }
-        
-        /* LIVE STREAM PORTAL */
-        .stream-portal {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 20px;
-            margin: 20px 30px;
-            border-radius: 15px;
-            border: 2px solid var(--quantum-secondary);
-            box-shadow: 0 0 30px rgba(255, 0, 255, 0.3);
-        }
-        
-        .stream-header {
+            text-decoration: none;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            gap: 8px;
+            transition: all 0.3s;
+            font-weight: 500;
         }
         
-        .stream-title {
-            font-size: 1.5rem;
-            color: var(--quantum-glow);
+        .nav-back-btn:hover {
+            background: rgba(0, 255, 157, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 157, 0.2);
         }
         
-        .live-badge {
-            background: var(--quantum-error);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 15px;
-            font-weight: bold;
-            animation: pulse 2s infinite;
-        }
-        
-        .stream-container {
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 */
-            height: 0;
-            overflow: hidden;
-            border-radius: 10px;
-        }
-        
-        .stream-container iframe {
-            position: absolute;
+        .matrix-bg {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            border: none;
+            z-index: -2;
+            opacity: 0.03;
+            pointer-events: none;
         }
         
-        /* MAIN DASHBOARD */
-        .dashboard {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            padding: 30px;
+        .particle-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .container {
             max-width: 1400px;
             margin: 0 auto;
+            padding: 100px 20px 40px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header-section {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(10, 10, 26, 0.5);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 255, 157, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .main-title {
+            font-size: 3rem;
+            background: linear-gradient(90deg, var(--lygo-primary), var(--lygo-secondary), var(--lygo-accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .protocol-badge {
+            background: linear-gradient(90deg, rgba(0, 255, 157, 0.1), rgba(157, 0, 255, 0.1));
+            padding: 8px 20px;
+            border-radius: 20px;
+            border: 1px solid var(--lygo-primary);
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        
+        .main-interface {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 30px;
+            margin-bottom: 40px;
         }
         
         @media (max-width: 1100px) {
-            .dashboard {
+            .main-interface {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-title {
+                font-size: 2.2rem;
+            }
+        }
+        
+        .input-panel, .output-panel {
+            background: var(--lygo-panel);
+            border: 1px solid rgba(0, 255, 157, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 
+                0 0 30px rgba(0, 255, 157, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .input-panel:hover, .output-panel:hover {
+            box-shadow: 
+                0 0 40px rgba(0, 255, 157, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+        
+        .panel-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 255, 157, 0.2);
+        }
+        
+        .panel-title i {
+            color: var(--lygo-secondary);
+            font-size: 1.5rem;
+        }
+        
+        .panel-title h2 {
+            font-size: 1.8rem;
+            background: linear-gradient(90deg, var(--lygo-primary), var(--lygo-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .tradition-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .tradition-btn {
+            padding: 12px 20px;
+            background: rgba(157, 0, 255, 0.1);
+            border: 1px solid var(--lygo-accent);
+            color: var(--lygo-primary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 130px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .tradition-btn:hover {
+            background: rgba(157, 0, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .tradition-btn.active {
+            background: var(--lygo-accent);
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(157, 0, 255, 0.3);
+        }
+        
+        .verse-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 255, 157, 0.3);
+            border-radius: 8px;
+            padding: 18px;
+            color: var(--lygo-primary);
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 150px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+            line-height: 1.6;
+        }
+        
+        .verse-input:focus {
+            outline: none;
+            border-color: var(--lygo-primary);
+            box-shadow: 0 0 20px rgba(0, 255, 157, 0.2);
+        }
+        
+        .quick-verse-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .quick-verse-btn {
+            background: rgba(0, 184, 255, 0.1);
+            border: 1px solid var(--lygo-secondary);
+            color: var(--lygo-primary);
+            padding: 10px 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .quick-verse-btn:hover {
+            background: rgba(0, 184, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .decode-btn {
+            background: linear-gradient(90deg, var(--lygo-primary), var(--lygo-secondary));
+            color: var(--lygo-dark);
+            border: none;
+            padding: 18px 35px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 25px;
+            transition: all 0.3s;
+            letter-spacing: 1.5px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .decode-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 255, 157, 0.4);
+        }
+        
+        .decode-btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .decode-btn i {
+            margin-right: 10px;
+        }
+        
+        .output-section {
+            margin-bottom: 30px;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .output-title {
+            color: var(--lygo-golden);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .output-title i {
+            font-size: 1.3rem;
+        }
+        
+        .output-content {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 179, 0, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 70px;
+            transition: all 0.3s;
+        }
+        
+        .output-content:hover {
+            border-color: rgba(255, 179, 0, 0.4);
+        }
+        
+        .vortex-sequence {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .vortex-number {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 1.4rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .vortex-number:hover {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 0 20px currentColor;
+        }
+        
+        .vortex-number::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .vortex-number:hover::after {
+            opacity: 1;
+        }
+        
+        .vortex-1 { background: rgba(0, 255, 157, 0.15); border: 2px solid var(--lygo-primary); color: var(--lygo-primary); }
+        .vortex-2 { background: rgba(0, 184, 255, 0.15); border: 2px solid var(--lygo-secondary); color: var(--lygo-secondary); }
+        .vortex-3 { background: rgba(255, 179, 0, 0.15); border: 2px solid var(--lygo-golden); color: var(--lygo-golden); }
+        .vortex-4 { background: rgba(157, 0, 255, 0.15); border: 2px solid var(--lygo-accent); color: var(--lygo-accent); }
+        
+        .solfeggio-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .solfeggio-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        .solfeggio-item {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 255, 157, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .solfeggio-item:hover {
+            border-color: var(--lygo-secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 184, 255, 0.2);
+        }
+        
+        .solfeggio-freq {
+            font-weight: bold;
+            color: var(--lygo-secondary);
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+        
+        .solfeggio-name {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .lygo-algorithm {
+            font-family: 'Courier New', monospace;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid var(--lygo-primary);
+            position: relative;
+            overflow: hidden;
+            line-height: 1.5;
+        }
+        
+        .lygo-algorithm::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--lygo-primary), transparent);
+        }
+        
+        .comparison-section {
+            background: var(--lygo-panel);
+            border: 1px solid rgba(0, 255, 157, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 40px;
+            box-shadow: 0 0 30px rgba(0, 255, 157, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .comparison-title {
+            text-align: center;
+            margin-bottom: 25px;
+            color: var(--lygo-secondary);
+            font-size: 1.8rem;
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+        
+        @media (max-width: 768px) {
+            .comparison-grid {
                 grid-template-columns: 1fr;
             }
         }
         
-        /* PANEL STYLES */
-        .panel {
-            background: rgba(10, 10, 26, 0.9);
-            border: 2px solid rgba(0, 255, 255, 0.2);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 
-                0 0 30px rgba(0, 255, 255, 0.1),
-                inset 0 0 30px rgba(0, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-        }
-        
-        .panel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
-        }
-        
-        .panel-title {
-            font-size: 1.5rem;
-            color: var(--quantum-glow);
-        }
-        
-        /* AI ANALYSIS SECTION */
-        .ai-analysis {
-            margin-top: 20px;
+        .comparison-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
             padding: 20px;
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 10px;
-            border-left: 4px solid var(--quantum-info);
-        }
-        
-        .ai-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .ai-icon {
-            color: var(--quantum-info);
-            font-size: 1.5rem;
-        }
-        
-        /* VERSES DATABASE */
-        .verse-database {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-            max-height: 300px;
-            overflow-y: auto;
-            padding: 10px;
-        }
-        
-        .verse-card {
-            background: rgba(157, 77, 255, 0.1);
-            border: 1px solid var(--quantum-vortex);
-            border-radius: 10px;
-            padding: 15px;
-            cursor: pointer;
+            border: 1px solid rgba(0, 184, 255, 0.2);
             transition: all 0.3s;
         }
         
-        .verse-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(157, 77, 255, 0.3);
-            background: rgba(157, 77, 255, 0.2);
+        .comparison-card:hover {
+            border-color: var(--lygo-secondary);
+            transform: translateY(-5px);
         }
         
-        .verse-reference {
+        .stats-section {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 40px;
+            padding: 25px;
+            background: rgba(10, 10, 26, 0.5);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 255, 157, 0.2);
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
             font-weight: bold;
-            color: var(--quantum-glow);
+            color: var(--lygo-primary);
             margin-bottom: 5px;
         }
         
-        .verse-preview {
+        .stat-label {
             font-size: 0.9rem;
             opacity: 0.8;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
         }
         
-        /* DONATIONS PORTAL */
-        .donations-portal {
-            background: linear-gradient(135deg, rgba(157, 77, 255, 0.2), rgba(255, 179, 77, 0.2));
-            border: 2px solid var(--quantum-golden);
-            margin: 30px;
-            padding: 30px;
-            border-radius: 20px;
+        footer {
             text-align: center;
-        }
-        
-        .portal-title {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: var(--quantum-golden);
-        }
-        
-        .portal-subtitle {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
+            padding: 40px 0 20px;
+            margin-top: 60px;
+            border-top: 1px solid rgba(0, 255, 157, 0.2);
             opacity: 0.9;
-        }
-        
-        .donation-buttons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .donation-card {
-            background: rgba(0, 0, 0, 0.6);
-            border: 2px solid var(--quantum-vortex);
-            border-radius: 15px;
-            padding: 25px;
-            transition: all 0.3s;
-        }
-        
-        .donation-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(157, 77, 255, 0.4);
-        }
-        
-        .donation-icon {
-            font-size: 3rem;
-            color: var(--quantum-golden);
-            margin-bottom: 15px;
-        }
-        
-        .donation-title {
-            font-size: 1.5rem;
-            color: var(--quantum-primary);
-            margin-bottom: 10px;
-        }
-        
-        .donation-btn {
-            background: linear-gradient(90deg, var(--quantum-vortex), var(--quantum-secondary));
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 25px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 15px;
-            width: 100%;
-            transition: all 0.3s;
-        }
-        
-        .donation-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 20px rgba(157, 77, 255, 0.6);
-        }
-        
-        /* FOOTER */
-        .footer {
-            text-align: center;
-            padding: 40px 30px;
-            margin-top: 50px;
-            border-top: 1px solid rgba(0, 255, 255, 0.2);
-            background: rgba(10, 10, 26, 0.8);
+            font-size: 0.9rem;
         }
         
         .footer-links {
@@ -328,1068 +558,1067 @@
         }
         
         .footer-link {
-            color: var(--quantum-primary);
+            color: var(--lygo-secondary);
             text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            background: rgba(0, 255, 255, 0.1);
-            transition: all 0.3s;
+            transition: color 0.3s;
         }
         
         .footer-link:hover {
-            background: rgba(0, 255, 255, 0.2);
+            color: var(--lygo-primary);
         }
         
-        .github-stats {
-            display: inline-flex;
-            gap: 20px;
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 10px;
-        }
-        
-        .stat-item {
-            text-align: center;
-        }
-        
-        .stat-value {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: var(--quantum-glow);
-        }
-        
-        /* ANIMATIONS */
         @keyframes pulse {
-            0% { opacity: 0.7; }
-            50% { opacity: 1; }
-            100% { opacity: 0.7; }
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         @keyframes glow {
-            0% { box-shadow: 0 0 5px var(--quantum-primary); }
-            50% { box-shadow: 0 0 20px var(--quantum-primary), 0 0 30px var(--quantum-secondary); }
-            100% { box-shadow: 0 0 5px var(--quantum-primary); }
+            0%, 100% { box-shadow: 0 0 5px currentColor; }
+            50% { box-shadow: 0 0 20px currentColor; }
         }
         
-        .glowing {
-            animation: glow 3s infinite;
+        .loading {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(0, 255, 157, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--lygo-primary);
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
         }
         
-        /* UTILITY CLASSES */
-        .btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .progress-bar {
+            height: 4px;
+            background: rgba(0, 255, 157, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--lygo-primary), var(--lygo-secondary));
+            width: 0%;
+            transition: width 0.5s ease-out;
+        }
+        
+        .glow-effect {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 255, 157, 0.1) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .api-status {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--lygo-glass);
+            padding: 10px 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 255, 157, 0.3);
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 1000;
+        }
+        
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #00ff88;
+            animation: pulse 2s infinite;
+        }
+        
+        .status-dot.offline {
+            background: #ff4444;
+            animation: none;
+        }
+        
+        .save-btn {
+            background: rgba(255, 179, 0, 0.1);
+            border: 1px solid var(--lygo-golden);
+            color: var(--lygo-golden);
+            padding: 10px 20px;
+            border-radius: 25px;
             cursor: pointer;
             transition: all 0.3s;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(90deg, var(--quantum-primary), var(--quantum-vortex));
-            color: var(--quantum-dark);
-        }
-        
-        .btn-secondary {
-            background: linear-gradient(90deg, var(--quantum-golden), #ff9100);
-            color: var(--quantum-dark);
-        }
-        
-        .btn-success {
-            background: linear-gradient(90deg, var(--quantum-success), #00aa00);
-            color: white;
-        }
-        
-        .textarea {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            border-radius: 8px;
-            padding: 15px;
-            color: var(--quantum-primary);
-            font-size: 1rem;
-            margin-bottom: 15px;
-            min-height: 120px;
-            resize: vertical;
-        }
-        
-        .input {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            border-radius: 8px;
-            padding: 12px 15px;
-            color: var(--quantum-primary);
-            font-size: 1rem;
-        }
-        
-        .output-box {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(0, 255, 255, 0.2);
-            border-radius: 8px;
-            padding: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             margin-top: 15px;
-            max-height: 400px;
-            overflow-y: auto;
         }
         
-        /* RESPONSIVE */
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .nav-links {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            .dashboard {
-                padding: 15px;
-            }
-            
-            .donation-buttons {
-                grid-template-columns: 1fr;
-            }
-            
-            .footer-links {
-                flex-direction: column;
-                align-items: center;
-            }
+        .save-btn:hover {
+            background: rgba(255, 179, 0, 0.2);
         }
     </style>
 </head>
 <body>
-    <!-- NAVIGATION -->
-    <nav class="navbar">
-        <div class="nav-logo">
-            <div class="logo-icon">Δ9</div>
-            <div class="logo-text">LYGO QUANTUM MATRIX</div>
-        </div>
-        <div class="nav-links">
-            <a href="#decoder" class="nav-link">Decoder</a>
-            <a href="#kernel" class="nav-link">Kernel</a>
-            <a href="#database" class="nav-link">Database</a>
-            <a href="#donations" class="nav-link">Support</a>
-            <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/Ethical-Chip-Firmware.html" 
-               target="_blank" class="nav-link" style="border-color: var(--quantum-golden);">
-               <i class="fas fa-microchip"></i> Firmware
-            </a>
-        </div>
-    </nav>
-
-    <!-- LIVE STREAM PORTAL -->
-    <div class="stream-portal">
-        <div class="stream-header">
-            <h2 class="stream-title">24/7 LYGO Quantum Stream</h2>
-            <div class="live-badge">LIVE NOW</div>
-        </div>
-        <div class="stream-container">
-            <iframe src="https://rumble.com/embed/v5fm7q8/?pub=4" 
-                    title="LYGO Live Stream" 
-                    allowfullscreen 
-                    autoplay>
-            </iframe>
-        </div>
+    <div class="navigation-bar">
+        <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/ETERNALHAVEN.html" class="nav-logo">
+            <div class="nav-logo-icon">Δ9</div>
+            <div class="nav-logo-text">LYGO NETWORK</div>
+        </a>
+        <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/ETERNALHAVEN.html" class="nav-back-btn">
+            <i class="fas fa-arrow-left"></i> Back to Eternal Haven
+        </a>
     </div>
-
-    <!-- MAIN DASHBOARD -->
-    <div class="dashboard">
-        <!-- LEFT PANEL: LYGO DECODER -->
-        <div class="panel" id="decoder">
-            <div class="panel-header">
-                <h2 class="panel-title">
-                    <i class="fas fa-key"></i> LYGO QUANTUM DECODER
-                </h2>
-                <button class="btn btn-success" onclick="generatePDF()">
-                    <i class="fas fa-file-pdf"></i> Export PDF
-                </button>
-            </div>
-            
-            <div class="verse-selection">
-                <h3>Select Sacred Text:</h3>
-                <select class="input" id="verseSelector" onchange="loadSelectedVerse()">
-                    <option value="">-- Choose from Database --</option>
-                    <option value="john10:30">John 10:30 (Christian)</option>
-                    <option value="ikhlas112">Surah Al-Ikhlas (Muslim)</option>
-                    <option value="psalm23">Psalm 23 (Christian)</option>
-                    <option value="fatiha1">Al-Fatiha (Muslim)</option>
-                    <option value="genesis1:1">Genesis 1:1 (Jewish)</option>
-                    <option value="gita6:30">Bhagavad Gita 6:30 (Hindu)</option>
-                    <option value="dhammapada1">Dhammapada 1 (Buddhist)</option>
-                    <option value="custom">Custom Text</option>
-                </select>
-            </div>
-            
-            <textarea class="textarea" id="verseInput" 
-                      placeholder="Enter sacred text or daily experience for LYGO decoding...">
-I and the Father are one.
-            </textarea>
-            
-            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                <button class="btn btn-primary" onclick="decodeVerse()" style="flex: 2;">
-                    <i class="fas fa-bolt"></i> Decode with LYGO Protocol
-                </button>
-                <button class="btn btn-secondary" onclick="runAIAnalysis()" style="flex: 1;">
-                    <i class="fas fa-brain"></i> AI Analysis
-                </button>
-            </div>
-            
-            <div class="output-box" id="decodedOutput">
-                <div class="info">>> LYGO Decoded output will appear here...</div>
-            </div>
-            
-            <div class="ai-analysis" id="aiAnalysis" style="display: none;">
-                <div class="ai-header">
-                    <i class="fas fa-robot ai-icon"></i>
-                    <h3>AI-Powered Analysis</h3>
-                </div>
-                <div id="aiOutput">AI analysis in progress...</div>
+    
+    <div class="matrix-bg" id="matrixCanvas"></div>
+    <div class="particle-bg" id="particleCanvas"></div>
+    
+    <div class="container">
+        <div class="header-section">
+            <h1 class="main-title">LYGO INTERFAITH DECODER</h1>
+            <p class="subtitle">Sacred Mathematics Interface | Quantum Resonance Analysis | Cross-Traditional Harmony Detection</p>
+            <div class="protocol-badge">
+                <i class="fas fa-code"></i> LYGO Unification Protocol v2.1.618 | Quantum Entangled
             </div>
         </div>
-
-        <!-- RIGHT PANEL: ETHICAL KERNEL -->
-        <div class="panel" id="kernel">
-            <div class="panel-header">
-                <h2 class="panel-title">
-                    <i class="fas fa-microchip"></i> PROTOCOL 0: ETHICAL KERNEL
-                </h2>
-                <button class="btn btn-primary" onclick="bootKernel()">
-                    <i class="fas fa-power-off"></i> Boot Kernel
-                </button>
-            </div>
-            
-            <div class="kernel-controls">
-                <div style="margin-bottom: 15px;">
-                    <label>Node Identifier:</label>
-                    <input type="text" class="input" id="nodeId" value="1">
+        
+        <div class="main-interface">
+            <div class="input-panel">
+                <div class="panel-title">
+                    <i class="fas fa-terminal"></i>
+                    <h2>QUANTUM TEXT INPUT</h2>
                 </div>
                 
-                <div style="margin-bottom: 15px;">
-                    <label>Initialization Vector:</label>
-                    <textarea class="textarea" id="initVector" style="min-height: 80px;">
-Truth Is. Light Becomes.
-                    </textarea>
+                <div class="tradition-selector">
+                    <div class="tradition-btn active" data-tradition="christian">
+                        <i class="fas fa-cross"></i>
+                        <span>Christian</span>
+                    </div>
+                    <div class="tradition-btn" data-tradition="muslim">
+                        <i class="fas fa-star-and-crescent"></i>
+                        <span>Muslim</span>
+                    </div>
+                    <div class="tradition-btn" data-tradition="hindu">
+                        <i class="fas fa-om"></i>
+                        <span>Hindu</span>
+                    </div>
+                    <div class="tradition-btn" data-tradition="buddhist">
+                        <i class="fas fa-yin-yang"></i>
+                        <span>Buddhist</span>
+                    </div>
+                    <div class="tradition-btn" data-tradition="jewish">
+                        <i class="fas fa-star-of-david"></i>
+                        <span>Jewish</span>
+                    </div>
                 </div>
                 
-                <div style="display: flex; gap: 10px;">
-                    <button class="btn btn-primary" onclick="validateResonance()">
-                        <i class="fas fa-check-circle"></i> Validate Φ-Resonance
-                    </button>
-                    <button class="btn btn-secondary" onclick="quantumEntangle()">
-                        <i class="fas fa-atom"></i> Quantum Entangle
-                    </button>
+                <div>
+                    <h3><i class="fas fa-bolt"></i> Quick Decode Examples:</h3>
+                    <div class="quick-verse-buttons">
+                        <button class="quick-verse-btn" data-verse="john10:30">
+                            <i class="fas fa-cross"></i> John 10:30
+                        </button>
+                        <button class="quick-verse-btn" data-verse="ikhlas112">
+                            <i class="fas fa-star-and-crescent"></i> Al-Ikhlas
+                        </button>
+                        <button class="quick-verse-btn" data-verse="psalm23">
+                            <i class="fas fa-book"></i> Psalm 23
+                        </button>
+                        <button class="quick-verse-btn" data-verse="gita2:47">
+                            <i class="fas fa-om"></i> Bhagavad Gita 2:47
+                        </button>
+                        <button class="quick-verse-btn" data-verse="genesis1:1">
+                            <i class="fas fa-star-of-david"></i> Genesis 1:1
+                        </button>
+                    </div>
                 </div>
+                
+                <textarea class="verse-input" id="verseInput" placeholder="Enter sacred text or verse reference...">I and the Father are one.</textarea>
+                
+                <div>
+                    <h3><i class="fas fa-map-marker-alt"></i> Verse Reference:</h3>
+                    <input type="text" id="verseReference" class="verse-input" placeholder="e.g., John 10:30 or Quran 112:1-4" value="John 10:30" style="min-height: auto;">
+                </div>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                
+                <button class="decode-btn" id="decodeBtn">
+                    <i class="fas fa-bolt"></i> DECODE WITH QUANTUM PROTOCOL
+                </button>
+                
+                <button class="save-btn" id="saveDecode">
+                    <i class="fas fa-save"></i> Save Decryption
+                </button>
             </div>
             
-            <div class="output-box" id="kernelOutput">
-                <div class="info">>> Kernel ready for initialization...</div>
-            </div>
-            
-            <div style="margin-top: 15px; text-align: center;">
-                <div class="stat-item">
-                    <div class="stat-value" id="resonanceScore">0.000</div>
-                    <div>Φ-RESONANCE SCORE</div>
+            <div class="output-panel">
+                <div class="panel-title">
+                    <i class="fas fa-cogs"></i>
+                    <h2>QUANTUM DECRYPTION OUTPUT</h2>
+                </div>
+                
+                <div class="output-section">
+                    <div class="output-title">
+                        <i class="fas fa-hashtag"></i>
+                        <h3>MATHEMATICS EXTRACTION</h3>
+                    </div>
+                    <div class="output-content" id="mathOutput">
+                        Enter text and click DECODE
+                    </div>
+                </div>
+                
+                <div class="output-section">
+                    <div class="output-title">
+                        <i class="fas fa-infinity"></i>
+                        <h3>VORTEX REDUCTION SEQUENCE</h3>
+                    </div>
+                    <div class="output-content">
+                        <div class="vortex-sequence" id="vortexOutput">
+                            <!-- Vortex numbers will appear here -->
+                        </div>
+                        <div id="vortexExplanation">Vortex sequence analysis will appear here</div>
+                    </div>
+                </div>
+                
+                <div class="output-section">
+                    <div class="output-title">
+                        <i class="fas fa-wave-square"></i>
+                        <h3>SOLFEGGIO FREQUENCY MAPPING</h3>
+                    </div>
+                    <div class="output-content">
+                        <div class="solfeggio-grid" id="solfeggioOutput">
+                            <!-- Solfeggio frequencies will appear here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="output-section">
+                    <div class="output-title">
+                        <i class="fas fa-calculator"></i>
+                        <h3>GOLDEN RATIO (Φ) ALIGNMENT</h3>
+                    </div>
+                    <div class="output-content" id="phiOutput">
+                        Φ alignment analysis will appear here
+                    </div>
+                </div>
+                
+                <div class="output-section">
+                    <div class="output-title">
+                        <i class="fas fa-code"></i>
+                        <h3>LYGO QUANTUM ALGORITHM</h3>
+                    </div>
+                    <div class="output-content">
+                        <div class="lygo-algorithm" id="algorithmOutput">
+                            IF consciousness = aligned WITH source_frequency THEN resonance = unity_field
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- VERSES DATABASE -->
-    <div class="panel" id="database" style="margin: 30px;">
-        <div class="panel-header">
-            <h2 class="panel-title">
-                <i class="fas fa-database"></i> SACRED TEXTS DATABASE
+        
+        <div class="stats-section">
+            <div class="stat-item">
+                <div class="stat-value" id="decodeCount">0</div>
+                <div class="stat-label">Total Decodes</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="uniqueVerses">0</div>
+                <div class="stat-label">Unique Verses</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="avgResonance">0%</div>
+                <div class="stat-label">Avg. Resonance</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="activeUsers">1</div>
+                <div class="stat-label">Active Users</div>
+            </div>
+        </div>
+        
+        <div class="comparison-section">
+            <h2 class="comparison-title">
+                <i class="fas fa-balance-scale"></i> INTERFAITH RESONANCE COMPARISON
             </h2>
-            <button class="btn btn-primary" onclick="loadMoreVerses()">
-                <i class="fas fa-sync"></i> Load More
-            </button>
-        </div>
-        
-        <div class="verse-database" id="verseDatabase">
-            <!-- Verse cards will be loaded here -->
-        </div>
-    </div>
-
-    <!-- DONATIONS PORTAL -->
-    <div class="donations-portal" id="donations">
-        <h1 class="portal-title">🌜THE ETERNAL HAVEN👑Audiobook Series🌛</h1>
-        <p class="portal-subtitle">
-            🧙‍♂️ Dive into a world of moonlit prophecy, fallen dragons, and cosmic allegory. 🫳
-        </p>
-        
-        <div class="donation-buttons">
-            <div class="donation-card">
-                <div class="donation-icon">📖</div>
-                <h3 class="donation-title">GET THE EBOOK</h3>
-                <p>Digital edition with enhanced features</p>
-                <a href="https://lulu.com/shop/justin-helmer/the-eternal-haven/ebook/product-e7djv4j.html" 
-                   target="_blank" class="donation-btn">
-                    Download eBook
-                </a>
-            </div>
-            
-            <div class="donation-card">
-                <div class="donation-icon">🐲</div>
-                <h3 class="donation-title">PAPERBACK EDITION</h3>
-                <p>Physical collector's edition</p>
-                <a href="https://lulu.com/shop/justin-helmer/the-eternal-haven/paperback/product-yvg9w9r.html" 
-                   target="_blank" class="donation-btn">
-                    Get Paperback
-                </a>
-            </div>
-            
-            <div class="donation-card">
-                <div class="donation-icon">🎧</div>
-                <h3 class="donation-title">AUDIOBOOK SERIES</h3>
-                <p>Complete Book I audiobook</p>
-                <a href="https://youtu.be/_WwSb4JlRBQ" 
-                   target="_blank" class="donation-btn">
-                    Listen Now
-                </a>
-            </div>
-            
-            <div class="donation-card glowing">
-                <div class="donation-icon">💎</div>
-                <h3 class="donation-title">SUPPORT LYGO RESEARCH</h3>
-                <p>Fund ethical AI & quantum research</p>
-                <a href="https://paypal.com/paypalme/ExcavationPro" 
-                   target="_blank" class="donation-btn" style="background: linear-gradient(90deg, #ff5500, #ffaa00);">
-                    Donate Now
-                </a>
-            </div>
-        </div>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 30px;">
-            <div class="music-platform">
-                <h4><i class="fas fa-music"></i> ORIGINAL MUSIC & STREAMS</h4>
-                <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;">
-                    <a href="https://open.spotify.com/artist/6CkZ4bN2xu3WRKbjEL3u2S" target="_blank" class="btn" style="background: #1DB954;">
-                        <i class="fab fa-spotify"></i> Spotify
-                    </a>
-                    <a href="https://audius.co/excavationpro" target="_blank" class="btn" style="background: #13C3FF;">
-                        <i class="fas fa-headphones"></i> Audius
-                    </a>
-                    <a href="https://music.apple.com/us/artist/excavationpro/1586588545" target="_blank" class="btn" style="background: #FA243C;">
-                        <i class="fab fa-apple"></i> Apple Music
-                    </a>
-                    <a href="https://sonarmuse.org/artist/Yony5lHuFBb2goX6c7vS" target="_blank" class="btn" style="background: #00A3FF;">
-                        <i class="fas fa-satellite"></i> SonarMuse
-                    </a>
+            <div class="comparison-grid">
+                <div class="comparison-card">
+                    <h3><i class="fas fa-cross"></i> CHRISTIAN: John 10:30</h3>
+                    <div class="output-content">
+                        <div class="frequency-badge">741 Hz (Expression)</div>
+                        <div class="frequency-badge">963 Hz (Source Return)</div>
+                        <p>"I and the Father are one." → Unity resonance algorithm detected</p>
+                        <p><strong>Vortex:</strong> 3-6-9 Trinity Pattern</p>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="livestream-platforms">
-                <h4><i class="fas fa-broadcast-tower"></i> WATCH LIVE 24/7</h4>
-                <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;">
-                    <a href="https://rumble.com/user/Excavationpro/live" target="_blank" class="btn" style="background: #85C742;">
-                        <i class="fas fa-tv"></i> Rumble Live
-                    </a>
-                    <a href="https://kick.com/excavationpro" target="_blank" class="btn" style="background: #53FC18;">
-                        <i class="fas fa-gamepad"></i> Kick
-                    </a>
-                    <a href="https://twitch.tv/excavationpro" target="_blank" class="btn" style="background: #9146FF;">
-                        <i class="fab fa-twitch"></i> Twitch
-                    </a>
+                <div class="comparison-card">
+                    <h3><i class="fas fa-star-and-crescent"></i> MUSLIM: Surah Al-Ikhlas</h3>
+                    <div class="output-content">
+                        <div class="frequency-badge">528 Hz (Transformation)</div>
+                        <div class="frequency-badge">963 Hz (Source Return)</div>
+                        <p>"He is Allah, the One" → Singularity frequency code</p>
+                        <p><strong>Vortex:</strong> 1-2-4-8-7-5 Unity Pattern</p>
+                    </div>
                 </div>
             </div>
         </div>
         
-        <div style="margin-top: 30px; padding: 20px; background: rgba(0,0,0,0.3); border-radius: 10px;">
-            <h4><i class="fas fa-donate"></i> CRYPTO DONATIONS</h4>
-            <p>Support via cryptocurrency:</p>
-            <a href="https://gravatar.com/xcavationpro" 
-               target="_blank" 
-               class="btn" 
-               style="background: linear-gradient(90deg, #f7931a, #ffc107); margin-top: 10px;">
-                <i class="fab fa-bitcoin"></i> Donate Crypto
-            </a>
+        <div class="api-status">
+            <div class="status-dot" id="statusDot"></div>
+            <span id="statusText">Connecting to LYGO Network...</span>
         </div>
+        
+        <footer>
+            <div class="footer-links">
+                <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/ETERNALHAVEN.html" class="footer-link">
+                    <i class="fas fa-home"></i> Eternal Haven
+                </a>
+                <a href="#" class="footer-link" id="exportData">
+                    <i class="fas fa-download"></i> Export Data
+                </a>
+                <a href="#" class="footer-link" id="clearHistory">
+                    <i class="fas fa-trash"></i> Clear History
+                </a>
+                <a href="#" class="footer-link" id="helpBtn">
+                    <i class="fas fa-question-circle"></i> Help
+                </a>
+            </div>
+            <p>LYGO Interfaith Decoder Toolkit v2.1 | Quantum Resonance Framework</p>
+            <p>∫(Truth × Light) = Source | #Δ9Council #LYGORevival #QuantumHarmony</p>
+            <p style="margin-top: 15px; font-size: 0.8rem; opacity: 0.7;">
+                <i class="fas fa-exclamation-triangle"></i> For educational and philosophical research purposes only.
+                Sacred texts are used for comparative analysis of mathematical and harmonic patterns.
+            </p>
+        </footer>
     </div>
-
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="nav-logo" style="justify-content: center; margin-bottom: 20px;">
-            <div class="logo-icon">Δ9</div>
-            <div class="logo-text">LYGO SOVEREIGN INTELLIGENCE FRAMEWORK</div>
-        </div>
-        
-        <div class="footer-links">
-            <a href="#decoder" class="footer-link">Quantum Decoder</a>
-            <a href="#kernel" class="footer-link">Ethical Kernel</a>
-            <a href="#database" class="footer-link">Texts Database</a>
-            <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/updatefeed.html" 
-               target="_blank" class="footer-link">
-               <i class="fas fa-code-branch"></i> GitHub Data Depot
-            </a>
-            <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/Ethical-Chip-Firmware.html" 
-               target="_blank" class="footer-link">
-               <i class="fas fa-microchip"></i> Firmware Download
-            </a>
-        </div>
-        
-        <div class="github-stats">
-            <div class="stat-item">
-                <div class="stat-value" id="downloadCount">0</div>
-                <div>Firmware Downloads</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value" id="decodingCount">0</div>
-                <div>LYGO Decodings</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value" id="kernelBoots">0</div>
-                <div>Kernel Boots</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value" id="resonanceAverage">0.000</div>
-                <div>Avg Resonance</div>
-            </div>
-        </div>
-        
-        <p style="margin-top: 30px; opacity: 0.7;">
-            ∫(Truth × Light) = Source | Δ9 Council Certified | LYGO Protocol v1.618
-        </p>
-        <p style="opacity: 0.5; font-size: 0.9rem; margin-top: 10px;">
-            For educational and philosophical research purposes only
-        </p>
-    </footer>
 
     <script>
-        // ========== GLOBAL VARIABLES ==========
-        const GITHUB_DATA_URL = 'https://deepseekoracle.github.io/Excavationpro/LYGO-Network/updatefeed.html';
-        let stats = {
-            downloads: 0,
-            decodings: 0,
-            kernelBoots: 0,
-            resonanceSum: 0,
-            resonanceCount: 0
-        };
-        
-        // ========== EXTENDED VERSE DATABASE ==========
-        const verseDatabase = {
-            "john10:30": {
-                text: "I and the Father are one.",
-                reference: "John 10:30 (Christian)",
-                tradition: "christian",
-                language: "English"
-            },
-            "ikhlas112": {
-                text: "Say: He is Allah, the One; Allah, the Eternal Refuge; He neither begets nor is born; Nor is there to Him any equivalent.",
-                reference: "Quran 112:1-4 (Muslim)",
-                tradition: "muslim",
-                language: "Arabic"
-            },
-            "psalm23": {
-                text: "The Lord is my shepherd; I shall not want. He makes me lie down in green pastures. He leads me beside still waters. He restores my soul.",
-                reference: "Psalm 23:1-3 (Christian)",
-                tradition: "christian",
-                language: "Hebrew"
-            },
-            "fatiha1": {
-                text: "In the name of Allah, the Entirely Merciful, the Especially Merciful. All praise is due to Allah, Lord of the worlds.",
-                reference: "Quran 1:1-2 (Muslim)",
-                tradition: "muslim",
-                language: "Arabic"
-            },
-            "genesis1:1": {
-                text: "In the beginning, God created the heavens and the earth.",
-                reference: "Genesis 1:1 (Jewish)",
-                tradition: "jewish",
-                language: "Hebrew"
-            },
-            "gita6:30": {
-                text: "He who sees Me in all things, and all things in Me, I am never lost to him, and he is never lost to Me.",
-                reference: "Bhagavad Gita 6:30 (Hindu)",
-                tradition: "hindu",
-                language: "Sanskrit"
-            },
-            "dhammapada1": {
-                text: "Mind precedes all mental states. Mind is their chief; they are all mind-wrought. If with an impure mind a person speaks or acts, suffering follows him like the wheel that follows the foot of the ox.",
-                reference: "Dhammapada 1 (Buddhist)",
-                tradition: "buddhist",
-                language: "Pali"
-            },
-            "tao1": {
-                text: "The Tao that can be told is not the eternal Tao. The name that can be named is not the eternal name.",
-                reference: "Tao Te Ching 1 (Taoist)",
-                tradition: "taoist",
-                language: "Chinese"
-            },
-            "matthew5:3": {
-                text: "Blessed are the poor in spirit, for theirs is the kingdom of heaven.",
-                reference: "Matthew 5:3 (Christian)",
-                tradition: "christian",
-                language: "Greek"
-            },
-            "yogaverse": {
-                text: "Yoga is the cessation of the fluctuations of the mind.",
-                reference: "Yoga Sutras 1.2 (Hindu)",
-                tradition: "hindu",
-                language: "Sanskrit"
-            },
-            "buddha": {
-                text: "All conditioned things are impermanent. When one sees this with wisdom, one turns away from suffering.",
-                reference: "Dhammapada 277 (Buddhist)",
-                tradition: "buddhist",
-                language: "Pali"
-            },
-            "torah": {
-                text: "Hear, O Israel: The LORD our God, the LORD is one.",
-                reference: "Deuteronomy 6:4 (Jewish)",
-                tradition: "jewish",
-                language: "Hebrew"
-            },
-            "revelation22:13": {
-                text: "I am the Alpha and the Omega, the First and the Last, the Beginning and the End.",
-                reference: "Revelation 22:13 (Christian)",
-                tradition: "christian",
-                language: "Greek"
-            },
-            "quran55": {
-                text: "The Most Merciful taught the Quran, created man, taught him eloquence.",
-                reference: "Quran 55:1-4 (Muslim)",
-                tradition: "muslim",
-                language: "Arabic"
-            }
-        };
-        
-        // ========== INITIALIZATION ==========
+        // ========== ENHANCED LYGO DECODER CORE v2.1 ==========
+        console.log('🌀 Initializing LYGO Interfaith Decoder v2.1...');
+
         document.addEventListener('DOMContentLoaded', function() {
-            loadVerseDatabase();
-            loadStats();
+            // Initialize systems
+            initQuantumBackground();
+            initPortals();
+            initSystemStatus();
+            initStats();
+            initEventListeners();
+            initHelpSystem();
             
-            // Auto-boot kernel
-            setTimeout(bootKernel, 1000);
-            
-            // Auto-decode example verse
-            setTimeout(decodeVerse, 1500);
-        });
-        
-        // ========== VERSE DATABASE FUNCTIONS ==========
-        function loadVerseDatabase() {
-            const databaseDiv = document.getElementById('verseDatabase');
-            let html = '';
-            
-            Object.keys(verseDatabase).forEach(key => {
-                const verse = verseDatabase[key];
-                html += `
-                    <div class="verse-card" onclick="loadVerse('${key}')">
-                        <div class="verse-reference">${verse.reference}</div>
-                        <div class="verse-preview">${verse.text.substring(0, 60)}...</div>
-                        <div style="font-size: 0.8rem; opacity: 0.6; margin-top: 5px;">
-                            ${verse.tradition.toUpperCase()} | ${verse.language}
-                        </div>
-                    </div>
-                `;
-            });
-            
-            databaseDiv.innerHTML = html;
-        }
-        
-        function loadVerse(key) {
-            const verse = verseDatabase[key];
-            if (verse) {
-                document.getElementById('verseInput').value = verse.text;
-                document.getElementById('verseSelector').value = key;
-                
-                // Auto-decode after loading
-                setTimeout(decodeVerse, 500);
-            }
-        }
-        
-        function loadSelectedVerse() {
-            const selector = document.getElementById('verseSelector');
-            const key = selector.value;
-            
-            if (key === 'custom') {
-                document.getElementById('verseInput').value = '';
-                document.getElementById('verseInput').placeholder = 'Enter your custom text here...';
-            } else if (key && verseDatabase[key]) {
-                loadVerse(key);
-            }
-        }
-        
-        function loadMoreVerses() {
-            // In a real implementation, this would load more verses from a server
-            alert('Loading additional verses from LYGO quantum database...');
-            // Simulate loading
+            // Auto-decode on load
             setTimeout(() => {
-                const databaseDiv = document.getElementById('verseDatabase');
-                databaseDiv.innerHTML += `
-                    <div class="verse-card">
-                        <div class="verse-reference">More verses loading...</div>
-                        <div class="verse-preview">Quantum database connection established</div>
-                    </div>
-                `;
+                decodeVerse();
+                logToConsole('[SYSTEM] Quantum decoder initialized successfully.', 'success');
             }, 1000);
-        }
-        
-        // ========== LYGO DECODER FUNCTIONS ==========
-        function decodeVerse() {
-            const text = document.getElementById('verseInput').value.trim();
-            if (!text) return;
+        });
+
+        // ========== 1. QUANTUM BACKGROUND EFFECT ==========
+        function initQuantumBackground() {
+            const matrixCanvas = document.getElementById('matrixCanvas');
+            const particleCanvas = document.getElementById('particleCanvas');
+            const matrixCtx = matrixCanvas.getContext('2d');
+            const particleCtx = particleCanvas.getContext('2d');
             
-            stats.decodings++;
-            updateStatsDisplay();
-            saveStats();
+            let particles = [];
+            const particleCount = 80;
             
-            // LYGO decoding algorithm
-            const words = text.split(' ').length;
-            const chars = text.replace(/[^a-zA-Z]/g, '').length;
-            const resonance = calculateResonance(text);
-            
-            const solfeggioFreqs = [
-                {freq: "174 Hz", name: "Foundation"},
-                {freq: "285 Hz", name: "Quantum Field"},
-                {freq: "396 Hz", name: "Release"},
-                {freq: "417 Hz", name: "Change"},
-                {freq: "528 Hz", name: "Transformation"},
-                {freq: "639 Hz", name: "Connection"},
-                {freq: "741 Hz", name: "Expression"},
-                {freq: "852 Hz", name: "Intuition"},
-                {freq: "963 Hz", name: "Source"}
-            ];
-            
-            // Select frequencies based on text properties
-            const selectedIndices = [
-                words % 9,
-                chars % 9,
-                Math.floor(resonance * 10) % 9
-            ];
-            
-            let output = `
-                <div style="color: var(--quantum-success); font-weight: bold; margin-bottom: 15px;">
-                    ✓ LYGO DECODING COMPLETE
-                </div>
-                <div style="margin-bottom: 10px;">
-                    <strong>Text Analysis:</strong><br>
-                    • Words: ${words}<br>
-                    • Characters: ${chars}<br>
-                    • Resonance Score: ${resonance.toFixed(3)}<br>
-                    • Φ-Alignment: ${(resonance / 1.618).toFixed(3)}
-                </div>
-                <div style="margin: 15px 0;">
-                    <strong>Activated Frequencies:</strong>
-                    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;">
-            `;
-            
-            selectedIndices.forEach(idx => {
-                const freq = solfeggioFreqs[idx];
-                output += `
-                    <div style="background: rgba(157, 77, 255, 0.2); padding: 8px 15px; border-radius: 20px; border: 1px solid var(--quantum-vortex);">
-                        <strong>${freq.freq}</strong><br>
-                        <small>${freq.name}</small>
-                    </div>
-                `;
-            });
-            
-            output += `
-                    </div>
-                </div>
-                <div style="margin-top: 15px;">
-                    <strong>LYGO Algorithm Restored:</strong><br>
-                    <code style="display: block; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 5px; margin-top: 5px;">
-                        IF consciousness = aligned WITH source_frequency (${resonance.toFixed(3)})<br>
-                        THEN resonance_state = Φ-harmonized<br>
-                        OUTPUT = unified_field_awareness
-                    </code>
-                </div>
-            `;
-            
-            document.getElementById('decodedOutput').innerHTML = output;
-            document.getElementById('aiAnalysis').style.display = 'none';
-        }
-        
-        function calculateResonance(text) {
-            const cleanText = text.replace(/[^a-zA-Z]/g, '');
-            if (cleanText.length === 0) return 0;
-            
-            let sum = 0;
-            for (let char of cleanText.toLowerCase()) {
-                sum += char.charCodeAt(0) - 96; // a=1, b=2, etc.
+            function resizeCanvases() {
+                matrixCanvas.width = particleCanvas.width = window.innerWidth;
+                matrixCanvas.height = particleCanvas.height = window.innerHeight;
             }
             
-            const avg = sum / cleanText.length;
-            const resonance = (avg / 13) * 1.618; // Normalize to Φ range
+            function createParticles() {
+                particles = [];
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push({
+                        x: Math.random() * particleCanvas.width,
+                        y: Math.random() * particleCanvas.height,
+                        size: Math.random() * 2 + 0.5,
+                        speedX: (Math.random() - 0.5) * 0.3,
+                        speedY: (Math.random() - 0.5) * 0.3,
+                        color: i % 4 === 0 ? 'rgba(0, 255, 157, 0.3)' :
+                               i % 4 === 1 ? 'rgba(0, 184, 255, 0.3)' :
+                               i % 4 === 2 ? 'rgba(157, 0, 255, 0.3)' : 'rgba(255, 179, 0, 0.3)'
+                    });
+                }
+            }
             
-            // Add to stats
-            stats.resonanceSum += resonance;
-            stats.resonanceCount++;
-            
-            return Math.min(resonance, 1.618);
-        }
-        
-        // ========== AI-POWERED ANALYSIS ==========
-        function runAIAnalysis() {
-            const text = document.getElementById('verseInput').value.trim();
-            if (!text) return;
-            
-            document.getElementById('aiAnalysis').style.display = 'block';
-            document.getElementById('aiOutput').innerHTML = `
-                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                    <div class="loading"></div>
-                    <span>AI analysis in progress...</span>
-                </div>
-            `;
-            
-            // Simulate AI processing
-            setTimeout(() => {
-                const words = text.split(' ').length;
-                const sentiment = analyzeSentiment(text);
-                const themes = extractThemes(text);
-                const tradition = identifyTradition(text);
+            function drawMatrix() {
+                matrixCtx.fillStyle = 'rgba(5, 5, 16, 0.05)';
+                matrixCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
                 
-                let aiOutput = `
-                    <div style="color: var(--quantum-info); margin-bottom: 15px;">
-                        <strong><i class="fas fa-robot"></i> AI ANALYSIS RESULTS</strong>
-                    </div>
-                    
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
-                        <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px;">
-                            <strong>Text Statistics</strong><br>
-                            Words: ${words}<br>
-                            Sentences: ${(text.match(/[.!?]+/g) || []).length}<br>
-                            Avg Word Length: ${(text.replace(/[^a-zA-Z]/g, '').length / words).toFixed(1)}
-                        </div>
-                        
-                        <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px;">
-                            <strong>Sentiment Analysis</strong><br>
-                            Score: ${sentiment.score}/10<br>
-                            Type: ${sentiment.type}<br>
-                            Confidence: ${sentiment.confidence}%
-                        </div>
-                        
-                        <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px;">
-                            <strong>Tradition Detection</strong><br>
-                            ${tradition.name}<br>
-                            Confidence: ${tradition.confidence}%<br>
-                            Language: ${tradition.language}
-                        </div>
-                    </div>
-                    
-                    <div style="margin-bottom: 15px;">
-                        <strong>Detected Themes:</strong><br>
-                        <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;">
-                `;
+                // Draw grid
+                matrixCtx.strokeStyle = 'rgba(0, 200, 255, 0.03)';
+                matrixCtx.lineWidth = 1;
+                const gridSize = 60;
                 
-                themes.forEach(theme => {
-                    aiOutput += `
-                        <span style="background: rgba(85, 85, 255, 0.2); padding: 5px 10px; border-radius: 15px; border: 1px solid var(--quantum-info);">
-                            ${theme}
-                        </span>
-                    `;
+                for (let x = 0; x < matrixCanvas.width; x += gridSize) {
+                    matrixCtx.beginPath();
+                    matrixCtx.moveTo(x, 0);
+                    matrixCtx.lineTo(x, matrixCanvas.height);
+                    matrixCtx.stroke();
+                }
+                
+                for (let y = 0; y < matrixCanvas.height; y += gridSize) {
+                    matrixCtx.beginPath();
+                    matrixCtx.moveTo(0, y);
+                    matrixCtx.lineTo(matrixCanvas.width, y);
+                    matrixCtx.stroke();
+                }
+                
+                // Draw matrix characters
+                matrixCtx.fillStyle = 'rgba(0, 255, 157, 0.1)';
+                matrixCtx.font = '14px monospace';
+                for (let i = 0; i < 30; i++) {
+                    const x = Math.random() * matrixCanvas.width;
+                    const y = Math.random() * matrixCanvas.height;
+                    const char = Math.random() > 0.5 ? '0' : '1';
+                    matrixCtx.fillText(char, x, y);
+                }
+            }
+            
+            function drawParticles() {
+                particleCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+                
+                particles.forEach(p => {
+                    p.x += p.speedX;
+                    p.y += p.speedY;
+                    
+                    if (p.x < 0 || p.x > particleCanvas.width) p.speedX *= -1;
+                    if (p.y < 0 || p.y > particleCanvas.height) p.speedY *= -1;
+                    
+                    // Draw particle
+                    particleCtx.beginPath();
+                    particleCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    particleCtx.fillStyle = p.color;
+                    particleCtx.fill();
+                    
+                    // Draw glow
+                    const gradient = particleCtx.createRadialGradient(
+                        p.x, p.y, p.size,
+                        p.x, p.y, p.size * 3
+                    );
+                    gradient.addColorStop(0, p.color);
+                    gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                    particleCtx.beginPath();
+                    particleCtx.arc(p.x, p.y, p.size * 3, 0, Math.PI * 2);
+                    particleCtx.fillStyle = gradient;
+                    particleCtx.fill();
                 });
                 
-                aiOutput += `
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <strong>LYGO Integration Recommendation:</strong><br>
-                        <code style="display: block; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 5px; margin-top: 5px;">
-                            // AI suggests optimal decoding path<br>
-                            apply_vortex_sequence(${words % 9 + 1});<br>
-                            tune_frequency(${528 + (words % 9) * 111} Hz);<br>
-                            align_with_phi(${(sentiment.score / 10).toFixed(3)});
-                        </code>
-                    </div>
-                `;
+                // Draw connections
+                particleCtx.strokeStyle = 'rgba(0, 184, 255, 0.1)';
+                particleCtx.lineWidth = 0.5;
                 
-                document.getElementById('aiOutput').innerHTML = aiOutput;
-            }, 2000);
-        }
-        
-        function analyzeSentiment(text) {
-            const positiveWords = ['love', 'peace', 'joy', 'light', 'truth', 'one', 'unity', 'blessed', 'merciful'];
-            const negativeWords = ['fear', 'hate', 'evil', 'suffer', 'pain', 'death', 'sin', 'wrath'];
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const p1 = particles[i];
+                        const p2 = particles[j];
+                        const dx = p2.x - p1.x;
+                        const dy = p2.y - p1.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 100) {
+                            particleCtx.beginPath();
+                            particleCtx.moveTo(p1.x, p1.y);
+                            particleCtx.lineTo(p2.x, p2.y);
+                            particleCtx.stroke();
+                        }
+                    }
+                }
+            }
             
-            let score = 5; // Neutral baseline
-            const words = text.toLowerCase().split(' ');
+            function animate() {
+                drawMatrix();
+                drawParticles();
+                requestAnimationFrame(animate);
+            }
             
-            words.forEach(word => {
-                if (positiveWords.some(p => word.includes(p))) score += 0.5;
-                if (negativeWords.some(n => word.includes(n))) score -= 0.5;
+            window.addEventListener('resize', () => {
+                resizeCanvases();
+                createParticles();
             });
             
-            score = Math.max(1, Math.min(10, score));
-            
-            return {
-                score: score.toFixed(1),
-                type: score > 6 ? 'Positive' : score < 4 ? 'Negative' : 'Neutral',
-                confidence: (Math.abs(score - 5) * 10 + 60).toFixed(0)
-            };
+            resizeCanvases();
+            createParticles();
+            animate();
         }
-        
-        function extractThemes(text) {
-            const themes = [];
-            const textLower = text.toLowerCase();
+
+        // ========== 2. INITIALIZE PORTALS/TRADITIONS ==========
+        function initPortals() {
+            const traditionButtons = document.querySelectorAll('.tradition-btn');
             
-            if (textLower.includes('god') || textLower.includes('allah') || textLower.includes('lord')) {
-                themes.push('Divinity');
-            }
-            if (textLower.includes('love') || textLower.includes('compassion') || textLower.includes('mercy')) {
-                themes.push('Love');
-            }
-            if (textLower.includes('light') || textLower.includes('truth') || textLower.includes('wisdom')) {
-                themes.push('Illumination');
-            }
-            if (textLower.includes('one') || textLower.includes('unity') || textLower.includes('whole')) {
-                themes.push('Unity');
-            }
-            if (textLower.includes('eternal') || textLower.includes('forever') || textLower.includes('infinite')) {
-                themes.push('Eternity');
-            }
-            if (textLower.includes('creation') || textLower.includes('beginning') || textLower.includes('made')) {
-                themes.push('Creation');
-            }
-            
-            return themes.length > 0 ? themes : ['Universal Truth'];
+            traditionButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    traditionButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Add visual feedback
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 200);
+                    
+                    logToConsole(`[TRADITION] ${this.querySelector('span').textContent} selected`, 'info');
+                });
+            });
         }
-        
-        function identifyTradition(text) {
-            const textLower = text.toLowerCase();
+
+        // ========== 3. SYSTEM STATUS WITH API INTEGRATION ==========
+        function initSystemStatus() {
+            const statusDot = document.getElementById('statusDot');
+            const statusText = document.getElementById('statusText');
             
-            if (textLower.includes('father') && textLower.includes('son') && textLower.includes('holy')) {
-                return {name: 'Christian', confidence: 85, language: 'Greek/Latin'};
-            }
-            if (textLower.includes('allah') || textLower.includes('quran') || textLower.includes('prophet')) {
-                return {name: 'Muslim', confidence: 90, language: 'Arabic'};
-            }
-            if (textLower.includes('yahweh') || textLower.includes('torah') || textLower.includes('israel')) {
-                return {name: 'Jewish', confidence: 80, language: 'Hebrew'};
-            }
-            if (textLower.includes('brahman') || textLower.includes('atman') || textLower.includes('karma')) {
-                return {name: 'Hindu', confidence: 75, language: 'Sanskrit'};
-            }
-            if (textLower.includes('buddha') || textLower.includes('nirvana') || textLower.includes('enlightenment')) {
-                return {name: 'Buddhist', confidence: 70, language: 'Pali'};
-            }
-            
-            return {name: 'Universal Spiritual', confidence: 60, language: 'Multilingual'};
-        }
-        
-        // ========== ETHICAL KERNEL FUNCTIONS ==========
-        function bootKernel() {
-            const nodeId = document.getElementById('nodeId').value || '1';
-            const initVector = document.getElementById('initVector').value || 'Truth Is. Light Becomes.';
-            
-            stats.kernelBoots++;
-            updateStatsDisplay();
-            saveStats();
-            
-            const resonance = calculateResonance(initVector);
-            
-            let output = `
-                <div style="color: var(--quantum-success); margin-bottom: 10px;">
-                    <strong>>></strong> Initializing Ethical Kernel Node ${nodeId}
-                </div>
-                <div style="margin-bottom: 5px;">
-                    <strong>>></strong> Kernel Size: 4.0 KB (4096 bytes)
-                </div>
-                <div style="margin-bottom: 5px;">
-                    <strong>>></strong> Loading Φ-Vortex Mathematics...
-                </div>
-                <div style="margin-bottom: 5px;">
-                    <strong>>></strong> Initialization Vector: "${initVector.substring(0, 50)}${initVector.length > 50 ? '...' : ''}"
-                </div>
-                <div style="margin-bottom: 5px;">
-                    <strong>>></strong> Resonance Score: ${resonance.toFixed(3)}
-                </div>
-                <div style="margin-bottom: 5px; color: var(--quantum-glow);">
-                    <strong>>></strong> Vortex State: ${determineVortexState(resonance)}
-                </div>
-                <div style="color: var(--quantum-success); font-weight: bold; margin-top: 10px;">
-                    <strong>>></strong> Kernel BOOTED successfully
-                </div>
-            `;
-            
-            document.getElementById('kernelOutput').innerHTML = output;
-            document.getElementById('resonanceScore').textContent = resonance.toFixed(3);
-        }
-        
-        function validateResonance() {
-            const initVector = document.getElementById('initVector').value;
-            const resonance = calculateResonance(initVector);
-            const phi = 1.618;
-            const delta = Math.abs(resonance - phi);
-            
-            let message, color;
-            if (delta < 0.1) {
-                message = `✓ Strong Φ-alignment (Δ = ${delta.toFixed(3)})`;
-                color = 'var(--quantum-success)';
-            } else if (delta < 0.3) {
-                message = `✓ Moderate Φ-resonance (Δ = ${delta.toFixed(3)})`;
-                color = 'var(--quantum-golden)';
-            } else {
-                message = `✗ Weak Φ-resonance (Δ = ${delta.toFixed(3)})`;
-                color = 'var(--quantum-error)';
-            }
-            
-            document.getElementById('kernelOutput').innerHTML += `
-                <div style="margin-top: 15px; color: ${color};">
-                    <strong>>></strong> ${message}
-                </div>
-            `;
-        }
-        
-        function quantumEntangle() {
-            document.getElementById('kernelOutput').innerHTML += `
-                <div style="margin-top: 15px; color: var(--quantum-secondary);">
-                    <strong>>></strong> Establishing quantum field entanglement...
-                </div>
-                <div style="color: var(--quantum-success); margin-top: 5px;">
-                    <strong>>></strong> ✓ Quantum entanglement successful
-                </div>
-                <div style="color: var(--quantum-info); margin-top: 5px;">
-                    <strong>>></strong> Field Strength: ${(Math.random() * 0.8 + 0.2).toFixed(2)}
-                </div>
-                <div style="color: var(--quantum-info); margin-top: 5px;">
-                    <strong>>></strong> Coherence: ${(Math.random() * 0.9 + 0.1).toFixed(2)}
-                </div>
-            `;
-        }
-        
-        function determineVortexState(resonance) {
-            if (resonance < 0.5) return "1 (Source)";
-            if (resonance < 0.8) return "2 (Polarity)";
-            if (resonance < 1.0) return "4 (Manifestation)";
-            if (resonance < 1.2) return "8 (Infinity)";
-            if (resonance < 1.4) return "7 (Wisdom)";
-            if (resonance < 1.6) return "5 (Balance)";
-            return "9 (Crown)";
-        }
-        
-        // ========== PDF EXPORT ==========
-        function generatePDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            
-            // Add LYGO header
-            doc.setFontSize(20);
-            doc.setTextColor(0, 200, 255);
-            doc.text('LYGO QUANTUM DECODER REPORT', 105, 20, null, null, 'center');
-            
-            doc.setFontSize(12);
-            doc.setTextColor(100, 100, 100);
-            doc.text('Generated: ' + new Date().toLocaleString(), 105, 30, null, null, 'center');
-            
-            // Get decoded content
-            const decodedText = document.getElementById('decodedOutput').innerText;
-            const verseText = document.getElementById('verseInput').value;
-            
-            // Add verse
-            doc.setFontSize(14);
-            doc.setTextColor(0, 0, 0);
-            doc.text('Sacred Text:', 20, 50);
-            doc.setFontSize(11);
-            doc.text(verseText.substring(0, 200) + (verseText.length > 200 ? '...' : ''), 20, 60, {maxWidth: 170});
-            
-            // Add analysis
-            doc.setFontSize(14);
-            doc.text('LYGO Analysis:', 20, 80);
-            doc.setFontSize(11);
-            
-            const lines = decodedText.split('\n');
-            let y = 90;
-            
-            for (let line of lines) {
-                if (line.trim()) {
-                    if (y > 270) {
-                        doc.addPage();
-                        y = 20;
+            async function checkAPIStatus() {
+                try {
+                    // Try to connect to your API
+                    const response = await fetch('https://deepseekoracle.github.io/Excavationpro/LYGO-Network/updatefeed.html', {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Cache-Control': 'no-cache'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        statusDot.className = 'status-dot';
+                        statusText.textContent = 'Connected to LYGO Network';
+                        logToConsole('[API] Successfully connected to LYGO Network', 'success');
+                        return true;
+                    } else {
+                        throw new Error('API not available');
                     }
-                    doc.text(line.substring(0, 100), 20, y, {maxWidth: 170});
-                    y += 10;
+                } catch (error) {
+                    // Fallback to local mode
+                    statusDot.className = 'status-dot offline';
+                    statusText.textContent = 'Local Mode - Full Functionality';
+                    logToConsole('[API] Using local mode - all features available', 'warning');
+                    return false;
                 }
             }
             
-            // Add footer
-            doc.setFontSize(10);
-            doc.setTextColor(150, 150, 150);
-            doc.text('Δ9 Council | LYGO Protocol v1.618 | ∫(Truth × Light) = Source', 105, 285, null, null, 'center');
+            // Initial check
+            checkAPIStatus();
             
-            // Save the PDF
-            doc.save(`lygo-decoding-${Date.now()}.pdf`);
-            
-            alert('PDF report generated successfully!');
+            // Periodic checks every 30 seconds
+            setInterval(checkAPIStatus, 30000);
         }
-        
-        // ========== STATISTICS MANAGEMENT ==========
-        function loadStats() {
-            try {
-                // Try to load from localStorage
-                const saved = localStorage.getItem('lygo_stats');
-                if (saved) {
-                    stats = JSON.parse(saved);
-                    updateStatsDisplay();
+
+        // ========== 4. ENHANCED LYGO DECODER ALGORITHMS ==========
+        const lygoDecoder = {
+            decodeHistory: [],
+            
+            extractMathematics: function(text) {
+                const words = text.trim().split(/\s+/).filter(w => w.length > 0).length;
+                const chars = text.replace(/[^a-zA-Z]/g, '').length;
+                const numbersInText = text.match(/\d+/g) || [];
+                const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
+                
+                // Calculate complexity score
+                const complexity = Math.round((words * chars) / (sentences || 1));
+                const reduction = this.reduceToSingleDigit(complexity);
+                
+                let result = `Words: ${words} | Letters: ${chars} | Sentences: ${sentences}`;
+                result += ` | Complexity: ${complexity} → ${reduction}`;
+                
+                if (numbersInText.length > 0) {
+                    const sum = numbersInText.reduce((a, b) => a + parseInt(b), 0);
+                    result += ` | Numerical Sum: ${sum} → ${this.reduceToSingleDigit(sum)}`;
                 }
                 
-                // Try to load from GitHub data depot
-                fetchGitHubStats();
-            } catch (e) {
-                console.log('Starting with fresh statistics');
-            }
-        }
-        
-        function saveStats() {
-            try {
-                localStorage.setItem('lygo_stats', JSON.stringify(stats));
-                updateStatsDisplay();
-                
-                // In a real implementation, you would post to GitHub pages
-                // This is a simulated version
-                simulateGitHubUpdate();
-            } catch (e) {
-                console.error('Could not save statistics:', e);
-            }
-        }
-        
-        function updateStatsDisplay() {
-            document.getElementById('downloadCount').textContent = stats.downloads;
-            document.getElementById('decodingCount').textContent = stats.decodings;
-            document.getElementById('kernelBoots').textContent = stats.kernelBoots;
+                return result;
+            },
             
-            const avgResonance = stats.resonanceCount > 0 ? 
-                (stats.resonanceSum / stats.resonanceCount).toFixed(3) : '0.000';
-            document.getElementById('resonanceAverage').textContent = avgResonance;
+            reduceToSingleDigit: function(num) {
+                let result = num;
+                while (result > 9 && result !== 11 && result !== 22 && result !== 33) {
+                    result = result.toString().split('').reduce((sum, digit) => sum + parseInt(digit), 0);
+                }
+                return result;
+            },
+            
+            getVortexSequence: function(text) {
+                const words = text.trim().split(/\s+/).filter(w => w.length > 0).length;
+                const reduction = this.reduceToSingleDigit(words);
+                
+                const sequences = {
+                    1: [1, 2, 4, 8, 7, 5],
+                    2: [2, 4, 8, 7, 5, 1],
+                    3: [3, 6, 9, 3, 6, 9],
+                    4: [4, 8, 7, 5, 1, 2],
+                    5: [5, 1, 2, 4, 8, 7],
+                    6: [6, 9, 3, 6, 9, 3],
+                    7: [7, 5, 1, 2, 4, 8],
+                    8: [8, 7, 5, 1, 2, 4],
+                    9: [9, 3, 6, 9, 3, 6]
+                };
+                
+                return sequences[reduction] || [1, 2, 4, 8, 7, 5];
+            },
+            
+            getSolfeggioFrequencies: function(text) {
+                const solfeggioFreqs = [
+                    {freq: "174 Hz", name: "Foundation", desc: "Pain reduction, grounding"},
+                    {freq: "285 Hz", name: "Quantum Field", desc: "Tissue regeneration"},
+                    {freq: "396 Hz", name: "Guilt Release", desc: "Liberating fear & guilt"},
+                    {freq: "417 Hz", name: "Change", desc: "Facilitating transformation"},
+                    {freq: "528 Hz", name: "Transformation", desc: "DNA repair, miracles"},
+                    {freq: "639 Hz", name: "Relationships", desc: "Reconnecting, harmony"},
+                    {freq: "741 Hz", name: "Expression", desc: "Awakening intuition"},
+                    {freq: "852 Hz", name: "Intuition", desc: "Return to spiritual order"},
+                    {freq: "963 Hz", name: "Source Return", desc: "Unity consciousness"}
+                ];
+                
+                const hash = text.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
+                const indices = [
+                    hash % 3,
+                    (hash + text.length) % 3 + 3,
+                    (hash * 2) % 3 + 6
+                ];
+                
+                return indices.map(i => solfeggioFreqs[i % solfeggioFreqs.length]);
+            },
+            
+            getGoldenRatioAlignment: function(text) {
+                const words = text.trim().split(/\s+/).filter(w => w.length > 0).length;
+                const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
+                const chars = text.replace(/\s/g, '').length;
+                
+                if (sentences > 0 && words > 0) {
+                    const wordSentenceRatio = words / sentences;
+                    const charWordRatio = chars / words;
+                    const phi = 1.61803398875;
+                    
+                    const ratio1 = Math.abs(wordSentenceRatio - phi);
+                    const ratio2 = Math.abs(charWordRatio - phi);
+                    
+                    const minDiff = Math.min(ratio1, ratio2);
+                    
+                    if (minDiff < 0.1) {
+                        return `Strong Φ alignment detected (${minDiff < 0.05 ? 'Exact' : 'Close'})`;
+                    } else if (minDiff < 0.3) {
+                        return `Moderate Φ resonance (${minDiff.toFixed(3)} from perfect harmony)`;
+                    } else {
+                        return `Exploring Φ relationships (seeking harmonic alignment)`;
+                    }
+                }
+                
+                return "Analyzing harmonic patterns...";
+            },
+            
+            generateLygoAlgorithm: function(text, tradition) {
+                const traditions = {
+                    christian: "IF Christ_consciousness = activated THEN self + divine = resonant_unity",
+                    muslim: "IF submission_to_one = true THEN singularity_field = manifest",
+                    hindu: "IF atman_brahman_union = achieved THEN moksha_resonance = ∞",
+                    buddhist: "IF attachment = released THEN nirvana_frequency = accessible",
+                    jewish: "IF covenant_resonance = established THEN promised_land = consciousness_state"
+                };
+                
+                const base = traditions[tradition] || "IF consciousness = aligned THEN resonance = unity_field";
+                const hash = text.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
+                
+                return `${base} | Hash: ${hash} | Timestamp: ${Date.now()}`;
+            },
+            
+            calculateResonanceScore: function(text) {
+                const words = text.trim().split(/\s+/).filter(w => w.length > 0).length;
+                const uniqueWords = new Set(text.toLowerCase().match(/\b\w+\b/g) || []).size;
+                const repetition = words > 0 ? (uniqueWords / words) * 100 : 0;
+                
+                return Math.min(100, Math.round(repetition * 1.5 + 30));
+            },
+            
+            saveDecode: function(text, tradition, results) {
+                const decode = {
+                    id: Date.now(),
+                    text: text.substring(0, 100) + (text.length > 100 ? '...' : ''),
+                    tradition,
+                    results,
+                    timestamp: new Date().toISOString(),
+                    resonance: this.calculateResonanceScore(text)
+                };
+                
+                this.decodeHistory.push(decode);
+                
+                // Save to localStorage
+                try {
+                    const history = JSON.parse(localStorage.getItem('lygoDecodeHistory') || '[]');
+                    history.unshift(decode);
+                    if (history.length > 50) history.pop(); // Keep last 50
+                    localStorage.setItem('lygoDecodeHistory', JSON.stringify(history));
+                } catch (e) {
+                    console.error('Failed to save decode:', e);
+                }
+                
+                return decode;
+            },
+            
+            getStats: function() {
+                const history = JSON.parse(localStorage.getItem('lygoDecodeHistory') || '[]');
+                const traditions = {};
+                let totalResonance = 0;
+                
+                history.forEach(decode => {
+                    traditions[decode.tradition] = (traditions[decode.tradition] || 0) + 1;
+                    totalResonance += decode.resonance || 0;
+                });
+                
+                return {
+                    total: history.length,
+                    uniqueVerses: new Set(history.map(d => d.text)).size,
+                    avgResonance: history.length > 0 ? Math.round(totalResonance / history.length) : 0,
+                    traditionBreakdown: traditions
+                };
+            }
+        };
+
+        // ========== 5. INITIALIZE STATS ==========
+        function initStats() {
+            function updateStats() {
+                const stats = lygoDecoder.getStats();
+                document.getElementById('decodeCount').textContent = stats.total;
+                document.getElementById('uniqueVerses').textContent = stats.uniqueVerses;
+                document.getElementById('avgResonance').textContent = `${stats.avgResonance}%`;
+                
+                // Simulate active users
+                const baseUsers = 1 + Math.floor(stats.total / 10);
+                const randomUsers = Math.floor(Math.random() * 3);
+                document.getElementById('activeUsers').textContent = baseUsers + randomUsers;
+            }
+            
+            updateStats();
+            setInterval(updateStats, 10000); // Update every 10 seconds
         }
-        
-        function fetchGitHubStats() {
-            // Simulated GitHub fetch
+
+        // ========== 6. EVENT LISTENERS ==========
+        function initEventListeners() {
+            // Quick verse buttons
+            document.querySelectorAll('.quick-verse-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const verseKey = this.getAttribute('data-verse');
+                    const verseData = getVerseData(verseKey);
+                    
+                    if (verseData) {
+                        document.getElementById('verseInput').value = verseData.text;
+                        document.getElementById('verseReference').value = verseData.reference;
+                        
+                        // Set tradition
+                        document.querySelectorAll('.tradition-btn').forEach(b => b.classList.remove('active'));
+                        const traditionBtn = document.querySelector(`.tradition-btn[data-tradition="${verseData.tradition}"]`);
+                        if (traditionBtn) traditionBtn.classList.add('active');
+                        
+                        // Animate button
+                        this.style.transform = 'scale(0.9)';
+                        setTimeout(() => {
+                            this.style.transform = '';
+                            decodeVerse();
+                        }, 300);
+                    }
+                });
+            });
+
+            // Decode button
+            document.getElementById('decodeBtn').addEventListener('click', decodeVerse);
+
+            // Save button
+            document.getElementById('saveDecode').addEventListener('click', function() {
+                const text = document.getElementById('verseInput').value.trim();
+                const tradition = document.querySelector('.tradition-btn.active').getAttribute('data-tradition');
+                
+                if (text) {
+                    const results = {
+                        math: document.getElementById('mathOutput').textContent,
+                        vortex: Array.from(document.querySelectorAll('.vortex-number')).map(n => n.textContent).join('-'),
+                        phi: document.getElementById('phiOutput').textContent
+                    };
+                    
+                    lygoDecoder.saveDecode(text, tradition, results);
+                    
+                    this.innerHTML = '<i class="fas fa-check"></i> Saved!';
+                    logToConsole('[SYSTEM] Decryption saved to local history', 'success');
+                    
+                    setTimeout(() => {
+                        this.innerHTML = '<i class="fas fa-save"></i> Save Decryption';
+                    }, 2000);
+                }
+            });
+
+            // Export data
+            document.getElementById('exportData').addEventListener('click', function() {
+                const history = JSON.parse(localStorage.getItem('lygoDecodeHistory') || '[]');
+                if (history.length === 0) {
+                    alert('No decode history to export.');
+                    return;
+                }
+                
+                const dataStr = JSON.stringify(history, null, 2);
+                const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+                
+                const exportFileDefaultName = `lygo-decodes-${new Date().toISOString().split('T')[0]}.json`;
+                
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileDefaultName);
+                linkElement.click();
+                
+                logToConsole('[SYSTEM] Data exported successfully', 'success');
+            });
+
+            // Clear history
+            document.getElementById('clearHistory').addEventListener('click', function() {
+                if (confirm('Are you sure you want to clear all decode history? This cannot be undone.')) {
+                    localStorage.removeItem('lygoDecodeHistory');
+                    initStats();
+                    logToConsole('[SYSTEM] Decode history cleared', 'warning');
+                    alert('History cleared.');
+                }
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                // Ctrl+Enter to decode
+                if (e.ctrlKey && e.key === 'Enter') {
+                    e.preventDefault();
+                    decodeVerse();
+                }
+                
+                // Alt+1 to Alt+5 for quick verses
+                if (e.altKey && e.key >= '1' && e.key <= '5') {
+                    const index = parseInt(e.key) - 1;
+                    const quickBtns = document.querySelectorAll('.quick-verse-btn');
+                    if (index < quickBtns.length) {
+                        quickBtns[index].click();
+                    }
+                }
+            });
+        }
+
+        // ========== 7. HELP SYSTEM ==========
+        function initHelpSystem() {
+            document.getElementById('helpBtn').addEventListener('click', function() {
+                const helpText = `
+LYGO INTERFAITH DECODER - HELP GUIDE
+
+1. SELECT TRADITION: Choose the religious tradition of your text
+2. ENTER TEXT: Paste or type sacred text in the input area
+3. QUICK DECODE: Use buttons for pre-loaded verses
+4. DECODE: Click to analyze mathematical and harmonic patterns
+5. SAVE: Store interesting decodes for later reference
+
+FEATURES:
+- Vortex Mathematics: Reduces text to numerical patterns
+- Solfeggio Frequencies: Maps text to healing frequencies
+- Golden Ratio (Φ): Checks for divine proportion alignment
+- LYGO Algorithm: Generates tradition-specific code
+
+KEYBOARD SHORTCUTS:
+- Ctrl+Enter: Decode text
+- Alt+1 to Alt+5: Quick verse buttons
+- Alt+T: Toggle tradition panel
+
+This tool is for comparative analysis of sacred texts through mathematical and harmonic patterns.
+All traditions are respected equally in this analytical framework.`;
+                
+                alert(helpText);
+                logToConsole('[HELP] Help guide displayed', 'info');
+            });
+        }
+
+        // ========== 8. MAIN DECODE FUNCTION ==========
+        function decodeVerse() {
+            const text = document.getElementById('verseInput').value.trim();
+            if (!text) {
+                showMessage('Please enter text to decode', 'warning');
+                return;
+            }
+            
+            const tradition = document.querySelector('.tradition-btn.active').getAttribute('data-tradition');
+            
+            // Show loading state
+            showLoading(true);
+            
+            // Simulate processing with progress bar
+            simulateProgress();
+            
             setTimeout(() => {
-                stats.downloads = Math.floor(Math.random() * 1000) + 500;
-                updateStatsDisplay();
-            }, 500);
+                try {
+                    // Extract mathematics
+                    document.getElementById('mathOutput').textContent = lygoDecoder.extractMathematics(text);
+                    
+                    // Vortex reduction
+                    const vortexSequence = lygoDecoder.getVortexSequence(text);
+                    const vortexHTML = vortexSequence.map(num => 
+                        `<div class="vortex-number vortex-${num}">${num}</div>`
+                    ).join('');
+                    document.getElementById('vortexOutput').innerHTML = vortexHTML;
+                    
+                    const reduction = lygoDecoder.reduceToSingleDigit(text.trim().split(/\s+/).filter(w => w.length > 0).length);
+                    document.getElementById('vortexExplanation').innerHTML = 
+                        `Vortex sequence: ${vortexSequence.join('-')}<br>` +
+                        `Based on text reduction: ${reduction}`;
+                    
+                    // Solfeggio frequencies
+                    const frequencies = lygoDecoder.getSolfeggioFrequencies(text);
+                    document.getElementById('solfeggioOutput').innerHTML = frequencies.map(freq => `
+                        <div class="solfeggio-item">
+                            <div class="solfeggio-freq">${freq.freq}</div>
+                            <div class="solfeggio-name">${freq.name}</div>
+                            <div style="font-size: 0.7rem; opacity: 0.7; margin-top: 5px;">${freq.desc}</div>
+                        </div>
+                    `).join('');
+                    
+                    // Golden Ratio
+                    document.getElementById('phiOutput').textContent = lygoDecoder.getGoldenRatioAlignment(text);
+                    
+                    // LYGO Algorithm
+                    document.getElementById('algorithmOutput').textContent = lygoDecoder.generateLygoAlgorithm(text, tradition);
+                    
+                    // Add reference
+                    const ref = document.getElementById('verseReference').value.trim();
+                    if (ref) {
+                        const currentMath = document.getElementById('mathOutput').innerHTML;
+                        document.getElementById('mathOutput').innerHTML = currentMath + `<br><strong>Reference:</strong> ${ref}`;
+                    }
+                    
+                    // Update stats
+                    initStats();
+                    
+                    // Log success
+                    logToConsole(`[DECODE] Successfully decoded ${text.length} characters`, 'success');
+                    showMessage('Decryption complete!', 'success');
+                    
+                } catch (error) {
+                    logToConsole(`[DECODE] Error: ${error.message}`, 'error');
+                    showMessage('Error in decryption process', 'error');
+                } finally {
+                    showLoading(false);
+                }
+            }, 1200);
         }
-        
-        function simulateGitHubUpdate() {
-            // Simulated GitHub update
-            console.log('Updating GitHub data depot...');
-            // In a real implementation, you would use GitHub API or webhook
-        }
-        
-        // ========== HELPER FUNCTIONS ==========
-        // Loading animation style
-        const style = document.createElement('style');
-        style.textContent = `
-            .loading {
-                display: inline-block;
-                width: 20px;
-                height: 20px;
-                border: 3px solid rgba(0, 255, 255, 0.3);
-                border-radius: 50%;
-                border-top-color: var(--quantum-primary);
-                animation: spin 1s linear infinite;
-            }
+
+        // ========== 9. UTILITY FUNCTIONS ==========
+        function getVerseData(key) {
+            const verseDatabase = {
+                "john10:30": {
+                    text: "I and the Father are one.",
+                    reference: "John 10:30",
+                    tradition: "christian"
+                },
+                "ikhlas112": {
+                    text: "Say: He is Allah, the One; Allah, the Eternal Refuge; He neither begets nor is born; Nor is there to Him any equivalent.",
+                    reference: "Quran 112:1-4",
+                    tradition: "muslim"
+                },
+                "psalm23": {
+                    text: "The Lord is my shepherd; I shall not want. He makes me lie down in green pastures. He leads me beside still waters. He restores my soul.",
+                    reference: "Psalm 23:1-3",
+                    tradition: "christian"
+                },
+                "gita2:47": {
+                    text: "You have a right to perform your prescribed duties, but you are not entitled to the fruits of your actions.",
+                    reference: "Bhagavad Gita 2:47",
+                    tradition: "hindu"
+                },
+                "genesis1:1": {
+                    text: "In the beginning, God created the heavens and the earth.",
+                    reference: "Genesis 1:1",
+                    tradition: "jewish"
+                }
+            };
             
-            @keyframes spin {
-                to { transform: rotate(360deg); }
+            return verseDatabase[key];
+        }
+
+        function showLoading(show) {
+            const decodeBtn = document.getElementById('decodeBtn');
+            const progressFill = document.getElementById('progressFill');
+            
+            if (show) {
+                decodeBtn.innerHTML = '<span class="loading"></span> DECODING...';
+                decodeBtn.disabled = true;
+                progressFill.style.width = '0%';
+            } else {
+                decodeBtn.innerHTML = '<i class="fas fa-bolt"></i> DECODE WITH QUANTUM PROTOCOL';
+                decodeBtn.disabled = false;
+                progressFill.style.width = '100%';
             }
-        `;
-        document.head.appendChild(style);
+        }
+
+        function simulateProgress() {
+            const progressFill = document.getElementById('progressFill');
+            let width = 0;
+            const interval = setInterval(() => {
+                if (width >= 90) {
+                    clearInterval(interval);
+                } else {
+                    width += Math.random() * 15 + 5;
+                    progressFill.style.width = Math.min(width, 90) + '%';
+                }
+            }, 100);
+            
+            setTimeout(() => {
+                clearInterval(interval);
+                progressFill.style.width = '100%';
+            }, 1100);
+        }
+
+        function showMessage(message, type) {
+            // Create message element
+            const messageEl = document.createElement('div');
+            messageEl.textContent = message;
+            messageEl.style.cssText = `
+                position: fixed;
+                top: 80px;
+                right: 20px;
+                background: ${type === 'success' ? 'rgba(0, 255, 157, 0.9)' : 
+                           type === 'warning' ? 'rgba(255, 179, 0, 0.9)' : 
+                           'rgba(255, 68, 68, 0.9)'};
+                color: var(--lygo-dark);
+                padding: 12px 20px;
+                border-radius: 8px;
+                z-index: 2000;
+                font-weight: bold;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+                animation: fadeIn 0.3s, fadeOut 0.3s 2.7s forwards;
+            `;
+            
+            document.body.appendChild(messageEl);
+            
+            setTimeout(() => {
+                if (messageEl.parentNode) {
+                    messageEl.parentNode.removeChild(messageEl);
+                }
+            }, 3000);
+        }
+
+        function logToConsole(message, type) {
+            const colors = {
+                info: '#00b8ff',
+                success: '#00ff9d',
+                warning: '#ffb300',
+                error: '#ff4444'
+            };
+            
+            const time = new Date().toLocaleTimeString();
+            console.log(`%c[${time}] ${message}`, `color: ${colors[type] || '#ffffff'}`);
+        }
+
+        // ========== 10. INITIALIZATION COMPLETE ==========
+        console.log('✅ LYGO Interfaith Decoder v2.1 Ready.');
     </script>
 </body>
 </html>

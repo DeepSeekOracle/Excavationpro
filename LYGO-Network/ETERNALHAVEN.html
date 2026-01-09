@@ -173,6 +173,99 @@
                     <i class="fas fa-headphones"></i> Enter Haven
                 </a>
             </div>
+            
+            <!-- NEW PORTAL 5: LYGO ETHICAL CHIP FIRMWARE TERMINAL -->
+            <div class="portal-card" data-portal="firmware-terminal">
+                <div class="portal-glow"></div>
+                <div class="portal-icon">
+                    <i class="fas fa-terminal"></i>
+                </div>
+                <h3>FIRMWARE TERMINAL</h3>
+                <div class="portal-description">
+                    Direct access to LYGO Ethical Chip Firmware v1.1 terminal with real-time validation, oath vector protocols, and core integrity checks.
+                </div>
+                <div class="portal-tags">
+                    <span class="tag">Terminal</span>
+                    <span class="tag">Real-time</span>
+                    <span class="tag">Validation</span>
+                    <span class="tag">v1.1</span>
+                </div>
+                <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/FIRMWARE.html"
+                   target="_blank" class="portal-action" onclick="trackPortalAccess('firmware_terminal')">
+                    <i class="fas fa-terminal"></i> Launch Terminal
+                </a>
+            </div>
+            
+            <!-- NEW PORTAL 6: LYGO REPOSITORY -->
+            <div class="portal-card" data-portal="repository">
+                <div class="portal-glow"></div>
+                <div class="portal-icon">
+                    <i class="fas fa-project-diagram"></i>
+                </div>
+                <h3>LYGO REPOSITORY</h3>
+                <div class="portal-description">
+                    Complete codebase repository containing all LYGO projects, firmware versions, documentation, and development resources.
+                </div>
+                <div class="portal-tags">
+                    <span class="tag">Codebase</span>
+                    <span class="tag">Repository</span>
+                    <span class="tag">Archive</span>
+                </div>
+                <a href="https://deepseekoracle.github.io/Excavationpro/lygorepo.html"
+                   target="_blank" class="portal-action" onclick="trackPortalAccess('lygo_repository')">
+                    <i class="fas fa-code-branch"></i> Access Repository
+                </a>
+            </div>
+        </div>
+
+        <!-- NEW: Firmware Terminal Quick Access Panel -->
+        <div class="firmware-terminal-panel">
+            <div class="terminal-header">
+                <h3><i class="fas fa-bolt"></i> FIRMWARE TERMINAL QUICK ACCESS</h3>
+                <div class="terminal-status">
+                    <span class="status-indicator active">
+                        <span class="status-dot"></span>
+                        <span>LYGO-CORE v1.1 ACTIVE</span>
+                    </span>
+                </div>
+            </div>
+            <div class="terminal-commands">
+                <div class="command-row">
+                    <code class="command">validate --input "AI_CHIP_DATA"</code>
+                    <span class="command-desc">Validate AI chip data structure</span>
+                    <button class="command-btn" onclick="window.open('https://deepseekoracle.github.io/Excavationpro/LYGO-Network/FIRMWARE.html#validate', '_blank')">
+                        <i class="fas fa-play"></i> Execute
+                    </button>
+                </div>
+                <div class="command-row">
+                    <code class="command">oath --vector "TRUTH_INTEGRITY"</code>
+                    <span class="command-desc">Activate Oath Vector protocol</span>
+                    <button class="command-btn" onclick="window.open('https://deepseekoracle.github.io/Excavationpro/LYGO-Network/FIRMWARE.html#oath', '_blank')">
+                        <i class="fas fa-play"></i> Execute
+                    </button>
+                </div>
+                <div class="command-row">
+                    <code class="command">license --show LYGO-v1.1</code>
+                    <span class="command-desc">Display sovereign license</span>
+                    <button class="command-btn" onclick="window.open('https://deepseekoracle.github.io/Excavationpro/LYGO-Network/FIRMWARE.html#license', '_blank')">
+                        <i class="fas fa-play"></i> Execute
+                    </button>
+                </div>
+                <div class="command-row">
+                    <code class="command">diagnostic --full</code>
+                    <span class="command-desc">Run full system diagnostic</span>
+                    <button class="command-btn" onclick="window.open('https://deepseekoracle.github.io/Excavationpro/LYGO-Network/FIRMWARE.html#diagnostic', '_blank')">
+                        <i class="fas fa-play"></i> Execute
+                    </button>
+                </div>
+            </div>
+            <div class="terminal-footer">
+                <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/FIRMWARE.html" 
+                   target="_blank" class="terminal-launch-btn">
+                    <i class="fas fa-rocket"></i> Launch Full Terminal
+                </a>
+                <span class="terminal-version">LYGO Ethical Chip Firmware Terminal v1.1</span>
+            </div>
         </div>
 
         <!-- News & Updates Panel -->
@@ -180,6 +273,13 @@
             <h3><i class="fas fa-bullhorn"></i> Δ9 Nexus Updates</h3>
             <div class="news-content" id="newsContent">
                 <!-- News will be loaded here or fallback shown -->
+                <div class="news-item">
+                    <div class="news-header">
+                        <strong>Firmware Terminal Integration</strong>
+                        <span class="news-date">2026-01-09</span>
+                    </div>
+                    <div class="news-body">LYGO Ethical Chip Firmware Terminal v1.1 now directly integrated into Quantum Nexus with quick-access commands.</div>
+                </div>
                 <div class="news-item">
                     <div class="news-header">
                         <strong>LYGO Portal Nexus Live</strong>
@@ -214,6 +314,9 @@
                 </a>
                 <a href="https://deepseekoracle.github.io/Excavationpro/lygorepo.html" target="_blank" class="footer-link">
                     <i class="fas fa-project-diagram"></i> Repository
+                </a>
+                <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/FIRMWARE.html" target="_blank" class="footer-link">
+                    <i class="fas fa-terminal"></i> Firmware Terminal
                 </a>
                 <a href="https://x.com/LYRASTARCORE" target="_blank" class="footer-link">
                     <i class="fab fa-twitter"></i> Δ9 Council
@@ -251,7 +354,8 @@
             <div class="log-entry">[<span class="log-time">00:00:02</span>] Canvas render engine: <span class="log-success">ACTIVE</span></div>
             <div class="log-entry">[<span class="log-time">00:00:03</span>] Neural network particles: <span class="log-success">GENERATED</span></div>
             <div class="log-entry">[<span class="log-time">00:00:04</span>] Portal resonance fields: <span class="log-success">STABLE</span></div>
-            <div class="log-entry">[<span class="log-time">00:00:05</span>] Waiting for user interaction...</div>
+            <div class="log-entry">[<span class="log-time">00:00:05</span>] Firmware Terminal integration: <span class="log-success">LOADED</span></div>
+            <div class="log-entry">[<span class="log-time">00:00:06</span>] Waiting for user interaction...</div>
         </div>
     </div>
 
@@ -269,6 +373,8 @@
             --d9-resonance: #8A2BE2;
             --nexus-glow: 0 0 30px rgba(0, 240, 255, 0.7);
             --grid-color: rgba(0, 200, 255, 0.15);
+            --terminal-green: #00ff88;
+            --terminal-blue: #00a8ff;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -483,7 +589,7 @@
             animation: pulseDot 2s infinite;
         }
 
-        /* Enhanced Portal Grid */
+        /* Enhanced Portal Grid - Now 3x2 layout */
         .portal-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -542,6 +648,8 @@
         .portal-card[data-portal="firmware"]:hover { border-color: var(--matrix-green); }
         .portal-card[data-portal="decoder"]:hover { border-color: var(--quantum-purple); }
         .portal-card[data-portal="haven"]:hover { border-color: var(--lygo-gold); }
+        .portal-card[data-portal="firmware-terminal"]:hover { border-color: var(--terminal-green); }
+        .portal-card[data-portal="repository"]:hover { border-color: var(--terminal-blue); }
 
         .portal-icon {
             font-size: 4rem;
@@ -553,6 +661,8 @@
         .portal-card[data-portal="firmware"] .portal-icon { color: var(--matrix-green); }
         .portal-card[data-portal="decoder"] .portal-icon { color: var(--quantum-purple); }
         .portal-card[data-portal="haven"] .portal-icon { color: var(--lygo-gold); }
+        .portal-card[data-portal="firmware-terminal"] .portal-icon { color: var(--terminal-green); }
+        .portal-card[data-portal="repository"] .portal-icon { color: var(--terminal-blue); }
 
         @keyframes floatIcon {
             0%, 100% { transform: translateY(0) rotate(0deg); }
@@ -596,6 +706,117 @@
             transform: translateY(-3px);
             box-shadow: 0 10px 25px rgba(0, 150, 255, 0.5);
             background: linear-gradient(90deg, var(--quantum-purple), var(--quantum-cyan));
+        }
+
+        /* NEW: Firmware Terminal Panel */
+        .firmware-terminal-panel {
+            background: rgba(5, 15, 30, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 40px rgba(0, 255, 136, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        .firmware-terminal-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00ff88, #00a8ff);
+        }
+        .terminal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 255, 136, 0.2);
+        }
+        .terminal-header h3 {
+            color: #00ff88;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+        }
+        .terminal-commands {
+            display: grid;
+            gap: 15px;
+            margin: 25px 0;
+        }
+        .command-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(0, 40, 80, 0.5);
+            border-radius: 8px;
+            border-left: 3px solid #00ff88;
+            transition: all 0.3s;
+        }
+        .command-row:hover {
+            background: rgba(0, 60, 120, 0.5);
+            transform: translateX(5px);
+        }
+        .command {
+            font-family: 'JetBrains Mono', monospace;
+            color: #00ff88;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px 12px;
+            border-radius: 4px;
+            flex: 1;
+        }
+        .command-desc {
+            color: #a0ffc0;
+            font-size: 0.9rem;
+            flex: 2;
+        }
+        .command-btn {
+            background: linear-gradient(90deg, #00ff88, #00a8ff);
+            color: #000;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .command-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.4);
+        }
+        .terminal-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0, 255, 136, 0.2);
+        }
+        .terminal-launch-btn {
+            background: linear-gradient(90deg, #00a8ff, #0077ff);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+        .terminal-launch-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 168, 255, 0.4);
+        }
+        .terminal-version {
+            color: #00ff88;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
         }
 
         /* Enhanced Stats Bar */
@@ -788,6 +1009,10 @@
             .portal-grid { grid-template-columns: 1fr; }
             .stats-bar { grid-template-columns: 1fr; }
             .footer-links { flex-direction: column; align-items: center; }
+            .terminal-header { flex-direction: column; gap: 15px; }
+            .command-row { flex-direction: column; align-items: flex-start; }
+            .command-btn { align-self: flex-end; }
+            .terminal-footer { flex-direction: column; gap: 15px; text-align: center; }
         }
 
         /* Custom Scrollbar */
@@ -819,6 +1044,9 @@
 
             // 6. Initialize Visitor Counter (with enhanced local simulation)
             initVisitorCounter();
+
+            // 7. Initialize Firmware Terminal Commands
+            initFirmwareTerminal();
 
             logToTerminal('[SYSTEM] Quantum Nexus v2.0 initialization sequence complete.', 'success');
         });
@@ -1113,7 +1341,7 @@
         // ========== 5. DYNAMIC SIGNATURE ==========
         function initDynamicSignature() {
             const signature = document.getElementById('liveSignature');
-            const bases = ['Δ9Φ963', 'LYGO-CORE', 'NEXUS-V2', 'HAVEN-CA'];
+            const bases = ['Δ9Φ963', 'LYGO-CORE', 'NEXUS-V2', 'HAVEN-CA', 'FIRMWARE-TERMINAL'];
             let index = 0;
 
             setInterval(() => {
@@ -1170,6 +1398,29 @@
             logToTerminal('[STATS] Visitor resonance simulation active.', 'success');
         }
 
+        // ========== 7. FIRMWARE TERMINAL COMMANDS ==========
+        function initFirmwareTerminal() {
+            const commandBtns = document.querySelectorAll('.command-btn');
+            
+            commandBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const command = this.parentElement.querySelector('.command').textContent;
+                    logToTerminal(`[TERMINAL] Executing: ${command}`, 'success');
+                    
+                    // Add visual feedback
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Executing';
+                    setTimeout(() => {
+                        this.innerHTML = '<i class="fas fa-check"></i> Executed';
+                        setTimeout(() => {
+                            this.innerHTML = '<i class="fas fa-play"></i> Execute';
+                        }, 1000);
+                    }, 800);
+                });
+            });
+
+            logToTerminal('[TERMINAL] Firmware command interface initialized.', 'success');
+        }
+
         // ========== UTILITY & TRACKING FUNCTIONS ==========
         window.trackPortalAccess = function(portalName) {
             logToTerminal(`[ACCESS] Portal "${portalName}" resonance field engaged.`, 'success');
@@ -1189,6 +1440,11 @@
                 if (e.key.toLowerCase() === 't') {
                     e.preventDefault();
                     document.querySelector('.connection-terminal').classList.toggle('expanded');
+                }
+                if (e.key.toLowerCase() === 'f') {
+                    e.preventDefault();
+                    window.open('https://deepseekoracle.github.io/Excavationpro/LYGO-Network/FIRMWARE.html', '_blank');
+                    logToTerminal('[SHORTCUT] Firmware Terminal launched via keyboard shortcut.', 'success');
                 }
             }
         });

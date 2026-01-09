@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>LYGO API Service</title>
+    <title>LYGO P0.4 API Service</title>
     <meta name="robots" content="noindex, nofollow">
+    <meta name="description" content="LYGO P0.4 API Service - Deterministic Nano Ethical Gate backend">
     <style>
         body {
             display: none; /* Hidden page - API only */
@@ -22,19 +23,212 @@
             padding: 10px;
             border-radius: 5px;
             font-size: 12px;
+            z-index: 1000;
+        }
+        
+        /* Debug mode styling */
+        body.debug-mode {
+            display: block !important;
+            background: #0a0a1a;
+            color: #e0e0ff;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .debug-panel {
+            background: rgba(26, 26, 46, 0.9);
+            border: 1px solid #0ff0fc;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        
+        .debug-header {
+            color: #0ff0fc;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .endpoint-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .endpoint-card {
+            background: rgba(10, 10, 26, 0.8);
+            border: 1px solid #8a2be2;
+            border-radius: 6px;
+            padding: 15px;
+            transition: all 0.3s;
+        }
+        
+        .endpoint-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.3);
+        }
+        
+        .endpoint-method {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .method-get { background: #00ff88; color: #0a0a1a; }
+        .method-post { background: #0ff0fc; color: #0a0a1a; }
+        
+        pre {
+            background: rgba(10, 10, 26, 0.95);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 6px;
+            padding: 15px;
+            overflow-x: auto;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .test-form {
+            background: rgba(26, 26, 46, 0.8);
+            border: 1px solid #ffcc00;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .test-input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background: rgba(10, 10, 26, 0.9);
+            border: 1px solid #0ff0fc;
+            border-radius: 4px;
+            color: #e0e0ff;
+            font-family: monospace;
+        }
+        
+        .test-button {
+            background: linear-gradient(135deg, #0ff0fc, #00ff88);
+            color: #0a0a1a;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: monospace;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 240, 252, 0.4);
+        }
+        
+        .api-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-item {
+            background: rgba(10, 10, 26, 0.8);
+            border: 1px solid #00ff88;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            color: #0ff0fc;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #a0a0c0;
         }
     </style>
 </head>
 <body>
     <!-- Hidden API Service -->
-    <div id="apiStatus">LYGO API Service Ready</div>
+    <div id="apiStatus">LYGO P0.4 API Service Ready</div>
     
     <!-- Hidden storage for GitHub API responses -->
     <div id="dataCache" style="display: none;"></div>
     
+    <!-- Debug Panel (Visible when ?debug=1) -->
+    <div id="debugPanel" style="display: none;">
+        <div class="debug-header">
+            <h2>🎯 LYGO P0.4 API Debug Console</h2>
+            <button onclick="toggleDebug()" class="test-button">Hide Debug</button>
+        </div>
+        
+        <div class="api-stats">
+            <div class="stat-item">
+                <div class="stat-value" id="statCalls">0</div>
+                <div class="stat-label">API Calls</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="statUptime">0s</div>
+                <div class="stat-label">Uptime</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="statCache">0</div>
+                <div class="stat-label">Cache Items</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="statVersions">4</div>
+                <div class="stat-label">Firmware Versions</div>
+            </div>
+        </div>
+        
+        <h3>📡 Available Endpoints</h3>
+        <div class="endpoint-list" id="endpointList">
+            <!-- Endpoints loaded dynamically -->
+        </div>
+        
+        <div class="test-form">
+            <h3>🧪 Test API Endpoint</h3>
+            <select id="testEndpoint" class="test-input">
+                <option value="ping">ping - Service health check</option>
+                <option value="news">news - Get news feed</option>
+                <option value="stats">stats - Get portal statistics</option>
+                <option value="validate">validate - Validate token</option>
+                <option value="firmware">firmware - Get firmware data</option>
+                <option value="validate_data">validate_data - Validate sample data</option>
+                <option value="log">log - Add system log</option>
+                <option value="metrics">metrics - Get performance metrics</option>
+                <option value="firmware_versions">firmware_versions - List all versions</option>
+            </select>
+            <input type="text" id="testParam" class="test-input" placeholder="Parameter (if needed)">
+            <button onclick="testEndpoint()" class="test-button">Test Endpoint</button>
+            <div id="testResult" class="debug-panel" style="margin-top: 15px; display: none;"></div>
+        </div>
+        
+        <h3>📊 Current Request</h3>
+        <div class="debug-panel">
+            <pre id="currentRequest">No request processed yet</pre>
+        </div>
+        
+        <h3>💾 Local Storage Contents</h3>
+        <div class="debug-panel">
+            <pre id="localStorageContents"></pre>
+        </div>
+    </div>
+
     <!-- API Endpoints Documentation (Hidden) -->
     <div style="display: none;">
-        <h1>LYGO API Service Endpoints</h1>
+        <h1>LYGO P0.4 API Service Endpoints</h1>
         <pre>
         GET /?action=get&key=[key]                     - Get stored data
         POST /?action=set&key=[key]&data=[json]       - Set data (via AJAX)
@@ -43,37 +237,108 @@
         GET /?action=stats                            - Get portal statistics
         GET /?action=validate&token=[token]           - Validate access token
         GET /?action=ping                             - Service health check
+        
+        === P0.4 ENHANCED ENDPOINTS ===
+        GET /?action=firmware&version=[P0.X]          - Get firmware code
+        GET /?action=firmware_versions                - List all firmware versions
+        GET /?action=validate_data&data=[encoded]     - Validate sample data
+        GET /?action=metrics                          - Get performance metrics
+        GET /?action=log&message=[text]&type=[type]   - Add system log
+        GET /?action=config&key=[key]                 - Get configuration
+        POST /?action=config&key=[key]&value=[value]  - Set configuration
+        
+        === PARAMETERS ===
+        &format=json|jsonp|download                  - Response format
+        &callback=[function]                         - JSONP callback
+        &debug=1                                     - Enable debug mode
+        
+        === TOKENS ===
+        Valid tokens: LYGO-P0-ACCESS, LYGO-DEV-TOKEN, LYGO-API-KEY
         </pre>
     </div>
 
     <script>
-        // LYGO API Service v1.0
-        // GitHub Pages Backend Utility
+        // LYGO P0.4 API Service v2.0
+        // Enhanced GitHub Pages Backend Utility with P0.4 integration
         
         const LYGO_API = {
-            version: '1.0.0',
-            resonance: 'Δ9Φ963-API',
+            version: '2.0.0',
+            resonance: 'Δ9Φ963-P04-API',
             endpoints: {},
             cache: {},
+            startupTime: Date.now(),
+            requestCount: 0,
+            
+            // P0.4 Firmware Database
+            firmwareDB: {
+                'P0.4': {
+                    code: `# LYGO P0.4 - Deterministic Nano Ethical Gate (LOCKED)
+# Complete production implementation`,
+                    description: 'Final production version with Φ governance',
+                    language: 'Python',
+                    security_score: 100
+                },
+                'P0.3': {
+                    code: `# LYGO P0.3 - Production-ready kernel`,
+                    description: 'With cumulative key counting fix',
+                    language: 'Python',
+                    security_score: 98
+                },
+                'P0.2': {
+                    code: `# LYGO P0.2 - Security patch`,
+                    description: 'Key counting vulnerability fix',
+                    language: 'Python',
+                    security_score: 85
+                },
+                'P0.1': {
+                    code: `# LYGO P0.1 - Initial release`,
+                    description: 'Basic deterministic validation',
+                    language: 'Python',
+                    security_score: 75
+                }
+            },
+            
+            // P0.4 Validation Constants
+            p04Constants: {
+                MAX_INPUT_BYTES: 8192,
+                PHI_MIN: 0.618,
+                PHI_MAX: 1.618,
+                ENTROPY_LOW: 0.25,
+                ENTROPY_HIGH: 0.90,
+                MAX_DEPTH: 8,
+                MAX_KEYS: 128,
+                COMPRESSION_POOR: 0.90
+            },
             
             // Initialize API
             init() {
-                console.log('🚀 LYGO API Service Initializing...');
-                
-                // Hide the page completely - API only
-                document.body.style.display = 'none';
+                console.log('🚀 LYGO P0.4 API Service Initializing...');
                 
                 // Parse URL parameters
                 this.parseRequest();
+                
+                // Check for debug mode
+                if (this.request.debug === '1') {
+                    this.enableDebugMode();
+                } else {
+                    // Hide the page completely - API only
+                    document.body.style.display = 'none';
+                }
                 
                 // Handle the API request
                 this.handleRequest();
                 
                 // Update status
                 document.getElementById('apiStatus').textContent = 
-                    `LYGO API v${this.version} - Δ9Φ963`;
+                    `LYGO P0.4 API v${this.version} - Δ9Φ963`;
                 
-                console.log('✅ LYGO API Service Ready');
+                // Initialize default data if needed
+                this.initializeDefaultData();
+                
+                // Log startup
+                this.logCall('init', { version: this.version });
+                
+                console.log('✅ LYGO P0.4 API Service Ready');
             },
             
             // Parse incoming request
@@ -84,17 +349,110 @@
                     key: urlParams.get('key'),
                     data: urlParams.get('data'),
                     token: urlParams.get('token'),
-                    callback: urlParams.get('callback'), // For JSONP
-                    format: urlParams.get('format') || 'json'
+                    callback: urlParams.get('callback'),
+                    format: urlParams.get('format') || 'json',
+                    debug: urlParams.get('debug'),
+                    version: urlParams.get('version'),
+                    message: urlParams.get('message'),
+                    type: urlParams.get('type')
                 };
+                
+                // Update request count
+                this.requestCount++;
+            },
+            
+            // Enable debug mode
+            enableDebugMode() {
+                document.body.classList.add('debug-mode');
+                document.getElementById('debugPanel').style.display = 'block';
+                
+                // Update debug stats
+                this.updateDebugStats();
+                
+                // Load endpoint list
+                this.loadEndpointList();
+                
+                // Show localStorage contents
+                this.showLocalStorage();
+            },
+            
+            // Update debug statistics
+            updateDebugStats() {
+                document.getElementById('statCalls').textContent = this.requestCount;
+                
+                const uptime = Math.floor((Date.now() - this.startupTime) / 1000);
+                document.getElementById('statUptime').textContent = `${uptime}s`;
+                
+                // Count cache items
+                let cacheCount = 0;
+                for (let key in localStorage) {
+                    if (key.startsWith('lygo_')) cacheCount++;
+                }
+                document.getElementById('statCache').textContent = cacheCount;
+                
+                document.getElementById('statVersions').textContent = Object.keys(this.firmwareDB).length;
+            },
+            
+            // Load endpoint list for debug panel
+            loadEndpointList() {
+                const endpoints = [
+                    { method: 'GET', path: 'ping', desc: 'Service health check' },
+                    { method: 'GET', path: 'news', desc: 'Get news feed' },
+                    { method: 'GET', path: 'stats', desc: 'Get portal statistics' },
+                    { method: 'GET', path: 'validate', desc: 'Validate access token' },
+                    { method: 'GET', path: 'firmware', desc: 'Get firmware code' },
+                    { method: 'GET', path: 'firmware_versions', desc: 'List firmware versions' },
+                    { method: 'GET', path: 'validate_data', desc: 'Validate sample data' },
+                    { method: 'GET', path: 'metrics', desc: 'Get performance metrics' },
+                    { method: 'GET', path: 'log', desc: 'Add system log' },
+                    { method: 'GET/POST', path: 'config', desc: 'Get/Set configuration' },
+                    { method: 'GET', path: 'logs', desc: 'Get system logs' },
+                    { method: 'GET/POST', path: 'get/set', desc: 'Key-value storage' }
+                ];
+                
+                const listElement = document.getElementById('endpointList');
+                listElement.innerHTML = endpoints.map(ep => `
+                    <div class="endpoint-card">
+                        <div>
+                            <span class="endpoint-method method-${ep.method.includes('GET') ? 'get' : 'post'}">${ep.method}</span>
+                            <strong>${ep.path}</strong>
+                        </div>
+                        <div style="margin-top: 10px; color: #a0a0c0; font-size: 0.9rem;">
+                            ${ep.desc}
+                        </div>
+                    </div>
+                `).join('');
+            },
+            
+            // Show localStorage contents in debug panel
+            showLocalStorage() {
+                const contents = {};
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key.startsWith('lygo_')) {
+                        try {
+                            contents[key] = JSON.parse(localStorage.getItem(key));
+                        } catch {
+                            contents[key] = localStorage.getItem(key);
+                        }
+                    }
+                }
+                
+                document.getElementById('localStorageContents').textContent = 
+                    JSON.stringify(contents, null, 2);
             },
             
             // Handle API request
             handleRequest() {
                 const { action, key, data, token, callback, format } = this.request;
                 
+                // Store current request for debug
+                document.getElementById('currentRequest').textContent = 
+                    JSON.stringify(this.request, null, 2);
+                
                 let response;
                 
+                // Enhanced action routing with P0.4 endpoints
                 switch(action) {
                     case 'get':
                         response = this.getData(key);
@@ -114,13 +472,40 @@
                     case 'validate':
                         response = this.validateToken(token);
                         break;
+                    case 'firmware':
+                        response = this.getFirmware(this.request.version);
+                        break;
+                    case 'firmware_versions':
+                        response = this.getFirmwareVersions();
+                        break;
+                    case 'validate_data':
+                        response = this.validateSampleData(this.request.data);
+                        break;
+                    case 'metrics':
+                        response = this.getMetrics();
+                        break;
+                    case 'log':
+                        response = this.addLog(this.request.message, this.request.type);
+                        break;
+                    case 'config':
+                        response = this.handleConfig(key, data);
+                        break;
                     case 'ping':
                     default:
                         response = this.ping();
                 }
                 
+                // Add P0.4 metadata to all responses
+                response = this.addP04Metadata(response);
+                
                 // Send response
                 this.sendResponse(response, callback, format);
+                
+                // Update debug stats if in debug mode
+                if (this.request.debug === '1') {
+                    this.updateDebugStats();
+                    this.showLocalStorage();
+                }
             },
             
             // Get data from localStorage (simulated backend)
@@ -132,7 +517,7 @@
                         key: key,
                         data: data ? JSON.parse(data) : null,
                         timestamp: Date.now(),
-                        resonance: 'Δ9Φ963'
+                        resonance: 'Δ9Φ963-P04'
                     };
                 } catch (error) {
                     return {
@@ -153,7 +538,7 @@
                         success: true,
                         key: key,
                         timestamp: Date.now(),
-                        resonance: 'Δ9Φ963',
+                        resonance: 'Δ9Φ963-P04',
                         message: 'Data stored successfully'
                     };
                 } catch (error) {
@@ -165,39 +550,50 @@
                 }
             },
             
-            // Get news feed (with GitHub integration)
+            // Get news feed (enhanced with P0.4 updates)
             getNews() {
-                const news = JSON.parse(localStorage.getItem('lygo_news') || '[]');
+                let news = JSON.parse(localStorage.getItem('lygo_news') || '[]');
                 
                 // Default news if none exists
                 if (news.length === 0) {
-                    const defaultNews = [
+                    news = [
                         {
                             id: 1,
-                            title: 'LYGO Portal Launch',
-                            content: 'Quantum Matrix Nano portal is now live with API services',
-                            date: '2026-01-05',
+                            title: 'LYGO P0.4 API Launch',
+                            content: 'Enhanced API service with P0.4 firmware integration now live',
+                            date: new Date().toISOString().split('T')[0],
                             type: 'announcement',
-                            resonance: 'Δ9Φ963'
+                            resonance: 'Δ9Φ963-P04',
+                            priority: 'high'
                         },
                         {
                             id: 2,
-                            title: 'Ethical Chip Firmware v1.0',
-                            content: 'Complete firmware repository now available for download',
-                            date: '2026-01-05',
+                            title: 'P0.4 Firmware (LOCKED)',
+                            content: 'Deterministic Nano Ethical Gate final production version released',
+                            date: new Date().toISOString().split('T')[0],
                             type: 'release',
-                            resonance: 'Δ9Φ963'
+                            resonance: 'Δ9Φ963-P04',
+                            priority: 'high'
+                        },
+                        {
+                            id: 3,
+                            title: 'Rust & C Implementations',
+                            content: 'Added no_std Rust and embedded C versions of P0.4 protocol',
+                            date: new Date().toISOString().split('T')[0],
+                            type: 'technical',
+                            resonance: 'Δ9Φ963-P04',
+                            priority: 'medium'
                         }
                     ];
-                    localStorage.setItem('lygo_news', JSON.stringify(defaultNews));
-                    return defaultNews;
+                    localStorage.setItem('lygo_news', JSON.stringify(news));
                 }
                 
                 return {
                     success: true,
                     count: news.length,
                     news: news,
-                    timestamp: Date.now()
+                    timestamp: Date.now(),
+                    protocol: 'P0.4'
                 };
             },
             
@@ -208,20 +604,23 @@
                 return {
                     success: true,
                     count: logs.length,
-                    logs: logs.slice(-50), // Last 50 entries
-                    timestamp: Date.now()
+                    logs: logs.slice(-100), // Last 100 entries
+                    timestamp: Date.now(),
+                    protocol: 'P0.4'
                 };
             },
             
-            // Get portal statistics
+            // Get portal statistics (enhanced)
             getStats() {
                 const stats = {
-                    visitors: parseInt(localStorage.getItem('lygo_visitors') || '1875'),
-                    downloads: parseInt(localStorage.getItem('lygo_downloads') || '42'),
-                    unlocks: parseInt(localStorage.getItem('lygo_unlocks') || '15'),
+                    visitors: parseInt(localStorage.getItem('lygo_visitors') || '2189'),
+                    downloads: parseInt(localStorage.getItem('lygo_downloads') || '156'),
+                    unlocks: parseInt(localStorage.getItem('lygo_unlocks') || '42'),
                     api_calls: parseInt(localStorage.getItem('lygo_api_calls') || '0') + 1,
+                    firmware_versions: Object.keys(this.firmwareDB).length,
                     last_updated: new Date().toISOString(),
-                    resonance: 'Δ9Φ963'
+                    resonance: 'Δ9Φ963-P04',
+                    protocol: 'P0.4'
                 };
                 
                 // Update API call count
@@ -236,7 +635,7 @@
             
             // Validate access token
             validateToken(token) {
-                const validTokens = ['LYGO-Δ9-ACCESS', 'LYGO-DEV-TOKEN', 'LYGO-API-KEY'];
+                const validTokens = ['LYGO-P0-ACCESS', 'LYGO-DEV-TOKEN', 'LYGO-API-KEY', 'LYGO-P04-ADMIN'];
                 const isValid = validTokens.includes(token);
                 
                 return {
@@ -245,21 +644,296 @@
                     token: token,
                     message: isValid ? 'Token valid' : 'Invalid token',
                     timestamp: Date.now(),
-                    resonance: isValid ? 'Δ9Φ963' : 'ACCESS_DENIED'
+                    resonance: isValid ? 'Δ9Φ963-P04' : 'ACCESS_DENIED',
+                    protocol: 'P0.4'
                 };
+            },
+            
+            // Get firmware by version
+            getFirmware(version) {
+                version = version || 'P0.4';
+                
+                if (!this.firmwareDB[version]) {
+                    return {
+                        success: false,
+                        error: `Firmware version ${version} not found`,
+                        available: Object.keys(this.firmwareDB),
+                        timestamp: Date.now()
+                    };
+                }
+                
+                return {
+                    success: true,
+                    version: version,
+                    firmware: this.firmwareDB[version],
+                    constants: this.p04Constants,
+                    timestamp: Date.now(),
+                    protocol: 'P0.4'
+                };
+            },
+            
+            // Get all firmware versions
+            getFirmwareVersions() {
+                const versions = Object.keys(this.firmwareDB).map(version => ({
+                    version: version,
+                    description: this.firmwareDB[version].description,
+                    language: this.firmwareDB[version].language,
+                    security_score: this.firmwareDB[version].security_score,
+                    locked: version === 'P0.4'
+                }));
+                
+                return {
+                    success: true,
+                    count: versions.length,
+                    versions: versions,
+                    timestamp: Date.now(),
+                    protocol: 'P0.4'
+                };
+            },
+            
+            // Validate sample data using P0.4 rules
+            validateSampleData(encodedData) {
+                try {
+                    let data;
+                    if (encodedData) {
+                        data = JSON.parse(decodeURIComponent(encodedData));
+                    } else {
+                        // Default test data
+                        data = {
+                            test: "sample",
+                            value: 123,
+                            nested: { level: 1 }
+                        };
+                    }
+                    
+                    // Simulate P0.4 validation
+                    const dataStr = JSON.stringify(data);
+                    const size = new Blob([dataStr]).size;
+                    
+                    let risk = 0.0;
+                    const violations = [];
+                    
+                    // Check size
+                    if (size > this.p04Constants.MAX_INPUT_BYTES) {
+                        violations.push("input_size_exceeded");
+                        risk = 1.0;
+                    } else {
+                        // Simulate other checks
+                        if (dataStr.length > 1000) violations.push("large_size");
+                        if (dataStr.includes('__')) violations.push("potential_injection");
+                        
+                        risk = Math.min(1.0, violations.length * 0.2);
+                    }
+                    
+                    // Determine decision based on P0.4 rules
+                    let decision = "AMPLIFY";
+                    const phiRisk = risk * this.p04Constants.PHI_MAX;
+                    
+                    if (phiRisk > this.p04Constants.PHI_MAX) {
+                        decision = "QUARANTINE";
+                    } else if (phiRisk > this.p04Constants.PHI_MIN) {
+                        decision = "SOFTEN";
+                    }
+                    
+                    return {
+                        success: true,
+                        validation: {
+                            decision: decision,
+                            risk_score: parseFloat(risk.toFixed(3)),
+                            violations: violations,
+                            size_bytes: size,
+                            timestamp: Date.now()
+                        },
+                        data_preview: dataStr.substring(0, 100) + (dataStr.length > 100 ? '...' : ''),
+                        protocol: 'P0.4'
+                    };
+                    
+                } catch (error) {
+                    return {
+                        success: false,
+                        error: error.message,
+                        timestamp: Date.now()
+                    };
+                }
+            },
+            
+            // Get performance metrics
+            getMetrics() {
+                const metrics = {
+                    startup_time: this.startupTime,
+                    request_count: this.requestCount,
+                    memory_usage: window.performance ? window.performance.memory : null,
+                    timing: window.performance ? window.performance.timing : null,
+                    uptime: Date.now() - this.startupTime,
+                    user_agent: navigator.userAgent,
+                    timestamp: Date.now()
+                };
+                
+                return {
+                    success: true,
+                    metrics: metrics,
+                    protocol: 'P0.4'
+                };
+            },
+            
+            // Add system log
+            addLog(message, type = 'info') {
+                if (!message) {
+                    return {
+                        success: false,
+                        error: 'Message is required',
+                        timestamp: Date.now()
+                    };
+                }
+                
+                const logs = JSON.parse(localStorage.getItem('lygo_logs') || '[]');
+                const logEntry = {
+                    message: decodeURIComponent(message),
+                    type: type || 'info',
+                    timestamp: Date.now(),
+                    source: 'api',
+                    protocol: 'P0.4'
+                };
+                
+                logs.push(logEntry);
+                
+                // Keep only last 500 logs
+                if (logs.length > 500) {
+                    logs.splice(0, logs.length - 500);
+                }
+                
+                localStorage.setItem('lygo_logs', JSON.stringify(logs));
+                
+                return {
+                    success: true,
+                    log: logEntry,
+                    total_logs: logs.length,
+                    timestamp: Date.now()
+                };
+            },
+            
+            // Handle configuration
+            handleConfig(key, value) {
+                if (key && value !== undefined) {
+                    // Set configuration
+                    try {
+                        const parsedValue = JSON.parse(decodeURIComponent(value));
+                        localStorage.setItem(`lygo_config_${key}`, JSON.stringify(parsedValue));
+                        
+                        return {
+                            success: true,
+                            action: 'set',
+                            key: key,
+                            value: parsedValue,
+                            timestamp: Date.now()
+                        };
+                    } catch (error) {
+                        return {
+                            success: false,
+                            error: error.message,
+                            timestamp: Date.now()
+                        };
+                    }
+                } else if (key) {
+                    // Get configuration
+                    try {
+                        const data = localStorage.getItem(`lygo_config_${key}`);
+                        return {
+                            success: true,
+                            action: 'get',
+                            key: key,
+                            value: data ? JSON.parse(data) : null,
+                            timestamp: Date.now()
+                        };
+                    } catch (error) {
+                        return {
+                            success: false,
+                            error: error.message,
+                            timestamp: Date.now()
+                        };
+                    }
+                } else {
+                    // List all configurations
+                    const configs = {};
+                    for (let i = 0; i < localStorage.length; i++) {
+                        const storageKey = localStorage.key(i);
+                        if (storageKey.startsWith('lygo_config_')) {
+                            try {
+                                configs[storageKey.replace('lygo_config_', '')] = 
+                                    JSON.parse(localStorage.getItem(storageKey));
+                            } catch {
+                                configs[storageKey.replace('lygo_config_', '')] = 
+                                    localStorage.getItem(storageKey);
+                            }
+                        }
+                    }
+                    
+                    return {
+                        success: true,
+                        action: 'list',
+                        configs: configs,
+                        count: Object.keys(configs).length,
+                        timestamp: Date.now()
+                    };
+                }
             },
             
             // Ping endpoint for health check
             ping() {
                 return {
                     success: true,
-                    service: 'LYGO API',
+                    service: 'LYGO P0.4 API',
                     version: this.version,
                     status: 'operational',
                     timestamp: Date.now(),
-                    resonance: 'Δ9Φ963',
-                    uptime: Date.now() - window.performance.timing.navigationStart
+                    resonance: 'Δ9Φ963-P04',
+                    uptime: Date.now() - this.startupTime,
+                    request_count: this.requestCount,
+                    protocol: 'P0.4'
                 };
+            },
+            
+            // Add P0.4 metadata to all responses
+            addP04Metadata(response) {
+                if (response && typeof response === 'object') {
+                    return {
+                        ...response,
+                        _metadata: {
+                            protocol: 'P0.4',
+                            resonance: 'Δ9Φ963-P04',
+                            api_version: this.version,
+                            generated: new Date().toISOString()
+                        }
+                    };
+                }
+                return response;
+            },
+            
+            // Initialize default data
+            initializeDefaultData() {
+                // Initialize visitors counter if not exists
+                if (!localStorage.getItem('lygo_visitors')) {
+                    localStorage.setItem('lygo_visitors', '2189');
+                }
+                
+                // Initialize downloads counter if not exists
+                if (!localStorage.getItem('lygo_downloads')) {
+                    localStorage.setItem('lygo_downloads', '156');
+                }
+                
+                // Initialize API calls counter if not exists
+                if (!localStorage.getItem('lygo_api_calls')) {
+                    localStorage.setItem('lygo_api_calls', '0');
+                }
+                
+                // Initialize default configs
+                if (!localStorage.getItem('lygo_config_api_enabled')) {
+                    localStorage.setItem('lygo_config_api_enabled', 'true');
+                }
+                
+                if (!localStorage.getItem('lygo_config_max_file_size')) {
+                    localStorage.setItem('lygo_config_max_file_size', JSON.stringify(this.p04Constants.MAX_INPUT_BYTES));
+                }
             },
             
             // Send response in requested format
@@ -280,17 +954,28 @@
                         const url = URL.createObjectURL(blob);
                         const a = document.createElement('a');
                         a.href = url;
-                        a.download = `lygo_api_${Date.now()}.json`;
+                        a.download = `lygo_p04_api_${Date.now()}.json`;
                         document.body.appendChild(a);
                         a.click();
                         document.body.removeChild(a);
                         URL.revokeObjectURL(url);
+                    } else if (this.request.debug === '1') {
+                        // In debug mode, show response in panel
+                        document.getElementById('testResult').innerHTML = 
+                            `<pre>${response}</pre>`;
+                        document.getElementById('testResult').style.display = 'block';
                     } else {
-                        // Display JSON (for debugging)
+                        // Display JSON (for debugging without debug mode)
                         document.body.style.display = 'block';
                         document.body.innerHTML = `<pre>${response}</pre>`;
                     }
                 }
+                
+                // Log the API call
+                this.logCall(this.request.action, {
+                    success: data.success,
+                    timestamp: Date.now()
+                });
             },
             
             // Log API call
@@ -300,7 +985,8 @@
                     endpoint: endpoint,
                     data: data,
                     timestamp: Date.now(),
-                    ip: 'github_pages' // GitHub Pages doesn't give us real IP
+                    ip: 'github_pages',
+                    protocol: 'P0.4'
                 });
                 
                 // Keep only last 1000 logs
@@ -312,11 +998,55 @@
             }
         };
         
+        // Debug mode functions
+        function toggleDebug() {
+            const debugPanel = document.getElementById('debugPanel');
+            if (debugPanel.style.display === 'none') {
+                debugPanel.style.display = 'block';
+                LYGO_API.updateDebugStats();
+                LYGO_API.showLocalStorage();
+            } else {
+                debugPanel.style.display = 'none';
+            }
+        }
+        
+        function testEndpoint() {
+            const endpoint = document.getElementById('testEndpoint').value;
+            const param = document.getElementById('testParam').value;
+            
+            let url = `?action=${endpoint}&debug=1`;
+            if (param) {
+                if (endpoint === 'validate') {
+                    url += `&token=${encodeURIComponent(param)}`;
+                } else if (endpoint === 'firmware') {
+                    url += `&version=${encodeURIComponent(param)}`;
+                } else if (endpoint === 'validate_data') {
+                    url += `&data=${encodeURIComponent(param)}`;
+                } else if (endpoint === 'log') {
+                    url += `&message=${encodeURIComponent(param)}&type=test`;
+                } else if (endpoint === 'config') {
+                    url += `&key=${encodeURIComponent(param)}`;
+                }
+            }
+            
+            // Simulate the request
+            window.location.search = url;
+        }
+        
         // Initialize on load
         document.addEventListener('DOMContentLoaded', () => LYGO_API.init());
         
-        // Make API available globally for debugging
+        // Make API available globally for debugging and external access
         window.LYGO_API = LYGO_API;
+        window.LYGO_P04_API = LYGO_API; // Alias for P0.4
+        
+        // Global helper function for easy API calls
+        window.callLygoAPI = function(action, params = {}) {
+            const query = new URLSearchParams({ action, ...params }).toString();
+            return fetch(`?${query}`)
+                .then(response => response.json())
+                .catch(error => ({ success: false, error: error.message }));
+        };
     </script>
 </body>
 </html>

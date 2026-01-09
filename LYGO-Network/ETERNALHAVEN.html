@@ -1231,7 +1231,7 @@
 
                 try {
                     // Use a simple fetch to the known endpoint
-                    const response = await fetch('https://deepseekoracle.github.io/Excavationpro/LYGO-Network/updatefeed.html?action=ping', {
+                    const response = await fetch('https://deepseekoracle.github.io/Excavationpro/LYGO-Network/updatefeed.json', {
                         signal: controller.signal
                     });
                     clearTimeout(timeoutId);

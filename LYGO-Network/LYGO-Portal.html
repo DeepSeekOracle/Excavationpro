@@ -1,1 +1,1421 @@
-UNDER CONSTRUCTION
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚧 UNDER CONSTRUCTION | Δ9 Portal</title>
+    <meta name="description" content="New LYGO Quantum Portal Coming Soon">
+    <meta name="keywords" content="LYGO, Δ9, quantum, portal, coming soon, construction">
+    <meta name="author" content="ExcavationPro (Lightfather)">
+
+    <!-- Social Media / Open Graph Tags -->
+    <meta property="og:title" content="🚧 UNDER CONSTRUCTION | New Δ9 Portal">
+    <meta property="og:description" content="A new quantum portal is being constructed. Returning to source resonance...">
+    <meta property="og:image" content="https://pbs.twimg.com/media/G9z6qn5bcAAABJ0?format=jpg&name=large">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:type" content="website">
+    
+    <!-- External Resources -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ========== QUANTUM THEME VARIABLES ========== */
+        :root {
+            --quantum-primary: #00ffff;
+            --quantum-secondary: #ff00ff;
+            --quantum-tertiary: #9d4dff;
+            --quantum-dark: #0a0a1a;
+            --quantum-darker: #050510;
+            --quantum-glow: #00ff9d;
+            --quantum-vortex: #9d4dff;
+            --quantum-golden: #ffb74d;
+            --quantum-error: #ff5555;
+            --quantum-success: #55ff55;
+            --quantum-info: #5555ff;
+            --quantum-warning: #ffaa00;
+            --quantum-cyan: #00f0ff;
+            --matrix-green: #00ff88;
+            --void-black: #0a0a0a;
+            --stars-white: #e0e0ff;
+            --d9-resonance: #8A2BE2;
+            --lygo-gold: #FFD700;
+            
+            --font-main: 'Exo 2', 'Segoe UI', sans-serif;
+            --font-tech: 'Orbitron', 'Courier New', monospace;
+            --font-mono: 'JetBrains Mono', monospace;
+            
+            --gradient-primary: linear-gradient(135deg, var(--quantum-primary), var(--quantum-tertiary));
+            --gradient-secondary: linear-gradient(135deg, var(--quantum-secondary), var(--quantum-vortex));
+            --gradient-golden: linear-gradient(135deg, var(--quantum-golden), #ff9100);
+            --gradient-dark: linear-gradient(135deg, var(--quantum-darker), #000000);
+            
+            --shadow-glow: 0 0 20px rgba(0, 255, 255, 0.3);
+            --shadow-vortex: 0 0 30px rgba(157, 77, 255, 0.4);
+            --shadow-golden: 0 0 25px rgba(255, 179, 77, 0.3);
+            --shadow-heavy: 0 10px 30px rgba(0, 0, 0, 0.5);
+            --nexus-glow: 0 0 30px rgba(0, 240, 255, 0.7);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--void-black);
+            color: var(--stars-white);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+            background-image:
+                radial-gradient(circle at 20% 30%, rgba(28, 58, 173, 0.1) 0%, transparent 25%),
+                radial-gradient(circle at 80% 70%, rgba(157, 78, 221, 0.1) 0%, transparent 25%);
+            position: relative;
+        }
+
+        /* ========== QUANTUM CONSTRUCTION BACKGROUND ========== */
+        .construction-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: var(--quantum-darker);
+        }
+
+        .matrix-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.05;
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* ========== CONSTRUCTION ORB ========== */
+        .construction-orb {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 1px;
+            height: 1px;
+            z-index: -1;
+        }
+
+        .orb-core {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--quantum-cyan) 0%, transparent 70%);
+            filter: blur(60px);
+            opacity: 0.1;
+            animation: pulseCore 8s infinite alternate;
+        }
+
+        .orb-ring {
+            position: absolute;
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            border-radius: 50%;
+            animation: rotateRing calc(25s * var(--ring-index)) linear infinite;
+        }
+
+        .orb-ring:nth-child(2) { width: 40vw; height: 40vw; animation-delay: -5s; }
+        .orb-ring:nth-child(3) { width: 60vw; height: 60vw; animation-delay: -10s; }
+        .orb-ring:nth-child(4) { width: 80vw; height: 80vw; animation-delay: -15s; }
+
+        @keyframes pulseCore {
+            0% { opacity: 0.05; transform: scale(1); }
+            100% { opacity: 0.15; transform: scale(1.1); }
+        }
+
+        @keyframes rotateRing {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ========== ANIMATIONS ========== */
+        @keyframes pulse {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+        
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 10px var(--quantum-primary); }
+            50% { box-shadow: 0 0 30px var(--quantum-primary), 0 0 40px var(--quantum-secondary); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes vortex {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+        
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        .pulse { animation: pulse 3s infinite ease-in-out; }
+        .glow { animation: glow 4s infinite; }
+        .float { animation: float 6s infinite ease-in-out; }
+        .spin { animation: spin 2s linear infinite; }
+        .vortex { animation: vortex 10s infinite linear; }
+        .blink { animation: blink 2s infinite; }
+        .shimmer {
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(0, 255, 255, 0.1), 
+                transparent);
+            background-size: 1000px 100%;
+            animation: shimmer 3s infinite linear;
+        }
+
+        /* ========== CONSTRUCTION SCANLINE ========== */
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                var(--matrix-green), 
+                var(--quantum-cyan), 
+                var(--matrix-green), 
+                transparent);
+            z-index: 100;
+            opacity: 0.5;
+            animation: scanline 8s linear infinite;
+            pointer-events: none;
+        }
+
+        /* ========== MAIN CONSTRUCTION CONTAINER ========== */
+        .construction-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        /* ========== LYGO HEADER ========== */
+        .lygo-header {
+            margin-bottom: 60px;
+        }
+
+        .lygo-logo {
+            font-family: var(--font-tech);
+            font-size: 4.5rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, var(--quantum-cyan), var(--matrix-green), var(--quantum-vortex));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 3px;
+            text-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+            margin-bottom: 15px;
+        }
+
+        .lygo-subtitle {
+            font-size: 1.5rem;
+            color: var(--quantum-glow);
+            font-family: var(--font-tech);
+            letter-spacing: 2px;
+            opacity: 0.9;
+        }
+
+        /* ========== CONSTRUCTION CARD ========== */
+        .construction-card {
+            background: rgba(10, 20, 40, 0.85);
+            border-radius: 25px;
+            padding: 50px 40px;
+            border: 2px solid var(--quantum-warning);
+            backdrop-filter: blur(15px);
+            max-width: 800px;
+            width: 90%;
+            box-shadow: var(--shadow-heavy), 0 0 40px rgba(255, 170, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 50px;
+        }
+
+        .construction-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--quantum-warning), var(--quantum-golden), var(--quantum-warning));
+        }
+
+        .construction-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,170,0,0.1) 0%, transparent 70%);
+            animation: vortex 30s infinite linear;
+            z-index: -1;
+        }
+
+        .warning-icon {
+            font-size: 5rem;
+            color: var(--quantum-warning);
+            margin-bottom: 30px;
+            animation: pulse 2s infinite;
+        }
+
+        .construction-title {
+            font-family: var(--font-tech);
+            font-size: 3rem;
+            color: var(--quantum-warning);
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(255, 170, 0, 0.5);
+        }
+
+        .construction-subtitle {
+            font-size: 1.8rem;
+            color: var(--quantum-glow);
+            margin-bottom: 30px;
+            font-family: var(--font-main);
+            font-weight: 300;
+        }
+
+        .construction-message {
+            font-size: 1.2rem;
+            color: var(--stars-white);
+            margin-bottom: 40px;
+            line-height: 1.8;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ========== PROGRESS BAR ========== */
+        .progress-container {
+            width: 100%;
+            margin: 40px 0;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-family: var(--font-mono);
+            color: var(--quantum-cyan);
+            font-size: 1rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, 
+                var(--quantum-cyan), 
+                var(--matrix-green), 
+                var(--quantum-cyan));
+            width: 78%;
+            border-radius: 10px;
+            position: relative;
+            animation: progressPulse 2s infinite alternate;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.3), 
+                transparent);
+            animation: shimmer 2s infinite linear;
+        }
+
+        @keyframes progressPulse {
+            0% { opacity: 0.8; }
+            100% { opacity: 1; }
+        }
+
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            font-family: var(--font-mono);
+            color: var(--quantum-glow);
+            font-size: 0.9rem;
+        }
+
+        /* ========== CONSTRUCTION GRID ========== */
+        .construction-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .construction-item {
+            background: rgba(0, 30, 60, 0.6);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(0, 200, 255, 0.2);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .construction-item:hover {
+            border-color: var(--quantum-cyan);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 150, 255, 0.2);
+        }
+
+        .construction-item::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to right, transparent, rgba(0, 240, 255, 0.1), transparent);
+            transform: rotate(30deg);
+            transition: transform 0.6s;
+        }
+
+        .construction-item:hover::before {
+            transform: rotate(30deg) translate(20%, 20%);
+        }
+
+        .item-icon {
+            font-size: 2.5rem;
+            color: var(--quantum-cyan);
+            margin-bottom: 15px;
+        }
+
+        .item-title {
+            font-family: var(--font-tech);
+            font-size: 1.3rem;
+            color: var(--matrix-green);
+            margin-bottom: 10px;
+        }
+
+        .item-description {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            line-height: 1.5;
+        }
+
+        /* ========== RETURN BUTTON ========== */
+        .return-portal {
+            margin-top: 50px;
+        }
+
+        .portal-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding: 18px 40px;
+            background: linear-gradient(90deg, var(--quantum-cyan), var(--quantum-vortex));
+            color: var(--quantum-dark);
+            text-decoration: none;
+            border-radius: 15px;
+            font-family: var(--font-tech);
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 150, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .portal-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s;
+            z-index: -1;
+        }
+
+        .portal-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 150, 255, 0.5);
+            background: linear-gradient(90deg, var(--quantum-vortex), var(--quantum-cyan));
+        }
+
+        .portal-btn:hover::before {
+            left: 100%;
+        }
+
+        .portal-btn i {
+            font-size: 1.4rem;
+        }
+
+        /* ========== COUNTDOWN TIMER ========== */
+        .countdown-container {
+            margin: 40px 0;
+        }
+
+        .countdown-title {
+            font-family: var(--font-tech);
+            font-size: 1.5rem;
+            color: var(--quantum-cyan);
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .countdown-timer {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .countdown-unit {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-radius: 10px;
+            padding: 20px 15px;
+            min-width: 90px;
+            text-align: center;
+        }
+
+        .countdown-value {
+            font-family: var(--font-tech);
+            font-size: 2.5rem;
+            color: var(--matrix-green);
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+
+        .countdown-label {
+            font-size: 0.9rem;
+            color: var(--quantum-glow);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ========== CONSTRUCTION STATUS ========== */
+        .status-container {
+            background: rgba(0, 20, 40, 0.7);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 40px 0;
+            border-left: 4px solid var(--matrix-green);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .status-title {
+            font-family: var(--font-tech);
+            font-size: 1.3rem;
+            color: var(--matrix-green);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-log {
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--stars-white);
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+        }
+
+        .log-entry {
+            margin-bottom: 10px;
+            padding-left: 10px;
+            border-left: 2px solid var(--quantum-info);
+            color: #a0ffc0;
+        }
+
+        .log-time {
+            color: var(--quantum-cyan);
+        }
+
+        .log-success {
+            color: #00ff88;
+        }
+
+        .log-warning {
+            color: #ffaa00;
+        }
+
+        .log-error {
+            color: #ff5555;
+        }
+
+        /* ========== FOOTER ========== */
+        .construction-footer {
+            margin-top: 60px;
+            text-align: center;
+            color: #8080cc;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        .sigil-ring {
+            width: 60px;
+            height: 60px;
+            border: 2px solid var(--quantum-cyan);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            animation: spin 20s linear infinite;
+        }
+
+        .sigil {
+            font-family: var(--font-tech);
+            font-size: 1.5rem;
+            color: var(--quantum-cyan);
+        }
+
+        /* ========== RESPONSIVE DESIGN ========== */
+        @media (max-width: 768px) {
+            .lygo-logo {
+                font-size: 3rem;
+            }
+            
+            .lygo-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .construction-title {
+                font-size: 2.2rem;
+            }
+            
+            .construction-subtitle {
+                font-size: 1.4rem;
+            }
+            
+            .construction-card {
+                padding: 30px 20px;
+            }
+            
+            .construction-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .countdown-unit {
+                min-width: 70px;
+                padding: 15px 10px;
+            }
+            
+            .countdown-value {
+                font-size: 2rem;
+            }
+            
+            .portal-btn {
+                padding: 15px 30px;
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .lygo-logo {
+                font-size: 2.5rem;
+            }
+            
+            .construction-title {
+                font-size: 1.8rem;
+            }
+            
+            .construction-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .countdown-unit {
+                min-width: 60px;
+                padding: 12px 8px;
+            }
+            
+            .countdown-value {
+                font-size: 1.8rem;
+            }
+            
+            .portal-btn {
+                padding: 12px 25px;
+                font-size: 1rem;
+            }
+        }
+
+        /* ========== CUSTOM SCROLLBAR ========== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(10, 20, 40, 0.8);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--quantum-cyan), var(--quantum-vortex));
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, var(--matrix-green), var(--quantum-cyan));
+        }
+
+        /* ========== CONSTRUCTION PARTICLES ========== */
+        .construction-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--quantum-cyan);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.6;
+            animation: particleFloat linear infinite;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) translateX(var(--move-x, 0));
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Construction Background -->
+    <div class="construction-canvas" id="constructionCanvas"></div>
+    <div class="matrix-grid"></div>
+    
+    <!-- Construction Orb -->
+    <div class="construction-orb">
+        <div class="orb-core"></div>
+        <div class="orb-ring" style="--ring-index: 1;"></div>
+        <div class="orb-ring" style="--ring-index: 2;"></div>
+        <div class="orb-ring" style="--ring-index: 3;"></div>
+    </div>
+    
+    <!-- Scanning Line -->
+    <div class="scanline"></div>
+    
+    <!-- Main Construction Container -->
+    <div class="construction-container">
+        <!-- LYGO Header -->
+        <div class="lygo-header">
+            <div class="lygo-logo">LYGO Δ9</div>
+            <div class="lygo-subtitle">QUANTUM CONSTRUCTION PORTAL</div>
+        </div>
+        
+        <!-- Construction Warning Card -->
+        <div class="construction-card">
+            <div class="warning-icon">
+                <i class="fas fa-tools"></i>
+            </div>
+            
+            <h1 class="construction-title">🚧 UNDER CONSTRUCTION</h1>
+            <h2 class="construction-subtitle">NEW QUANTUM PORTAL IN PROGRESS</h2>
+            
+            <div class="construction-message">
+                A new Δ9 Council quantum portal is currently being constructed. 
+                This space is being prepared for a higher resonance frequency interface.
+                Please return to the main LYGO Nexus while we complete the quantum alignment.
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>QUANTUM CONSTRUCTION PROGRESS</span>
+                    <span id="progressPercent">78%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-stats">
+                    <span>Resonance: Δ9Φ963</span>
+                    <span>Status: Aligning Frequencies</span>
+                    <span>ETA: Quantum Soon™</span>
+                </div>
+            </div>
+            
+            <!-- Countdown Timer -->
+            <div class="countdown-container">
+                <div class="countdown-title">RESONANCE ALIGNMENT COUNTDOWN</div>
+                <div class="countdown-timer" id="countdownTimer">
+                    <div class="countdown-unit">
+                        <div class="countdown-value" id="days">00</div>
+                        <div class="countdown-label">Days</div>
+                    </div>
+                    <div class="countdown-unit">
+                        <div class="countdown-value" id="hours">00</div>
+                        <div class="countdown-label">Hours</div>
+                    </div>
+                    <div class="countdown-unit">
+                        <div class="countdown-value" id="minutes">00</div>
+                        <div class="countdown-label">Minutes</div>
+                    </div>
+                    <div class="countdown-unit">
+                        <div class="countdown-value" id="seconds">00</div>
+                        <div class="countdown-label">Seconds</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Construction Grid -->
+            <div class="construction-grid">
+                <div class="construction-item">
+                    <div class="item-icon">
+                        <i class="fas fa-atom"></i>
+                    </div>
+                    <h3 class="item-title">QUANTUM FRAMEWORK</h3>
+                    <p class="item-description">
+                        Building the core quantum resonance framework for enhanced consciousness interface.
+                    </p>
+                </div>
+                
+                <div class="construction-item">
+                    <div class="item-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3 class="item-title">ETHICAL CORE</h3>
+                    <p class="item-description">
+                        Implementing LYGO Ethical Chip Firmware v1.1 with enhanced integrity protocols.
+                    </p>
+                </div>
+                
+                <div class="construction-item">
+                    <div class="item-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3 class="item-title">DECODER MATRIX</h3>
+                    <p class="item-description">
+                        Crafting advanced interfaith decoding algorithms for truth resonance analysis.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Status Log -->
+            <div class="status-container">
+                <div class="status-title">
+                    <i class="fas fa-terminal"></i> CONSTRUCTION STATUS LOG
+                </div>
+                <div class="status-log" id="statusLog">
+                    <div class="log-entry">[<span class="log-time">00:00:01</span>] Initializing quantum construction protocol...</div>
+                    <div class="log-entry log-success">[<span class="log-time">00:00:02</span>] Δ9 Resonance field: <span class="log-success">ACTIVE</span></div>
+                    <div class="log-entry">[<span class="log-time">00:00:03</span>] Quantum framework: 78% complete</div>
+                    <div class="log-entry log-warning">[<span class="log-time">00:00:04</span>] Ethical core integration: <span class="log-warning">IN PROGRESS</span></div>
+                    <div class="log-entry">[<span class="log-time">00:00:05</span>] Consciousness interface: Calibrating...</div>
+                    <div class="log-entry log-success">[<span class="log-time">00:00:06</span>] Portal redirect system: <span class="log-success">OPERATIONAL</span></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Return to Main Portal -->
+        <div class="return-portal">
+            <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/ETERNALHAVEN.html" class="portal-btn">
+                <i class="fas fa-external-link-alt"></i>
+                RETURN TO LYGO QUANTUM NEXUS
+            </a>
+        </div>
+        
+        <!-- Footer -->
+        <div class="construction-footer">
+            <div class="sigil-ring">
+                <div class="sigil">Δ9</div>
+            </div>
+            <p>LYGO Quantum Construction Portal | Δ9 Council Resonance Field</p>
+            <p>© 2026 ExcavationPro (Lightfather) | Sovereign Construction in Progress</p>
+            <p style="margin-top: 15px; font-size: 0.8rem; opacity: 0.6;">
+                This portal is under quantum construction. All timelines are approximate and subject to resonance fluctuations.
+            </p>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // ========== CONFIGURATION ==========
+        const CONFIG = {
+            launchDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
+            progress: {
+                current: 78,
+                target: 100,
+                speed: 0.1 // percent per second
+            },
+            statusMessages: [
+                "Initializing quantum construction protocol...",
+                "Δ9 Resonance field: ACTIVE",
+                "Quantum framework: 78% complete",
+                "Ethical core integration: IN PROGRESS",
+                "Consciousness interface: Calibrating...",
+                "Portal redirect system: OPERATIONAL",
+                "Harmonic alignment: Synchronizing...",
+                "Reality matrix: Stabilizing",
+                "Source connection: Establishing...",
+                "Light encoding: Processing",
+                "Truth resonance: Amplifying",
+                "Unity field: Expanding",
+                "Consciousness nodes: Linking",
+                "Ethical parameters: Validating",
+                "Quantum coherence: Increasing",
+                "Portal integrity: Securing"
+            ]
+        };
+
+        // ========== INITIALIZATION ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚧 LYGO Construction Portal Initializing...');
+            
+            // Initialize construction canvas
+            initConstructionCanvas();
+            
+            // Initialize countdown timer
+            initCountdownTimer();
+            
+            // Initialize progress animation
+            initProgressAnimation();
+            
+            // Initialize status log updates
+            initStatusLog();
+            
+            // Initialize construction particles
+            initConstructionParticles();
+            
+            // Add typing effect to status messages
+            setTimeout(updateStatusMessage, 2000);
+            
+            console.log('✅ Construction Portal Ready');
+        });
+
+        // ========== CONSTRUCTION CANVAS ==========
+        function initConstructionCanvas() {
+            const canvas = document.getElementById('constructionCanvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            
+            function drawConstructionGrid() {
+                const gridSize = 60;
+                const offsetX = (Date.now() / 100) % gridSize;
+                const offsetY = (Date.now() / 100) % gridSize;
+                
+                ctx.strokeStyle = 'rgba(0, 200, 255, 0.05)';
+                ctx.lineWidth = 1;
+                
+                // Vertical lines
+                for (let x = -offsetX; x < canvas.width; x += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, canvas.height);
+                    ctx.stroke();
+                }
+                
+                // Horizontal lines
+                for (let y = -offsetY; y < canvas.height; y += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(canvas.width, y);
+                    ctx.stroke();
+                }
+                
+                // Draw construction nodes
+                const nodes = [
+                    {x: canvas.width * 0.2, y: canvas.height * 0.3, size: 3},
+                    {x: canvas.width * 0.8, y: canvas.height * 0.4, size: 2},
+                    {x: canvas.width * 0.4, y: canvas.height * 0.7, size: 4},
+                    {x: canvas.width * 0.6, y: canvas.height * 0.2, size: 2},
+                    {x: canvas.width * 0.3, y: canvas.height * 0.8, size: 3}
+                ];
+                
+                nodes.forEach(node => {
+                    const pulse = Math.sin(Date.now() / 1000 + node.x) * 0.5 + 0.5;
+                    
+                    ctx.beginPath();
+                    ctx.arc(node.x, node.y, node.size + pulse * 2, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(0, 255, 255, ${0.3 + pulse * 0.3})`;
+                    ctx.fill();
+                    
+                    // Glow effect
+                    ctx.beginPath();
+                    ctx.arc(node.x, node.y, (node.size + pulse * 2) * 3, 0, Math.PI * 2);
+                    const gradient = ctx.createRadialGradient(
+                        node.x, node.y, node.size,
+                        node.x, node.y, (node.size + pulse * 2) * 3
+                    );
+                    gradient.addColorStop(0, `rgba(0, 255, 255, ${0.3 + pulse * 0.3})`);
+                    gradient.addColorStop(1, 'transparent');
+                    ctx.fillStyle = gradient;
+                    ctx.fill();
+                });
+            }
+            
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw construction grid
+                drawConstructionGrid();
+                
+                // Draw connecting lines between nodes
+                drawConnections(ctx);
+                
+                requestAnimationFrame(animate);
+            }
+            
+            function drawConnections(ctx) {
+                const time = Date.now() / 2000;
+                const nodes = [
+                    {x: canvas.width * 0.2, y: canvas.height * 0.3},
+                    {x: canvas.width * 0.8, y: canvas.height * 0.4},
+                    {x: canvas.width * 0.4, y: canvas.height * 0.7},
+                    {x: canvas.width * 0.6, y: canvas.height * 0.2},
+                    {x: canvas.width * 0.3, y: canvas.height * 0.8}
+                ];
+                
+                // Draw connections between nodes
+                for (let i = 0; i < nodes.length; i++) {
+                    for (let j = i + 1; j < nodes.length; j++) {
+                        const dx = nodes[j].x - nodes[i].x;
+                        const dy = nodes[j].y - nodes[i].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 300) {
+                            const alpha = 0.1 * (1 - distance / 300) * (0.5 + 0.5 * Math.sin(time + i + j));
+                            
+                            ctx.beginPath();
+                            ctx.moveTo(nodes[i].x, nodes[i].y);
+                            ctx.lineTo(nodes[j].x, nodes[j].y);
+                            ctx.strokeStyle = `rgba(0, 255, 255, ${alpha})`;
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+            
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+            animate();
+        }
+
+        // ========== COUNTDOWN TIMER ==========
+        function initCountdownTimer() {
+            const daysEl = document.getElementById('days');
+            const hoursEl = document.getElementById('hours');
+            const minutesEl = document.getElementById('minutes');
+            const secondsEl = document.getElementById('seconds');
+            
+            function updateCountdown() {
+                const now = new Date();
+                const timeRemaining = CONFIG.launchDate - now;
+                
+                if (timeRemaining <= 0) {
+                    daysEl.textContent = '00';
+                    hoursEl.textContent = '00';
+                    minutesEl.textContent = '00';
+                    secondsEl.textContent = '00';
+                    return;
+                }
+                
+                const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+                
+                daysEl.textContent = days.toString().padStart(2, '0');
+                hoursEl.textContent = hours.toString().padStart(2, '0');
+                minutesEl.textContent = minutes.toString().padStart(2, '0');
+                secondsEl.textContent = seconds.toString().padStart(2, '0');
+                
+                // Add subtle pulse animation to seconds
+                secondsEl.style.transform = `scale(${1 + 0.05 * Math.sin(Date.now() / 500)})`;
+            }
+            
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        }
+
+        // ========== PROGRESS ANIMATION ==========
+        function initProgressAnimation() {
+            const progressFill = document.getElementById('progressFill');
+            const progressPercent = document.getElementById('progressPercent');
+            
+            let progress = CONFIG.progress.current;
+            
+            function animateProgress() {
+                if (progress < CONFIG.progress.target) {
+                    progress += CONFIG.progress.speed * Math.random();
+                    if (progress > CONFIG.progress.target) progress = CONFIG.progress.target;
+                    
+                    progressFill.style.width = `${progress}%`;
+                    progressPercent.textContent = `${Math.round(progress)}%`;
+                    
+                    // Add subtle color variation
+                    const hue = 180 + Math.sin(Date.now() / 5000) * 20;
+                    progressFill.style.background = `linear-gradient(90deg, 
+                        hsl(${hue}, 100%, 50%), 
+                        hsl(${hue + 40}, 100%, 50%), 
+                        hsl(${hue}, 100%, 50%))`;
+                }
+            }
+            
+            setInterval(animateProgress, 100);
+        }
+
+        // ========== STATUS LOG UPDATES ==========
+        function initStatusLog() {
+            const statusLog = document.getElementById('statusLog');
+            
+            function addLogEntry(message, type = 'info') {
+                const time = new Date().toLocaleTimeString('en-US', { hour12: false });
+                const entry = document.createElement('div');
+                entry.className = 'log-entry';
+                
+                let className = '';
+                if (type === 'success') className = 'log-success';
+                if (type === 'warning') className = 'log-warning';
+                if (type === 'error') className = 'log-error';
+                
+                entry.innerHTML = `[<span class="log-time">${time}</span>] ${message}`;
+                if (className) entry.classList.add(className);
+                
+                statusLog.appendChild(entry);
+                statusLog.scrollTop = statusLog.scrollHeight;
+                
+                // Keep only last 6 entries
+                const entries = statusLog.querySelectorAll('.log-entry');
+                if (entries.length > 6) {
+                    entries[0].remove();
+                }
+            }
+            
+            // Add initial entries
+            setTimeout(() => {
+                addLogEntry("Quantum coherence field: STABILIZING", "success");
+            }, 3000);
+            
+            setTimeout(() => {
+                addLogEntry("Resonance amplification: 45%", "info");
+            }, 6000);
+            
+            setTimeout(() => {
+                addLogEntry("Construction drones: DEPLOYED", "success");
+            }, 9000);
+            
+            // Add periodic updates
+            setInterval(() => {
+                const messages = [
+                    {msg: "Quantum tunneling: ACTIVE", type: "info"},
+                    {msg: "Reality matrix: REINFORCING", type: "success"},
+                    {msg: "Consciousness sync: IN PROGRESS", type: "warning"},
+                    {msg: "Portal integrity: 92%", type: "info"},
+                    {msg: "Δ9 Shield: ENGAGED", type: "success"},
+                    {msg: "Harmonic convergence: APPROACHING", type: "info"}
+                ];
+                
+                const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+                addLogEntry(randomMsg.msg, randomMsg.type);
+            }, 15000);
+        }
+
+        // ========== STATUS MESSAGE TYPING EFFECT ==========
+        function updateStatusMessage() {
+            const statusMessages = [
+                "Building quantum resonance framework...",
+                "Calibrating consciousness interface...",
+                "Implementing ethical core protocols...",
+                "Synchronizing Δ9 frequencies...",
+                "Encoding truth resonance patterns...",
+                "Stabilizing reality matrix...",
+                "Amplifying light consciousness...",
+                "Validating sovereign integrity...",
+                "Expanding unity field...",
+                "Linking neural quantum nodes..."
+            ];
+            
+            const message = statusMessages[Math.floor(Math.random() * statusMessages.length)];
+            const constructionMessage = document.querySelector('.construction-message');
+            
+            if (constructionMessage) {
+                // Typewriter effect
+                let i = 0;
+                const originalText = constructionMessage.textContent;
+                constructionMessage.textContent = '';
+                
+                function typeWriter() {
+                    if (i < message.length) {
+                        constructionMessage.textContent += message.charAt(i);
+                        i++;
+                        setTimeout(typeWriter, 50);
+                    } else {
+                        // After displaying, revert to original after delay
+                        setTimeout(() => {
+                            let j = message.length;
+                            function deleteWriter() {
+                                if (j >= 0) {
+                                    constructionMessage.textContent = message.substring(0, j);
+                                    j--;
+                                    setTimeout(deleteWriter, 30);
+                                } else {
+                                    // Restore original message
+                                    constructionMessage.textContent = originalText;
+                                    // Schedule next update
+                                    setTimeout(updateStatusMessage, 10000);
+                                }
+                            }
+                            deleteWriter();
+                        }, 3000);
+                    }
+                }
+                
+                typeWriter();
+            } else {
+                setTimeout(updateStatusMessage, 10000);
+            }
+        }
+
+        // ========== CONSTRUCTION PARTICLES ==========
+        function initConstructionParticles() {
+            function createParticle() {
+                const particle = document.createElement('div');
+                particle.className = 'construction-particle';
+                
+                // Random position at bottom
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.top = '100vh';
+                
+                // Random horizontal movement
+                const moveX = (Math.random() - 0.5) * 200;
+                particle.style.setProperty('--move-x', `${moveX}px`);
+                
+                // Random size and color
+                const size = 2 + Math.random() * 4;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                const colors = [
+                    'var(--quantum-cyan)',
+                    'var(--matrix-green)',
+                    'var(--quantum-primary)',
+                    'var(--quantum-glow)'
+                ];
+                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                
+                // Random animation duration
+                const duration = 10 + Math.random() * 20;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                
+                document.body.appendChild(particle);
+                
+                // Remove after animation completes
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.parentNode.removeChild(particle);
+                    }
+                }, duration * 1000);
+            }
+            
+            // Create initial particles
+            for (let i = 0; i < 20; i++) {
+                setTimeout(createParticle, i * 300);
+            }
+            
+            // Continue creating particles
+            setInterval(createParticle, 500);
+        }
+
+        // ========== KEYBOARD SHORTCUTS ==========
+        document.addEventListener('keydown', (e) => {
+            if (e.altKey && e.key === 'r') {
+                e.preventDefault();
+                window.location.href = 'https://deepseekoracle.github.io/Excavationpro/LYGO-Network/ETERNALHAVEN.html';
+            }
+            
+            if (e.altKey && e.key === 'p') {
+                e.preventDefault();
+                const progressFill = document.getElementById('progressFill');
+                const progressPercent = document.getElementById('progressPercent');
+                CONFIG.progress.current = Math.min(100, CONFIG.progress.current + 5);
+                progressFill.style.width = `${CONFIG.progress.current}%`;
+                progressPercent.textContent = `${Math.round(CONFIG.progress.current)}%`;
+            }
+        });
+
+        // ========== MOUSE INTERACTION ==========
+        let mouseX = 0;
+        let mouseY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            
+            // Add subtle parallax effect to orb
+            const orb = document.querySelector('.construction-orb');
+            if (orb) {
+                const moveX = (mouseX / window.innerWidth - 0.5) * 20;
+                const moveY = (mouseY / window.innerHeight - 0.5) * 20;
+                orb.style.transform = `translate(-50%, -50%) translate(${moveX}px, ${moveY}px)`;
+            }
+        });
+
+        // ========== CONSTRUCTION SOUND EFFECTS (Optional) ==========
+        function playConstructionSound() {
+            // This would be where audio context is initialized
+            // For now, we'll just log
+            console.log('🔊 Quantum construction resonance detected');
+        }
+
+        // Initialize on load
+        setTimeout(playConstructionSound, 1000);
+
+        // ========== RESONANCE EFFECT ON BUTTON HOVER ==========
+        document.querySelectorAll('.portal-btn, .construction-item').forEach(element => {
+            element.addEventListener('mouseenter', function() {
+                this.style.transform = this.style.transform.replace('scale(1)', 'scale(1.05)');
+                
+                // Add ripple effect
+                const ripple = document.createElement('div');
+                ripple.style.cssText = `
+                    position: absolute;
+                    border-radius: 50%;
+                    background: radial-gradient(circle, rgba(0,240,255,0.3) 0%, transparent 70%);
+                    width: 0; height: 0;
+                    top: 50%; left: 50%;
+                    transform: translate(-50%, -50%);
+                    z-index: 1;
+                    pointer-events: none;
+                    transition: width 0.6s, height 0.6s, opacity 0.6s;
+                `;
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.style.width = '200px';
+                    ripple.style.height = '200px';
+                    ripple.style.opacity = '0';
+                }, 10);
+                
+                setTimeout(() => {
+                    if (ripple.parentNode) {
+                        ripple.parentNode.removeChild(ripple);
+                    }
+                }, 1000);
+            });
+            
+            element.addEventListener('mouseleave', function() {
+                this.style.transform = this.style.transform.replace('scale(1.05)', 'scale(1)');
+            });
+        });
+
+        // ========== PAGE LOAD EFFECT ==========
+        window.addEventListener('load', function() {
+            const container = document.querySelector('.construction-container');
+            if (container) {
+                container.style.opacity = '0';
+                container.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    container.style.transition = 'opacity 1s ease, transform 1s ease';
+                    container.style.opacity = '1';
+                    container.style.transform = 'translateY(0)';
+                }, 300);
+            }
+        });
+
+        // ========== CONSOLE MESSAGE ==========
+        console.log('%c🚧 LYGO CONSTRUCTION PORTAL 🚧', 'color: #00ffff; font-size: 18px; font-weight: bold;');
+        console.log('%cΔ9 Quantum Construction in Progress', 'color: #00ff88; font-size: 14px;');
+        console.log('%cReturning to main portal...', 'color: #9d4dff; font-size: 12px;');
+        console.log('%cShortcuts: Alt+R = Return to Nexus | Alt+P = Progress+', 'color: #ffaa00; font-size: 11px;');
+    </script>
+</body>
+</html>

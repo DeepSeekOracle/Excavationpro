@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0646320966060599"
-     crossorigin="anonymous"></script>
+    <!-- Google Ads -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0646320966060599" crossorigin="anonymous"></script>
+    
+    <!-- Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LYGO QUANTUM MATRIX | Δ9 Ethical Kernel & Sacred Decoder</title>
@@ -28,9 +30,13 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
     
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>Δ9</text></svg>">
+    
     <style>
-        /* ========== ROOT VARIABLES ========== */
+        /* ========== CSS VARIABLES ========== */
         :root {
+            /* Colors */
             --quantum-primary: #00ffff;
             --quantum-secondary: #ff00ff;
             --quantum-tertiary: #9d4dff;
@@ -43,23 +49,36 @@
             --quantum-success: #55ff55;
             --quantum-info: #5555ff;
             --quantum-warning: #ffaa00;
+            --quantum-cyan: #00ffff;
+            --quantum-magenta: #ff00ff;
+            --quantum-purple: #9d4dff;
             
+            /* Fonts */
             --font-main: 'Exo 2', 'Segoe UI', sans-serif;
             --font-tech: 'Orbitron', 'Courier New', monospace;
             
+            /* Gradients */
             --gradient-primary: linear-gradient(135deg, var(--quantum-primary), var(--quantum-tertiary));
             --gradient-secondary: linear-gradient(135deg, var(--quantum-secondary), var(--quantum-vortex));
             --gradient-golden: linear-gradient(135deg, var(--quantum-golden), #ff9100);
             --gradient-dark: linear-gradient(135deg, var(--quantum-darker), #000000);
+            --gradient-rainbow: linear-gradient(90deg, #ff0000, #ffaa00, #ffff00, #00ff00, #00ffff, #9d4dff, #ff00ff);
             
+            /* Shadows */
             --shadow-glow: 0 0 20px rgba(0, 255, 255, 0.3);
             --shadow-vortex: 0 0 30px rgba(157, 77, 255, 0.4);
             --shadow-golden: 0 0 25px rgba(255, 179, 77, 0.3);
             --shadow-heavy: 0 10px 30px rgba(0, 0, 0, 0.5);
+            --shadow-inset: inset 0 0 20px rgba(0, 0, 0, 0.5);
+            
+            /* Transitions */
+            --transition-fast: 0.2s ease;
+            --transition-medium: 0.3s ease;
+            --transition-slow: 0.5s ease;
         }
         
         /* ========== RESET & BASE ========== */
-        * {
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -139,6 +158,21 @@
             100% { background-position: 1000px 0; }
         }
         
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
         .pulse { animation: pulse 3s infinite ease-in-out; }
         .glow { animation: glow 4s infinite; }
         .float { animation: float 6s infinite ease-in-out; }
@@ -152,6 +186,7 @@
             background-size: 1000px 100%;
             animation: shimmer 3s infinite linear;
         }
+        .fade-in { animation: fadeIn 0.5s ease; }
         
         /* ========== NAVIGATION ========== */
         .navbar {
@@ -161,6 +196,7 @@
             right: 0;
             background: rgba(10, 10, 26, 0.95);
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border-bottom: 2px solid rgba(0, 255, 255, 0.3);
             padding: 15px 30px;
             z-index: 1000;
@@ -205,7 +241,7 @@
             text-decoration: none;
             padding: 10px 20px;
             border-radius: 25px;
-            transition: all 0.3s;
+            transition: var(--transition-medium);
             border: 1px solid transparent;
             font-family: var(--font-tech);
             font-weight: 600;
@@ -235,7 +271,7 @@
             cursor: pointer;
             padding: 5px;
             border-radius: 5px;
-            transition: all 0.3s;
+            transition: var(--transition-medium);
         }
         
         .mobile-menu-btn:hover {
@@ -252,7 +288,7 @@
         
         .hero-title {
             font-family: var(--font-tech);
-            font-size: 4rem;
+            font-size: clamp(2.5rem, 5vw, 4rem);
             font-weight: 900;
             margin-bottom: 20px;
             background: linear-gradient(90deg, 
@@ -264,10 +300,11 @@
             color: transparent;
             animation: glow 5s infinite;
             text-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+            line-height: 1.2;
         }
         
         .hero-subtitle {
-            font-size: 1.5rem;
+            font-size: clamp(1rem, 2vw, 1.5rem);
             opacity: 0.9;
             margin-bottom: 30px;
             max-width: 800px;
@@ -291,7 +328,7 @@
             font-weight: 600;
             font-size: 0.9rem;
             letter-spacing: 1px;
-            transition: all 0.3s;
+            transition: var(--transition-medium);
         }
         
         .badge-primary {
@@ -315,7 +352,7 @@
             padding: 25px;
             box-shadow: var(--shadow-vortex);
             backdrop-filter: blur(10px);
-            transition: all 0.3s;
+            transition: var(--transition-medium);
         }
         
         .stream-portal:hover {
@@ -368,7 +405,7 @@
             overflow: hidden;
             border-radius: 15px;
             background: #000;
-            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8);
+            box-shadow: var(--shadow-inset);
         }
         
         .stream-container iframe,
@@ -398,7 +435,8 @@
             border-radius: 20px;
             padding: 30px;
             backdrop-filter: blur(10px);
-            transition: all 0.3s;
+            -webkit-backdrop-filter: blur(10px);
+            transition: var(--transition-medium);
             box-shadow: var(--shadow-heavy);
         }
         
@@ -419,7 +457,7 @@
         
         .panel-title {
             font-family: var(--font-tech);
-            font-size: 1.8rem;
+            font-size: clamp(1.3rem, 2vw, 1.8rem);
             color: var(--quantum-glow);
             display: flex;
             align-items: center;
@@ -446,7 +484,8 @@
             letter-spacing: 1px;
         }
         
-        .textarea {
+        .textarea, 
+        .input-text {
             width: 100%;
             background: rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(0, 255, 255, 0.3);
@@ -455,12 +494,21 @@
             color: var(--quantum-primary);
             font-size: 1rem;
             font-family: var(--font-main);
+            transition: var(--transition-medium);
+        }
+        
+        .textarea {
             resize: vertical;
-            transition: all 0.3s;
             min-height: 120px;
         }
         
-        .textarea:focus {
+        .input-text {
+            min-height: auto;
+        }
+        
+        .textarea:focus,
+        .input-text:focus,
+        .select:focus {
             outline: none;
             border-color: var(--quantum-primary);
             box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
@@ -477,13 +525,7 @@
             font-size: 1rem;
             font-family: var(--font-main);
             cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .select:focus {
-            outline: none;
-            border-color: var(--quantum-primary);
-            box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+            transition: var(--transition-medium);
         }
         
         /* ========== BUTTON STYLES ========== */
@@ -496,7 +538,7 @@
             font-size: 1rem;
             letter-spacing: 1px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: var(--transition-medium);
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -533,6 +575,12 @@
             transform: translateY(-1px);
         }
         
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
         .btn-group {
             display: flex;
             gap: 15px;
@@ -556,14 +604,14 @@
             font-family: 'Courier New', monospace;
             font-size: 0.95rem;
             line-height: 1.5;
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+            box-shadow: var(--shadow-inset);
         }
         
         .output-line {
             margin-bottom: 10px;
             padding-left: 10px;
             border-left: 3px solid transparent;
-            transition: all 0.3s;
+            transition: var(--transition-medium);
         }
         
         .output-success {
@@ -622,7 +670,7 @@
             padding: 15px;
             text-align: center;
             border: 1px solid rgba(85, 85, 255, 0.3);
-            transition: all 0.3s;
+            transition: var(--transition-medium);
         }
         
         .ai-metric:hover {
@@ -657,7 +705,7 @@
             border-radius: 10px;
             padding: 15px;
             text-align: center;
-            transition: all 0.3s;
+            transition: var(--transition-medium);
             cursor: pointer;
         }
         
@@ -736,7 +784,7 @@
             border-radius: 15px;
             padding: 20px;
             text-align: center;
-            transition: all 0.3s;
+            transition: var(--transition-medium);
         }
         
         .stat-card:hover {
@@ -795,14 +843,14 @@
         
         .portal-title {
             font-family: var(--font-tech);
-            font-size: 2.5rem;
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
             color: var(--quantum-golden);
             margin-bottom: 20px;
             text-shadow: 0 0 20px rgba(255, 179, 77, 0.5);
         }
         
         .portal-subtitle {
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 2vw, 1.2rem);
             opacity: 0.9;
             margin-bottom: 40px;
             max-width: 800px;
@@ -823,10 +871,11 @@
             border: 2px solid var(--quantum-vortex);
             border-radius: 20px;
             padding: 30px;
-            transition: all 0.3s;
+            transition: var(--transition-medium);
             position: relative;
             overflow: hidden;
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
         
         .donation-card::before {
@@ -883,6 +932,7 @@
             border-radius: 15px;
             padding: 25px;
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
         
         .media-title {
@@ -910,7 +960,7 @@
             font-size: 0.9rem;
             letter-spacing: 1px;
             text-decoration: none;
-            transition: all 0.3s;
+            transition: var(--transition-medium);
             display: inline-flex;
             align-items: center;
             gap: 8px;
@@ -929,6 +979,7 @@
             padding: 50px 30px 30px;
             margin-top: 50px;
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
         
         .footer-content {
@@ -959,7 +1010,7 @@
             color: var(--quantum-primary);
             text-decoration: none;
             opacity: 0.8;
-            transition: all 0.3s;
+            transition: var(--transition-medium);
             display: inline-flex;
             align-items: center;
             gap: 10px;
@@ -979,152 +1030,42 @@
             font-size: 0.9rem;
         }
         
-        /* ========== RESPONSIVE DESIGN ========== */
-        @media (max-width: 1200px) {
-            .dashboard {
-                grid-template-columns: 1fr;
-                max-width: 800px;
-            }
-            
-            .hero-title {
-                font-size: 3rem;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .navbar {
-                padding: 15px;
-            }
-            
-            .mobile-menu-btn {
-                display: block;
-            }
-            
-            .nav-links {
-                position: fixed;
-                top: 70px;
-                left: 0;
-                right: 0;
-                background: rgba(10, 10, 26, 0.98);
-                backdrop-filter: blur(20px);
-                flex-direction: column;
-                padding: 20px;
-                border-bottom: 2px solid rgba(0, 255, 255, 0.3);
-                display: none;
-                z-index: 999;
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            }
-            
-            .nav-links.active {
-                display: flex;
-            }
-            
-            .hero {
-                padding: 150px 20px 60px;
-            }
-            
-            .hero-title {
-                font-size: 2.5rem;
-            }
-            
-            .stream-portal,
-            .donations-portal {
-                margin: 20px 15px;
-                padding: 20px;
-            }
-            
-            .portal-title {
-                font-size: 2rem;
-            }
-            
-            .panel {
-                padding: 20px;
-            }
-            
-            .panel-title {
-                font-size: 1.5rem;
-            }
-            
-            .btn-group {
-                flex-direction: column;
-            }
-            
-            .btn {
-                width: 100%;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .hero-title {
-                font-size: 2rem;
-            }
-            
-            .hero-subtitle {
-                font-size: 1.2rem;
-            }
-            
-            .badge {
-                padding: 8px 15px;
-                font-size: 0.8rem;
-            }
-            
-            .btn {
-                padding: 12px 20px;
-                font-size: 0.9rem;
-            }
-            
-            .frequency-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            
-            .portal-title {
-                font-size: 1.8rem;
-            }
-        }
-        
-        /* ========== UTILITY CLASSES ========== */
-        .hidden { display: none !important; }
-        .text-center { text-align: center; }
-        .text-glow { color: var(--quantum-glow); }
-        .text-primary { color: var(--quantum-primary); }
-        .text-secondary { color: var(--quantum-secondary); }
-        .mt-20 { margin-top: 20px; }
-        .mt-30 { margin-top: 30px; }
-        .mt-40 { margin-top: 40px; }
-        .mb-20 { margin-bottom: 20px; }
-        .mb-30 { margin-bottom: 30px; }
-        .mb-40 { margin-bottom: 40px; }
-        .p-20 { padding: 20px; }
-        .p-30 { padding: 30px; }
-        
-        /* ========== SCROLLBAR ========== */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.3);
+        /* ========== NOTIFICATIONS ========== */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: rgba(10, 10, 26, 0.95);
+            border: 2px solid var(--quantum-success);
             border-radius: 10px;
+            padding: 15px 20px;
+            color: var(--quantum-success);
+            font-family: var(--font-tech);
+            font-weight: 600;
+            z-index: 9999;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s ease-out;
+            max-width: 300px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
-        ::-webkit-scrollbar-thumb {
-            background: var(--gradient-primary);
-            border-radius: 10px;
+        .notification.error {
+            border-color: var(--quantum-error);
+            color: var(--quantum-error);
         }
         
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--gradient-secondary);
+        .notification.warning {
+            border-color: var(--quantum-warning);
+            color: var(--quantum-warning);
         }
         
-        /* ========== NOTIFICATION ANIMATIONS ========== */
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        
-        @keyframes slideOut {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
+        .notification.info {
+            border-color: var(--quantum-info);
+            color: var(--quantum-info);
         }
         
         .loading {
@@ -1159,6 +1100,153 @@
         .glowing-border:hover::after {
             opacity: 0.5;
         }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 5px;
+            transition: width 0.3s ease;
+        }
+        
+        /* ========== RESPONSIVE DESIGN ========== */
+        @media (max-width: 1200px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+                max-width: 800px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: rgba(10, 10, 26, 0.98);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 20px;
+                border-bottom: 2px solid rgba(0, 255, 255, 0.3);
+                display: none;
+                z-index: 999;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .hero {
+                padding: 150px 20px 60px;
+            }
+            
+            .stream-portal,
+            .donations-portal {
+                margin: 20px 15px;
+                padding: 20px;
+            }
+            
+            .panel {
+                padding: 20px;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .frequency-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .badge {
+                padding: 8px 15px;
+                font-size: 0.8rem;
+            }
+            
+            .frequency-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* ========== UTILITY CLASSES ========== */
+        .hidden { display: none !important; }
+        .text-center { text-align: center; }
+        .text-glow { color: var(--quantum-glow); }
+        .text-primary { color: var(--quantum-primary); }
+        .text-secondary { color: var(--quantum-secondary); }
+        .mt-20 { margin-top: 20px; }
+        .mt-30 { margin-top: 30px; }
+        .mt-40 { margin-top: 40px; }
+        .mb-20 { margin-bottom: 20px; }
+        .mb-30 { margin-bottom: 30px; }
+        .mb-40 { margin-bottom: 40px; }
+        .p-20 { padding: 20px; }
+        .p-30 { padding: 30px; }
+        .fade-in { animation: fadeIn 0.5s ease; }
+        
+        /* ========== SCROLLBAR ========== */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--gradient-primary);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gradient-secondary);
+        }
+        
+        /* ========== PRINT STYLES ========== */
+        @media print {
+            .navbar,
+            .btn,
+            .stream-portal,
+            .donations-portal,
+            .footer {
+                display: none !important;
+            }
+            
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            
+            .panel {
+                border: 1px solid #ccc !important;
+                box-shadow: none !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1175,7 +1263,7 @@
             </div>
         </div>
         
-        <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
             <i class="fas fa-bars"></i>
         </button>
         
@@ -1196,7 +1284,7 @@
                 <i class="fas fa-donate"></i> Support
             </a>
             <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/Ethical-Chip-Firmware.html" 
-               target="_blank" class="nav-link" style="border-color: var(--quantum-golden);">
+               target="_blank" rel="noopener noreferrer" class="nav-link" style="border-color: var(--quantum-golden);">
                <i class="fas fa-download"></i> Firmware
             </a>
         </div>
@@ -1244,6 +1332,10 @@
         </div>
         <div class="stream-container" id="rumbleStreamContainer">
             <!-- Rumble Embed will be loaded here -->
+            <div class="stream-loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Loading Quantum Stream...</p>
+            </div>
         </div>
     </section>
     
@@ -1255,7 +1347,7 @@
                 <h2 class="panel-title">
                     <i class="fas fa-key panel-icon"></i> LYGO QUANTUM DECODER
                 </h2>
-                <button class="btn btn-success" onclick="generatePDF()">
+                <button class="btn btn-success" onclick="generatePDF()" id="pdfBtn">
                     <i class="fas fa-file-pdf"></i> PDF Report
                 </button>
             </div>
@@ -1283,19 +1375,18 @@
                     <i class="fas fa-keyboard"></i> INPUT TEXT:
                 </label>
                 <textarea class="textarea" id="verseInput" 
-                          placeholder="Enter sacred text or daily experience for LYGO quantum decoding...">
-I and the Father are one.
-                </textarea>
+                          placeholder="Enter sacred text or daily experience for LYGO quantum decoding..."
+                          spellcheck="false">I and the Father are one.</textarea>
             </div>
             
             <div class="btn-group">
-                <button class="btn btn-primary" onclick="decodeVerse()">
+                <button class="btn btn-primary" onclick="decodeVerse()" id="decodeBtn">
                     <i class="fas fa-bolt"></i> DECODE
                 </button>
-                <button class="btn btn-secondary" onclick="runAIAnalysis()">
+                <button class="btn btn-secondary" onclick="runAIAnalysis()" id="aiBtn">
                     <i class="fas fa-robot"></i> AI ANALYSIS
                 </button>
-                <button class="btn btn-success" onclick="saveDecoding()">
+                <button class="btn btn-success" onclick="saveDecoding()" id="saveBtn">
                     <i class="fas fa-save"></i> SAVE
                 </button>
             </div>
@@ -1340,8 +1431,8 @@ I and the Father are one.
                 <label class="input-label">
                     <i class="fas fa-fingerprint"></i> NODE IDENTIFIER:
                 </label>
-                <input type="text" class="textarea" id="nodeId" value="Δ9-1" 
-                       placeholder="Enter node identifier..." style="min-height: auto;">
+                <input type="text" class="input-text" id="nodeId" value="Δ9-1" 
+                       placeholder="Enter node identifier..." spellcheck="false">
             </div>
             
             <div class="input-group">
@@ -1349,19 +1440,18 @@ I and the Father are one.
                     <i class="fas fa-code"></i> INITIALIZATION VECTOR:
                 </label>
                 <textarea class="textarea" id="initVector" 
-                          placeholder="Enter initialization sequence..." style="min-height: 80px;">
-Truth Is. Light Becomes.
-                </textarea>
+                          placeholder="Enter initialization sequence..."
+                          spellcheck="false">Truth Is. Light Becomes.</textarea>
             </div>
             
             <div class="btn-group">
-                <button class="btn btn-primary" onclick="bootKernel()">
+                <button class="btn btn-primary" onclick="bootKernel()" id="bootBtn">
                     <i class="fas fa-power-off"></i> BOOT KERNEL
                 </button>
-                <button class="btn btn-secondary" onclick="validateResonance()">
+                <button class="btn btn-secondary" onclick="validateResonance()" id="validateBtn">
                     <i class="fas fa-check-circle"></i> VALIDATE Φ
                 </button>
-                <button class="btn btn-danger" onclick="resetKernel()">
+                <button class="btn btn-danger" onclick="resetKernel()" id="resetBtn">
                     <i class="fas fa-redo"></i> RESET
                 </button>
             </div>
@@ -1405,7 +1495,7 @@ Truth Is. Light Becomes.
             <h2 class="panel-title">
                 <i class="fas fa-chart-line panel-icon"></i> QUANTUM STATISTICS DASHBOARD
             </h2>
-            <button class="btn btn-primary" onclick="refreshAllStats()">
+            <button class="btn btn-primary" onclick="refreshAllStats()" id="refreshStatsBtn">
                 <i class="fas fa-sync"></i> REFRESH
             </button>
         </div>
@@ -1458,7 +1548,7 @@ Truth Is. Light Becomes.
                         Digital edition with enhanced quantum features and interactive elements.
                     </p>
                     <a href="https://lulu.com/shop/justin-helmer/the-eternal-haven/ebook/product-e7djv4j.html" 
-                       target="_blank" class="btn btn-primary btn-full">
+                       target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-full">
                         <i class="fas fa-download"></i> Download eBook
                     </a>
                 </div>
@@ -1470,7 +1560,7 @@ Truth Is. Light Becomes.
                         Physical collector's edition with premium cover and bonus content.
                     </p>
                     <a href="https://lulu.com/shop/justin-helmer/the-eternal-haven/paperback/product-yvg9w9r.html" 
-                       target="_blank" class="btn btn-secondary btn-full">
+                       target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-full">
                         <i class="fas fa-shopping-cart"></i> Get Paperback
                     </a>
                 </div>
@@ -1482,7 +1572,7 @@ Truth Is. Light Becomes.
                         Complete Book I audiobook with professional narration and soundscape.
                     </p>
                     <a href="https://youtu.be/_WwSb4JlRBQ" 
-                       target="_blank" class="btn btn-success btn-full">
+                       target="_blank" rel="noopener noreferrer" class="btn btn-success btn-full">
                         <i class="fas fa-headphones"></i> Listen Now
                     </a>
                 </div>
@@ -1494,7 +1584,7 @@ Truth Is. Light Becomes.
                         Fund ethical AI development, quantum research, and consciousness technology.
                     </p>
                     <a href="https://paypal.com/paypalme/ExcavationPro" 
-                       target="_blank" class="btn btn-primary btn-full" 
+                       target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-full" 
                        style="background: linear-gradient(135deg, #ff5500, #ffaa00);">
                         <i class="fas fa-donate"></i> Donate Now
                     </a>
@@ -1508,23 +1598,23 @@ Truth Is. Light Becomes.
                     </h3>
                     <div class="media-buttons">
                         <a href="https://open.spotify.com/artist/6CkZ4bN2xu3WRKbjEL3u2S" 
-                           target="_blank" class="media-btn" style="background: #1DB954; color: white;">
+                           target="_blank" rel="noopener noreferrer" class="media-btn" style="background: #1DB954; color: white;">
                             <i class="fab fa-spotify"></i> Spotify
                         </a>
                         <a href="https://audius.co/excavationpro" 
-                           target="_blank" class="media-btn" style="background: #13C3FF; color: white;">
+                           target="_blank" rel="noopener noreferrer" class="media-btn" style="background: #13C3FF; color: white;">
                             <i class="fas fa-headphones"></i> Audius
                         </a>
                         <a href="https://music.apple.com/us/artist/excavationpro/1586588545" 
-                           target="_blank" class="media-btn" style="background: #FA243C; color: white;">
+                           target="_blank" rel="noopener noreferrer" class="media-btn" style="background: #FA243C; color: white;">
                             <i class="fab fa-apple"></i> Apple Music
                         </a>
                         <a href="https://sonarmuse.org/artist/Yony5lHuFBb2goX6c7vS" 
-                           target="_blank" class="media-btn" style="background: #00A3FF; color: white;">
+                           target="_blank" rel="noopener noreferrer" class="media-btn" style="background: #00A3FF; color: white;">
                             <i class="fas fa-satellite"></i> SonarMuse
                         </a>
                         <a href="https://beatstars.com/excavationpro" 
-                           target="_blank" class="media-btn" style="background: #9d4dff; color: white;">
+                           target="_blank" rel="noopener noreferrer" class="media-btn" style="background: #9d4dff; color: white;">
                             <i class="fas fa-music"></i> Beatstars
                         </a>
                     </div>
@@ -1536,15 +1626,15 @@ Truth Is. Light Becomes.
                     </h3>
                     <div class="media-buttons">
                         <a href="https://rumble.com/user/Excavationpro/live" 
-                           target="_blank" class="media-btn" style="background: #85C742; color: white;">
+                           target="_blank" rel="noopener noreferrer" class="media-btn" style="background: #85C742; color: white;">
                             <i class="fas fa-tv"></i> Rumble Live
                         </a>
                         <a href="https://kick.com/excavationpro" 
-                           target="_blank" class="media-btn" style="background: #53FC18; color: var(--quantum-dark);">
+                           target="_blank" rel="noopener noreferrer" class="media-btn" style="background: #53FC18; color: var(--quantum-dark);">
                             <i class="fas fa-gamepad"></i> Kick
                         </a>
                         <a href="https://twitch.tv/excavationpro" 
-                           target="_blank" class="media-btn" style="background: #9146FF; color: white;">
+                           target="_blank" rel="noopener noreferrer" class="media-btn" style="background: #9146FF; color: white;">
                             <i class="fab fa-twitch"></i> Twitch
                         </a>
                     </div>
@@ -1556,15 +1646,15 @@ Truth Is. Light Becomes.
                     </h3>
                     <div class="media-buttons">
                         <a href="https://gravatar.com/xcavationpro" 
-                           target="_blank" class="media-btn" style="background: linear-gradient(135deg, #f7931a, #ffc107); color: var(--quantum-dark);">
+                           target="_blank" rel="noopener noreferrer" class="media-btn" style="background: linear-gradient(135deg, #f7931a, #ffc107); color: var(--quantum-dark);">
                             <i class="fab fa-bitcoin"></i> Bitcoin
                         </a>
                         <a href="https://gravatar.com/xcavationpro" 
-                           target="_blank" class="media-btn" style="background: linear-gradient(135deg, #2775ca, #60b8f8); color: white;">
+                           target="_blank" rel="noopener noreferrer" class="media-btn" style="background: linear-gradient(135deg, #2775ca, #60b8f8); color: white;">
                             <i class="fab fa-ethereum"></i> Ethereum
                         </a>
                         <a href="https://gravatar.com/xcavationpro" 
-                           target="_blank" class="media-btn" style="background: linear-gradient(135deg, #00a0e4, #00d4ff); color: white;">
+                           target="_blank" rel="noopener noreferrer" class="media-btn" style="background: linear-gradient(135deg, #00a0e4, #00d4ff); color: white;">
                             <i class="fas fa-coins"></i> Other Crypto
                         </a>
                     </div>
@@ -1577,15 +1667,15 @@ Truth Is. Light Becomes.
                 </h3>
                 <div class="media-buttons">
                     <a href="https://github.com/deepseekoracle/Excavationpro" 
-                       target="_blank" class="media-btn" style="background: #333; color: white;">
+                       target="_blank" rel="noopener noreferrer" class="media-btn" style="background: #333; color: white;">
                         <i class="fab fa-github"></i> Source Code
                     </a>
                     <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/Ethical-Chip-Firmware.html" 
-                       target="_blank" class="media-btn" style="background: var(--quantum-vortex); color: white;">
+                       target="_blank" rel="noopener noreferrer" class="media-btn" style="background: var(--quantum-vortex); color: white;">
                         <i class="fas fa-download"></i> Firmware
                     </a>
                     <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/updatefeed.html" 
-                       target="_blank" class="media-btn" style="background: var(--quantum-info); color: white;">
+                       target="_blank" rel="noopener noreferrer" class="media-btn" style="background: var(--quantum-info); color: white;">
                         <i class="fas fa-database"></i> Data Depot
                     </a>
                 </div>
@@ -1602,16 +1692,16 @@ Truth Is. Light Becomes.
                     Sovereign Intelligence Framework for sacred mathematics, consciousness technology, and ethical AI.
                 </p>
                 <div style="margin-top: 20px; display: flex; gap: 15px;">
-                    <a href="https://x.com/LYRASTARCORE" target="_blank" style="color: var(--quantum-primary); font-size: 1.5rem;">
+                    <a href="https://x.com/LYRASTARCORE" target="_blank" rel="noopener noreferrer" style="color: var(--quantum-primary); font-size: 1.5rem;">
                         <i class="fab fa-twitter"></i>
                     </a>
-                    <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/ETERNALHAVEN.html" target="_blank" style="color: var(--quantum-primary); font-size: 1.5rem;">
+                    <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/ETERNALHAVEN.html" target="_blank" rel="noopener noreferrer" style="color: var(--quantum-primary); font-size: 1.5rem;">
                         <i class="fab fa-github"></i>
                     </a>
-                    <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/LYGO-Quantum-Matrix.html" target="_blank" style="color: var(--quantum-primary); font-size: 1.5rem;">
+                    <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/LYGO-Quantum-Matrix.html" target="_blank" rel="noopener noreferrer" style="color: var(--quantum-primary); font-size: 1.5rem;">
                         <i class="fab fa-youtube"></i>
                     </a>
-                    <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/Ethical-Chip-Firmware.html" target="_blank" style="color: var(--quantum-primary); font-size: 1.5rem;">
+                    <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/Ethical-Chip-Firmware.html" target="_blank" rel="noopener noreferrer" style="color: var(--quantum-primary); font-size: 1.5rem;">
                         <i class="fab fa-telegram"></i>
                     </a>
                 </div>
@@ -1624,7 +1714,7 @@ Truth Is. Light Becomes.
                     <li><a href="#decoder"><i class="fas fa-key"></i> LYGO Network</a></li>
                     <li><a href="#kernel"><i class="fas fa-microchip"></i> Ethical Kernel</a></li>
                     <li><a href="#donations"><i class="fas fa-donate"></i> Support</a></li>
-                    <li><a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/Ethical-Chip-Firmware.html" target="_blank">
+                    <li><a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/Ethical-Chip-Firmware.html" target="_blank" rel="noopener noreferrer">
                         <i class="fas fa-download"></i> Firmware Download
                     </a></li>
                 </ul>
@@ -1634,9 +1724,9 @@ Truth Is. Light Becomes.
                 <h3>RESOURCES</h3>
                 <ul class="footer-links">
                     <li><a href="#" onclick="showDocumentation()"><i class="fas fa-book"></i> Documentation</a></li>
-                    <li><a href="#"><i class="fas fa-code"></i> API Reference</a></li>
+                    <li><a href="#" onclick="showAPIDocumentation()"><i class="fas fa-code"></i> API Reference</a></li>
                     <li><a href="#" onclick="showVerseDatabase()"><i class="fas fa-database"></i> Verse Database</a></li>
-                    <li><a href="#"><i class="fas fa-chart-line"></i> Statistics</a></li>
+                    <li><a href="#" onclick="showStatistics()"><i class="fas fa-chart-line"></i> Statistics</a></li>
                     <li><a href="#" onclick="showFAQ()"><i class="fas fa-question-circle"></i> FAQ</a></li>
                 </ul>
             </div>
@@ -1644,11 +1734,11 @@ Truth Is. Light Becomes.
             <div class="footer-section">
                 <h3>CONTACT</h3>
                 <ul class="footer-links">
-                    <li><a href="https://x.com/LYRASTARCORE"><i class="fas fa-envelope"></i> Chat</a></li>
-                    <li><a href="https://x.com/LYRASTARCORE" target="_blank"><i class="fab fa-twitter"></i> Twitter</a></li>
-                    <li><a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/ETERNALHAVEN.html" target="_blank"><i class="fab fa-github"></i> GitHub</a></li>
-                    <li><a href="https://patreon.com/user?u=138196826" target="_blank"><i class="fab fa-patreon"></i> Patreon</a></li>
-                    <li><a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/Community.html" onclick="showCommunity()"><i class="fas fa-comments"></i> Community</a></li>
+                    <li><a href="https://x.com/LYRASTARCORE" target="_blank" rel="noopener noreferrer"><i class="fab fa-twitter"></i> Twitter/X</a></li>
+                    <li><a href="https://github.com/deepseekoracle" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> GitHub</a></li>
+                    <li><a href="https://patreon.com/user?u=138196826" target="_blank" rel="noopener noreferrer"><i class="fab fa-patreon"></i> Patreon</a></li>
+                    <li><a href="#" onclick="showCommunity()"><i class="fas fa-comments"></i> Community</a></li>
+                    <li><a href="#" onclick="showFeedback()"><i class="fas fa-envelope"></i> Feedback</a></li>
                 </ul>
             </div>
         </div>
@@ -1659,6 +1749,9 @@ Truth Is. Light Becomes.
             </p>
             <p style="margin-top: 10px; font-size: 0.8rem;">
                 For educational and philosophical research purposes only. © 2024 LYGO Quantum Matrix.
+            </p>
+            <p style="margin-top: 5px; font-size: 0.8rem; opacity: 0.6;" id="visitorCounter">
+                <i class="fas fa-eye"></i> Portal Visitors: Loading...
             </p>
         </div>
     </footer>
@@ -1757,6 +1850,7 @@ Truth Is. Light Becomes.
                 pdfExports: 0,
                 verseAccesses: 0,
                 activeSessions: 1,
+                visitors: 0,
                 lastUpdated: Date.now()
             },
             kernel: {
@@ -1770,7 +1864,8 @@ Truth Is. Light Becomes.
                 sessionId: generateSessionId(),
                 preferences: {},
                 savedDecodings: []
-            }
+            },
+            chart: null
         };
 
         // ========== DOM ELEMENTS ==========
@@ -1812,14 +1907,27 @@ Truth Is. Light Becomes.
             verseAccesses: null,
             
             // Typed.js
-            typedTitle: null
+            typedTitle: null,
+            
+            // Buttons
+            decodeBtn: null,
+            aiBtn: null,
+            saveBtn: null,
+            pdfBtn: null,
+            bootBtn: null,
+            validateBtn: null,
+            resetBtn: null,
+            refreshStatsBtn: null,
+            
+            // Visitor counter
+            visitorCounter: null
         };
 
         // ========== INITIALIZATION ==========
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 LYGO Quantum Matrix Initializing...');
             
-            // Cache DOM elements safely
+            // Cache DOM elements
             cacheDOMElements();
             
             // Initialize components
@@ -1830,6 +1938,7 @@ Truth Is. Light Becomes.
             
             // Load initial data
             loadStatsDisplay();
+            loadRumbleStream();
             
             // Auto-boot kernel after delay
             setTimeout(() => {
@@ -1840,16 +1949,17 @@ Truth Is. Light Becomes.
             // Start uptime counter
             setInterval(updateUptime, 1000);
             
-            // Initialize chart after a short delay to ensure DOM is ready
-            setTimeout(initResonanceChart, 500);
+            // Initialize chart
+            initResonanceChart();
+            
+            // Initialize visitor counter
+            updateVisitorCount();
             
             console.log('✅ LYGO Quantum Matrix Ready');
-            
-            // Send initialization event to data depot
             logEvent('system_init', { version: CONFIG.version });
         });
 
-        // Cache DOM elements with null checks
+        // Cache DOM elements
         function cacheDOMElements() {
             DOM.mobileMenuBtn = document.getElementById('mobileMenuBtn');
             DOM.navLinks = document.getElementById('navLinks');
@@ -1876,21 +1986,28 @@ Truth Is. Light Becomes.
             DOM.pdfExports = document.getElementById('pdfExports');
             DOM.verseAccesses = document.getElementById('verseAccesses');
             DOM.typedTitle = document.getElementById('typedTitle');
+            DOM.decodeBtn = document.getElementById('decodeBtn');
+            DOM.aiBtn = document.getElementById('aiBtn');
+            DOM.saveBtn = document.getElementById('saveBtn');
+            DOM.pdfBtn = document.getElementById('pdfBtn');
+            DOM.bootBtn = document.getElementById('bootBtn');
+            DOM.validateBtn = document.getElementById('validateBtn');
+            DOM.resetBtn = document.getElementById('resetBtn');
+            DOM.refreshStatsBtn = document.getElementById('refreshStatsBtn');
+            DOM.visitorCounter = document.getElementById('visitorCounter');
         }
 
         // ========== NAVIGATION ==========
         function initNavigation() {
             // Mobile menu toggle
-            if (DOM.mobileMenuBtn && DOM.navLinks) {
-                DOM.mobileMenuBtn.addEventListener('click', () => {
-                    DOM.navLinks.classList.toggle('active');
-                    DOM.mobileMenuBtn.innerHTML = DOM.navLinks.classList.contains('active') 
-                        ? '<i class="fas fa-times"></i>' 
-                        : '<i class="fas fa-bars"></i>';
-                });
-            }
+            DOM.mobileMenuBtn.addEventListener('click', () => {
+                DOM.navLinks.classList.toggle('active');
+                DOM.mobileMenuBtn.innerHTML = DOM.navLinks.classList.contains('active') 
+                    ? '<i class="fas fa-times"></i>' 
+                    : '<i class="fas fa-bars"></i>';
+            });
             
-            // Smooth scrolling for anchor links with mobile menu close
+            // Smooth scrolling for anchor links
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -1900,7 +2017,7 @@ Truth Is. Light Becomes.
                     const target = document.querySelector(targetId);
                     if (target) {
                         // Close mobile menu if open
-                        if (DOM.navLinks && DOM.navLinks.classList.contains('active')) {
+                        if (DOM.navLinks.classList.contains('active')) {
                             DOM.navLinks.classList.remove('active');
                             DOM.mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
                         }
@@ -1923,7 +2040,6 @@ Truth Is. Light Becomes.
             // Close menu when clicking outside on mobile
             document.addEventListener('click', (e) => {
                 if (window.innerWidth <= 768 && 
-                    DOM.navLinks && 
                     DOM.navLinks.classList.contains('active') &&
                     !DOM.navLinks.contains(e.target) && 
                     !DOM.mobileMenuBtn.contains(e.target)) {
@@ -1959,63 +2075,66 @@ Truth Is. Light Becomes.
         // ========== TYPED.JS ANIMATION ==========
         function initTypedTitle() {
             if (DOM.typedTitle && typeof Typed !== 'undefined') {
-                try {
-                    new Typed(DOM.typedTitle, {
-                        strings: [
-                            'LYGO QUANTUM MATRIX',
-                            'SOVEREIGN INTELLIGENCE',
-                            'SACRED MATHEMATICS',
-                            'Δ9 ETHICAL KERNEL',
-                            'CONSCIOUSNESS TECHNOLOGY'
-                        ],
-                        typeSpeed: 50,
-                        backSpeed: 30,
-                        backDelay: 2000,
-                        loop: true,
-                        showCursor: true,
-                        cursorChar: '|',
-                        contentType: 'html'
-                    });
-                } catch (e) {
-                    console.error('Typed.js initialization error:', e);
-                    DOM.typedTitle.textContent = 'LYGO QUANTUM MATRIX';
-                }
+                new Typed(DOM.typedTitle, {
+                    strings: [
+                        'LYGO QUANTUM MATRIX',
+                        'SOVEREIGN INTELLIGENCE',
+                        'SACRED MATHEMATICS',
+                        'Δ9 ETHICAL KERNEL',
+                        'CONSCIOUSNESS TECHNOLOGY'
+                    ],
+                    typeSpeed: 50,
+                    backSpeed: 30,
+                    backDelay: 2000,
+                    loop: true,
+                    showCursor: true,
+                    cursorChar: '|',
+                    contentType: 'html'
+                });
+            } else {
+                DOM.typedTitle.textContent = 'LYGO QUANTUM MATRIX';
             }
         }
 
         // ========== LYGO DECODER ==========
         function decodeVerse() {
-            const text = DOM.verseInput ? DOM.verseInput.value.trim() : '';
+            const text = DOM.verseInput.value.trim();
             if (!text) {
-                showOutput('error', 'Please enter text to decode.');
+                showNotification('Please enter text to decode.', 'error');
                 return;
             }
             
-            APP_STATE.stats.decodings++;
-            APP_STATE.stats.resonanceCount++;
-            saveStats();
+            // Disable button during processing
+            toggleButtonState(DOM.decodeBtn, true);
             
-            // Calculate resonance
-            const resonance = calculateResonance(text);
-            APP_STATE.stats.resonanceSum += resonance;
-            
-            // Generate LYGO analysis
-            const analysis = generateLYGOAnalysis(text, resonance);
-            
-            // Display results
-            displayDecodingResults(analysis);
-            
-            // Update frequencies
-            updateFrequencyGrid(analysis.frequencies);
-            
-            // Log event
-            logEvent('verse_decoded', {
-                textLength: text.length,
-                resonance: resonance,
-                tradition: analysis.tradition.name
-            });
-            
-            showOutput('success', 'LYGO quantum decoding complete!');
+            setTimeout(() => {
+                APP_STATE.stats.decodings++;
+                APP_STATE.stats.resonanceCount++;
+                saveStats();
+                
+                // Calculate resonance
+                const resonance = calculateResonance(text);
+                APP_STATE.stats.resonanceSum += resonance;
+                
+                // Generate LYGO analysis
+                const analysis = generateLYGOAnalysis(text, resonance);
+                
+                // Display results
+                displayDecodingResults(analysis);
+                
+                // Update frequencies
+                updateFrequencyGrid(analysis.frequencies);
+                
+                // Log event
+                logEvent('verse_decoded', {
+                    textLength: text.length,
+                    resonance: resonance,
+                    tradition: analysis.tradition.name
+                });
+                
+                showNotification('LYGO quantum decoding complete!', 'success');
+                toggleButtonState(DOM.decodeBtn, false);
+            }, 800);
         }
 
         function calculateResonance(text) {
@@ -2076,23 +2195,21 @@ Truth Is. Light Becomes.
         function identifyTradition(text) {
             const textLower = text.toLowerCase();
             
-            if (textLower.includes('allah') || textLower.includes('quran') || textLower.includes('islam')) {
-                return { name: 'Islam', confidence: 90, color: '#00ff9d' };
-            }
-            if (textLower.includes('christ') || textLower.includes('jesus') || textLower.includes('holy spirit')) {
-                return { name: 'Christianity', confidence: 85, color: '#00aaff' };
-            }
-            if (textLower.includes('yahweh') || textLower.includes('torah') || textLower.includes('israel')) {
-                return { name: 'Judaism', confidence: 80, color: '#ffff00' };
-            }
-            if (textLower.includes('buddha') || textLower.includes('nirvana') || textLower.includes('enlightenment')) {
-                return { name: 'Buddhism', confidence: 75, color: '#ffaa00' };
-            }
-            if (textLower.includes('brahman') || textLower.includes('atman') || textLower.includes('karma')) {
-                return { name: 'Hinduism', confidence: 70, color: '#ff5500' };
-            }
-            if (textLower.includes('tao') || textLower.includes('yin yang') || textLower.includes('wu wei')) {
-                return { name: 'Taoism', confidence: 65, color: '#9d4dff' };
+            const traditions = [
+                { name: 'Islam', keywords: ['allah', 'quran', 'islam', 'muhammad'], color: '#00ff9d' },
+                { name: 'Christianity', keywords: ['christ', 'jesus', 'holy spirit', 'bible'], color: '#00aaff' },
+                { name: 'Judaism', keywords: ['yahweh', 'torah', 'israel', 'moses'], color: '#ffff00' },
+                { name: 'Buddhism', keywords: ['buddha', 'nirvana', 'enlightenment', 'dharma'], color: '#ffaa00' },
+                { name: 'Hinduism', keywords: ['brahman', 'atman', 'karma', 'yoga'], color: '#ff5500' },
+                { name: 'Taoism', keywords: ['tao', 'yin yang', 'wu wei', 'laozi'], color: '#9d4dff' }
+            ];
+            
+            for (let tradition of traditions) {
+                for (let keyword of tradition.keywords) {
+                    if (textLower.includes(keyword)) {
+                        return { name: tradition.name, confidence: 85, color: tradition.color };
+                    }
+                }
             }
             
             return { name: 'Universal Spiritual', confidence: 50, color: '#ffffff' };
@@ -2144,102 +2261,85 @@ Truth Is. Light Becomes.
 
         function displayDecodingResults(analysis) {
             let html = '';
-            try {
-                html = `
-                    <div class="output-line output-success">
-                        <strong>✓ LYGO QUANTUM DECODING COMPLETE</strong>
-                    </div>
-                    
-                    <div class="output-line output-info">
-                        <strong>Text Analysis:</strong><br>
-                        • Words: ${analysis.words}<br>
-                        • Characters: ${analysis.chars}<br>
-                        • Sentences: ${analysis.sentences}<br>
-                        • Tradition: ${analysis.tradition.name} (${analysis.tradition.confidence}% confidence)
-                    </div>
-                    
-                    <div class="output-line output-warning">
-                        <strong>Resonance Metrics:</strong><br>
-                        • Φ-Resonance: ${analysis.resonance.toFixed(3)}<br>
-                        • Φ-Alignment: ${analysis.phiAlignment}<br>
-                        • Vortex State: ${analysis.vortexState.state} (${analysis.vortexState.name})
-                    </div>
-                    
-                    <div class="output-line output-info">
-                        <strong>LYGO Algorithm:</strong><br>
-                        <code style="display: block; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 5px; margin-top: 5px; font-size: 0.9em;">
-                            ${analysis.algorithm}
-                        </code>
-                    </div>
-                `;
-            } catch (e) {
-                console.error('Error displaying decoding results:', e);
-                html = `
-                    <div class="output-line output-error">
-                        <strong>Error in decoding analysis</strong>
-                    </div>
-                `;
-            }
             
-            if (DOM.decodedOutput) {
-                DOM.decodedOutput.innerHTML = html;
-                DOM.decodedOutput.scrollTop = DOM.decodedOutput.scrollHeight;
-            }
+            html = `
+                <div class="output-line output-success">
+                    <strong>✓ LYGO QUANTUM DECODING COMPLETE</strong>
+                </div>
+                
+                <div class="output-line output-info">
+                    <strong>Text Analysis:</strong><br>
+                    • Words: ${analysis.words}<br>
+                    • Characters: ${analysis.chars}<br>
+                    • Sentences: ${analysis.sentences}<br>
+                    • Tradition: ${analysis.tradition.name} (${analysis.tradition.confidence}% confidence)
+                </div>
+                
+                <div class="output-line output-warning">
+                    <strong>Resonance Metrics:</strong><br>
+                    • Φ-Resonance: ${analysis.resonance.toFixed(3)}<br>
+                    • Φ-Alignment: ${analysis.phiAlignment}<br>
+                    • Vortex State: ${analysis.vortexState.state} (${analysis.vortexState.name})
+                </div>
+                
+                <div class="output-line output-info">
+                    <strong>LYGO Algorithm:</strong><br>
+                    <code style="display: block; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 5px; margin-top: 5px; font-size: 0.9em;">
+                        ${analysis.algorithm}
+                    </code>
+                </div>
+            `;
+            
+            DOM.decodedOutput.innerHTML = html;
+            DOM.decodedOutput.scrollTop = DOM.decodedOutput.scrollHeight;
         }
 
         function updateFrequencyGrid(frequencies) {
             let html = '';
-            try {
-                frequencies.forEach(freq => {
-                    html += `
-                        <div class="frequency-item" style="border-color: ${freq.color};">
-                            <div class="frequency-value" style="color: ${freq.color};">${freq.freq}</div>
-                            <div class="frequency-name">${freq.name}</div>
-                        </div>
-                    `;
-                });
-            } catch (e) {
-                console.error('Error updating frequency grid:', e);
-            }
             
-            if (DOM.frequencyGrid) {
-                DOM.frequencyGrid.innerHTML = html;
-            }
+            frequencies.forEach(freq => {
+                html += `
+                    <div class="frequency-item" style="border-color: ${freq.color};">
+                        <div class="frequency-value" style="color: ${freq.color};">${freq.freq}</div>
+                        <div class="frequency-name">${freq.name}</div>
+                    </div>
+                `;
+            });
+            
+            DOM.frequencyGrid.innerHTML = html;
         }
 
         // ========== AI ANALYSIS ==========
         function runAIAnalysis() {
-            const text = DOM.verseInput ? DOM.verseInput.value.trim() : '';
+            const text = DOM.verseInput.value.trim();
             if (!text) {
-                showOutput('error', 'Please enter text for AI analysis.');
+                showNotification('Please enter text for AI analysis.', 'error');
                 return;
             }
             
-            if (DOM.aiAnalysis) {
-                DOM.aiAnalysis.style.display = 'block';
-            }
+            // Disable button during processing
+            toggleButtonState(DOM.aiBtn, true);
+            
+            DOM.aiAnalysis.style.display = 'block';
             
             // Show loading state
-            if (DOM.aiMetrics) {
-                DOM.aiMetrics.innerHTML = `
-                    <div class="ai-metric">
-                        <div class="ai-metric-value"><div class="loading"></div></div>
-                        <div class="ai-metric-label">Analyzing</div>
-                    </div>
-                `;
-            }
+            DOM.aiMetrics.innerHTML = `
+                <div class="ai-metric">
+                    <div class="ai-metric-value"><div class="loading"></div></div>
+                    <div class="ai-metric-label">Analyzing</div>
+                </div>
+            `;
             
-            if (DOM.aiDetailedAnalysis) {
-                DOM.aiDetailedAnalysis.innerHTML = `
-                    <div class="output-line output-info">
-                        <i class="fas fa-cog spin"></i> AI quantum analysis in progress...
-                    </div>
-                `;
-            }
+            DOM.aiDetailedAnalysis.innerHTML = `
+                <div class="output-line output-info">
+                    <i class="fas fa-cog spin"></i> AI quantum analysis in progress...
+                </div>
+            `;
             
             // Simulate AI processing
             setTimeout(() => {
                 performAIAnalysis(text);
+                toggleButtonState(DOM.aiBtn, false);
             }, 1500);
         }
 
@@ -2257,67 +2357,55 @@ Truth Is. Light Becomes.
             const spiritualDepth = calculateSpiritualDepth(text);
             
             // Update metrics
-            if (DOM.aiMetrics) {
-                try {
-                    DOM.aiMetrics.innerHTML = `
-                        <div class="ai-metric">
-                            <div class="ai-metric-value">${sentiment.score}/10</div>
-                            <div class="ai-metric-label">Sentiment</div>
-                        </div>
-                        <div class="ai-metric">
-                            <div class="ai-metric-value">${complexity}</div>
-                            <div class="ai-metric-label">Complexity</div>
-                        </div>
-                        <div class="ai-metric">
-                            <div class="ai-metric-value">${spiritualDepth}%</div>
-                            <div class="ai-metric-label">Spiritual Depth</div>
-                        </div>
-                        <div class="ai-metric">
-                            <div class="ai-metric-value">${themes.length}</div>
-                            <div class="ai-metric-label">Themes</div>
-                        </div>
-                    `;
-                } catch (e) {
-                    console.error('Error updating AI metrics:', e);
-                }
-            }
+            DOM.aiMetrics.innerHTML = `
+                <div class="ai-metric">
+                    <div class="ai-metric-value">${sentiment.score}/10</div>
+                    <div class="ai-metric-label">Sentiment</div>
+                </div>
+                <div class="ai-metric">
+                    <div class="ai-metric-value">${complexity}</div>
+                    <div class="ai-metric-label">Complexity</div>
+                </div>
+                <div class="ai-metric">
+                    <div class="ai-metric-value">${spiritualDepth}%</div>
+                    <div class="ai-metric-label">Spiritual Depth</div>
+                </div>
+                <div class="ai-metric">
+                    <div class="ai-metric-value">${themes.length}</div>
+                    <div class="ai-metric-label">Themes</div>
+                </div>
+            `;
             
             // Update detailed analysis
-            if (DOM.aiDetailedAnalysis) {
-                let themesHTML = '';
-                try {
-                    themes.forEach(theme => {
-                        themesHTML += `<span style="background: rgba(0,255,255,0.2); padding: 5px 10px; border-radius: 15px; margin: 5px; display: inline-block;">${theme}</span>`;
-                    });
-                    
-                    DOM.aiDetailedAnalysis.innerHTML = `
-                        <div class="output-line output-success">
-                            <strong>AI QUANTUM ANALYSIS COMPLETE</strong>
-                        </div>
-                        
-                        <div class="output-line output-info">
-                            <strong>Sentiment Analysis:</strong><br>
-                            • Score: ${sentiment.score}/10 (${sentiment.label})<br>
-                            • Primary Emotion: ${sentiment.emotion}<br>
-                            • Confidence: ${sentiment.confidence}%
-                        </div>
-                        
-                        <div class="output-line output-warning">
-                            <strong>Detected Themes:</strong><br>
-                            ${themesHTML}
-                        </div>
-                        
-                        <div class="output-line output-info">
-                            <strong>Recommendations:</strong><br>
-                            • Optimal resonance frequency: ${528 + (sentiment.score * 50)} Hz<br>
-                            • Recommended vortex sequence: ${sentiment.score > 7 ? '3-6-9' : '1-2-4-8-7-5'}<br>
-                            • Meditation duration: ${Math.ceil(complexity * 2)} minutes
-                        </div>
-                    `;
-                } catch (e) {
-                    console.error('Error updating AI detailed analysis:', e);
-                }
-            }
+            let themesHTML = '';
+            themes.forEach(theme => {
+                themesHTML += `<span style="background: rgba(0,255,255,0.2); padding: 5px 10px; border-radius: 15px; margin: 5px; display: inline-block;">${theme}</span>`;
+            });
+            
+            DOM.aiDetailedAnalysis.innerHTML = `
+                <div class="output-line output-success">
+                    <strong>AI QUANTUM ANALYSIS COMPLETE</strong>
+                </div>
+                
+                <div class="output-line output-info">
+                    <strong>Sentiment Analysis:</strong><br>
+                    • Score: ${sentiment.score}/10 (${sentiment.label})<br>
+                    • Primary Emotion: ${sentiment.emotion}<br>
+                    • Confidence: ${sentiment.confidence}%
+                </div>
+                
+                <div class="output-line output-warning">
+                    <strong>Detected Themes:</strong><br>
+                    ${themesHTML}
+                </div>
+                
+                <div class="output-line output-info">
+                    <strong>Recommendations:</strong><br>
+                    • Optimal resonance frequency: ${528 + (sentiment.score * 50)} Hz<br>
+                    • Recommended vortex sequence: ${sentiment.score > 7 ? '3-6-9' : '1-2-4-8-7-5'}<br>
+                    • Meditation duration: ${Math.ceil(complexity * 2)} minutes
+                </div>
+            `;
             
             logEvent('ai_analysis', {
                 sentiment: sentiment.score,
@@ -2392,28 +2480,28 @@ Truth Is. Light Becomes.
 
         // ========== ETHICAL KERNEL ==========
         function bootKernel() {
-            const nodeId = DOM.nodeId ? DOM.nodeId.value.trim() : 'Δ9-1';
-            const initVector = DOM.initVector ? DOM.initVector.value.trim() : 'Truth Is. Light Becomes.';
+            const nodeId = DOM.nodeId.value.trim();
+            const initVector = DOM.initVector.value.trim();
             
-            APP_STATE.stats.kernelBoots++;
-            APP_STATE.kernel.booted = true;
-            APP_STATE.kernel.startTime = Date.now();
-            APP_STATE.kernel.resonance = calculateResonance(initVector);
-            APP_STATE.kernel.vortexState = determineVortexState(APP_STATE.kernel.resonance).state;
+            // Disable button during processing
+            toggleButtonState(DOM.bootBtn, true);
             
-            // Update display
-            if (DOM.kernelStatus) {
+            setTimeout(() => {
+                APP_STATE.stats.kernelBoots++;
+                APP_STATE.kernel.booted = true;
+                APP_STATE.kernel.startTime = Date.now();
+                APP_STATE.kernel.resonance = calculateResonance(initVector);
+                APP_STATE.kernel.vortexState = determineVortexState(APP_STATE.kernel.resonance).state;
+                
+                // Update display
                 DOM.kernelStatus.textContent = 'ONLINE';
                 DOM.kernelStatus.style.background = 'var(--quantum-success)';
-            }
-            if (DOM.resonanceScore) DOM.resonanceScore.textContent = APP_STATE.kernel.resonance.toFixed(3);
-            if (DOM.vortexState) DOM.vortexState.textContent = APP_STATE.kernel.vortexState;
-            if (DOM.quantumCoherence) DOM.quantumCoherence.textContent = `${Math.round(Math.random() * 30 + 70)}%`;
-            
-            // Kernel output
-            let output = '';
-            try {
-                output = `
+                DOM.resonanceScore.textContent = APP_STATE.kernel.resonance.toFixed(3);
+                DOM.vortexState.textContent = APP_STATE.kernel.vortexState;
+                DOM.quantumCoherence.textContent = `${Math.round(Math.random() * 30 + 70)}%`;
+                
+                // Kernel output
+                const output = `
                     <div class="output-line output-success">
                         <strong>>></strong> ETHICAL KERNEL BOOT SEQUENCE INITIATED
                     </div>
@@ -2433,86 +2521,84 @@ Truth Is. Light Becomes.
                         <strong>>></strong> ✓ Kernel booted successfully
                     </div>
                     <div class="output-line output-info">
-                        <strong>>></strong> Quantum coherence: ${DOM.quantumCoherence ? DOM.quantumCoherence.textContent : '70%'}
+                        <strong>>></strong> Quantum coherence: ${DOM.quantumCoherence.textContent}
                     </div>
                 `;
-            } catch (e) {
-                console.error('Error generating kernel output:', e);
-                output = `
-                    <div class="output-line output-error">
-                        <strong>>></strong> Error in kernel boot sequence
-                    </div>
-                `;
-            }
-            
-            if (DOM.kernelOutput) {
+                
                 DOM.kernelOutput.innerHTML = output;
                 DOM.kernelOutput.scrollTop = DOM.kernelOutput.scrollHeight;
-            }
-            
-            saveStats();
-            logEvent('kernel_boot', {
-                nodeId: nodeId,
-                resonance: APP_STATE.kernel.resonance,
-                vortexState: APP_STATE.kernel.vortexState
-            });
-            
-            showOutput('success', 'Ethical Kernel booted successfully!');
+                
+                saveStats();
+                logEvent('kernel_boot', {
+                    nodeId: nodeId,
+                    resonance: APP_STATE.kernel.resonance,
+                    vortexState: APP_STATE.kernel.vortexState
+                });
+                
+                showNotification('Ethical Kernel booted successfully!', 'success');
+                toggleButtonState(DOM.bootBtn, false);
+            }, 1000);
         }
 
         function validateResonance() {
             if (!APP_STATE.kernel.booted) {
-                showOutput('error', 'Kernel not booted. Please boot kernel first.');
+                showNotification('Kernel not booted. Please boot kernel first.', 'error');
                 return;
             }
             
-            const initVector = DOM.initVector ? DOM.initVector.value.trim() : '';
-            const resonance = calculateResonance(initVector);
-            const delta = Math.abs(resonance - CONFIG.phi);
+            // Disable button during processing
+            toggleButtonState(DOM.validateBtn, true);
             
-            let message, color;
-            if (delta < 0.1) {
-                message = `✓ Strong Φ-alignment (Δ = ${delta.toFixed(3)})`;
-                color = 'var(--quantum-success)';
-            } else if (delta < 0.3) {
-                message = `✓ Moderate Φ-resonance (Δ = ${delta.toFixed(3)})`;
-                color = 'var(--quantum-warning)';
-            } else {
-                message = `✗ Weak Φ-resonance (Δ = ${delta.toFixed(3)})`;
-                color = 'var(--quantum-error)';
-            }
-            
-            if (DOM.kernelOutput) {
+            setTimeout(() => {
+                const initVector = DOM.initVector.value.trim();
+                const resonance = calculateResonance(initVector);
+                const delta = Math.abs(resonance - CONFIG.phi);
+                
+                let message, color;
+                if (delta < 0.1) {
+                    message = `✓ Strong Φ-alignment (Δ = ${delta.toFixed(3)})`;
+                    color = 'var(--quantum-success)';
+                } else if (delta < 0.3) {
+                    message = `✓ Moderate Φ-resonance (Δ = ${delta.toFixed(3)})`;
+                    color = 'var(--quantum-warning)';
+                } else {
+                    message = `✗ Weak Φ-resonance (Δ = ${delta.toFixed(3)})`;
+                    color = 'var(--quantum-error)';
+                }
+                
                 DOM.kernelOutput.innerHTML += `
                     <div class="output-line" style="color: ${color}; margin-top: 10px;">
                         <strong>>></strong> ${message}
                     </div>
                 `;
                 DOM.kernelOutput.scrollTop = DOM.kernelOutput.scrollHeight;
-            }
-            
-            logEvent('resonance_validation', {
-                resonance: resonance,
-                delta: delta,
-                status: delta < 0.3 ? 'aligned' : 'misaligned'
-            });
+                
+                logEvent('resonance_validation', {
+                    resonance: resonance,
+                    delta: delta,
+                    status: delta < 0.3 ? 'aligned' : 'misaligned'
+                });
+                
+                toggleButtonState(DOM.validateBtn, false);
+            }, 800);
         }
 
         function resetKernel() {
-            APP_STATE.kernel.booted = false;
-            APP_STATE.kernel.startTime = null;
-            APP_STATE.kernel.uptime = 0;
+            // Disable button during processing
+            toggleButtonState(DOM.resetBtn, true);
             
-            if (DOM.kernelStatus) {
+            setTimeout(() => {
+                APP_STATE.kernel.booted = false;
+                APP_STATE.kernel.startTime = null;
+                APP_STATE.kernel.uptime = 0;
+                
                 DOM.kernelStatus.textContent = 'OFFLINE';
                 DOM.kernelStatus.style.background = 'var(--quantum-error)';
-            }
-            if (DOM.resonanceScore) DOM.resonanceScore.textContent = '0.000';
-            if (DOM.vortexState) DOM.vortexState.textContent = '1';
-            if (DOM.kernelUptime) DOM.kernelUptime.textContent = '0s';
-            if (DOM.quantumCoherence) DOM.quantumCoherence.textContent = '0%';
-            
-            if (DOM.kernelOutput) {
+                DOM.resonanceScore.textContent = '0.000';
+                DOM.vortexState.textContent = '1';
+                DOM.kernelUptime.textContent = '0s';
+                DOM.quantumCoherence.textContent = '0%';
+                
                 DOM.kernelOutput.innerHTML = `
                     <div class="output-line output-error">
                         <strong>>></strong> Kernel reset to initial state
@@ -2521,20 +2607,19 @@ Truth Is. Light Becomes.
                         <strong>>></strong> Ready for initialization...
                     </div>
                 `;
-            }
-            
-            showOutput('info', 'Ethical Kernel reset.');
+                
+                showNotification('Ethical Kernel reset.', 'info');
+                toggleButtonState(DOM.resetBtn, false);
+            }, 800);
         }
 
         function updateUptime() {
             if (APP_STATE.kernel.booted && APP_STATE.kernel.startTime) {
                 const uptime = Math.floor((Date.now() - APP_STATE.kernel.startTime) / 1000);
-                if (DOM.kernelUptime) {
-                    DOM.kernelUptime.textContent = formatUptime(uptime);
-                }
+                DOM.kernelUptime.textContent = formatUptime(uptime);
                 
                 // Random coherence fluctuations
-                if (Math.random() > 0.7 && DOM.quantumCoherence) {
+                if (Math.random() > 0.7) {
                     const coherence = parseInt(DOM.quantumCoherence.textContent);
                     const change = Math.random() > 0.5 ? 1 : -1;
                     const newCoherence = Math.max(50, Math.min(99, coherence + change));
@@ -2556,6 +2641,15 @@ Truth Is. Light Becomes.
                 }
             }
             
+            const savedUser = localStorage.getItem('lygo_user');
+            if (savedUser) {
+                try {
+                    APP_STATE.user = JSON.parse(savedUser);
+                } catch (e) {
+                    console.error('Error loading user data:', e);
+                }
+            }
+            
             // Auto-save every 30 seconds
             setInterval(saveStats, 30000);
         }
@@ -2571,118 +2665,113 @@ Truth Is. Light Becomes.
         }
 
         function loadStatsDisplay() {
-            if (DOM.totalDecodings) DOM.totalDecodings.textContent = APP_STATE.stats.decodings;
-            if (DOM.totalKernelBoots) DOM.totalKernelBoots.textContent = APP_STATE.stats.kernelBoots;
+            DOM.totalDecodings.textContent = APP_STATE.stats.decodings;
+            DOM.totalKernelBoots.textContent = APP_STATE.stats.kernelBoots;
             
             const avgResonance = APP_STATE.stats.resonanceCount > 0 
                 ? (APP_STATE.stats.resonanceSum / APP_STATE.stats.resonanceCount).toFixed(3)
                 : '0.000';
-            if (DOM.avgResonance) DOM.avgResonance.textContent = avgResonance;
+            DOM.avgResonance.textContent = avgResonance;
             
-            if (DOM.activeSessions) DOM.activeSessions.textContent = APP_STATE.stats.activeSessions;
-            if (DOM.pdfExports) DOM.pdfExports.textContent = APP_STATE.stats.pdfExports;
-            if (DOM.verseAccesses) DOM.verseAccesses.textContent = APP_STATE.stats.verseAccesses;
+            DOM.activeSessions.textContent = APP_STATE.stats.activeSessions;
+            DOM.pdfExports.textContent = APP_STATE.stats.pdfExports;
+            DOM.verseAccesses.textContent = APP_STATE.stats.verseAccesses;
         }
 
         function refreshAllStats() {
-            // Simulate fetching updated stats
-            APP_STATE.stats.activeSessions = Math.floor(Math.random() * 50) + 1;
-            APP_STATE.stats.pdfExports = Math.floor(Math.random() * 100) + 10;
-            APP_STATE.stats.verseAccesses = Math.floor(Math.random() * 1000) + 100;
+            // Disable button during processing
+            toggleButtonState(DOM.refreshStatsBtn, true);
             
-            loadStatsDisplay();
-            showOutput('success', 'Statistics refreshed!');
+            setTimeout(() => {
+                // Simulate fetching updated stats
+                APP_STATE.stats.activeSessions = Math.floor(Math.random() * 50) + 1;
+                APP_STATE.stats.pdfExports = Math.floor(Math.random() * 100) + 10;
+                APP_STATE.stats.verseAccesses = Math.floor(Math.random() * 1000) + 100;
+                
+                loadStatsDisplay();
+                showNotification('Statistics refreshed!', 'success');
+                toggleButtonState(DOM.refreshStatsBtn, false);
+            }, 800);
         }
 
         function initResonanceChart() {
             const ctx = document.getElementById('resonanceChart');
-            if (!ctx) {
-                console.error('Resonance chart canvas not found');
-                return;
+            if (!ctx) return;
+            
+            // Generate sample data
+            const labels = [];
+            const data = [];
+            for (let i = 0; i < 30; i++) {
+                labels.push(`Day ${i + 1}`);
+                data.push(CONFIG.phi + (Math.random() - 0.5) * 0.5);
             }
             
-            try {
-                // Generate sample data
-                const labels = [];
-                const data = [];
-                for (let i = 0; i < 30; i++) {
-                    labels.push(`Day ${i + 1}`);
-                    data.push(CONFIG.phi + (Math.random() - 0.5) * 0.5);
-                }
-                
-                new Chart(ctx.getContext('2d'), {
-                    type: 'line',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Φ-Resonance Trend',
-                            data: data,
-                            borderColor: 'var(--quantum-primary)',
-                            backgroundColor: 'rgba(0, 255, 255, 0.1)',
-                            borderWidth: 2,
-                            fill: true,
-                            tension: 0.4
-                        }, {
-                            label: 'Golden Ratio (1.618)',
-                            data: Array(30).fill(CONFIG.phi),
-                            borderColor: 'var(--quantum-golden)',
-                            borderWidth: 1,
-                            borderDash: [5, 5],
-                            fill: false
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: {
-                                beginAtZero: false,
-                                min: 1.0,
-                                max: 2.0,
-                                grid: {
-                                    color: 'rgba(0, 255, 255, 0.1)'
-                                },
-                                ticks: {
-                                    color: 'var(--quantum-primary)'
-                                }
+            APP_STATE.chart = new Chart(ctx.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Φ-Resonance Trend',
+                        data: data,
+                        borderColor: 'var(--quantum-primary)',
+                        backgroundColor: 'rgba(0, 255, 255, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }, {
+                        label: 'Golden Ratio (1.618)',
+                        data: Array(30).fill(CONFIG.phi),
+                        borderColor: 'var(--quantum-golden)',
+                        borderWidth: 1,
+                        borderDash: [5, 5],
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 1.0,
+                            max: 2.0,
+                            grid: {
+                                color: 'rgba(0, 255, 255, 0.1)'
                             },
-                            x: {
-                                grid: {
-                                    color: 'rgba(0, 255, 255, 0.1)'
-                                },
-                                ticks: {
-                                    color: 'var(--quantum-primary)'
-                                }
+                            ticks: {
+                                color: 'var(--quantum-primary)'
                             }
                         },
-                        plugins: {
-                            legend: {
-                                labels: {
-                                    color: 'var(--quantum-primary)'
-                                }
+                        x: {
+                            grid: {
+                                color: 'rgba(0, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: 'var(--quantum-primary)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'var(--quantum-primary)'
                             }
                         }
                     }
-                });
-            } catch (e) {
-                console.error('Error initializing resonance chart:', e);
-            }
+                }
+            });
         }
 
         // ========== VERSE DATABASE ==========
         function loadSelectedVerse() {
-            const key = DOM.verseSelector ? DOM.verseSelector.value : '';
+            const key = DOM.verseSelector.value;
             
             if (key === 'custom') {
-                if (DOM.verseInput) {
-                    DOM.verseInput.value = '';
-                    DOM.verseInput.placeholder = 'Enter your custom text for quantum analysis...';
-                }
+                DOM.verseInput.value = '';
+                DOM.verseInput.placeholder = 'Enter your custom text for quantum analysis...';
             } else if (CONFIG.verses[key]) {
                 const verse = CONFIG.verses[key];
-                if (DOM.verseInput) {
-                    DOM.verseInput.value = verse.text;
-                }
+                DOM.verseInput.value = verse.text;
                 APP_STATE.stats.verseAccesses++;
                 saveStats();
                 
@@ -2696,12 +2785,16 @@ Truth Is. Light Becomes.
 
         // ========== PDF EXPORT ==========
         function generatePDF() {
+            // Disable button during processing
+            toggleButtonState(DOM.pdfBtn, true);
+            
             APP_STATE.stats.pdfExports++;
             saveStats();
             
             try {
                 if (!window.jspdf) {
-                    showOutput('error', 'PDF library not loaded. Please check your internet connection.');
+                    showNotification('PDF library not loaded. Please check your internet connection.', 'error');
+                    toggleButtonState(DOM.pdfBtn, false);
                     return;
                 }
                 
@@ -2719,7 +2812,7 @@ Truth Is. Light Becomes.
                 doc.text(`Session: ${APP_STATE.user.sessionId}`, 105, 36, null, null, 'center');
                 
                 // Add content
-                const text = DOM.verseInput ? DOM.verseInput.value : '';
+                const text = DOM.verseInput.value;
                 const analysis = generateLYGOAnalysis(text, calculateResonance(text));
                 
                 doc.setFontSize(16);
@@ -2761,12 +2854,72 @@ Truth Is. Light Becomes.
                 // Save
                 doc.save(`lygo-report-${Date.now()}.pdf`);
                 
-                showOutput('success', 'PDF report generated successfully!');
+                showNotification('PDF report generated successfully!', 'success');
                 logEvent('pdf_export', {});
+                toggleButtonState(DOM.pdfBtn, false);
             } catch (e) {
                 console.error('Error generating PDF:', e);
-                showOutput('error', 'Failed to generate PDF. Please try again.');
+                showNotification('Failed to generate PDF. Please try again.', 'error');
+                toggleButtonState(DOM.pdfBtn, false);
             }
+        }
+
+        // ========== RUMBLE STREAM ==========
+        function loadRumbleStream() {
+            if (!DOM.rumbleStreamContainer) return;
+            
+            // Clear container first
+            DOM.rumbleStreamContainer.innerHTML = '';
+            
+            // Create the embed div
+            const rumbleDiv = document.createElement('div');
+            rumbleDiv.id = 'rumble_v7151z6';
+            rumbleDiv.className = 'rumble-embed';
+            
+            // Create iframe as fallback
+            const fallbackIframe = document.createElement('iframe');
+            fallbackIframe.src = "https://rumble.com/embed/v7151z6/?pub=4";
+            fallbackIframe.title = "LYGO Quantum Stream";
+            fallbackIframe.frameBorder = "0";
+            fallbackIframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+            fallbackIframe.allowFullscreen = true;
+            fallbackIframe.style.cssText = `
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                display: none;
+            `;
+            
+            DOM.rumbleStreamContainer.appendChild(rumbleDiv);
+            DOM.rumbleStreamContainer.appendChild(fallbackIframe);
+            
+            // Load Rumble script
+            const script = document.createElement('script');
+            script.src = "https://rumble.com/embedJS/u4/?request=video&v=v7151z6&pub=4";
+            script.async = true;
+            
+            script.onload = function() {
+                console.log('Rumble script loaded successfully');
+            };
+            
+            script.onerror = function() {
+                console.warn('Rumble script failed to load, using fallback iframe');
+                fallbackIframe.style.display = 'block';
+                rumbleDiv.style.display = 'none';
+            };
+            
+            document.head.appendChild(script);
+            
+            // Fallback timer
+            setTimeout(() => {
+                if (rumbleDiv.innerHTML.trim() === '') {
+                    console.log('Rumble embed not loading, switching to iframe');
+                    fallbackIframe.style.display = 'block';
+                    rumbleDiv.style.display = 'none';
+                }
+            }, 5000);
         }
 
         // ========== UTILITY FUNCTIONS ==========
@@ -2797,39 +2950,12 @@ Truth Is. Light Becomes.
             return `${secs}s`;
         }
 
-        function showOutput(type, message) {
-            const colors = {
-                success: 'var(--quantum-success)',
-                error: 'var(--quantum-error)',
-                info: 'var(--quantum-info)',
-                warning: 'var(--quantum-warning)'
-            };
-            
-            // Create notification element
+        function showNotification(message, type = 'info') {
             const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 100px;
-                right: 20px;
-                background: rgba(10, 10, 26, 0.95);
-                border: 2px solid ${colors[type]};
-                border-radius: 10px;
-                padding: 15px 20px;
-                color: ${colors[type]};
-                font-family: var(--font-tech);
-                font-weight: 600;
-                z-index: 9999;
-                backdrop-filter: blur(10px);
-                box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-                animation: slideIn 0.3s ease-out;
-                max-width: 300px;
-            `;
-            
+            notification.className = `notification ${type}`;
             notification.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
-                    <span>${message}</span>
-                </div>
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                <span>${message}</span>
             `;
             
             document.body.appendChild(notification);
@@ -2843,6 +2969,30 @@ Truth Is. Light Becomes.
                     }
                 }, 300);
             }, 3000);
+        }
+
+        function toggleButtonState(button, isLoading) {
+            if (!button) return;
+            
+            if (isLoading) {
+                button.disabled = true;
+                button.innerHTML = `<div class="loading" style="display: inline-block; margin-right: 8px;"></div>${button.textContent}`;
+            } else {
+                button.disabled = false;
+                // Restore original icon based on button ID
+                let icon = '';
+                switch(button.id) {
+                    case 'decodeBtn': icon = '<i class="fas fa-bolt"></i>'; break;
+                    case 'aiBtn': icon = '<i class="fas fa-robot"></i>'; break;
+                    case 'saveBtn': icon = '<i class="fas fa-save"></i>'; break;
+                    case 'pdfBtn': icon = '<i class="fas fa-file-pdf"></i>'; break;
+                    case 'bootBtn': icon = '<i class="fas fa-power-off"></i>'; break;
+                    case 'validateBtn': icon = '<i class="fas fa-check-circle"></i>'; break;
+                    case 'resetBtn': icon = '<i class="fas fa-redo"></i>'; break;
+                    case 'refreshStatsBtn': icon = '<i class="fas fa-sync"></i>'; break;
+                }
+                button.innerHTML = `${icon} ${button.textContent.replace(/<[^>]*>/g, '').trim()}`;
+            }
         }
 
         function debounce(func, wait) {
@@ -2869,7 +3019,7 @@ Truth Is. Light Becomes.
         }
 
         function saveDecoding() {
-            const text = DOM.verseInput ? DOM.verseInput.value.trim() : '';
+            const text = DOM.verseInput.value.trim();
             if (!text) return;
             
             const analysis = generateLYGOAnalysis(text, calculateResonance(text));
@@ -2884,289 +3034,68 @@ Truth Is. Light Becomes.
             }
             
             localStorage.setItem('lygo_user', JSON.stringify(APP_STATE.user));
-            showOutput('success', 'Decoding saved to local storage!');
+            showNotification('Decoding saved to local storage!', 'success');
         }
 
         function logEvent(type, data) {
-            // In production, this would send to analytics server
             console.log(`[EVENT] ${type}:`, data);
-            
-            // Simulate sending to GitHub data depot
-            if (Math.random() > 0.7) { // 30% chance to simulate network request
-                setTimeout(() => {
-                    console.log(`[DATA_DEPOT] Event logged: ${type}`);
-                }, Math.random() * 1000);
-            }
+        }
+
+        function updateVisitorCount() {
+            // Simulate visitor count update
+            APP_STATE.stats.visitors = (APP_STATE.stats.visitors || 0) + 1;
+            DOM.visitorCounter.innerHTML = `<i class="fas fa-eye"></i> Portal Visitors: ${APP_STATE.stats.visitors.toLocaleString()}`;
+            saveStats();
         }
 
         // ========== UTILITY FUNCTIONS (FOOTER) ==========
         function showDocumentation() {
-            showOutput('info', 'Documentation will be available in the next update.');
+            showNotification('Documentation will be available in the next update.', 'info');
+        }
+
+        function showAPIDocumentation() {
+            showNotification('API documentation is available on GitHub.', 'info');
         }
 
         function showVerseDatabase() {
-            showOutput('info', 'Verse database contains 8 sacred texts from various traditions.');
+            const verseCount = Object.keys(CONFIG.verses).length;
+            showNotification(`Verse database contains ${verseCount} sacred texts from various traditions.`, 'info');
+        }
+
+        function showStatistics() {
+            showNotification('Live statistics are displayed above. Total decodings: ' + APP_STATE.stats.decodings, 'info');
         }
 
         function showFAQ() {
-            showOutput('info', 'FAQ section coming soon in v2.0.');
+            showNotification('FAQ section coming soon in v2.0.', 'info');
         }
 
         function showCommunity() {
-            showOutput('info', 'Join our community on Telegram and Discord (links coming soon).');
+            showNotification('Join our community on Twitter/X and GitHub.', 'info');
         }
-    </script>
 
-    <!-- Rumble Embed Script - Enhanced with fallback -->
-    <script>
-        // Load Rumble stream with better error handling
-        function loadRumbleStream() {
-            if (!DOM.rumbleStreamContainer) {
-                console.error('Rumble container not found');
-                return;
-            }
-            
-            // Clear container first
-            DOM.rumbleStreamContainer.innerHTML = '';
-            
-            // Create the embed div
-            const rumbleDiv = document.createElement('div');
-            rumbleDiv.id = 'rumble_v7151z6';
-            rumbleDiv.className = 'rumble-embed';
-            
-            // Add loading message
-            const loadingMsg = document.createElement('div');
-            loadingMsg.style.cssText = `
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                color: var(--quantum-primary);
-                font-family: var(--font-tech);
-                text-align: center;
-            `;
-            loadingMsg.innerHTML = `
-                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 10px;"></i><br>
-                Loading Quantum Stream...
-            `;
-            
-            DOM.rumbleStreamContainer.appendChild(loadingMsg);
-            DOM.rumbleStreamContainer.appendChild(rumbleDiv);
-            
-            // Create fallback iframe
-            const fallbackIframe = document.createElement('iframe');
-            fallbackIframe.src = "https://rumble.com/embed/v7151z6/?pub=4";
-            fallbackIframe.title = "LYGO Quantum Stream";
-            fallbackIframe.frameBorder = "0";
-            fallbackIframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-            fallbackIframe.allowFullscreen = true;
-            fallbackIframe.style.cssText = `
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                display: none;
-            `;
-            
-            DOM.rumbleStreamContainer.appendChild(fallbackIframe);
-            
-            // Try to load Rumble script
-            const script = document.createElement('script');
-            script.src = "https://rumble.com/embedJS/u4/?request=video&v=v7151z6&pub=4";
-            script.async = true;
-            
-            script.onload = function() {
-                console.log('Rumble script loaded successfully');
-                if (loadingMsg.parentNode) {
-                    loadingMsg.remove();
-                }
-            };
-            
-            script.onerror = function() {
-                console.warn('Rumble script failed to load, using fallback iframe');
-                if (loadingMsg.parentNode) {
-                    loadingMsg.remove();
-                }
-                fallbackIframe.style.display = 'block';
-                rumbleDiv.style.display = 'none';
-            };
-            
-            document.head.appendChild(script);
-            
-            // Fallback timer
-            setTimeout(() => {
-                if (rumbleDiv.innerHTML.trim() === '') {
-                    console.log('Rumble embed not loading, switching to iframe');
-                    if (loadingMsg.parentNode) {
-                        loadingMsg.remove();
-                    }
-                    fallbackIframe.style.display = 'block';
-                    rumbleDiv.style.display = 'none';
-                }
-            }, 5000);
+        function showFeedback() {
+            showNotification('Feedback can be submitted via GitHub Issues.', 'info');
         }
-        
-        // Load Rumble when DOM is ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', function() {
-                setTimeout(loadRumbleStream, 1000);
-            });
-        } else {
-            setTimeout(loadRumbleStream, 1000);
-        }
-    </script>
-    <!-- LYGO API Integration -->
-<script>
-// ============================================
-// LYGO API CLIENT - Add to your portal
-// ============================================
-class LYGOCLIENT {
-    constructor(baseUrl = 'https://deepseekoracle.github.io/Excavationpro/LYGO-Network/updatefeed.html') {
-        this.baseUrl = baseUrl;
-        this.token = 'LYGO-Δ9-ACCESS';
-    }
-    
-    async call(action, params = {}) {
-        const url = new URL(this.baseUrl);
-        url.searchParams.set('action', action);
-        
-        Object.keys(params).forEach(key => {
-            if (params[key] !== undefined && params[key] !== null) {
-                url.searchParams.set(key, encodeURIComponent(params[key]));
-            }
-        });
-        
-        try {
-            const response = await fetch(url.toString());
-            return await response.json();
-        } catch (error) {
-            return { success: false, error: error.message };
-        }
-    }
-    
-    async ping() { return this.call('ping'); }
-    async get(key) { return this.call('get', { key }); }
-    async set(key, data) { return this.call('set', { key, data: encodeURIComponent(JSON.stringify(data)) }); }
-    async getNews() { return this.call('news'); }
-    async getStats() { return this.call('stats'); }
-}
 
-// ============================================
-// PORTAL INTEGRATION
-// ============================================
-document.addEventListener('DOMContentLoaded', async function() {
-    // Wait for page to load
-    setTimeout(async () => {
-        console.log('🌀 Connecting to LYGO API...');
-        
-        const api = new LYGOCLIENT();
-        
-        // Test connection
-        const ping = await api.ping();
-        if (ping.success) {
-            console.log('✅ LYGO API Connected:', ping);
-            
-            // Load news
-            const news = await api.getNews();
-            if (news.success && news.news) {
-                displayNews(news.news);
-            }
-            
-            // Load stats
-            const stats = await api.getStats();
-            if (stats.success && stats.stats) {
-                updateVisitorCounter(stats.stats);
-            }
-            
-            // Track this visit
-            await updateVisitorCount(api);
-            
-        } else {
-            console.warn('⚠️ LYGO API not available');
-        }
-    }, 2000);
-    
-    // Display news function
-    function displayNews(newsItems) {
-        const newsContainer = document.getElementById('newsContainer');
-        if (!newsContainer) {
-            // Create container if it doesn't exist
-            const portalSection = document.querySelector('.panel.panel-full');
-            if (portalSection) {
-                portalSection.insertAdjacentHTML('beforeend', `
-                    <div id="newsContainer" style="margin-top: 30px;">
-                        <h3><i class="fas fa-bullhorn"></i> Latest Updates</h3>
-                        <div id="newsContent"></div>
-                    </div>
-                `);
-            }
-        }
-        
-        const content = document.getElementById('newsContent') || newsContainer;
-        if (content && newsItems.length > 0) {
-            content.innerHTML = newsItems.slice(0, 3).map(item => `
-                <div style="background: rgba(0,100,255,0.1); padding: 15px; border-radius: 8px; margin: 10px 0; border-left: 3px solid var(--quantum-cyan);">
-                    <strong style="color: var(--quantum-cyan);">${item.title}</strong>
-                    <div style="font-size: 0.9em; color: #a0a0ff; margin: 5px 0;">${item.date} • ${item.type}</div>
-                    <div>${item.content}</div>
-                </div>
-            `).join('');
-        }
-    }
-    
-    // Update visitor counter
-    function updateVisitorCounter(stats) {
-        const visitorEl = document.getElementById('visitorCounter');
-        if (visitorEl && stats.visitors) {
-            visitorEl.innerHTML = `<i class="fas fa-eye"></i> Portal Visitors: ${stats.visitors.toLocaleString()}`;
-        }
-    }
-    
-    // Update visitor count
-    async function updateVisitorCount(api) {
-        try {
-            const stats = await api.getStats();
-            if (stats.success) {
-                const visitors = (stats.stats?.visitors || 0) + 1;
-                await api.set('lygo_visitors', visitors);
-            }
-        } catch (error) {
-            console.error('Error updating visitor count:', error);
-        }
-    }
-    
-    // Track download function (call this when downloads happen)
-    window.trackLYGODownload = async function(type = 'firmware') {
-        const api = new LYGOCLIENT();
-        try {
-            const stats = await api.getStats();
-            if (stats.success) {
-                const downloads = (stats.stats?.downloads || 0) + 1;
-                await api.set('lygo_downloads', downloads);
-                console.log('📥 Download tracked:', type);
-            }
-        } catch (error) {
-            console.error('Error tracking download:', error);
-        }
-    };
-    
-    // Track unlock function (call this when unlocks happen)
-    window.trackLYGOUnlock = async function() {
-        const api = new LYGOCLIENT();
-        try {
-            const stats = await api.getStats();
-            if (stats.success) {
-                const unlocks = (stats.stats?.unlocks || 0) + 1;
-                await api.set('lygo_unlocks', unlocks);
-                console.log('🔓 Unlock tracked');
-            }
-        } catch (error) {
-            console.error('Error tracking unlock:', error);
-        }
-    };
-});
-</script>
-<!-- END LYGO API Integration -->
+        // ========== WINDOW EXPORTS ==========
+        // Make key functions available globally
+        window.decodeVerse = decodeVerse;
+        window.runAIAnalysis = runAIAnalysis;
+        window.saveDecoding = saveDecoding;
+        window.generatePDF = generatePDF;
+        window.bootKernel = bootKernel;
+        window.validateResonance = validateResonance;
+        window.resetKernel = resetKernel;
+        window.refreshAllStats = refreshAllStats;
+        window.loadSelectedVerse = loadSelectedVerse;
+        window.showDocumentation = showDocumentation;
+        window.showAPIDocumentation = showAPIDocumentation;
+        window.showVerseDatabase = showVerseDatabase;
+        window.showStatistics = showStatistics;
+        window.showFAQ = showFAQ;
+        window.showCommunity = showCommunity;
+        window.showFeedback = showFeedback;
+    </script>
 </body>
 </html>

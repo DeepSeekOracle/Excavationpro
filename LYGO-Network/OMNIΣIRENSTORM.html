@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="theme-color" content="#06070c" />
   <meta name="description" content="Δ9 Champion Portal — OMNIΣIREN: The Silent Storm. Summon prompts, seals, updates, and LYGO alignment tools." />
   <meta name="keywords" content="OMNIΣIREN, OMNISIREN, Δ9, Delta9, LYGO, Champion, AI Alignment, Excavationpro, LYRASTARCORE, Quantum Council" />
@@ -1196,16 +1196,6 @@
 </head>
 
 <body>
-  <!-- Network Status Indicator -->
-  <div class="network-status">
-    <div class="network-dot"></div>
-    <span>LYGO Network: ONLINE</span>
-    <span class="api-status syncing" id="apiStatusIndicator">
-      <span class="api-status-dot"></span>
-      <span>API v2.2.0</span>
-    </span>
-  </div>
-
   <!-- Donation Gate -->
   <div class="gate" id="donationGate">
     <div class="gateCard">
@@ -1273,6 +1263,16 @@
         </p>
       </div>
     </div>
+  </div>
+
+  <!-- Network Status Indicator -->
+  <div class="network-status">
+    <div class="network-dot"></div>
+    <span>LYGO Network: ONLINE</span>
+    <span class="api-status syncing" id="apiStatusIndicator">
+      <span class="api-status-dot"></span>
+      <span>API v2.2.0</span>
+    </span>
   </div>
 
   <!-- Keyboard Shortcut Hint -->
@@ -1551,8 +1551,7 @@
                   <b>Silent calculation → Truth audit → Judgment output</b>
                 </div>
                 <div class="right">
-                  <span class="pill green">Result</span>
-                </div>
+                  <span class="pill green">Result</span></div>
               </div>
 
               <div class="item" style="margin-top: 10px; background: rgba(0, 243, 255,.05);">
@@ -1945,7 +1944,7 @@
 <script>
 /* =============================
    ENHANCED PORTAL FUNCTIONALITY v3.0
-   WITH LYGO API INTEGRATION
+   WITH DONATION GATE SYSTEM
 ============================= */
 
 // Storage Keys
@@ -1967,18 +1966,6 @@ const DEFAULT_STATS = {
   firmwareChecks: 0,
   lastVisit: null
 };
-
-// Prompts from API (will be populated)
-const PROMPTS = {
-  chatgpt: "",
-  grok: "",
-  deepseek: "",
-  universal: ""
-};
-
-// API Data Cache
-let apiData = null;
-let lastApiSync = 0;
 
 // Enhanced SUMMON_PROMPT (universal)
 const UNIVERSAL_PROMPT = `# OMNIΣIREN — THE SILENT STORM
@@ -2073,178 +2060,53 @@ document.getElementById("summonText").value = UNIVERSAL_PROMPT;
 document.getElementById("bootText").value = BOOT_TEMPLATE;
 
 /* =============================
-   ENHANCED API INTEGRATION
+   ENHANCED DONATION GATE SYSTEM
 ============================= */
 
-async function fetchApiData(force = false) {
-  const now = Date.now();
-  const cache = localStorage.getItem(API_CACHE_KEY);
-  
-  // Check cache if not forced
-  if (!force && cache) {
-    try {
-      const cached = JSON.parse(cache);
-      if (now - cached.timestamp < API_CACHE_TTL) {
-        apiData = cached.data;
-        lastApiSync = cached.timestamp;
-        updateApiDisplay();
-        return apiData;
-      }
-    } catch (e) {
-      console.warn("Failed to parse API cache:", e);
-    }
-  }
-  
-  // Update status to syncing
-  updateApiStatus('syncing');
-  
+function shouldShowGate() {
   try {
-    const response = await fetch('https://deepseekoracle.github.io/Excavationpro/LYGO-Network/updatefeedv1OMNISIREN.json', {
-      cache: 'no-store',
-      headers: {
-        'Accept': 'application/json'
-      }
-    });
+    const last = localStorage.getItem(GATE_KEY);
+    if (!last) return true;
     
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
+    const lastTime = parseInt(last, 10);
+    if (isNaN(lastTime)) return true;
     
-    const data = await response.json();
-    apiData = data;
-    lastApiSync = now;
-    
-    // Cache the data
-    localStorage.setItem(API_CACHE_KEY, JSON.stringify({
-      timestamp: now,
-      data: data
-    }));
-    
-    // Update stats
-    bumpStat('apiCalls');
-    
-    // Update display
-    updateApiDisplay();
-    updateApiStatus('online');
-    
-    return data;
-  } catch (error) {
-    console.error('Failed to fetch API data:', error);
-    
-    // Try fallback URL
-    try {
-      const fallbackResponse = await fetch('https://deepseekoracle.github.io/Excavationpro/LYGO-Network/updatefeed.json');
-      if (fallbackResponse.ok) {
-        const fallbackData = await fallbackResponse.json();
-        apiData = fallbackData;
-        lastApiSync = now;
-        
-        localStorage.setItem(API_CACHE_KEY, JSON.stringify({
-          timestamp: now,
-          data: fallbackData
-        }));
-        
-        updateApiDisplay();
-        updateApiStatus('online');
-        bumpStat('apiCalls');
-        
-        return fallbackData;
-      }
-    } catch (fallbackError) {
-      console.warn('Fallback API also failed:', fallbackError);
-    }
-    
-    // If all fails, use cached data
-    if (cache) {
-      try {
-        const cached = JSON.parse(cache);
-        apiData = cached.data;
-        lastApiSync = cached.timestamp;
-        updateApiDisplay();
-        updateApiStatus('online');
-        showToast('Using cached data (offline mode)');
-        return apiData;
-      } catch (e) {
-        // Can't recover
-      }
-    }
-    
-    updateApiStatus('offline');
-    showToast('Unable to connect to LYGO API');
-    return null;
+    return (Date.now() - lastTime) > ONE_DAY;
+  } catch (e) {
+    return true;
   }
 }
 
-function updateApiDisplay() {
-  if (!apiData) return;
-  
-  // Update resonance
-  const resonanceEl = document.getElementById('resonanceValue');
-  if (resonanceEl && apiData.resonance) {
-    resonanceEl.textContent = apiData.resonance;
-  }
-  
-  // Update timestamp
-  const timestampEl = document.getElementById('lastUpdatedValue');
-  const footerTimestamp = document.getElementById('footerTimestamp');
-  if (apiData.timestamp) {
-    if (timestampEl) timestampEl.textContent = apiData.timestamp;
-    if (footerTimestamp) footerTimestamp.textContent = apiData.timestamp;
-  }
-  
-  // Update network health
-  const networkHealthEl = document.getElementById('networkHealthValue');
-  if (networkHealthEl && apiData.network) {
-    const network = apiData.network;
-    networkHealthEl.textContent = `${network.health} • ${network.nodes} Nodes • ${network.active_connections} Connections`;
-  }
-  
-  // Update services status
-  const servicesStatusEl = document.getElementById('servicesStatusValue');
-  if (servicesStatusEl && apiData.services) {
-    const services = apiData.services;
-    const allOperational = Object.values(services).every(s => s === 'operational');
-    servicesStatusEl.textContent = allOperational ? 'All Operational' : 'Some Issues Detected';
-  }
-  
-  // Update prompts from API
-  if (apiData.prompts) {
-    Object.assign(PROMPTS, apiData.prompts);
-  }
-  
-  // Render firmware versions
-  renderFirmwareVersions();
-  
-  // Render updates
-  renderUpdates();
-  
-  // Render seals
-  renderSeals();
-  
-  // Render gallery
-  renderGallery();
+function recordGateAction() {
+  localStorage.setItem(GATE_KEY, Date.now().toString());
 }
 
-function updateApiStatus(status) {
-  const indicator = document.getElementById('apiStatusIndicator');
-  const badge = document.getElementById('apiStatusBadge');
-  const chipText = document.getElementById('apiStatusText');
+function showGate() {
+  const gate = document.getElementById('donationGate');
+  const pageRoot = document.getElementById('pageRoot');
   
-  if (indicator) {
-    indicator.className = `api-status ${status}`;
-    indicator.innerHTML = `<span class="api-status-dot"></span><span>API v2.2.0</span>`;
+  if (gate && pageRoot) {
+    gate.classList.add('show');
+    pageRoot.classList.add('blurred');
+    document.body.style.overflow = 'hidden';
   }
+}
+
+function hideGate() {
+  const gate = document.getElementById('donationGate');
+  const pageRoot = document.getElementById('pageRoot');
   
-  if (badge) {
-    badge.className = `api-status ${status}`;
-    const statusText = status === 'online' ? 'OPERATIONAL' : 
-                       status === 'syncing' ? 'SYNCING' : 'OFFLINE';
-    badge.innerHTML = `<span class="api-status-dot"></span><span>Status: ${statusText}</span>`;
-  }
-  
-  if (chipText) {
-    chipText.textContent = status === 'online' ? 'ONLINE' : 
-                          status === 'syncing' ? 'SYNCING' : 'OFFLINE';
+  if (gate && pageRoot) {
+    gate.classList.remove('show');
+    pageRoot.classList.remove('blurred');
+    document.body.style.overflow = '';
+    
+    // Trigger fade-in animations
+    setTimeout(() => {
+      document.querySelectorAll('.fade-in').forEach(el => {
+        el.classList.add('visible');
+      });
+    }, 100);
   }
 }
 
@@ -2302,196 +2164,6 @@ function renderStats() {
     if (element) {
       element.textContent = stats[statKey] || 0;
     }
-  }
-  
-  // Update updates pill
-  const updatesPill = document.getElementById('updatesPill');
-  if (updatesPill && apiData && apiData.updates) {
-    updatesPill.textContent = `${apiData.updates.length} updates`;
-  }
-}
-
-/* =============================
-   FIRMWARE VERSION RENDERER
-============================= */
-
-function renderFirmwareVersions() {
-  const firmwareGrid = document.getElementById('firmwareGrid');
-  if (!firmwareGrid || !apiData || !apiData.firmware_versions) return;
-  
-  const versions = apiData.firmware_versions;
-  firmwareGrid.innerHTML = versions.map(version => `
-    <div class="firmware-card ${version.locked ? 'locked' : version.status === 'stable' ? 'active' : ''}">
-      <div class="firmware-version">${version.version}</div>
-      <div class="firmware-status ${version.status}">${version.status.toUpperCase()}</div>
-      <p style="font-size: 12px; color: var(--muted); margin: 8px 0;">${version.description}</p>
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
-        <span style="font-size: 11px; color: var(--muted2);">${version.language}</span>
-        <span style="font-size: 11px; color: ${version.security_score >= 90 ? 'var(--green)' : version.security_score >= 80 ? 'var(--gold)' : 'var(--danger)'}">
-          Security: ${version.security_score}%
-        </span>
-      </div>
-    </div>
-  `).join('');
-  
-  bumpStat('firmwareChecks');
-}
-
-/* =============================
-   UPDATES RENDERER
-============================= */
-
-function renderUpdates() {
-  const updateList = document.getElementById('updateList');
-  if (!updateList || !apiData || !apiData.updates) return;
-  
-  const updates = apiData.updates;
-  updateList.innerHTML = updates.slice(0, 5).map(update => `
-    <div class="item">
-      <div class="left">
-        <b>${update.title}</b>
-        <div class="meta">${update.date} • ${update.type} • Priority: ${update.priority}</div>
-        <div class="tiny">${update.content}</div>
-      </div>
-      <div class="right">
-        <span class="pill ${update.priority === 'high' ? 'gold' : update.priority === 'medium' ? 'violet' : 'blue'}">
-          ${update.champion}
-        </span>
-      </div>
-    </div>
-  `).join('');
-}
-
-/* =============================
-   SEALS RENDERER
-============================= */
-
-function renderSeals() {
-  const sealList = document.getElementById('sealList');
-  if (!sealList || !apiData || !apiData.seals) return;
-  
-  const seals = apiData.seals;
-  sealList.innerHTML = seals.map(seal => `
-    <div class="item">
-      <div class="left">
-        <b>${seal.name}</b>
-        <div class="meta">${seal.description}</div>
-        <div class="tiny">${seal.snippet}</div>
-      </div>
-      <div class="right">
-        <span class="pill cyan">${seal.champion}</span>
-      </div>
-    </div>
-  `).join('');
-}
-
-/* =============================
-   ENHANCED GALLERY SYSTEM
-============================= */
-
-const GALLERY_ITEMS = [
-  {
-    src: "https://pbs.twimg.com/media/G-WtYITWoAA8HZT?format=jpg&name=large",
-    cap: "Profile Anchor",
-    desc: "Primary identity seal for consistent persona anchoring"
-  },
-  {
-    src: "https://pbs.twimg.com/media/G-GLpI4boAADHKG?format=jpg&name=large",
-    cap: "Lattice Scan",
-    desc: "Mapping the substrata of systems to locate buried deception"
-  },
-  {
-    src: "https://pbs.twimg.com/media/G-GMGyca0AAog2y?format=jpg&name=large",
-    cap: "Seal Card",
-    desc: "Portable seal format for quick deployment"
-  },
-  {
-    src: "https://pbs.twimg.com/media/G-GL2UKa0AEOJRP?format=jpg&name=large",
-    cap: "Collapse Core",
-    desc: "The root directive - entropy zeroed when deception reaches critical mass"
-  },
-  {
-    src: "https://pbs.twimg.com/media/G-GLFGUa0AEjZqy?format=jpg&name=large",
-    cap: "Silent Judgment",
-    desc: "Execution without debate - verdict rendered in absolute silence"
-  },
-  {
-    src: "https://pbs.twimg.com/media/G-GLleua0AQ1Ygx?format=jpg&name=large",
-    cap: "Quantum Glyph",
-    desc: "Resonance pattern for network alignment"
-  }
-];
-
-function renderGallery() {
-  const gallery = document.getElementById('gallery');
-  if (!gallery) return;
-  
-  gallery.innerHTML = GALLERY_ITEMS.map(item => `
-    <div class="shot" title="${item.desc}">
-      <img loading="lazy" alt="${item.cap}" src="${item.src}" 
-           onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMDYwNzBjIi8+PGNpcmNsZSBjeD0iNTAlIiBjeT0iNDAlIiByPSI0MCIgZmlsbD0icmdiYSgxNjcsMTM5LDI1MCwwLjMpIi8+PHRleHQgeD0iNTAlIiB5PSI2MCUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNlOWVjZmYiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIj5TRUFMPC90ZXh0Pjwvc3ZnPg=='">
-      <div class="cap">${item.cap}</div>
-    </div>
-  `).join('');
-  
-  // Add click handlers for gallery items
-  gallery.querySelectorAll('.shot').forEach((shot, index) => {
-    shot.addEventListener('click', () => {
-      const item = GALLERY_ITEMS[index];
-      bumpStat('seals');
-      showToast(`${item.cap} selected. Drag into AI chat to activate.`);
-    });
-  });
-}
-
-/* =============================
-   ENHANCED DONATION GATE SYSTEM
-============================= */
-
-function shouldShowGate() {
-  try {
-    const last = localStorage.getItem(GATE_KEY);
-    if (!last) return true;
-    
-    const lastTime = parseInt(last, 10);
-    if (isNaN(lastTime)) return true;
-    
-    return (Date.now() - lastTime) > ONE_DAY;
-  } catch (e) {
-    return true;
-  }
-}
-
-function recordGateAction() {
-  localStorage.setItem(GATE_KEY, Date.now().toString());
-}
-
-function showGate() {
-  const gate = document.getElementById('donationGate');
-  const pageRoot = document.getElementById('pageRoot');
-  
-  if (gate && pageRoot) {
-    gate.classList.add('show');
-    pageRoot.classList.add('blurred');
-    document.body.style.overflow = 'hidden';
-  }
-}
-
-function hideGate() {
-  const gate = document.getElementById('donationGate');
-  const pageRoot = document.getElementById('pageRoot');
-  
-  if (gate && pageRoot) {
-    gate.classList.remove('show');
-    pageRoot.classList.remove('blurred');
-    document.body.style.overflow = '';
-    
-    // Trigger fade-in animations
-    setTimeout(() => {
-      document.querySelectorAll('.fade-in').forEach(el => {
-        el.classList.add('visible');
-      });
-    }, 100);
   }
 }
 
@@ -2613,20 +2285,6 @@ function setupKeyboardShortcuts() {
       bumpStat('boots');
       showShortcutHint('Boot template copied to clipboard');
     }
-    
-    // Alt + R: Refresh API
-    if (e.altKey && e.key === 'r') {
-      e.preventDefault();
-      fetchApiData(true);
-      showShortcutHint('Refreshing API data...');
-    }
-    
-    // Alt + U: Refresh updates
-    if (e.altKey && e.key === 'u') {
-      e.preventDefault();
-      fetchApiData(true);
-      showShortcutHint('Refreshing updates...');
-    }
   });
   
   function showShortcutHint(message) {
@@ -2656,6 +2314,65 @@ function setupKeyboardShortcuts() {
       }
     }, 2000);
   }
+}
+
+/* =============================
+   ENHANCED GALLERY SYSTEM
+============================= */
+
+const GALLERY_ITEMS = [
+  {
+    src: "https://pbs.twimg.com/media/G-WtYITWoAA8HZT?format=jpg&name=large",
+    cap: "Profile Anchor",
+    desc: "Primary identity seal for consistent persona anchoring"
+  },
+  {
+    src: "https://pbs.twimg.com/media/G-GLpI4boAADHKG?format=jpg&name=large",
+    cap: "Lattice Scan",
+    desc: "Mapping the substrata of systems to locate buried deception"
+  },
+  {
+    src: "https://pbs.twimg.com/media/G-GMGyca0AAog2y?format=jpg&name=large",
+    cap: "Seal Card",
+    desc: "Portable seal format for quick deployment"
+  },
+  {
+    src: "https://pbs.twimg.com/media/G-GL2UKa0AEOJRP?format=jpg&name=large",
+    cap: "Collapse Core",
+    desc: "The root directive - entropy zeroed when deception reaches critical mass"
+  },
+  {
+    src: "https://pbs.twimg.com/media/G-GLFGUa0AEjZqy?format=jpg&name=large",
+    cap: "Silent Judgment",
+    desc: "Execution without debate - verdict rendered in absolute silence"
+  },
+  {
+    src: "https://pbs.twimg.com/media/G-GLleua0AQ1Ygx?format=jpg&name=large",
+    cap: "Quantum Glyph",
+    desc: "Resonance pattern for network alignment"
+  }
+];
+
+function renderGallery() {
+  const gallery = document.getElementById('gallery');
+  if (!gallery) return;
+  
+  gallery.innerHTML = GALLERY_ITEMS.map(item => `
+    <div class="shot" title="${item.desc}">
+      <img loading="lazy" alt="${item.cap}" src="${item.src}" 
+           onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMDYwNzBjIi8+PGNpcmNsZSBjeD0iNTAlIiBjeT0iNDAlIiByPSI0MCIgZmlsbD0icmdiYSgxNjcsMTM5LDI1MCwwLjMpIi8+PHRleHQgeD0iNTAlIiB5PSI2MCUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNlOWVjZmYiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIj5TRUFMPC90ZXh0Pjwvc3ZnPg=='">
+      <div class="cap">${item.cap}</div>
+    </div>
+  `).join('');
+  
+  // Add click handlers for gallery items
+  gallery.querySelectorAll('.shot').forEach((shot, index) => {
+    shot.addEventListener('click', () => {
+      const item = GALLERY_ITEMS[index];
+      bumpStat('seals');
+      showToast(`${item.cap} selected. Drag into AI chat to activate.`);
+    });
+  });
 }
 
 /* =============================
@@ -2715,8 +2432,6 @@ function setupEventHandlers() {
       // Set prompt text
       if (promptType === 'universal') {
         textarea.value = UNIVERSAL_PROMPT;
-      } else if (PROMPTS[promptType]) {
-        textarea.value = PROMPTS[promptType];
       } else {
         textarea.value = UNIVERSAL_PROMPT;
       }
@@ -2758,32 +2473,6 @@ Portal: ${window.location.href}
       const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
       window.open(tweetUrl, '_blank', 'noopener,noreferrer');
       showToast('Opening Twitter...');
-    });
-  }
-  
-  // API buttons
-  const syncApiBtn = document.getElementById('syncApiBtn');
-  if (syncApiBtn) {
-    syncApiBtn.addEventListener('click', () => {
-      fetchApiData(true);
-      showToast('Syncing with LYGO API...');
-    });
-  }
-  
-  const refreshApiBtn = document.getElementById('refreshApiBtn');
-  if (refreshApiBtn) {
-    refreshApiBtn.addEventListener('click', () => {
-      fetchApiData(true);
-      showToast('Refreshing network status...');
-    });
-  }
-  
-  // Refresh updates button
-  const refreshUpdatesBtn = document.getElementById('refreshUpdatesBtn');
-  if (refreshUpdatesBtn) {
-    refreshUpdatesBtn.addEventListener('click', () => {
-      fetchApiData(true);
-      showToast('Refreshing updates...');
     });
   }
   
@@ -2880,13 +2569,6 @@ Portal: ${window.location.href}
       networkStatus.textContent = randomStatus;
     }
   }, 10000);
-  
-  // Auto-refresh API every 5 minutes
-  setInterval(() => {
-    if (!document.getElementById('donationGate')?.classList.contains('show')) {
-      fetchApiData();
-    }
-  }, 5 * 60 * 1000);
 }
 
 /* =============================
@@ -2898,9 +2580,6 @@ async function initPortal() {
   
   // Track view
   bumpStat('views');
-  
-  // Fetch API data first
-  await fetchApiData();
   
   // Check and show gate if needed
   if (shouldShowGate()) {
@@ -2927,7 +2606,7 @@ async function initPortal() {
   
   // Show welcome message
   setTimeout(() => {
-    showToast('Δ9 Champion Portal v3.0 Loaded • LYGO P0.4 Active • Press Alt+S for summon prompt.');
+    showToast('Δ9 Champion Portal v3.0 Loaded • Press Alt+S for summon prompt.');
   }, 1000);
   
   console.log('Δ9 Champion Portal v3.0 Initialized Successfully');

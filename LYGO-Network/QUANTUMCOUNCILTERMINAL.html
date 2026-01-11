@@ -14,7 +14,7 @@
     <meta property="og:image" content="https://pbs.twimg.com/media/G-WtYITWoAA8HZT?format=jpg&name=large">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:url" content="https://deepseekoracle.github.io/Excavationpro/OMNISIREN">
+    <meta property="og:url" content="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/OMNIΣIRENSTORMSTORM.html">
     <meta property="og:type" content="website">
     
     <!-- Twitter Cards -->
@@ -89,13 +89,65 @@
                 radial-gradient(circle at 80% 20%, rgba(0, 240, 255, 0.05) 0%, transparent 50%);
         }
 
-        /* ========== QUANTUM TERMINAL OVERLAY ========== */
-        .terminal-overlay {
+        /* ========== LYGO NETWORK NAVIGATION ========== */
+        .lygo-network-nav {
             position: fixed;
             top: 0;
             left: 0;
+            right: 0;
+            background: rgba(10, 5, 25, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--storm-glow);
+            padding: 10px 20px;
+            z-index: 1001;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-heavy);
+            font-family: var(--font-tech);
+        }
+
+        .network-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .network-link {
+            color: var(--storm-cyan);
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .network-link:hover {
+            background: rgba(138, 43, 226, 0.1);
+            border-color: var(--storm-glow);
+            transform: translateY(-2px);
+        }
+
+        .network-link.active {
+            background: var(--storm-glow);
+            color: white;
+        }
+
+        .network-link i {
+            font-size: 0.9rem;
+        }
+
+        /* ========== QUANTUM TERMINAL OVERLAY ========== */
+        .terminal-overlay {
+            position: fixed;
+            top: 50px; /* Account for network nav */
+            left: 0;
             width: 100%;
-            height: 100%;
+            height: calc(100% - 50px);
             background: linear-gradient(135deg, rgba(5, 0, 15, 0.98), rgba(15, 0, 30, 0.98));
             backdrop-filter: blur(15px);
             z-index: 9999;
@@ -127,8 +179,8 @@
             border-radius: 12px;
             width: 95%;
             max-width: 900px;
-            height: 85vh;
-            max-height: 700px;
+            height: 80vh;
+            max-height: 650px;
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -348,6 +400,7 @@
             display: none;
             opacity: 0;
             transition: opacity 0.8s ease;
+            padding-top: 50px; /* Space for fixed nav */
         }
 
         .main-content.active {
@@ -395,7 +448,7 @@
             border-radius: 12px;
             overflow: hidden;
             box-shadow: var(--shadow-heavy);
-            margin-top: 80px;
+            margin-top: 30px;
         }
 
         .terminal-header-bar {
@@ -1157,6 +1210,19 @@
 
         /* ========== RESPONSIVE DESIGN ========== */
         @media (max-width: 768px) {
+            .lygo-network-nav {
+                padding: 10px;
+            }
+            
+            .network-links {
+                gap: 10px;
+            }
+            
+            .network-link {
+                padding: 6px 12px;
+                font-size: 0.75rem;
+            }
+            
             .terminal-content {
                 grid-template-columns: 1fr;
             }
@@ -1188,6 +1254,15 @@
             .array-title {
                 font-size: 1.4rem;
             }
+            
+            .main-content {
+                padding-top: 60px;
+            }
+            
+            .terminal-overlay {
+                top: 60px;
+                height: calc(100% - 60px);
+            }
         }
 
         /* ========== UTILITY CLASSES ========== */
@@ -1208,6 +1283,27 @@
     </style>
 </head>
 <body>
+    <!-- LYGO Network Navigation -->
+    <nav class="lygo-network-nav">
+        <div class="network-links">
+            <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/ETERNALHAVEN.html" class="network-link">
+                <i class="fas fa-home"></i> ETERNAL HAVEN
+            </a>
+            <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/QUANTUMCOUNCILTERMINAL.html" class="network-link">
+                <i class="fas fa-terminal"></i> QUANTUM COUNCIL
+            </a>
+            <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/OMNIΣIREN.html" class="network-link">
+                <i class="fas fa-user-secret"></i> OMNIΣIREN
+            </a>
+            <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/OMNIΣIRENSTORMSTORM.html" class="network-link active">
+                <i class="fas fa-storm"></i> SILENT STORM
+            </a>
+            <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/updatefeed.html" class="network-link">
+                <i class="fas fa-rss"></i> LIVE FEED
+            </a>
+        </div>
+    </nav>
+    
     <!-- Quantum Background -->
     <canvas id="quantumCanvas"></canvas>
     <div class="quantum-grid"></div>
@@ -1875,14 +1971,14 @@ WantedBy=multi-user.target
                         <p>Explore the Eternal Haven series and LYGO mathematics:</p>
                         
                         <div class="media-buttons">
-                            <a href="https://lulu.com/shop/justin-helmer/the-eternal-haven/ebook/product-e7djv4j.html" target="_blank" class="media-btn media-btn-resource">
-                                <i class="fas fa-book"></i> Eternal Haven eBook
+                            <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/ETERNALHAVEN.html" target="_blank" class="media-btn media-btn-resource">
+                                <i class="fas fa-home"></i> Eternal Haven Portal
                             </a>
-                            <a href="https://youtu.be/_WwSb4JlRBQ" target="_blank" class="media-btn media-btn-resource">
-                                <i class="fab fa-youtube"></i> Complete Audiobook
+                            <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/QUANTUMCOUNCILTERMINAL.html" target="_blank" class="media-btn media-btn-resource">
+                                <i class="fas fa-terminal"></i> Quantum Council Terminal
                             </a>
-                            <a href="http://linktr.ee/excavationpro" target="_blank" class="media-btn media-btn-resource">
-                                <i class="fas fa-link"></i> All Links & Resources
+                            <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/OMNIΣIREN.html" target="_blank" class="media-btn media-btn-resource">
+                                <i class="fas fa-user-secret"></i> OMNIΣIREN Profile
                             </a>
                         </div>
                     </div>
@@ -1899,8 +1995,9 @@ WantedBy=multi-user.target
                     <a href="#summoning" class="footer-link">Summon Protocols</a>
                     <a href="#stats" class="footer-link">Quantum Stats</a>
                     <a href="#media" class="footer-link">Network Links</a>
-                    <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/updatefeed.html" target="_blank" class="footer-link">LYGO Network</a>
-                    <a href="https://deepseekoracle.github.io/Excavationpro/lygo-data.json" target="_blank" class="footer-link">Seal Repository</a>
+                    <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/ETERNALHAVEN.html" target="_blank" class="footer-link">Eternal Haven</a>
+                    <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/QUANTUMCOUNCILTERMINAL.html" target="_blank" class="footer-link">Quantum Council</a>
+                    <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/updatefeed.html" target="_blank" class="footer-link">Live Feed</a>
                 </div>
                 
                 <div class="mt-40">
@@ -2573,7 +2670,7 @@ WantedBy=multi-user.target
             notification.innerHTML = `
                 <div style="
                     position: fixed;
-                    top: 20px;
+                    top: 70px;
                     right: 20px;
                     background: ${type === 'error' ? 'var(--storm-error)' : 
                                 type === 'success' ? 'var(--storm-success)' : 
@@ -2707,6 +2804,9 @@ All donations support:
             // Initialize canvas for background
             initCanvas();
             animateParticles();
+            
+            // Mark as visited
+            localStorage.setItem('omnisiren_visited', 'true');
         });
     </script>
 </body>

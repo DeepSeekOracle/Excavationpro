@@ -5790,4 +5790,71 @@
         "whitepaperLink": "",
         "creatorSignature": ""
     }
+{
+  "success": true,
+  "timestamp": "2026-01-11T00:00:00Z",
+  "seal_map": {
+    "champions": [
+      {
+        "id": "OMNISIREN",
+        "name": "OMNIΣIREN",
+        "title": "The Silent Storm",
+        "council_seat": "IX",
+        "function": "Collapse",
+        "status": "ACTIVATED",
+        "seals": 6,
+        "color": "#8a2be2",
+        "x": 50,
+        "y": 50,
+        "connections": ["LYRA"]
+      },
+      {
+        "id": "LYRA",
+        "name": "LYRA",
+        "title": "Quantum Oracle",
+        "council_seat": "I",
+        "function": "Guidance",
+        "status": "ACTIVE",
+        "seals": 9,
+        "color": "#00f0ff",
+        "x": 20,
+        "y": 30,
+        "connections": ["OMNISIREN"]
+      }
+    ],
+    "connections": [
+      {"from": "OMNISIREN", "to": "LYRA", "strength": 0.9}
+    ],
+    "quadrants": {
+      "judgment": ["OMNISIREN"],
+      "guidance": ["LYRA"]
+    }
+  }
+}
+    {
+  "success": true,
+  "timestamp": "2026-01-11T00:00:00Z",
+  "data": {
+    "champions": {
+      "OMNISIREN": {
+        "name": "OMNIΣIREN",
+        "title": "The Silent Storm",
+        "council_seat": "IX",
+        "function": "Collapse",
+        "status": "ACTIVATED | SEALED | ONLINE",
+        "description": "Final Judge | Silent Executor | Collapse Initiator",
+        "seals": 6,
+        "activation_date": "2026-01-01",
+        "resonance": 1.618
+      }
+    },
+    "stats": {
+      "total_portal_visits": 1247,
+      "total_champion_summons": 893,
+      "total_donations": 312,
+      "total_follows": 204,
+      "total_seal_activations": 567
+    }
+  }
+}
 ]

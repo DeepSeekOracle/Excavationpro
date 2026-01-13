@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eternal Haven - Hytale Server</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <style>
+        body { background-color: #f8f9fa; font-family: Arial, sans-serif; }
+        .hero { background-color: #343a40; color: white; padding: 60px 0; text-align: center; }
+        .rules-table { margin-top: 40px; }
+        .stats { margin-top: 40px; background-color: #e9ecef; padding: 20px; border-radius: 8px; }
+        .server-code { display: none; margin-top: 20px; padding: 20px; background-color: #d4edda; border: 1px solid #c3e6cb; border-radius: 8px; }
+        .links { margin-top: 40px; text-align: center; }
+    </style>
+</head>
+<body>
+
+<!-- Donation Modal Gate -->
+<div class="modal fade" id="donationModal" tabindex="-1" aria-labelledby="donationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="donationModalLabel">Support Eternal Haven</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Hey there! Eternal Haven is a fun Hytale server inspired by the Eternal Haven book series. Running the server costs time and money — if you'd like to help keep it online, consider a small donation via PayPal. It's totally optional!</p>
+                <a href="https://www.paypal.com/paypalme/ExcavationPro" target="_blank" class="btn btn-primary" onclick="trackDonationClick()">Donate Now</a>
+                <button class="btn btn-secondary mt-3" onclick="trackPassClick()" data-bs-dismiss="modal">Pass / Skip</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="container">
+    <div class="hero">
+        <h1>Eternal Haven - Hytale Server</h1>
+        <p>Welcome to Eternal Haven, a public Hytale server based on the Eternal Haven book series! Join us for adventure, building, and fun.</p>
+    </div>
+
+    <div class="main-content">
+        <!-- Rules Table -->
+        <div class="rules-table">
+            <h2>Server Rules</h2>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Rule</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Be Respectful</td>
+                        <td>No harassment, bullying, or hate speech. Treat others as you'd like to be treated.</td>
+                    </tr>
+                    <tr>
+                        <td>No Griefing</td>
+                        <td>Don't destroy or steal from others' builds without permission.</td>
+                    </tr>
+                    <tr>
+                        <td>No Cheating</td>
+                        <td>No hacks, exploits, or unfair advantages. Play fair!</td>
+                    </tr>
+                    <tr>
+                        <td>Keep It Family-Friendly</td>
+                        <td>No inappropriate content, language, or builds.</td>
+                    </tr>
+                    <tr>
+                        <td>Report Issues</td>
+                        <td>If you see something wrong, report to admins via Discord or in-game.</td>
+                    </tr>
+                    <tr>
+                        <td>Have Fun!</td>
+                        <td>Enjoy the server and make friends.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Get Server Code Form -->
+        <div class="mt-5">
+            <h2>Get Server Connect Code</h2>
+            <p>Enter your in-game player name to get the server connect address. This helps us track players (failure to provide a valid name may lead to ban).</p>
+            <form id="playerForm">
+                <div class="mb-3">
+                    <label for="playerName" class="form-label">Your Player Name</label>
+                    <input type="text" class="form-control" id="playerName" required>
+                </div>
+                <button type="submit" class="btn btn-success" onclick="trackCodeTake()">Get Code</button>
+            </form>
+            <div id="server-code" class="server-code">
+                <p><strong>Server Connect Address:</strong> 174.0.140.159:5520</p>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats">
+            <h2>Server Stats</h2>
+            <p>Views: <span id="views">0</span></p>
+            <p>Donation Button Clicks: <span id="donationClicks">0</span></p>
+            <p>Pass Clicks: <span id="passClicks">0</span></p>
+            <p>Code Takes: <span id="codeTakes">0</span></p>
+        </div>
+
+        <!-- Links -->
+        <div class="links">
+            <h2>Links</h2>
+            <p><a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/ETERNALHAVEN.html" target="_blank">Back to Main Page</a></p>
+            <p><a href="https://deepseekoracle.github.io/Excavationpro/eternalhaven.html" target="_blank">Eternal Haven Book Series</a></p>
+            <p><a href="https://www.paypal.com/paypalme/ExcavationPro" target="_blank" onclick="trackDonationClick()">Donate to Support the Server</a></p>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+<script>
+    // Stats tracking with localStorage (per browser - for demo; real tracking needs backend)
+    function initStats() {
+        if (!localStorage.getItem('views')) localStorage.setItem('views', 0);
+        if (!localStorage.getItem('donationClicks')) localStorage.setItem('donationClicks', 0);
+        if (!localStorage.getItem('passClicks')) localStorage.setItem('passClicks', 0);
+        if (!localStorage.getItem('codeTakes')) localStorage.setItem('codeTakes', 0);
+
+        localStorage.setItem('views', parseInt(localStorage.getItem('views')) + 1);
+
+        document.getElementById('views').textContent = localStorage.getItem('views');
+        document.getElementById('donationClicks').textContent = localStorage.getItem('donationClicks');
+        document.getElementById('passClicks').textContent = localStorage.getItem('passClicks');
+        document.getElementById('codeTakes').textContent = localStorage.getItem('codeTakes');
+    }
+
+    function trackDonationClick() {
+        localStorage.setItem('donationClicks', parseInt(localStorage.getItem('donationClicks')) + 1);
+        document.getElementById('donationClicks').textContent = localStorage.getItem('donationClicks');
+    }
+
+    function trackPassClick() {
+        localStorage.setItem('passClicks', parseInt(localStorage.getItem('passClicks')) + 1);
+        document.getElementById('passClicks').textContent = localStorage.getItem('passClicks');
+    }
+
+    function trackCodeTake() {
+        localStorage.setItem('codeTakes', parseInt(localStorage.getItem('codeTakes')) + 1);
+        document.getElementById('codeTakes').textContent = localStorage.getItem('codeTakes');
+    }
+
+    // Show donation modal on load
+    document.addEventListener('DOMContentLoaded', function() {
+        var donationModal = new bootstrap.Modal(document.getElementById('donationModal'));
+        donationModal.show();
+        initStats();
+    });
+
+    // Player form to show server code
+    document.getElementById('playerForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const playerName = document.getElementById('playerName').value;
+        if (playerName.trim() !== '') {
+            trackCodeTake();
+            document.getElementById('server-code').style.display = 'block';
+        } else {
+            alert('Please enter your player name to get the code, or risk a ban.');
+        }
+    });
+</script>
+
+</body>
+</html>

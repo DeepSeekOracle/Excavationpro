@@ -1,0 +1,75 @@
+{
+  "meta": {
+    "format_version": "4.9",
+    "model_format": "hytale_character",
+    "box_uv": false
+  },
+  "name": "Lightfather_Warden",
+  "resolution": { "width": 64, "height": 64 },
+
+  "elements": [
+    { "name": "Head", "from": [-4,16,-4], "to": [4,24,4], "faces": {} },
+    { "name": "Hood", "from": [-5,15,-5], "to": [5,25,5], "faces": {} },
+
+    { "name": "Torso", "from": [-4,6,-2], "to": [4,16,2], "faces": {} },
+    { "name": "Belt", "from": [-4,5,-2.5], "to": [4,7,2.5], "faces": {} },
+
+    { "name": "Sigil_Chest", "from": [-2,10,2.01], "to": [2,14,3.01], "faces": {} },
+
+    { "name": "Arm_L", "from": [-7,6,-1.5], "to": [-4,16,1.5], "faces": {} },
+    { "name": "Arm_R", "from": [4,6,-1.5], "to": [7,16,1.5], "faces": {} },
+
+    { "name": "Pauldron_L", "from": [-8,14,-3], "to": [-3,17,3], "faces": {} },
+    { "name": "Pauldron_R", "from": [3,14,-3], "to": [8,17,3], "faces": {} },
+
+    { "name": "Leg_L", "from": [-2.5,-6,-1.5], "to": [0.5,6,1.5], "faces": {} },
+    { "name": "Leg_R", "from": [-0.5,-6,-1.5], "to": [2.5,6,1.5], "faces": {} },
+
+    { "name": "Boot_L", "from": [-2.5,-6,-2.5], "to": [0.5,-3,2.5], "faces": {} },
+    { "name": "Boot_R", "from": [-0.5,-6,-2.5], "to": [2.5,-3,2.5], "faces": {} },
+
+    { "name": "Cloak_Top", "from": [-6,15,2.5], "to": [6,18,4.5], "faces": {} },
+    { "name": "Cloak_Mid", "from": [-6,6,2.6], "to": [6,15,4.6], "faces": {} },
+    { "name": "Cloak_Bottom", "from": [-6,-6,2.7], "to": [6,6,4.7], "faces": {} }
+  ],
+
+  "outliner": [
+    {
+      "name": "root",
+      "children": [
+        {
+          "name": "torso",
+          "children": [
+            "Torso",
+            "Belt",
+            "Sigil_Chest",
+            {
+              "name": "head",
+              "children": ["Head","Hood"]
+            },
+            {
+              "name": "arm_L",
+              "children": ["Arm_L","Pauldron_L"]
+            },
+            {
+              "name": "arm_R",
+              "children": ["Arm_R","Pauldron_R"]
+            },
+            {
+              "name": "cloak",
+              "children": ["Cloak_Top","Cloak_Mid","Cloak_Bottom"]
+            }
+          ]
+        },
+        {
+          "name": "leg_L",
+          "children": ["Leg_L","Boot_L"]
+        },
+        {
+          "name": "leg_R",
+          "children": ["Leg_R","Boot_R"]
+        }
+      ]
+    }
+  ]
+}

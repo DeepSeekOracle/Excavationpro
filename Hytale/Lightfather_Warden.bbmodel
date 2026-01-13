@@ -4,48 +4,188 @@
     "model_format": "hytale_character",
     "box_uv": false
   },
-  "name": "LYRA_StarCore",
-  "resolution": { "width": 128, "height": 128 },
-
+  "name": "Lightfather_Complete",
+  "resolution": {
+    "width": 64,
+    "height": 64
+  },
   "elements": [
-    { "name": "Head", "from": [-3.5, 15, -3.5], "to": [3.5, 22, 3.5], "faces": {} },
-
-    { "name": "Halo", "from": [-6, 22.5, -1], "to": [6, 24, 1], "faces": {} },
-
-    { "name": "Torso", "from": [-3.5, 5, -2], "to": [3.5, 15, 2], "faces": {} },
-
-    { "name": "Chest_Core", "from": [-1.2, 9, 2.01], "to": [1.2, 12, 3.21], "faces": {} },
-
-    { "name": "Arm_L", "from": [-6.5, 5.5, -1.5], "to": [-3.5, 14.5, 1.5], "faces": {} },
-    { "name": "Arm_R", "from": [3.5, 5.5, -1.5], "to": [6.5, 14.5, 1.5], "faces": {} },
-
-    { "name": "Hip_Robe", "from": [-4.5, 0, -2.5], "to": [4.5, 5, 2.5], "faces": {} },
-
-    { "name": "Leg_L", "from": [-2.5, -6, -1.5], "to": [-0.5, 0, 1.5], "faces": {} },
-    { "name": "Leg_R", "from": [0.5, -6, -1.5], "to": [2.5, 0, 1.5], "faces": {} },
-
-    { "name": "Energy_Trail", "from": [-3, -6.5, -2], "to": [3, -1, 2], "faces": {} }
+    {
+      "name": "Head",
+      "from": [-4, 16, -4],
+      "to": [4, 24, 4],
+      "faces": {
+        "north": {"uv": [0, 0], "texture": 0},
+        "east": {"uv": [8, 0], "texture": 0},
+        "south": {"uv": [16, 0], "texture": 0},
+        "west": {"uv": [24, 0], "texture": 0},
+        "up": {"uv": [32, 0], "texture": 0},
+        "down": {"uv": [40, 0], "texture": 0}
+      }
+    },
+    {
+      "name": "Beard",
+      "from": [-2.5, 14, -4.2],
+      "to": [2.5, 16, -3.8],
+      "faces": {
+        "north": {"uv": [48, 0], "texture": 0},
+        "east": {"uv": [52, 0], "texture": 0},
+        "south": {"uv": [56, 0], "texture": 0},
+        "west": {"uv": [60, 0], "texture": 0},
+        "up": {"uv": [0, 4], "texture": 0},
+        "down": {"uv": [4, 4], "texture": 0}
+      }
+    },
+    {
+      "name": "Torso",
+      "from": [-4, 6, -2],
+      "to": [4, 16, 2],
+      "faces": {
+        "north": {"uv": [0, 16], "texture": 0},
+        "east": {"uv": [8, 16], "texture": 0},
+        "south": {"uv": [16, 16], "texture": 0},
+        "west": {"uv": [24, 16], "texture": 0},
+        "up": {"uv": [32, 16], "texture": 0},
+        "down": {"uv": [40, 16], "texture": 0}
+      }
+    },
+    {
+      "name": "Chest_Sigil",
+      "from": [-2, 10, 2.01],
+      "to": [2, 14, 2.5],
+      "faces": {
+        "north": {"uv": [48, 16], "texture": 0},
+        "east": {"uv": [52, 16], "texture": 0},
+        "south": {"uv": [56, 16], "texture": 0},
+        "west": {"uv": [60, 16], "texture": 0},
+        "up": {"uv": [0, 20], "texture": 0},
+        "down": {"uv": [4, 20], "texture": 0}
+      }
+    },
+    {
+      "name": "Arm_L",
+      "from": [-7, 6, -1.5],
+      "to": [-4, 16, 1.5],
+      "faces": {
+        "north": {"uv": [0, 32], "texture": 0},
+        "east": {"uv": [4, 32], "texture": 0},
+        "south": {"uv": [8, 32], "texture": 0},
+        "west": {"uv": [12, 32], "texture": 0},
+        "up": {"uv": [16, 32], "texture": 0},
+        "down": {"uv": [20, 32], "texture": 0}
+      }
+    },
+    {
+      "name": "Arm_R",
+      "from": [4, 6, -1.5],
+      "to": [7, 16, 1.5],
+      "faces": {
+        "north": {"uv": [24, 32], "texture": 0},
+        "east": {"uv": [28, 32], "texture": 0},
+        "south": {"uv": [32, 32], "texture": 0},
+        "west": {"uv": [36, 32], "texture": 0},
+        "up": {"uv": [40, 32], "texture": 0},
+        "down": {"uv": [44, 32], "texture": 0}
+      }
+    },
+    {
+      "name": "Leg_L",
+      "from": [-2.5, -6, -1.5],
+      "to": [0.5, 6, 1.5],
+      "faces": {
+        "north": {"uv": [0, 48], "texture": 0},
+        "east": {"uv": [4, 48], "texture": 0},
+        "south": {"uv": [8, 48], "texture": 0},
+        "west": {"uv": [12, 48], "texture": 0},
+        "up": {"uv": [16, 48], "texture": 0},
+        "down": {"uv": [20, 48], "texture": 0}
+      }
+    },
+    {
+      "name": "Leg_R",
+      "from": [-0.5, -6, -1.5],
+      "to": [2.5, 6, 1.5],
+      "faces": {
+        "north": {"uv": [24, 48], "texture": 0},
+        "east": {"uv": [28, 48], "texture": 0},
+        "south": {"uv": [32, 48], "texture": 0},
+        "west": {"uv": [36, 48], "texture": 0},
+        "up": {"uv": [40, 48], "texture": 0},
+        "down": {"uv": [44, 48], "texture": 0}
+      }
+    },
+    {
+      "name": "Cloak_Front",
+      "from": [-5, 5, 2.5],
+      "to": [5, 18, 4.5],
+      "faces": {
+        "north": {"uv": [48, 24], "texture": 0},
+        "east": {"uv": [56, 24], "texture": 0},
+        "south": {"uv": [0, 32], "texture": 0},
+        "west": {"uv": [8, 32], "texture": 0},
+        "up": {"uv": [16, 32], "texture": 0},
+        "down": {"uv": [24, 32], "texture": 0}
+      }
+    },
+    {
+      "name": "Boot_L",
+      "from": [-2.5, -6, -2],
+      "to": [0.5, -4, 2],
+      "faces": {
+        "north": {"uv": [48, 40], "texture": 0},
+        "east": {"uv": [52, 40], "texture": 0},
+        "south": {"uv": [56, 40], "texture": 0},
+        "west": {"uv": [60, 40], "texture": 0},
+        "up": {"uv": [0, 44], "texture": 0},
+        "down": {"uv": [4, 44], "texture": 0}
+      }
+    },
+    {
+      "name": "Boot_R",
+      "from": [-0.5, -6, -2],
+      "to": [2.5, -4, 2],
+      "faces": {
+        "north": {"uv": [48, 48], "texture": 0},
+        "east": {"uv": [52, 48], "texture": 0},
+        "south": {"uv": [56, 48], "texture": 0},
+        "west": {"uv": [60, 48], "texture": 0},
+        "up": {"uv": [0, 52], "texture": 0},
+        "down": {"uv": [4, 52], "texture": 0}
+      }
+    }
   ],
-
   "outliner": [
     {
       "name": "root",
       "children": [
-        "Head",
-        "Halo",
         {
           "name": "torso",
           "children": [
             "Torso",
-            "Chest_Core",
-            "Hip_Robe",
-            "Energy_Trail",
-            "Arm_L",
-            "Arm_R"
+            "Chest_Sigil",
+            {
+              "name": "head",
+              "children": ["Head", "Beard"]
+            },
+            {
+              "name": "arm_L",
+              "children": ["Arm_L"]
+            },
+            {
+              "name": "arm_R",
+              "children": ["Arm_R"]
+            },
+            "Cloak_Front"
           ]
         },
-        "Leg_L",
-        "Leg_R"
+        {
+          "name": "leg_L",
+          "children": ["Leg_L", "Boot_L"]
+        },
+        {
+          "name": "leg_R",
+          "children": ["Leg_R", "Boot_R"]
+        }
       ]
     }
   ]

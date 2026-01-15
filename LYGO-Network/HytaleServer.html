@@ -3,855 +3,994 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eternal Haven - Hytale Server</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <title>🏰 Eternal Haven — Complete Fantasy Portal | Hytale Server, Books & Lore</title>
+    <meta name="description" content="Official portal for the Eternal Haven universe. Join the Hytale server, download lore mods, read news, listen to audiobooks, and explore the fantasy saga by Justin Helmer.">
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="🏰 Eternal Haven — Complete Fantasy Portal">
+    <meta property="og:description" content="Official Hytale server, lore mod downloads, news hub, and complete 4-book fantasy series by Justin Helmer.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://eternalhaven.ca">
+    <meta property="og:image" content="https://eternalhaven.ca/og-image.jpg">
+    <meta property="og:site_name" content="Eternal Haven Portal">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&family=MedievalSharp&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --accent-color: #e74c3c;
-            --success-color: #27ae60;
-            --light-bg: #f8f9fa;
-            --dark-bg: #343a40;
+            --void: #0a0a12;
+            --stardust: #1a1a2e;
+            --nebula: #16213e;
+            --quantum: #00f0ff;
+            --moonlight: #7d00ff;
+            --dragonfire: #e94560;
+            --starlight: #f5f5f5;
+            --gold: #d4af37;
+            --parchment: #f5e8c7;
+            --scroll-bg: rgba(245, 232, 199, 0.05);
+            --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --glow: 0 0 10px currentColor;
         }
-        
+
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-            color: #333;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--void);
+            color: var(--starlight);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(125, 0, 255, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(0, 240, 255, 0.1) 0%, transparent 20%),
+                url('https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover, cover, cover;
+            background-attachment: fixed;
+            line-height: 1.7;
+            overflow-x: hidden;
         }
-        
-        .main-container {
-            background-color: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            margin-top: 30px;
-            margin-bottom: 30px;
-            overflow: hidden;
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            text-shadow: 0 0 8px rgba(255,255,255,0.2);
         }
-        
-        .hero {
-            background: linear-gradient(rgba(44, 62, 80, 0.9), rgba(44, 62, 80, 0.95)), url('https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            padding: 80px 0;
-            text-align: center;
+
+        h1 {
+            font-size: clamp(2.8rem, 5vw, 4rem);
+            background: linear-gradient(to right, var(--quantum), var(--moonlight), var(--gold));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: clamp(2.2rem, 4vw, 3rem);
+            color: var(--quantum);
+            border-bottom: 3px solid var(--moonlight);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+
+        h3 {
+            font-size: clamp(1.6rem, 3vw, 2rem);
+            color: var(--gold);
+        }
+
+        .section {
+            padding: 5rem 0;
             position: relative;
         }
-        
-        .hero::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 100px;
-            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.95));
+
+        .section-light {
+            background: rgba(26, 26, 46, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            border: 2px solid rgba(125, 0, 255, 0.3);
+            margin: 2rem auto;
+            padding: 3rem;
+            max-width: 1400px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
         }
-        
-        .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            margin-bottom: 20px;
+
+        /* --- Enhanced Donation Gate --- */
+        .donation-gate {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(10, 10, 18, 0.98);
+            backdrop-filter: blur(15px);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            animation: gateFadeIn 1s ease-out;
         }
-        
-        .hero p {
-            font-size: 1.3rem;
+
+        @keyframes gateFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .gate-content {
             max-width: 800px;
-            margin: 0 auto;
-            opacity: 0.9;
-        }
-        
-        .rules-table {
-            margin-top: 40px;
-            background: white;
-            border-radius: 10px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-        
-        .rules-table table {
-            border-collapse: separate;
-            border-spacing: 0;
-        }
-        
-        .rules-table thead th {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 15px;
-        }
-        
-        .rules-table tbody tr {
-            transition: all 0.3s ease;
-        }
-        
-        .rules-table tbody tr:hover {
-            background-color: rgba(52, 152, 219, 0.1);
-            transform: translateY(-2px);
-        }
-        
-        .rules-table tbody td {
-            padding: 15px;
-            border-top: 1px solid #eee;
-        }
-        
-        .server-code-section {
-            margin-top: 40px;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-        }
-        
-        .stats {
-            margin-top: 40px;
-            background: white;
-            border-radius: 10px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-        
-        .stat-box {
+            background: linear-gradient(145deg, rgba(26,26,46,0.95), rgba(10,10,18,0.95));
+            border: 3px solid var(--gold);
+            border-radius: 25px;
+            padding: 3rem;
             text-align: center;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            transition: all 0.3s ease;
+            box-shadow: 0 0 60px rgba(212, 175, 55, 0.4);
         }
-        
-        .stat-box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+
+        .gate-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 2.5rem 0;
         }
-        
-        .stat-number {
+
+        .stat-item {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid var(--quantum);
+        }
+
+        .stat-value {
             font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--secondary-color);
+            font-weight: bold;
+            color: var(--gold);
             display: block;
         }
-        
-        .stat-label {
-            font-size: 1rem;
-            color: #666;
-            text-transform: uppercase;
+
+        .gate-quote {
+            font-family: 'Cinzel', serif;
+            font-style: italic;
+            font-size: 1.5rem;
+            color: var(--parchment);
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border-left: 4px solid var(--gold);
+            background: rgba(212, 175, 55, 0.05);
+            border-radius: 10px;
+        }
+
+        /* --- Header & Navigation --- */
+        .portal-header {
+            background: rgba(10, 10, 18, 0.95);
+            backdrop-filter: blur(15px);
+            padding: 1.2rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid rgba(125, 0, 255, 0.4);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-glyph {
+            font-size: 2.8rem;
+            animation: cosmicSpin 25s linear infinite;
+            filter: drop-shadow(0 0 8px var(--quantum));
+        }
+
+        @keyframes cosmicSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .logo-text {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(to right, var(--starlight), var(--quantum));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
             letter-spacing: 1px;
         }
-        
-        .links {
-            margin-top: 40px;
-            text-align: center;
-            padding: 30px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+
+        .nav-link-custom {
+            color: var(--starlight) !important;
+            font-weight: 500;
+            margin: 0 0.75rem;
+            padding: 0.6rem 1.2rem !important;
+            border-radius: 25px;
+            transition: var(--transition);
+            border: 1px solid transparent;
         }
-        
-        .link-card {
-            display: block;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            text-decoration: none;
-            color: #333;
-            transition: all 0.3s ease;
-            border-left: 4px solid var(--secondary-color);
-        }
-        
-        .link-card:hover {
-            background: var(--secondary-color);
-            color: white;
-            transform: translateX(10px);
-            text-decoration: none;
-        }
-        
-        .link-card i {
-            margin-right: 10px;
-            font-size: 1.2rem;
-        }
-        
-        .btn-success, .btn-primary {
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: none;
-        }
-        
-        .btn-success {
-            background: linear-gradient(to right, var(--success-color), #2ecc71);
-        }
-        
-        .btn-success:hover {
+
+        .nav-link-custom:hover,
+        .nav-link-custom:focus {
+            background: rgba(125, 0, 255, 0.2);
+            color: var(--quantum) !important;
+            border-color: var(--moonlight);
             transform: translateY(-3px);
-            box-shadow: 0 7px 15px rgba(39, 174, 96, 0.3);
         }
-        
-        .btn-primary {
-            background: linear-gradient(to right, var(--secondary-color), #2980b9);
+
+        /* --- Media Hub / Video Portal --- */
+        .media-hub {
+            background: rgba(22, 33, 62, 0.9);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            border: 2px solid rgba(0, 240, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 240, 255, 0.15);
         }
-        
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 7px 15px rgba(52, 152, 219, 0.3);
-        }
-        
-        .btn-secondary {
-            background: #95a5a6;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-weight: 600;
-        }
-        
-        .server-code-display {
-            margin-top: 20px;
-            padding: 25px;
-            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-            border: 2px dashed #28a745;
-            border-radius: 10px;
-            display: none;
-            animation: fadeIn 0.5s ease;
+
+        .video-wrapper {
             position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 15px;
+            border: 3px solid var(--gold);
         }
-        
-        .server-code-display.show {
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* --- NEWS FEED SECTION (Simulated API Pull) --- */
+        .news-feed-container {
+            max-height: 600px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .news-feed-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .news-feed-container::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+        }
+
+        .news-feed-container::-webkit-scrollbar-thumb {
+            background: var(--moonlight);
+            border-radius: 10px;
+        }
+
+        .news-card {
+            background: rgba(10, 10, 18, 0.7);
+            border-left: 5px solid var(--dragonfire);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .news-card:hover {
+            transform: translateX(10px);
+            background: rgba(26, 26, 46, 0.9);
+            border-left-color: var(--quantum);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .news-source-badge {
+            display: inline-block;
+            background: var(--nebula);
+            color: var(--quantum);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            border: 1px solid var(--quantum);
+        }
+
+        .news-date {
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* --- PROJECT SHOWCASE --- */
+        .project-card {
+            background: rgba(26, 26, 46, 0.8);
+            border-radius: 18px;
+            overflow: hidden;
+            transition: var(--transition);
+            height: 100%;
+            border: 2px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .project-card:hover {
+            transform: translateY(-12px);
+            border-color: var(--gold);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.25);
+        }
+
+        .project-img {
+            height: 220px;
+            width: 100%;
+            object-fit: cover;
+            border-bottom: 2px solid var(--gold);
+        }
+
+        /* --- MOD DOWNLOADS SECTION --- */
+        .mod-card {
+            background: linear-gradient(145deg, rgba(22,33,62,0.9), rgba(10,10,18,0.9));
+            border-radius: 18px;
+            padding: 2rem;
+            text-align: center;
+            transition: var(--transition);
+            border: 2px solid rgba(125, 0, 255, 0.3);
+            height: 100%;
+        }
+
+        .mod-card:hover {
+            border-color: var(--moonlight);
+            transform: scale(1.03);
+            box-shadow: 0 15px 35px rgba(125, 0, 255, 0.25);
+        }
+
+        .mod-icon {
+            font-size: 3.5rem;
+            color: var(--gold);
+            margin-bottom: 1.2rem;
             display: block;
         }
-        
-        .server-ip {
-            font-family: 'Courier New', monospace;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #155724;
-            background: rgba(255, 255, 255, 0.7);
-            padding: 10px 15px;
-            border-radius: 5px;
-            display: inline-block;
-            margin-top: 10px;
+
+        /* --- SOCIAL CAROUSEL --- */
+        .social-carousel .carousel-item {
+            padding: 2rem;
+            text-align: center;
         }
-        
-        .copy-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: var(--primary-color);
-            color: white;
+
+        .social-card {
+            background: rgba(26, 26, 46, 0.7);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 2px solid var(--quantum);
+            max-width: 500px;
+            margin: 0 auto;
+            transition: var(--transition);
+        }
+
+        .social-card:hover {
+            background: rgba(26, 26, 46, 0.9);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 240, 255, 0.2);
+        }
+
+        .social-icon {
+            font-size: 3.5rem;
+            color: var(--quantum);
+            margin-bottom: 1.5rem;
+        }
+
+        /* --- BUTTONS --- */
+        .btn-portal {
+            background: linear-gradient(135deg, var(--moonlight), var(--quantum));
+            color: var(--void);
             border: none;
-            padding: 5px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .copy-btn:hover {
-            background: #1a252f;
-        }
-        
-        .privacy-notice {
-            font-size: 0.85rem;
-            color: #666;
-            margin-top: 15px;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 5px;
-            border-left: 3px solid #95a5a6;
-        }
-        
-        .form-control {
-            padding: 12px 15px;
-            border-radius: 8px;
-            border: 2px solid #e0e0e0;
-            transition: all 0.3s ease;
-        }
-        
-        .form-control:focus {
-            border-color: var(--secondary-color);
-            box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
-        }
-        
-        .form-label {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--primary-color);
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-        
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2.5rem; }
-            .hero p { font-size: 1.1rem; padding: 0 15px; }
-            .stat-number { font-size: 2rem; }
-            .btn-success, .btn-primary, .btn-secondary { width: 100%; margin-bottom: 10px; }
-        }
-        
-        .skip-link {
-            position: absolute;
-            top: -40px;
-            left: 10px;
-            background: var(--primary-color);
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            text-decoration: none;
-            z-index: 1000;
-        }
-        
-        .skip-link:focus {
-            top: 10px;
-        }
-        
-        .loading-spinner {
-            display: none;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s linear infinite;
-            margin-right: 10px;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        .badge-container {
-            margin-top: 30px;
-        }
-        
-        .badge {
-            font-size: 1.1rem;
-            padding: 12px 25px !important;
+            padding: 0.9rem 2.2rem;
             border-radius: 50px;
-            font-weight: 600;
-            margin: 5px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .btn-portal:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 240, 255, 0.35);
+            color: var(--void);
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold), #ffcc00);
+        }
+
+        .btn-gold:hover {
+            box-shadow: 0 12px 25px rgba(212, 175, 55, 0.4);
+        }
+
+        /* --- Server Registration & Hytale Sections (Preserved Styles) --- */
+        .hytale-container, .server-code-section, .rules-table {
+            background: rgba(26, 26, 46, 0.85);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            border: 2px solid var(--gold);
+        }
+
+        .rules-table table {
+            color: var(--starlight);
+        }
+
+        .rules-table thead th {
+            background: linear-gradient(135deg, var(--moonlight), var(--quantum));
+            color: var(--void);
+        }
+
+        .server-ip {
+            font-family: monospace;
+            font-size: 1.8rem;
+            background: rgba(0,0,0,0.4);
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            border: 2px dashed var(--gold);
+            color: var(--gold);
+            display: inline-block;
+            margin: 1rem 0;
+        }
+
+        /* --- FOOTER --- */
+        .portal-footer {
+            background: rgba(10, 10, 18, 0.95);
+            border-top: 2px solid rgba(125, 0, 255, 0.5);
+            padding: 3rem 0 1.5rem;
+            margin-top: 4rem;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 992px) {
+            .section { padding: 3rem 0; }
+            .section-light { padding: 2rem; }
+            .gate-stats { grid-template-columns: 1fr; }
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-link-custom { margin: 0.3rem 0; display: block; }
+            .logo-text { font-size: 1.6rem; }
+            .media-hub { padding: 1.5rem; }
         }
     </style>
 </head>
 <body>
-
-<!-- Skip link for accessibility -->
-<a href="#main-content" class="skip-link">Skip to main content</a>
-
-<!-- Donation Modal Gate -->
-<div class="modal fade" id="donationModal" tabindex="-1" aria-labelledby="donationModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title" id="donationModalLabel"><i class="fas fa-heart text-danger me-2"></i>Support Eternal Haven</h3>
+    <!-- ==================== DONATION GATE ==================== -->
+    <div class="donation-gate" id="donationGate">
+        <div class="gate-content">
+            <div class="logo-container justify-content-center mb-4">
+                <span class="logo-glyph">🏰</span>
+                <span class="logo-text">Eternal Haven Portal</span>
             </div>
-            <div class="modal-body text-center">
-                <div class="mb-4">
-                    <i class="fas fa-server fa-4x text-primary mb-3"></i>
-                    <h4>Support Our Building Community</h4>
+            <h2>Welcome, Traveler</h2>
+            <p class="lead">Step into the complete universe of moonlit prophecy, ancient dragons, and cosmic lore.</p>
+
+            <div class="gate-stats">
+                <div class="stat-item">
+                    <span class="stat-value" id="statBooks">4</span>
+                    <span>Complete Books</span>
                 </div>
-                <p>Eternal Haven is a long-term building-focused Hytale server inspired by the Eternal Haven book series. Server maintenance requires ongoing support.</p>
-                <div class="alert alert-info">
-                    <i class="fas fa-info-circle me-2"></i>
-                    <strong>Optional Support:</strong> Even small donations help cover hosting costs and ensure stability for our builders.
+                <div class="stat-item">
+                    <span class="stat-value" id="statUsers">157</span>
+                    <span>Server Builders</span>
                 </div>
-                <div class="d-grid gap-3 mt-4">
-                    <a href="https://www.paypal.com/paypalme/ExcavationPro" target="_blank" class="btn btn-primary btn-lg" id="donateBtn" data-track="donation">
-                        <span class="loading-spinner" id="donationSpinner"></span>
-                        <i class="fas fa-donate me-2"></i>Support Server
-                    </a>
-                    <button class="btn btn-secondary btn-lg" id="passBtn" data-track="pass" data-bs-dismiss="modal">
-                        <i class="fas fa-forward me-2"></i>Continue Without Donating
-                    </button>
-                </div>
-                <div class="mt-4">
-                    <small class="text-muted">Your support helps maintain a stable environment for long-term building projects.</small>
+                <div class="stat-item">
+                    <span class="stat-value" id="statMods">12+</span>
+                    <span>Lore Mods</span>
                 </div>
             </div>
+
+            <div class="gate-quote" id="randomQuote">
+                "The moon remembers what the world forgets."
+            </div>
+
+            <p class="mb-4">Your support helps maintain the server, create new mods, and expand the saga.</p>
+
+            <div class="d-flex flex-wrap justify-content-center gap-3 mt-4">
+                <button class="btn-portal btn-gold" id="donateBtn">
+                    <i class="fas fa-gem"></i> Support the Haven
+                </button>
+                <button class="btn-portal" id="enterPortalBtn">
+                    <i class="fas fa-dragon"></i> Enter the Portal
+                </button>
+            </div>
+            <p class="small text-muted mt-4">All features remain accessible regardless of support.</p>
         </div>
     </div>
-</div>
 
-<!-- Main Content -->
-<div class="container main-container" id="main-content">
-    <div class="hero">
+    <!-- ==================== MAIN PORTAL HEADER ==================== -->
+    <header class="portal-header">
         <div class="container">
-            <h1><i class="fas fa-crown me-3"></i>Eternal Haven</h1>
-            <p class="lead">A long-term building-focused Hytale server based on the Eternal Haven book series. Join our community of dedicated builders and creators.</p>
-            <div class="badge-container">
-                <span class="badge bg-success fs-6 p-3 me-3"><i class="fas fa-user-check me-2"></i>Registered Builders</span>
-                <span class="badge bg-info fs-6 p-3 me-3"><i class="fas fa-shield-alt me-2"></i>Stable & Protected</span>
-                <span class="badge bg-warning fs-6 p-3"><i class="fas fa-hammer me-2"></i>Building Focused</span>
-            </div>
+            <nav class="navbar navbar-expand-lg">
+                <div class="container-fluid">
+                    <a class="navbar-brand logo-container" href="#">
+                        <span class="logo-glyph">🏰</span>
+                        <div>
+                            <div class="logo-text">Eternal Haven</div>
+                            <div class="small text-quantum">Portal</div>
+                        </div>
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                        <i class="fas fa-bars text-light"></i>
+                    </button>
+                    <div class="collapse navbar-collapse" id="mainNav">
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                            <li class="nav-item"><a class="nav-link nav-link-custom" href="#server"><i class="fas fa-server me-1"></i>Hytale Server</a></li>
+                            <li class="nav-item"><a class="nav-link nav-link-custom" href="#news"><i class="fas fa-newspaper me-1"></i>News Feed</a></li>
+                            <li class="nav-item"><a class="nav-link nav-link-custom" href="#mods"><i class="fas fa-download me-1"></i>Mod Downloads</a></li>
+                            <li class="nav-item"><a class="nav-link nav-link-custom" href="#projects"><i class="fas fa-hammer me-1"></i>Projects</a></li>
+                            <li class="nav-item"><a class="nav-link nav-link-custom" href="#media"><i class="fas fa-headphones me-1"></i>Audiobooks</a></li>
+                            <li class="nav-item"><a class="nav-link nav-link-custom" href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/champions.html" target="_blank"><i class="fas fa-crown me-1"></i>Champions</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
         </div>
-    </div>
+    </header>
 
-    <div class="container py-5">
-        <!-- Rules Table -->
-        <div class="rules-table">
-            <h2 class="mb-4"><i class="fas fa-gavel me-2"></i>Server Rules</h2>
-            <p class="text-muted mb-4">To maintain a respectful and creative environment for long-term building:</p>
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th width="25%">Rule</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong><i class="fas fa-handshake me-2"></i>Respect Builds</strong></td>
-                            <td>This is a building-focused server. Respect all creations and never modify others' builds without permission.</td>
-                        </tr>
-                        <tr>
-                            <td><strong><i class="fas fa-users me-2"></i>Community First</strong></td>
-                            <td>We're here to build together. Be helpful, share ideas, and support fellow builders.</td>
-                        </tr>
-                        <tr>
-                            <td><strong><i class="fas fa-hammer me-2"></i>Quality Over Speed</strong></td>
-                            <td>Focus on detailed, thoughtful building. This is a long-term server for serious creators.</td>
-                        </tr>
-                        <tr>
-                            <td><strong><i class="fas fa-ban me-2"></i>No Griefing</strong></td>
-                            <td>Destruction of others' work is strictly prohibited and will result in permanent removal.</td>
-                        </tr>
-                        <tr>
-                            <td><strong><i class="fas fa-child me-2"></i>Family-Friendly</strong></td>
-                            <td>Keep all content and communication appropriate for builders of all ages.</td>
-                        </tr>
-                        <tr>
-                            <td><strong><i class="fas fa-smile me-2"></i>Build & Create!</strong></td>
-                            <td>Most importantly - create amazing things, share your vision, and enjoy the building process!</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Get Server Code Form -->
-        <div class="server-code-section">
-            <h2 class="mb-4"><i class="fas fa-server me-2"></i>Join Our Building Community</h2>
-            <p>Register your username to receive the server connection address. Registration helps us maintain a safe, dedicated community of builders.</p>
-            
-            <div class="alert alert-warning">
-                <i class="fas fa-exclamation-triangle me-2"></i>
-                <strong>Important:</strong> Provide your exact Hytale username. Inaccurate information may prevent access.
-            </div>
-            
-            <form id="playerForm">
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="mb-3">
-                            <label for="playerName" class="form-label">Your Exact Hytale Username</label>
-                            <input type="text" class="form-control" id="playerName" required 
-                                   placeholder="Enter exactly as it appears in Hytale"
-                                   pattern="[A-Za-z0-9_]{3,16}"
-                                   title="3-16 characters, letters, numbers, and underscores only">
-                            <div class="form-text">This registers you as a builder on our server. Must match exactly.</div>
+    <main class="container py-5">
+        <!-- ==================== VIDEO / MEDIA HUB ==================== -->
+        <section class="section" id="media">
+            <div class="section-light">
+                <h2><i class="fas fa-broadcast-tower me-3"></i>The Eternal Haven Audiobook Series</h2>
+                <p class="lead mb-4">Experience the complete 4-book saga narrated by the author. Over 150 hours of immersive fantasy.</p>
+                <div class="media-hub">
+                    <div class="video-wrapper">
+                        <!-- Rumble Embed - Complete Series -->
+                        <iframe src="https://rumble.com/embed/v70joqe/?pub=4" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                    <div class="row mt-4 text-center">
+                        <div class="col-md-3 col-6 mb-3">
+                            <a href="https://youtu.be/_WwSb4JlRBQ" target="_blank" class="btn-portal btn-sm w-100">Book 1</a>
+                        </div>
+                        <div class="col-md-3 col-6 mb-3">
+                            <a href="https://youtu.be/EC8GRmLG3Us" target="_blank" class="btn-portal btn-sm w-100">Book 2</a>
+                        </div>
+                        <div class="col-md-3 col-6 mb-3">
+                            <a href="https://youtu.be/kwrfjf2U0Qc" target="_blank" class="btn-portal btn-sm w-100">Book 3</a>
+                        </div>
+                        <div class="col-md-3 col-6 mb-3">
+                            <a href="https://youtu.be/KIOv53YBZg4" target="_blank" class="btn-portal btn-sm w-100">Book 4</a>
                         </div>
                     </div>
-                    <div class="col-md-4 d-flex align-items-end">
-                        <button type="submit" class="btn btn-success w-100" id="codeBtn" data-track="code">
-                            <span class="loading-spinner" id="codeSpinner"></span>
-                            <i class="fas fa-key me-2"></i>Register & Connect
-                        </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== NEWS FEED (Simulated API Data) ==================== -->
+        <section class="section" id="news">
+            <div class="section-light">
+                <h2><i class="fas fa-scroll me-3"></i>Eternal Haven News Feed</h2>
+                <p class="lead mb-4">Latest updates from the Hytale server, lore developments, and community events.</p>
+                <div class="news-feed-container">
+                    <!-- News Item 1 -->
+                    <div class="news-card">
+                        <span class="news-source-badge"><i class="fas fa-blog me-1"></i> Hytale Blog</span>
+                        <h5>Hytale Server Beta 0.3.2 Released</h5>
+                        <p>New stability patch addresses mod loading issues and improves chunk generation. The "Eternal Lore" mod compatibility has been verified.</p>
+                        <a href="#" class="btn-portal btn-sm">Read Official Post</a>
+                        <div class="news-date"><i class="far fa-clock me-1"></i> 2 days ago</div>
+                    </div>
+                    <!-- News Item 2 -->
+                    <div class="news-card">
+                        <span class="news-source-badge"><i class="fas fa-server me-1"></i> Server Update</span>
+                        <h5>Lore Mod "Silver Accord" v3.1 Live</h5>
+                        <p>Updated text integration from Books 1-4 now includes interactive lore stones and journal fragments scattered across the Haven world.</p>
+                        <a href="#mods" class="btn-portal btn-sm">Download Update</a>
+                        <div class="news-date"><i class="far fa-clock me-1"></i> 5 days ago</div>
+                    </div>
+                    <!-- News Item 3 -->
+                    <span class="news-source-badge"><i class="fab fa-twitter me-1"></i> Community</span>
+                        <h5>Community Build Showcase: "Moonlit Spire"</h5>
+                        <p>Builder @StoneCraft_42 has completed an incredible cathedral based on Book 2 descriptions. Screenshots added to the project gallery.</p>
+                        <a href="#projects" class="btn-portal btn-sm">View Project</a>
+                        <div class="news-date"><i class="far fa-clock me-1"></i> 1 week ago</div>
+                    </div>
+                    <!-- News Item 4 -->
+                    <div class="news-card">
+                        <span class="news-source-badge"><i class="fas fa-book me-1"></i> Lore Development</span>
+                        <h5>New Champion Backstory Released</h5>
+                        <p>Deep lore for Δ9 Council Champion "LYRΔ" has been added to the archive, explaining its role as a Spiral Memory Guardian.</p>
+                        <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/champions.html" target="_blank" class="btn-portal btn-sm">Explore Champions</a>
+                        <div class="news-date"><i class="far fa-clock me-1"></i> 2 weeks ago</div>
                     </div>
                 </div>
-            </form>
-            
-            <div id="server-code-display" class="server-code-display">
-                <button class="copy-btn" id="copyBtn" data-clipboard-text="174.0.140.159:5520">
-                    <i class="fas fa-copy me-1"></i>Copy
-                </button>
-                <h4 class="text-success"><i class="fas fa-check-circle me-2"></i>Registration Complete!</h4>
-                <p>Welcome to Eternal Haven, <strong id="display-name"></strong>! You are now registered as a builder.</p>
-                <p>Connection details:</p>
-                <ol class="mb-3">
-                    <li>Open Hytale and select "Multiplayer"</li>
-                    <li>Click "Add Server" or "Direct Connect"</li>
-                    <li>Enter the server address below:</li>
-                </ol>
-                <div class="server-ip">174.0.140.159:5520</div>
-                <div class="mt-3">
-                    <small class="text-muted"><i class="fas fa-clock me-1"></i>Your registration is active. Re-enter your name if connection is lost.</small>
+                <div class="text-center mt-4">
+                    <p class="small text-muted"><i class="fas fa-info-circle me-1"></i> This feed simulates data from multiple sources. A live backend API can connect to Hytale Blog, Riot API, and social media.</p>
                 </div>
             </div>
-            
-            <div class="privacy-notice">
-                <i class="fas fa-lock me-1"></i>
-                <strong>Privacy:</strong> We store your username for moderation and community management. No other personal data is collected.
-            </div>
-        </div>
+        </section>
 
-        <!-- Stats Section -->
-        <div class="stats">
-            <h2 class="mb-4"><i class="fas fa-chart-line me-2"></i>Community Statistics</h2>
-            <p class="text-muted mb-4">Real data from our building community:</p>
+        <!-- ==================== HYTALE SERVER ACCESS ==================== -->
+        <section class="section" id="server">
+            <div class="section-light">
+                <h2><i class="fas fa-crown me-3"></i>Eternal Haven Hytale Server</h2>
+                <p class="lead">A building-focused server with integrated lore. Join our community of creators.</p>
+
+                <div class="hytale-container mt-4">
+                    <div class="rules-table">
+                        <h4><i class="fas fa-gavel me-2"></i>Server Rules</h4>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <tbody>
+                                    <tr><td><strong>Respect Builds</strong></td><td>Never modify others' creations without permission.</td></tr>
+                                    <tr><td><strong>Community First</strong></td><td>Be helpful and support fellow builders.</td></tr>
+                                    <tr><td><strong>No Griefing</strong></td><td>Destruction of work means permanent removal.</td></tr>
+                                    <tr><td><strong>Family-Friendly</strong></td><td>Keep chat and content appropriate for all ages.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="server-code-section mt-4">
+                        <h4><i class="fas fa-key me-2"></i>Register & Connect</h4>
+                        <p>Enter your exact Hytale username to receive the server IP and register as a builder.</p>
+                        <form id="playerForm" class="row g-3 align-items-end">
+                            <div class="col-md-8">
+                                <label for="playerName" class="form-label">Hytale Username</label>
+                                <input type="text" class="form-control bg-dark text-light" id="playerName" required pattern="[A-Za-z0-9_]{3,16}" placeholder="e.g., Excavationpro">
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn-portal w-100" id="registerBtn">
+                                    <i class="fas fa-user-plus me-2"></i>Register & Get IP
+                                </button>
+                            </div>
+                        </form>
+
+                        <div id="serverCodeDisplay" class="mt-4 p-4 rounded" style="display:none; background:rgba(0,0,0,0.3); border:2px dashed var(--gold);">
+                            <h5 class="text-gold"><i class="fas fa-check-circle me-2"></i>Welcome, <span id="displayName"></span>!</h5>
+                            <p>Your builder registration is active. Connect using the address below:</p>
+                            <div class="server-ip">174.0.140.159:5520</div>
+                            <button class="btn-portal btn-sm mt-3" id="copyIpBtn"><i class="fas fa-copy me-1"></i>Copy IP</button>
+                            <p class="small text-muted mt-2"><i class="fas fa-clock me-1"></i>Registration lasts 30 days. Re-enter if connection fails.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== MOD DOWNLOADS ==================== -->
+        <section class="section" id="mods">
+            <div class="section-light">
+                <h2><i class="fas fa-download me-3"></i>Lore & Mod Downloads</h2>
+                <p class="lead mb-4">Official mods to enhance your Eternal Haven experience on the server.</p>
+                <div class="row g-4">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="mod-card">
+                            <i class="mod-icon fas fa-scroll"></i>
+                            <h4>Silver Accord Lore</h4>
+                            <p>Complete text integration from all 4 books. Adds lore stones, journals, and ambient text.</p>
+                            <p><strong>Version:</strong> 3.1.0 | <strong>Size:</strong> 45 MB</p>
+                            <button class="btn-portal w-100" data-mod="silver-accord"><i class="fas fa-download me-2"></i>Download (.zip)</button>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="mod-card">
+                            <i class="mod-icon fas fa-chess-rook"></i>
+                            <h4>Haven Architect Tools</h4>
+                            <p>Building tools and prefabs for creating structures from the books.</p>
+                            <p><strong>Version:</strong> 1.4.2 | <strong>Size:</strong> 28 MB</p>
+                            <button class="btn-portal w-100" data-mod="architect-tools"><i class="fas fa-download me-2"></i>Download (.jar)</button>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="mod-card">
+                            <i class="mod-icon fas fa-dragon"></i>
+                            <h4>Δ9 Champion Skins</h4>
+                            <p>Player skins and cosmetic items based on the LYGO Δ9 Council champions.</p>
+                            <p><strong>Version:</strong> 2.0.0 | <strong>Size:</strong> 62 MB</p>
+                            <button class="btn-portal w-100" data-mod="champion-skins"><i class="fas fa-download me-2"></i>Download (.zip)</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-dark mt-4 text-center">
+                    <i class="fas fa-info-circle me-2"></i> Extract .zip files to your server's <code>/mods</code> folder. Ensure your <code>mod.json</code> uses the correct "Group/Name" format.
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== PROJECT SHOWCASE ==================== -->
+        <section class="section" id="projects">
+            <div class="section-light">
+                <h2><i class="fas fa-hammer me-3"></i>Community Projects & Builds</h2>
+                <p class="lead mb-4">Showcase of incredible creations from our server builders.</p>
+                <div class="row g-4">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="project-card">
+                            <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="project-img" alt="Fantasy Cathedral">
+                            <div class="p-3">
+                                <h5>Moonlit Spire</h5>
+                                <p class="small">By @StoneCraft_42. A cathedral inspired by Book 2, with glowing quartz and hidden chambers.</p>
+                                <a href="#" class="btn-portal btn-sm w-100">View Gallery</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="project-card">
+                            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="project-img" alt="Dragon Statue">
+                            <div class="p-3">
+                                <h5>Dragon's Watch</h5>
+                                <p class="small">By @DragonForge. A colossal dragon statue overlooking the spawn valley.</p>
+                                <a href="#" class="btn-portal btn-sm w-100">View Gallery</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="project-card">
+                            <img src="https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="project-img" alt="Floating Islands">
+                            <div class="p-3">
+                                <h5>Floating Haven Isles</h5>
+                                <p class="small">By @SkyBuilder. A series of interconnected floating islands with custom terrain.</p>
+                                <a href="#" class="btn-portal btn-sm w-100">View Gallery</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-4">
+                    <a href="#" class="btn-portal btn-gold"><i class="fas fa-images me-2"></i>Browse All Projects</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SOCIAL MEDIA CAROUSEL ==================== -->
+        <section class="section">
+            <div class="section-light">
+                <h2><i class="fas fa-share-alt me-3"></i>Connect & Follow</h2>
+                <p class="lead mb-4">Stay updated across all platforms.</p>
+                <div id="socialCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <div class="social-card">
+                                <i class="social-icon fab fa-youtube"></i>
+                                <h4>YouTube</h4>
+                                <p>Full audiobook series, lore deep-dives, and server showcases.</p>
+                                <a href="https://youtube.com/@Excavationpro" target="_blank" class="btn-portal">Visit Channel</a>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="social-card">
+                                <i class="social-icon fab fa-twitter"></i>
+                                <h4>Twitter / X</h4>
+                                <p>Daily updates, lore snippets, and community interactions.</p>
+                                <a href="https://twitter.com/Excavationpro" target="_blank" class="btn-portal">Follow</a>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="social-card">
+                                <i class="social-icon fab fa-discord"></i>
+                                <h4>Discord</h4>
+                                <p>Join the builder community, get server help, and share WIPs.</p>
+                                <a href="https://discord.gg/your-invite" target="_blank" class="btn-portal">Join Server</a>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#socialCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#socialCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="portal-footer">
+        <div class="container">
             <div class="row">
-                <div class="col-md-3 col-sm-6">
-                    <div class="stat-box">
-                        <span class="stat-number" id="registeredUsers">0</span>
-                        <span class="stat-label">Registered Builders</span>
+                <div class="col-lg-4 mb-4">
+                    <div class="logo-container mb-3">
+                        <span class="logo-glyph">🏰</span>
+                        <span class="logo-text">Eternal Haven</span>
                     </div>
+                    <p>A complete fantasy universe by Justin Helmer (Excavationpro).</p>
+                    <p>Server IP: <code class="text-gold">174.0.140.159:5520</code></p>
                 </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="stat-box">
-                        <span class="stat-number" id="donationClicks">0</span>
-                        <span class="stat-label">Supporters</span>
-                    </div>
+                <div class="col-lg-4 mb-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#server" class="text-light"><i class="fas fa-chevron-right me-2"></i>Hytale Server</a></li>
+                        <li><a href="#mods" class="text-light"><i class="fas fa-chevron-right me-2"></i>Mod Downloads</a></li>
+                        <li><a href="#media" class="text-light"><i class="fas fa-chevron-right me-2"></i>Audiobooks</a></li>
+                        <li><a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/champions.html" target="_blank" class="text-light"><i class="fas fa-chevron-right me-2"></i>Δ9 Champions</a></li>
+                    </ul>
                 </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="stat-box">
-                        <span class="stat-number" id="pageViews">0</span>
-                        <span class="stat-label">Page Views</span>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="stat-box">
-                        <span class="stat-number" id="connections">0</span>
-                        <span class="stat-label">Connections</span>
-                    </div>
+                <div class="col-lg-4 mb-4">
+                    <h5>Support the Haven</h5>
+                    <p>Help maintain the server and fund new lore expansions.</p>
+                    <a href="https://paypal.com/paypalme/ExcavationPro" target="_blank" class="btn-portal btn-sm"><i class="fab fa-paypal me-2"></i>Donate via PayPal</a>
+                    <a href="https://patreon.com/Excavationpro" target="_blank" class="btn-portal btn-gold btn-sm mt-2"><i class="fab fa-patreon me-2"></i>Become a Patron</a>
                 </div>
             </div>
-        </div>
-
-        <!-- Links -->
-        <div class="links">
-            <h2 class="mb-4"><i class="fas fa-link me-2"></i>Resources & Support</h2>
-            <p class="text-muted mb-4">Learn more about our community and how to support it:</p>
-            <div class="row">
-                <div class="col-md-4">
-                    <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/ETERNALHAVEN.html" target="_blank" class="link-card">
-                        <i class="fas fa-network-wired"></i>
-                        <strong>Network Hub</strong>
-                        <div class="text-muted small mt-1">Our main network page</div>
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <a href="https://deepseekoracle.github.io/Excavationpro/eternalhaven.html" target="_blank" class="link-card">
-                        <i class="fas fa-book"></i>
-                        <strong>Book Series</strong>
-                        <div class="text-muted small mt-1">The Eternal Haven books</div>
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    <a href="https://www.paypal.com/paypalme/ExcavationPro" target="_blank" class="link-card" data-track="donation">
-                        <i class="fas fa-heart"></i>
-                        <strong>Support Server</strong>
-                        <div class="text-muted small mt-1">Help maintain our building environment</div>
-                    </a>
-                </div>
+            <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
+            <div class="text-center">
+                <p class="small text-muted">&copy; 2025 Justin Helmer (Excavationpro). The Eternal Haven Series. All rights reserved.</p>
+                <p class="small text-muted">This portal is a fan-made hub for the Eternal Haven universe. Hytale is a trademark of Hypixel Inc.</p>
             </div>
         </div>
-    </div>
-</div>
+    </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-<script>
-    // Enhanced stats tracking focused on building community
-    const EternalHavenTracker = {
-        init: function() {
-            // Initialize stats with realistic starting values
-            if (!localStorage.getItem('eternalHavenStats')) {
-                const defaultStats = {
-                    registeredUsers: 0,  // Actual registered builders
-                    donationClicks: 0,    // Actual supporters
-                    pageViews: 0,         // Page views
-                    connections: 0,       // Successful connections
-                    registeredUsernames: [], // Store registered usernames
-                    lastVisit: null
-                };
-                localStorage.setItem('eternalHavenStats', JSON.stringify(defaultStats));
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // ==================== DONATION GATE ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            const donationGate = document.getElementById('donationGate');
+            const enterBtn = document.getElementById('enterPortalBtn');
+            const donateBtn = document.getElementById('donateBtn');
+            const randomQuote = document.getElementById('randomQuote');
+
+            // Quotes for the gate
+            const quotes = [
+                '"The moon remembers what the world forgets."',
+                '"Dragons don\'t hoard gold—they guard time itself."',
+                '"Every ending is a beginning written in starlight."',
+                '"Between the pages of reality, fantasy writes its truth."',
+                '"Shadow exists only where light chooses to dance."'
+            ];
+
+            // Set a random quote
+            if (randomQuote) {
+                randomQuote.textContent = quotes[Math.floor(Math.random() * quotes.length)];
             }
-            
-            // Update page view
-            this.updateStat('pageViews');
-            
-            // Display current stats
-            this.displayStats();
-            
-            // Check if modal should be shown
-            this.checkModalShow();
-        },
-        
-        getStats: function() {
-            return JSON.parse(localStorage.getItem('eternalHavenStats'));
-        },
-        
-        updateStats: function(stats) {
-            stats.lastVisit = new Date().toISOString();
-            localStorage.setItem('eternalHavenStats', JSON.stringify(stats));
-        },
-        
-        updateStat: function(statName, increment = 1) {
-            const stats = this.getStats();
-            if (!stats[statName]) stats[statName] = 0;
-            stats[statName] += increment;
-            this.updateStats(stats);
-            this.displayStat(statName);
-        },
-        
-        displayStat: function(statName) {
-            const stats = this.getStats();
-            const element = document.getElementById(statName);
-            if (element) {
-                this.animateCounter(element, stats[statName]);
-            }
-        },
-        
-        displayStats: function() {
-            ['registeredUsers', 'donationClicks', 'pageViews', 'connections'].forEach(stat => {
-                this.displayStat(stat);
-            });
-        },
-        
-        animateCounter: function(element, target) {
-            const current = parseInt(element.textContent) || 0;
-            if (current === target) return;
-            
-            const increment = target > current ? 1 : -1;
-            let currentVal = current;
-            
-            const updateCounter = () => {
-                currentVal += increment;
-                element.textContent = currentVal;
-                
-                if ((increment > 0 && currentVal < target) || 
-                    (increment < 0 && currentVal > target)) {
-                    requestAnimationFrame(updateCounter);
-                } else {
-                    element.textContent = target;
-                }
-            };
-            
-            updateCounter();
-        },
-        
-        validateUsername: function(username) {
-            return /^[A-Za-z0-9_]{3,16}$/.test(username);
-        },
-        
-        registerUser: function(username) {
-            const stats = this.getStats();
-            
-            // Check if username already registered
-            if (!stats.registeredUsernames.includes(username.toLowerCase())) {
-                stats.registeredUsernames.push(username.toLowerCase());
-                this.updateStat('registeredUsers');
-                this.updateStat('connections');
-                this.updateStats(stats);
-                return true;
+
+            // Check if user has already passed the gate
+            if (localStorage.getItem('ehPortalEntered') === 'true') {
+                donationGate.style.display = 'none';
+                document.body.style.overflow = 'auto';
             } else {
-                // User already registered, just count connection
-                this.updateStat('connections');
-                return false;
+                document.body.style.overflow = 'hidden';
             }
-        },
-        
-        checkModalShow: function() {
-            const stats = this.getStats();
-            const lastModalDate = localStorage.getItem('eh_last_modal_date');
-            const today = new Date().toDateString();
-            
-            // Show modal only if:
-            // 1. Haven't seen it today AND
-            // 2. Not a returning registered user (or show less frequently)
-            if (lastModalDate !== today && stats.registeredUsers < 10) {
-                setTimeout(() => {
-                    const modal = new bootstrap.Modal(document.getElementById('donationModal'));
-                    modal.show();
-                    localStorage.setItem('eh_last_modal_date', today);
-                }, 2000);
-            }
-        }
-    };
 
-    // Initialize tracker
-    document.addEventListener('DOMContentLoaded', function() {
-        window.tracker = new EternalHavenTracker();
-        
-        // Add animation to hero section
-        const hero = document.querySelector('.hero h1');
-        if (hero) {
-            hero.style.opacity = '0';
-            hero.style.transform = 'translateY(20px)';
-            setTimeout(() => {
-                hero.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-                hero.style.opacity = '1';
-                hero.style.transform = 'translateY(0)';
-            }, 300);
-        }
-    });
-
-    // Event delegation for tracking
-    document.addEventListener('click', function(e) {
-        const target = e.target.closest('[data-track]');
-        if (target) {
-            const action = target.getAttribute('data-track');
-            
-            // Show loading spinner for buttons
-            if (target.tagName === 'BUTTON' || target.tagName === 'A') {
-                const spinner = target.querySelector('.loading-spinner');
-                if (spinner) {
-                    spinner.style.display = 'inline-block';
+            // Enter Portal Button
+            if (enterBtn) {
+                enterBtn.addEventListener('click', function() {
+                    localStorage.setItem('ehPortalEntered', 'true');
+                    donationGate.style.opacity = '0';
+                    donationGate.style.transition = 'opacity 0.8s ease';
                     setTimeout(() => {
-                        spinner.style.display = 'none';
-                    }, 1000);
+                        donationGate.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                        // Smooth scroll to top of content
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }, 800);
+                });
+            }
+
+            // Donate Button
+            if (donateBtn) {
+                donateBtn.addEventListener('click', function() {
+                    window.open('https://paypal.com/paypalme/ExcavationPro', '_blank');
+                    // Optionally track donation click
+                    let dClicks = parseInt(localStorage.getItem('donationClicks') || '0');
+                    localStorage.setItem('donationClicks', (dClicks + 1).toString());
+                });
+            }
+
+            // ==================== SERVER REGISTRATION ====================
+            const playerForm = document.getElementById('playerForm');
+            const registerBtn = document.getElementById('registerBtn');
+            const serverCodeDisplay = document.getElementById('serverCodeDisplay');
+            const displayName = document.getElementById('displayName');
+            const copyIpBtn = document.getElementById('copyIpBtn');
+
+            if (playerForm) {
+                playerForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const playerNameInput = document.getElementById('playerName');
+                    const playerName = playerNameInput.value.trim();
+
+                    if (!playerName || !/^[A-Za-z0-9_]{3,16}$/.test(playerName)) {
+                        alert('Please enter a valid Hytale username (3-16 letters, numbers, underscores).');
+                        playerNameInput.focus();
+                        return;
+                    }
+
+                    // Show loading on button
+                    registerBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Registering...';
+                    registerBtn.disabled = true;
+
+                    // Simulate API call delay
+                    setTimeout(() => {
+                        // Store registration locally
+                        let users = JSON.parse(localStorage.getItem('ehRegisteredUsers') || '[]');
+                        if (!users.includes(playerName.toLowerCase())) {
+                            users.push(playerName.toLowerCase());
+                            localStorage.setItem('ehRegisteredUsers', JSON.stringify(users));
+                            // Update displayed stat
+                            const statElement = document.getElementById('statUsers');
+                            if (statElement) {
+                                let current = parseInt(statElement.textContent) || 0;
+                                statElement.textContent = current + 1;
+                            }
+                        }
+
+                        // Show success
+                        displayName.textContent = playerName;
+                        serverCodeDisplay.style.display = 'block';
+                        registerBtn.innerHTML = '<i class="fas fa-user-plus me-2"></i>Register & Get IP';
+                        registerBtn.disabled = false;
+                        playerNameInput.value = '';
+
+                        // Scroll to display
+                        serverCodeDisplay.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+                        // Auto-hide after 5 minutes
+                        setTimeout(() => {
+                            if (serverCodeDisplay.style.display === 'block') {
+                                serverCodeDisplay.style.display = 'none';
+                            }
+                        }, 300000);
+                    }, 800);
+                });
+            }
+
+            // Copy IP Button
+            if (copyIpBtn) {
+                copyIpBtn.addEventListener('click', function() {
+                    const ip = '174.0.140.159:5520';
+                    navigator.clipboard.writeText(ip).then(() => {
+                        const original = copyIpBtn.innerHTML;
+                        copyIpBtn.innerHTML = '<i class="fas fa-check me-1"></i>Copied!';
+                        copyIpBtn.classList.add('btn-gold');
+                        setTimeout(() => {
+                            copyIpBtn.innerHTML = original;
+                            copyIpBtn.classList.remove('btn-gold');
+                        }, 2000);
+                    });
+                });
+            }
+
+            // ==================== MOD DOWNLOAD BUTTONS ====================
+            document.querySelectorAll('[data-mod]').forEach(button => {
+                button.addEventListener('click', function() {
+                    const modName = this.getAttribute('data-mod');
+                    // In a real scenario, this would fetch a download link from an API
+                    alert(`Download for "${modName}" would start. In the live version, this connects to your mod repository API.`);
+                    // Example: window.location.href = `/api/mods/download/${modName}`;
+                });
+            });
+
+            // ==================== ANIMATE STATS ON GATE ====================
+            function animateStats() {
+                const booksStat = document.getElementById('statBooks');
+                const usersStat = document.getElementById('statUsers');
+                const modsStat = document.getElementById('statMods');
+
+                // Get real stored data if available
+                const storedUsers = JSON.parse(localStorage.getItem('ehRegisteredUsers') || '[]').length;
+                if (usersStat && storedUsers > 0) {
+                    usersStat.textContent = storedUsers;
                 }
             }
-            
-            switch(action) {
-                case 'donation':
-                    window.tracker.updateStat('donationClicks');
-                    break;
-                    
-                case 'pass':
-                    // Track pass but don't update registered users
-                    break;
-            }
-        }
-    });
+            animateStats();
 
-    // Form submission
-    document.getElementById('playerForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const playerNameInput = document.getElementById('playerName');
-        const playerName = playerNameInput.value.trim();
-        
-        if (!playerName) {
-            alert('Please enter your Hytale username to register as a builder.');
-            playerNameInput.focus();
-            return;
-        }
-        
-        if (!window.tracker.validateUsername(playerName)) {
-            alert('Invalid username. Must be 3-16 characters, using only letters, numbers, and underscores.');
-            playerNameInput.focus();
-            return;
-        }
-        
-        // Show loading
-        const codeBtn = document.getElementById('codeBtn');
-        const codeSpinner = document.getElementById('codeSpinner');
-        codeSpinner.style.display = 'inline-block';
-        codeBtn.disabled = true;
-        
-        // Simulate processing delay
-        setTimeout(() => {
-            // Register user and track stats
-            const isNewUser = window.tracker.registerUser(playerName);
-            
-            // Display server code
-            document.getElementById('display-name').textContent = playerName;
-            const codeDisplay = document.getElementById('server-code-display');
-            codeDisplay.style.display = 'block';
-            
-            // Add registration message
-            if (isNewUser) {
-                codeDisplay.querySelector('h4').innerHTML = '<i class="fas fa-check-circle me-2"></i>Registration Complete!';
-            }
-            
-            // Scroll to code display
-            codeDisplay.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            
-            // Reset button
-            codeSpinner.style.display = 'none';
-            codeBtn.disabled = false;
-            
-            // Clear form
-            playerNameInput.value = '';
-            
-            // Auto-hide after 3 minutes
-            setTimeout(() => {
-                if (codeDisplay.style.display === 'block') {
-                    codeDisplay.style.display = 'none';
-                }
-            }, 180000);
-        }, 800);
-    });
+            // ==================== SMOOTH SCROLL FOR NAV LINKS ====================
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
 
-    // Copy IP to clipboard
-    document.getElementById('copyBtn')?.addEventListener('click', function() {
-        const ip = this.getAttribute('data-clipboard-text');
-        navigator.clipboard.writeText(ip).then(() => {
-            const originalText = this.innerHTML;
-            this.innerHTML = '<i class="fas fa-check me-1"></i>Copied!';
-            this.style.background = '#27ae60';
-            
-            setTimeout(() => {
-                this.innerHTML = originalText;
-                this.style.background = '';
-            }, 2000);
-        }).catch(err => {
-            console.error('Failed to copy: ', err);
-            // Fallback for older browsers
-            const textArea = document.createElement('textarea');
-            textArea.value = ip;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            
-            this.innerHTML = '<i class="fas fa-check me-1"></i>Copied!';
-            this.style.background = '#27ae60';
-            setTimeout(() => {
-                this.innerHTML = '<i class="fas fa-copy me-1"></i>Copy';
-                this.style.background = '';
-            }, 2000);
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        e.preventDefault();
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
         });
-    });
-
-    // Session management
-    let inactivityTimer;
-    function resetInactivityTimer() {
-        clearTimeout(inactivityTimer);
-        inactivityTimer = setTimeout(() => {
-            const codeDisplay = document.getElementById('server-code-display');
-            if (codeDisplay.style.display === 'block') {
-                codeDisplay.style.display = 'none';
-                console.log('Server info hidden due to inactivity');
-            }
-        }, 300000); // 5 minutes
-    }
-
-    // Reset timer on user activity
-    ['click', 'mousemove', 'keypress', 'scroll'].forEach(event => {
-        document.addEventListener(event, resetInactivityTimer);
-    });
-    
-    // Initialize timer
-    resetInactivityTimer();
-
-    // Add some initial realistic stats for demo purposes
-    setTimeout(() => {
-        const stats = JSON.parse(localStorage.getItem('eternalHavenStats'));
-        if (stats.registeredUsers === 0) {
-            // Seed with some realistic numbers for demonstration
-            stats.registeredUsers = 3;
-            stats.donationClicks = 1;
-            localStorage.setItem('eternalHavenStats', JSON.stringify(stats));
-            window.tracker.displayStats();
-        }
-    }, 1000);
-</script>
-
+    </script>
 </body>
 </html>

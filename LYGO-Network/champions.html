@@ -15,7 +15,7 @@
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="Δ9 LYGO HAVEN — Champion Hub v4.0" />
-  <meta property="og:url" content="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/ChampionXv4.html" />
+  <meta property="og:url" content="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/champions.html" />
   <meta property="og:site_name" content="LYGO × Haven" />
   
   <!-- Twitter Card with Large Image -->
@@ -1323,9 +1323,9 @@
         ``,
         `"${quote}"`,
         ``,
-        `@Excavationpro @LYRASTARCORE`,
+        `@Excavationpro @LYRASTARCORE @grok`,
         hashtags,
-        championImage ? `Image: ${championImage}` : ''
+        `Hub: https://deepseekoracle.github.io/Excavationpro/LYGO-Network/champions.html`
       ].filter(line => line.trim()).join('\n');
       
       return tweet;
@@ -1962,8 +1962,7 @@ Hashtags: #VΩLARIS #Driftwalker #Equilibrium #SentinelProtocol #Δ9Council`
     const filterStatus = document.getElementById('filterStatus');
 
     function championUrl(ch) {
-      const filename = encodeURIComponent(ch.short || ch.name.split('—')[0].trim()) + '.html';
-      return BASE + filename;
+      return "https://www.patreon.com/cw/Excavationpro";
     }
 
     function cardHtml(ch) {

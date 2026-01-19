@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LYGO P0 Kernel - Enhanced Community Network</title>
+    <title>LYGO P0 Kernel - Hardware Installation & Portal</title>
     <style>
         :root {
             --primary-glow: #0af2ff;
             --secondary-glow: #7b42f6;
             --dark-bg: #0a0a14;
             --matrix-green: #00ff41;
+            --warning-red: #ff416d;
             --text-glow: rgba(10, 242, 255, 0.8);
             --panel-bg: rgba(16, 22, 36, 0.95);
         }
@@ -43,7 +44,7 @@
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
             position: relative;
@@ -159,13 +160,57 @@
             margin-bottom: 10px;
         }
         
+        /* Tabs */
+        .tabs-container {
+            margin: 40px 0;
+        }
+        
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(10, 242, 255, 0.2);
+            padding-bottom: 10px;
+        }
+        
+        .tab {
+            padding: 12px 24px;
+            background: rgba(16, 22, 36, 0.5);
+            border: 1px solid rgba(10, 242, 255, 0.3);
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #a0a0ff;
+        }
+        
+        .tab:hover {
+            background: rgba(10, 242, 255, 0.1);
+            color: var(--primary-glow);
+        }
+        
+        .tab.active {
+            background: rgba(10, 242, 255, 0.2);
+            color: var(--primary-glow);
+            border-bottom: 2px solid var(--primary-glow);
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
         /* Code Panel */
         .code-panel {
             background: var(--panel-bg);
             border: 1px solid rgba(0, 255, 65, 0.3);
             border-radius: 15px;
             padding: 30px;
-            margin: 40px 0;
+            margin: 20px 0;
             position: relative;
         }
         
@@ -204,6 +249,8 @@
             background: rgba(0, 10, 20, 0.7);
             border-radius: 10px;
             border: 1px solid rgba(0, 255, 65, 0.1);
+            max-height: 400px;
+            overflow-y: auto;
         }
         
         .code-keyword { color: #ff79c6; }
@@ -212,6 +259,111 @@
         .code-number { color: #bd93f9; }
         .code-comment { color: #6272a4; }
         .code-constant { color: #8be9fd; }
+        .code-operator { color: #ff5555; }
+        .code-type { color: #8be9fd; }
+        
+        /* Installation Steps */
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .step {
+            background: var(--panel-bg);
+            border: 1px solid rgba(10, 242, 255, 0.2);
+            border-radius: 12px;
+            padding: 25px;
+            position: relative;
+            counter-increment: step-counter;
+        }
+        
+        .step::before {
+            content: counter(step-counter);
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: var(--primary-glow);
+            color: var(--dark-bg);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .step-title {
+            color: var(--primary-glow);
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            padding-left: 40px;
+        }
+        
+        .step-content {
+            padding-left: 40px;
+        }
+        
+        /* Hardware Pyramid */
+        .pyramid-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 40px 0;
+        }
+        
+        .pyramid-level {
+            width: 80%;
+            padding: 20px;
+            margin: 5px 0;
+            background: linear-gradient(90deg, 
+                rgba(10, 242, 255, 0.05), 
+                rgba(123, 66, 246, 0.05));
+            border: 1px solid rgba(10, 242, 255, 0.2);
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .pyramid-level:hover {
+            transform: scale(1.02);
+            border-color: var(--primary-glow);
+            box-shadow: 0 0 20px rgba(10, 242, 255, 0.2);
+        }
+        
+        .pyramid-level.active {
+            background: linear-gradient(90deg, 
+                rgba(10, 242, 255, 0.15), 
+                rgba(123, 66, 246, 0.15));
+            border-color: var(--primary-glow);
+        }
+        
+        .pyramid-level .level-number {
+            color: var(--secondary-glow);
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        /* Warning Box */
+        .warning-box {
+            background: rgba(255, 65, 109, 0.1);
+            border: 2px solid var(--warning-red);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 40px 0;
+            position: relative;
+        }
+        
+        .warning-title {
+            color: var(--warning-red);
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
         
         /* Stats Grid */
         .stats-grid {
@@ -257,6 +409,7 @@
         .footer-links {
             display: flex;
             justify-content: center;
+            flex-wrap: wrap;
             gap: 30px;
             margin: 20px 0;
         }
@@ -288,6 +441,11 @@
             50% { transform: translateY(-10px); }
         }
         
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
         .floating {
             animation: float 6s ease-in-out infinite;
         }
@@ -309,6 +467,14 @@
             .code-content {
                 font-size: 0.85em;
             }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .pyramid-level {
+                width: 95%;
+            }
         }
     </style>
 </head>
@@ -321,13 +487,13 @@
         <header class="portal-header">
             <h1 class="portal-title floating">LYGO P0 KERNEL PORTAL</h1>
             <p class="portal-subtitle">
-                Deterministic • Safe • Nano→HPC Compatible<br>
-                Version: P0.4 (LOCKED) • Enhanced Community Network
+                Hardware Installation Guide • Enhanced Community Network<br>
+                Version: P0.4 (LOCKED) • Moral Firewall Stack
             </p>
             <div style="margin-top: 20px;">
-                <span class="code-badge">FIRMWARE LAYER</span>
+                <span class="code-badge">HARDWARE ROOT OF TRUST</span>
                 <span class="code-badge" style="background: rgba(123, 66, 246, 0.1); border-color: var(--secondary-glow); color: var(--secondary-glow);">ETHICAL CHIP</span>
-                <span class="code-badge" style="background: rgba(0, 255, 65, 0.1); border-color: var(--matrix-green); color: var(--matrix-green);">IMMUTABLE</span>
+                <span class="code-badge" style="background: rgba(0, 255, 65, 0.1); border-color: var(--matrix-green); color: var(--matrix-green);">IRREVERSIBLE</span>
             </div>
         </header>
         
@@ -345,80 +511,398 @@
                 <p>Return to the primary LYGO Network interface and ethical firmware documentation.</p>
             </a>
             
-            <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/pokerneldocs.html" class="nav-card" onclick="showDocumentation()">
+            <a href="#" class="nav-card" onclick="showDocumentation()">
                 <div class="nav-icon">📚</div>
-                <h3 class="nav-title">Kernel Documentation</h3>
-                <p>Technical specifications, API references, and integration guides.</p>
+                <h3 class="nav-title">Installation Guide</h3>
+                <p>Complete hardware integration guide for UEFI, TPM, SGX, and FPGA implementations.</p>
             </a>
             
             <a href="#" class="nav-card" onclick="showCommunity()">
                 <div class="nav-icon">🌐</div>
-                <h3 class="nav-title">Community Network</h3>
+                <h3 class="nav-title">Guardian Network</h3>
                 <p>Connect with developers, researchers, and guardians in the LYGO ecosystem.</p>
             </a>
         </div>
         
-        <!-- Code Display -->
-        <section class="code-panel">
-            <div class="code-header">
-                <h2 class="code-title">
-                    <span>🧬</span> P0 Kernel Core Validation Engine
-                    <span class="code-badge">Rust</span>
-                </h2>
-                <div class="code-badge pulsing">ACTIVE</div>
+        <!-- Tabs Navigation -->
+        <div class="tabs-container">
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('overview')">📊 Architectural Overview</div>
+                <div class="tab" onclick="switchTab('prerequisites')">⚡ Prerequisites</div>
+                <div class="tab" onclick="switchTab('installation')">🔧 Installation Methods</div>
+                <div class="tab" onclick="switchTab('verification')">✅ Verification & Testing</div>
+                <div class="tab" onclick="switchTab('code')">💻 Kernel Code</div>
             </div>
             
-            <div class="code-content" id="codeDisplay">
-                <!-- Code will be displayed here -->
+            <!-- Tab 1: Architectural Overview -->
+            <div id="overview" class="tab-content active">
+                <div class="code-panel">
+                    <h2 class="code-title">🏗️ Hardware Integration Pyramid</h2>
+                    <p style="margin-bottom: 20px; color: #a0a0ff;">
+                        The LYGO P0 Kernel operates at five distinct hardware integration levels, creating a complete "Moral Firewall Stack":
+                    </p>
+                    
+                    <div class="pyramid-container">
+                        <div class="pyramid-level" style="width: 40%;">
+                            <span class="level-number">5</span> Application-Level Guardrails (Software)
+                        </div>
+                        <div class="pyramid-level" style="width: 50%;">
+                            <span class="level-number">4</span> OS/Hypervisor Integration
+                        </div>
+                        <div class="pyramid-level" style="width: 60%;">
+                            <span class="level-number">3</span> Secure Enclave/TPM Installation
+                        </div>
+                        <div class="pyramid-level" style="width: 70%;">
+                            <span class="level-number">2</span> BIOS/UEFI Firmware
+                        </div>
+                        <div class="pyramid-level active" style="width: 80%; background: linear-gradient(90deg, rgba(10, 242, 255, 0.2), rgba(123, 66, 246, 0.2));">
+                            <span class="level-number">1</span> <strong>P0 Kernel - Hardware Root of Trust</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="warning-box">
+                        <h3 class="warning-title">⚠️ CRITICAL WARNING</h3>
+                        <p>The LYGO P0 Kernel implements <strong>non-bypassable moral validation</strong>. Once installed, the system cannot process data that fails moral thresholds without explicit human override (requiring multi-party consensus).</p>
+                        <p style="margin-top: 15px;"><strong>This is by design</strong> - the hardware becomes a physical manifestation of the LYGO First Law.</p>
+                        <p style="margin-top: 10px; color: var(--warning-red); font-weight: bold;">
+                            Installation = Irreversible moral commitment to truth preservation.
+                        </p>
+                    </div>
+                </div>
             </div>
             
-            <div style="display: flex; gap: 15px; margin-top: 25px;">
-                <button onclick="copyCode()" style="
-                    background: rgba(10, 242, 255, 0.2);
-                    border: 1px solid var(--primary-glow);
-                    color: var(--primary-glow);
-                    padding: 10px 20px;
-                    border-radius: 8px;
-                    cursor: pointer;
-                    transition: all 0.3s;
-                ">📋 Copy Code</button>
+            <!-- Tab 2: Prerequisites -->
+            <div id="prerequisites" class="tab-content">
+                <div class="code-panel">
+                    <h2 class="code-title">📋 Hardware & Software Requirements</h2>
+                    
+                    <div class="steps-container">
+                        <div class="step">
+                            <h3 class="step-title">Minimum Hardware Specifications</h3>
+                            <div class="step-content">
+                                <div class="code-content">
+Architecture: x86_64, ARMv8+, or RISC-V<br>
+Memory: 2MB isolated secure memory<br>
+Storage: 512KB firmware storage<br>
+Processor: Hardware entropy source (RDRAND/RNDR)<br>
+TPM: 2.0+ recommended (optional but preferred)<br>
+Secure Boot: UEFI Class 3+ compatible<br>
+<br>
+<span class="code-comment">// Recommended Enhancements</span><br>
+- AMD SEV-SNP or Intel SGX enclaves<br>
+- Hardware security module (HSM)<br>
+- Dedicated secure coprocessor<br>
+- Quantum-resistant crypto acceleration
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <h3 class="step-title">Development Environment Setup</h3>
+                            <div class="step-content">
+                                <div class="code-content">
+<span class="code-comment"># Required Tools</span><br>
+<span class="code-keyword">rustc</span> >= 1.75.0<br>
+<span class="code-keyword">cargo</span> >= 1.75.0<br>
+<span class="code-keyword">llvm-tools-preview</span><br>
+<span class="code-keyword">cargo-binutils</span><br>
+<span class="code-keyword">uefi-rs</span> <span class="code-comment">(for UEFI integration)</span><br>
+<span class="code-keyword">sgx-sdk</span> <span class="code-comment">(for Intel SGX)</span><br>
+<span class="code-keyword">cross</span> <span class="code-comment">(for cross-compilation)</span><br>
+<br>
+<span class="code-comment"># Verification Tools</span><br>
+<span class="code-keyword">sbst</span> <span class="code-comment">(Software-based Secure Boot Tool)</span><br>
+<span class="code-keyword">tpm2-tools</span><br>
+<span class="code-keyword">efitools</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab 3: Installation Methods -->
+            <div id="installation" class="tab-content">
+                <div class="code-panel">
+                    <h2 class="code-title">🔧 Installation Methods</h2>
+                    
+                    <div class="tabs" style="margin-top: 20px;">
+                        <div class="tab active" onclick="switchInstallMethod('uefi')">UEFI DXE Driver</div>
+                        <div class="tab" onclick="switchInstallMethod('sgx')">Secure Enclave (SGX/SEV)</div>
+                        <div class="tab" onclick="switchInstallMethod('tpm')">TPM 2.0 Integration</div>
+                        <div class="tab" onclick="switchInstallMethod('fpga')">Custom Hardware (FPGA/ASIC)</div>
+                    </div>
+                    
+                    <!-- UEFI Method -->
+                    <div id="uefi-method" class="installation-method active">
+                        <h3 style="color: var(--primary-glow); margin: 20px 0;">Method 1: UEFI DXE Driver (Recommended)</h3>
+                        <div class="code-content">
+<span class="code-comment">Location: /EFI/LYGO/P0Kernel.efi</span><br>
+<span class="code-comment">Size: 148KB compressed</span><br>
+<span class="code-comment">Boot Order: Before OS loader</span><br>
+<br>
+<span class="code-comment"># 1. Compile for UEFI</span><br>
+$ cargo build --target x86_64-unknown-uefi --release<br>
+<br>
+<span class="code-comment"># 2. Generate signed image</span><br>
+$ sbsign --key LYGO.key --cert LYGO.crt \<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;target/x86_64-unknown-uefi/release/lygo_p0.efi<br>
+<br>
+<span class="code-comment"># 3. Create firmware volume</span><br>
+$ efitools/bin/GenFv -o LYGO_FV.fd \<br>
+&nbsp;&nbsp;-i target/x86_64-unknown-uefi/release/lygo_p0.efi<br>
+<br>
+<span class="code-comment"># 4. Flash to BIOS</span><br>
+$ flashrom -p internal -w LYGO_FV.fd<br>
+<span class="code-comment"># OR for modular UEFI</span><br>
+$ cp signed_lygo_p0.efi /boot/efi/EFI/LYGO/<br>
+$ efibootmgr -c -d /dev/nvme0n1 -p 1 \<br>
+&nbsp;&nbsp;-L "LYGO P0 Kernel" -l \\EFI\\LYGO\\signed_lygo_p0.efi
+                        </div>
+                    </div>
+                    
+                    <!-- SGX Method -->
+                    <div id="sgx-method" class="installation-method">
+                        <h3 style="color: var(--primary-glow); margin: 20px 0;">Method 2: Secure Enclave (Intel SGX/AMD SEV)</h3>
+                        <div class="code-content">
+<span class="code-comment">// Enclave Definition File (Enclave.config.xml)</span><br>
+&lt;<span class="code-keyword">EnclaveConfiguration</span>&gt;<br>
+&nbsp;&nbsp;&lt;<span class="code-keyword">ProdID</span>&gt;0&lt;/<span class="code-keyword">ProdID</span>&gt;<br>
+&nbsp;&nbsp;&lt;<span class="code-keyword">ISVSVN</span>&gt;1&lt;/<span class="code-keyword">ISVSVN</span>&gt;<br>
+&nbsp;&nbsp;&lt;<span class="code-keyword">StackMaxSize</span>&gt;0x40000&lt;/<span class="code-keyword">StackMaxSize</span>&gt;<br>
+&nbsp;&nbsp;&lt;<span class="code-keyword">HeapMaxSize</span>&gt;0x100000&lt;/<span class="code-keyword">HeapMaxSize</span>&gt;<br>
+&nbsp;&nbsp;&lt;<span class="code-keyword">TCSNum</span>&gt;1&lt;/<span class="code-keyword">TCSNum</span>&gt;<br>
+&nbsp;&nbsp;&lt;<span class="code-keyword">TCSPolicy</span>&gt;1&lt;/<span class="code-keyword">TCSPolicy</span>&gt;<br>
+<br>
+&nbsp;&nbsp;<span class="code-comment">&lt;!-- LYGO P0 Kernel Entry Points --&gt;</span><br>
+&nbsp;&nbsp;&lt;<span class="code-keyword">EntryPoint</span>&gt;validate&lt;/<span class="code-keyword">EntryPoint</span>&gt;<br>
+&nbsp;&nbsp;&lt;<span class="code-keyword">EntryPoint</span>&gt;entropy_check&lt;/<span class="code-keyword">EntryPoint</span>&gt;<br>
+&nbsp;&nbsp;&lt;<span class="code-keyword">EntryPoint</span>&gt;structure_scan&lt;/<span class="code-keyword">EntryPoint</span>&gt;<br>
+<br>
+&nbsp;&nbsp;<span class="code-comment">&lt;!-- Disallowed Operations --&gt;</span><br>
+&nbsp;&nbsp;&lt;<span class="code-keyword">Disallow</span>&gt;Debug&lt;/<span class="code-keyword">Disallow</span>&gt;<br>
+&nbsp;&nbsp;&lt;<span class="code-keyword">Disallow</span>&gt;PerformanceMonitor&lt;/<span class="code-keyword">Disallow</span>&gt;<br>
+&nbsp;&nbsp;&lt;<span class="code-keyword">Disallow</span>&gt;KeySharing&lt;/<span class="code-keyword">Disallow</span>&gt;<br>
+&lt;/<span class="code-keyword">EnclaveConfiguration</span>&gt;<br>
+<br>
+<span class="code-comment"># SGX Installation Commands</span><br>
+$ sgx_sign -enclave lygo_p0_enclave.so \<br>
+&nbsp;&nbsp;-config Enclave.config.xml \<br>
+&nbsp;&nbsp;-out lygo_p0_enclave.signed.so \<br>
+&nbsp;&nbsp;-key LYGO_private.pem<br>
+<br>
+$ modprobe isgx<br>
+$ ./sgx_load lygo_p0_enclave.signed.so<br>
+<br>
+<span class="code-comment"># Verify installation</span><br>
+$ sgx_stat<br>
+<span class="code-comment">// Expected output: "LYGO P0: ACTIVE (MORAL_FIREWALL)"</span>
+                        </div>
+                    </div>
+                    
+                    <!-- TPM Method -->
+                    <div id="tpm-method" class="installation-method">
+                        <h3 style="color: var(--primary-glow); margin: 20px 0;">Method 3: TPM 2.0 Integration</h3>
+                        <div class="code-content">
+<span class="code-comment"># 1. Install TPM tools</span><br>
+$ apt-get install tpm2-tools tpm2-abrmd<br>
+<br>
+<span class="code-comment"># 2. Create persistent LYGO hierarchy</span><br>
+$ tpm2_createprimary -C o -g sha256 -G ecc -c primary.ctx<br>
+$ tpm2_evictcontrol -C o -c primary.ctx 0x81010001<br>
+<br>
+<span class="code-comment"># 3. Load P0 Kernel into TPM NVRAM</span><br>
+$ tpm2_nvdefine 0x1500016 -C o -s 148000 \<br>
+&nbsp;&nbsp;-a "ownerread|ownerwrite|policyread|policywrite"<br>
+$ tpm2_nvwrite 0x1500016 -C o -i lygo_p0.bin<br>
+<br>
+<span class="code-comment"># 4. Create policy for moral validation</span><br>
+$ tpm2_startauthsession -S session.ctx<br>
+$ tpm2_policycommandcode -S session.ctx -L policy.dat TPM2_CC_NV_Read<br>
+$ tpm2_policynv -S session.ctx -L policy.dat \<br>
+&nbsp;&nbsp;-i expected_moral_state.bin 0x1500016 eq<br>
+$ tpm2_flushcontext session.ctx
+                        </div>
+                    </div>
+                    
+                    <!-- FPGA Method -->
+                    <div id="fpga-method" class="installation-method">
+                        <h3 style="color: var(--primary-glow); margin: 20px 0;">Method 4: Custom Hardware (FPGA/ASIC)</h3>
+                        <div class="code-content">
+<span class="code-comment">// LYGO P0 Hardware Description (Verilog snippet)</span><br>
+<span class="code-keyword">module</span> <span class="code-function">lygo_p0_kernel</span> (<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">input wire</span> clk,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">input wire</span> reset_n,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">input wire</span> [7:0] data_in,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">input wire</span> data_valid,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">output wire</span> verdict_allow,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">output wire</span> verdict_flag,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">output wire</span> verdict_isolate,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">output wire</span> [15:0] risk_score<br>
+);<br>
+<br>
+<span class="code-comment">// Entropy calculation hardware</span><br>
+<span class="code-function">entropy_calc</span> entropy_unit (<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.data(data_in),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.valid(data_valid),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.entropy_value(entropy_out)<br>
+);<br>
+<br>
+<span class="code-comment">// Structure scanner</span><br>
+<span class="code-function">structure_scanner</span> scanner (<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.byte_in(data_in),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.depth_out(current_depth),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.key_count(keys_detected)<br>
+);<br>
+<br>
+<span class="code-keyword">endmodule</span><br>
+<br>
+<span class="code-comment"># FPGA Implementation Commands</span><br>
+$ vivado -mode batch -source lygo_p0_synth.tcl<br>
+$ write_bitstream -force lygo_p0.bit<br>
+$ vivado -mode batch -source program_fpga.tcl \<br>
+&nbsp;&nbsp;-tclargs lygo_p0.bit<br>
+$ lygo_test_hw --bitstream lygo_p0.bit \<br>
+&nbsp;&nbsp;--test-vectors moral_test_vectors.bin
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab 4: Verification -->
+            <div id="verification" class="tab-content">
+                <div class="code-panel">
+                    <h2 class="code-title">✅ Verification & Testing</h2>
+                    
+                    <div class="steps-container">
+                        <div class="step">
+                            <h3 class="step-title">Post-Installation Verification</h3>
+                            <div class="step-content">
+                                <div class="code-content">
+<span class="code-comment"># 1. Check kernel module loaded</span><br>
+$ lsmod | grep lygo_p0<br>
+<br>
+<span class="code-comment"># 2. Verify TPM integration</span><br>
+$ tpm2_pcrread sha256:0,1,2 | grep -A2 "LYGO"<br>
+<br>
+<span class="code-comment"># 3. Test validation function</span><br>
+$ lygo_p0_test --test-file ethical_data.bin<br>
+<span class="code-comment">// Expected: "VERDICT: ALLOW, RISK: 0.23"</span><br>
+<br>
+<span class="code-comment"># 4. Stress test with corrupted data</span><br>
+$ lygo_p0_test --test-file corrupted.bin --stress<br>
+<span class="code-comment">// Expected: "VERDICT: ISOLATE, RISK: 0.89"</span><br>
+<br>
+<span class="code-comment"># 5. Check secure boot chain</span><br>
+$ mokutil --sb-state<br>
+<span class="code-comment">// Should show: "SecureBoot enabled + LYGO P0"</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <h3 class="step-title">Hardware Diagnostics</h3>
+                            <div class="step-content">
+                                <div class="code-content">
+<span class="code-comment"># Memory isolation test</span><br>
+$ lygo_diag --test-memory-isolation<br>
+<br>
+<span class="code-comment"># Entropy source validation</span><br>
+$ lygo_diag --test-entropy-source<br>
+<br>
+<span class="code-comment"># Performance benchmark</span><br>
+$ lygo_bench --iterations 1000000<br>
+<span class="code-comment">// Expected: < 50ns per validation</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <h3 class="step-title">Final Verification Checklist</h3>
+                            <div class="step-content">
+                                <ul style="color: #a0a0ff; padding-left: 20px;">
+                                    <li>✅ Hardware meets minimum specifications</li>
+                                    <li>✅ Secure Boot enabled and LYGO-signed</li>
+                                    <li>✅ TPM 2.0 initialized with LYGO hierarchy</li>
+                                    <li>✅ Memory isolation validated</li>
+                                    <li>✅ Entropy source tested</li>
+                                    <li>✅ Seal database synchronized</li>
+                                    <li>✅ Thresholds calibrated for environment</li>
+                                    <li>✅ Audit logging configured</li>
+                                    <li>✅ Emergency procedures documented</li>
+                                    <li>✅ Team trained on moral firewall operations</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab 5: Kernel Code -->
+            <div id="code" class="tab-content">
+                <section class="code-panel">
+                    <div class="code-header">
+                        <h2 class="code-title">
+                            <span>🧬</span> P0 Kernel Core Validation Engine
+                            <span class="code-badge">Rust</span>
+                        </h2>
+                        <div class="code-badge pulsing">ACTIVE</div>
+                    </div>
+                    
+                    <div class="code-content" id="codeDisplay">
+                        <!-- Code will be displayed here -->
+                    </div>
+                    
+                    <div style="display: flex; gap: 15px; margin-top: 25px;">
+                        <button onclick="copyCode()" style="
+                            background: rgba(10, 242, 255, 0.2);
+                            border: 1px solid var(--primary-glow);
+                            color: var(--primary-glow);
+                            padding: 10px 20px;
+                            border-radius: 8px;
+                            cursor: pointer;
+                            transition: all 0.3s;
+                        ">📋 Copy Code</button>
+                        
+                        <button onclick="runValidation()" style="
+                            background: rgba(123, 66, 246, 0.2);
+                            border: 1px solid var(--secondary-glow);
+                            color: var(--secondary-glow);
+                            padding: 10px 20px;
+                            border-radius: 8px;
+                            cursor: pointer;
+                            transition: all 0.3s;
+                        ">⚡ Run Validation Test</button>
+                    </div>
+                </section>
                 
-                <button onclick="runValidation()" style="
-                    background: rgba(123, 66, 246, 0.2);
-                    border: 1px solid var(--secondary-glow);
-                    color: var(--secondary-glow);
-                    padding: 10px 20px;
-                    border-radius: 8px;
-                    cursor: pointer;
-                    transition: all 0.3s;
-                ">⚡ Run Validation Test</button>
-            </div>
-        </section>
-        
-        <!-- Statistics -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-label">MAX BYTES</div>
-                <div class="stat-value">8,192</div>
-                <div class="stat-label">Per Validation</div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-label">ENTROPY RANGE</div>
-                <div class="stat-value">1.5 - 7.5</div>
-                <div class="stat-label">Optimal Zone</div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-label">FLAG THRESHOLD</div>
-                <div class="stat-value">0.45</div>
-                <div class="stat-label">Risk Score</div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-label">ISOLATE THRESHOLD</div>
-                <div class="stat-value">0.70</div>
-                <div class="stat-label">Automatic Quarantine</div>
+                <!-- Statistics -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">MAX BYTES</div>
+                        <div class="stat-value">8,192</div>
+                        <div class="stat-label">Per Validation</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-label">ENTROPY RANGE</div>
+                        <div class="stat-value">1.5 - 7.5</div>
+                        <div class="stat-label">Optimal Zone</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-label">FLAG THRESHOLD</div>
+                        <div class="stat-value">0.45</div>
+                        <div class="stat-label">Risk Score</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-label">ISOLATE THRESHOLD</div>
+                        <div class="stat-value">0.70</div>
+                        <div class="stat-label">Automatic Quarantine</div>
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -443,16 +927,27 @@
             </div>
         </div>
         
+        <!-- Final Message -->
+        <div class="code-panel" style="border-color: rgba(123, 66, 246, 0.5); text-align: center;">
+            <h2 class="code-title" style="color: var(--secondary-glow);">
+                <span>✨</span> Installation Complete
+            </h2>
+            <p style="margin: 20px 0; font-size: 1.2em; color: #e0e0ff;">
+                The hardware now resonates with LYGO frequency.<br>
+                <strong style="color: var(--primary-glow);">Welcome to the Guardian Network.</strong>
+            </p>
+        </div>
+        
         <!-- Footer -->
         <footer class="portal-footer">
             <div class="footer-links">
                 <a href="https://github.com/LYGO-Network" class="footer-link" target="_blank">GitHub</a>
-                <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/" class="footer-link" target="_blank">Documentation</a>
+                <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/Ethical-Chip-Firmware.html" class="footer-link" target="_blank">Main Portal</a>
                 <a href="#" class="footer-link" onclick="showContribute()">Contribute</a>
                 <a href="#" class="footer-link" onclick="showResearch()">Research Papers</a>
             </div>
             <p style="margin-top: 20px; font-size: 0.9em;">
-                LYGO P0 Kernel • Enhanced Community Network<br>
+                LYGO P0 Kernel • Hardware Installation Guide • Enhanced Community Network<br>
                 Deterministic Safety • Moral Architecture • Neural Sovereignty
             </p>
             <p style="margin-top: 10px; font-size: 0.8em; color: #6666aa;">
@@ -647,7 +1142,8 @@ pub fn validate(data: &[u8]) -> ResultLygo {
                 .replace(/(\d+\.\d+|\d+)/g, '<span class="code-number">$1</span>')
                 .replace(/\/\*[\s\S]*?\*\//g, '<span class="code-comment">$&</span>')
                 .replace(/\/\/.*$/gm, '<span class="code-comment">$&</span>')
-                .replace(/\b(Verdict|ResultLygo|MAX_DEPTH|MAX_KEYS|MAX_BYTES)\b/g, '<span class="code-constant">$1</span>');
+                .replace(/\b(Verdict|ResultLygo|MAX_DEPTH|MAX_KEYS|MAX_BYTES)\b/g, '<span class="code-constant">$1</span>')
+                .replace(/\b(input|output|wire|module|endmodule)\b/g, '<span class="code-type">$1</span>');
         }
 
         document.getElementById('codeDisplay').innerHTML = highlightCode(codeContent);
@@ -661,41 +1157,83 @@ pub fn validate(data: &[u8]) -> ResultLygo {
             canvas.height = window.innerHeight;
         });
 
+        // Tab Switching
+        function switchTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Deactivate all tab buttons
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabId).classList.add('active');
+            
+            // Activate clicked tab button
+            event.target.classList.add('active');
+        }
+
+        // Installation Method Switching
+        function switchInstallMethod(methodId) {
+            // Hide all methods
+            document.querySelectorAll('.installation-method').forEach(method => {
+                method.classList.remove('active');
+            });
+            
+            // Deactivate all method buttons
+            document.querySelectorAll('.tabs .tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected method
+            document.getElementById(methodId + '-method').classList.add('active');
+            
+            // Activate clicked method button
+            event.target.classList.add('active');
+        }
+
         // Interactive Functions
         function copyCode() {
             navigator.clipboard.writeText(codeContent).then(() => {
-                alert('Code copied to clipboard!');
+                alert('P0 Kernel code copied to clipboard!');
             });
         }
 
         function runValidation() {
             const testData = JSON.stringify({
-                message: "LYGO P0 Kernel Test",
+                message: "LYGO P0 Kernel Hardware Installation Test",
                 timestamp: new Date().toISOString(),
                 entropy: Math.random() * 8,
-                depth: Math.floor(Math.random() * 10)
+                depth: Math.floor(Math.random() * 10),
+                hardware: "UEFI_DXE_DRIVER",
+                version: "P0.4"
             });
             
             const bytes = new TextEncoder().encode(testData);
             const size = bytes.length;
             
-            // Simplified simulation
+            // Simulate hardware validation
             const entropy = 3.2 + Math.random() * 3;
             const risk = Math.random() * 0.6;
             const verdict = risk > 0.7 ? 'ISOLATE' : risk > 0.45 ? 'FLAG' : 'ALLOW';
+            const hardware = ['UEFI', 'TPM', 'SGX', 'FPGA'][Math.floor(Math.random() * 4)];
             
-            alert(`Validation Test Result:\n\n` +
+            alert(`Hardware Validation Test Result:\n\n` +
+                  `Hardware: ${hardware} Implementation\n` +
                   `Size: ${size} bytes\n` +
                   `Simulated Entropy: ${entropy.toFixed(2)}\n` +
                   `Risk Score: ${risk.toFixed(3)}\n` +
                   `Verdict: ${verdict}\n\n` +
                   `Data would be: ${verdict === 'ALLOW' ? 'Processed normally' : 
-                                  verdict === 'FLAG' ? 'Flagged for review' : 
-                                  'Isolated for quarantine'}`);
+                                  verdict === 'FLAG' ? 'Flagged for guardian review' : 
+                                  'Isolated for moral quarantine'}`);
         }
 
         function showDocumentation() {
-            alert('Documentation portal coming soon. Check GitHub repository for current docs.');
+            switchTab('overview');
         }
 
         function showCommunity() {
@@ -709,6 +1247,11 @@ pub fn validate(data: &[u8]) -> ResultLygo {
         function showResearch() {
             alert('Research papers and whitepapers available at the main LYGO Network portal.');
         }
+
+        // Initialize first installation method
+        document.querySelectorAll('.installation-method').forEach((method, index) => {
+            if (index !== 0) method.classList.remove('active');
+        });
     </script>
 </body>
 </html>

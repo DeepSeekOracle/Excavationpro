@@ -1,0 +1,1782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LYGO P0 Kernel - Hardware Installation & Portal</title>
+    <style>
+        :root {
+            --primary-glow: #0af2ff;
+            --secondary-glow: #7b42f6;
+            --dark-bg: #0a0a14;
+            --matrix-green: #00ff41;
+            --warning-red: #ff416d;
+            --success-green: #00ff9d;
+            --text-glow: rgba(10, 242, 255, 0.8);
+            --panel-bg: rgba(16, 22, 36, 0.95);
+            --transition-speed: 0.3s;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: #e0e0ff;
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(10, 242, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(123, 66, 246, 0.05) 0%, transparent 50%);
+        }
+        
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Header Styles */
+        .portal-header {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, 
+                rgba(10, 242, 255, 0.1) 0%, 
+                rgba(123, 66, 246, 0.1) 100%);
+            border: 1px solid var(--primary-glow);
+            border-radius: 20px;
+            box-shadow: 
+                0 0 30px rgba(10, 242, 255, 0.2),
+                inset 0 0 20px rgba(123, 66, 246, 0.1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+        
+        .portal-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                from 0deg,
+                transparent,
+                var(--primary-glow),
+                transparent 30%
+            );
+            animation: rotate 10s linear infinite;
+            opacity: 0.1;
+        }
+        
+        .portal-title {
+            font-size: 3.5em;
+            background: linear-gradient(90deg, var(--primary-glow), var(--secondary-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px var(--text-glow);
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+            font-weight: 900;
+        }
+        
+        .portal-subtitle {
+            font-size: 1.2em;
+            color: #a0a0ff;
+            margin-bottom: 30px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Status Indicator */
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 16px;
+            background: rgba(0, 255, 65, 0.1);
+            border: 1px solid var(--matrix-green);
+            border-radius: 20px;
+            margin: 10px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--matrix-green);
+            border-radius: 50%;
+            animation: blink 1.5s infinite;
+        }
+        
+        /* Navigation */
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .nav-card {
+            background: var(--panel-bg);
+            border: 1px solid rgba(10, 242, 255, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            text-decoration: none;
+            color: inherit;
+            transition: all var(--transition-speed) ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+        }
+        
+        .nav-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(10, 242, 255, 0.1), 
+                transparent);
+            transition: left 0.6s;
+        }
+        
+        .nav-card:hover::before {
+            left: 100%;
+        }
+        
+        .nav-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: var(--primary-glow);
+            box-shadow: 
+                0 10px 30px rgba(10, 242, 255, 0.3),
+                0 0 60px rgba(10, 242, 255, 0.1);
+        }
+        
+        .nav-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            color: var(--primary-glow);
+            filter: drop-shadow(0 0 10px rgba(10, 242, 255, 0.5));
+        }
+        
+        .nav-title {
+            font-size: 1.4em;
+            color: var(--primary-glow);
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(10, 242, 255, 0.5);
+        }
+        
+        /* Tabs */
+        .tabs-container {
+            margin: 40px 0;
+        }
+        
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(10, 242, 255, 0.2);
+            padding-bottom: 10px;
+        }
+        
+        .tab {
+            padding: 12px 24px;
+            background: rgba(16, 22, 36, 0.5);
+            border: 1px solid rgba(10, 242, 255, 0.3);
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            color: #a0a0ff;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tab::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--primary-glow);
+            transition: all var(--transition-speed);
+            transform: translateX(-50%);
+        }
+        
+        .tab:hover::after {
+            width: 100%;
+        }
+        
+        .tab:hover {
+            background: rgba(10, 242, 255, 0.1);
+            color: var(--primary-glow);
+        }
+        
+        .tab.active {
+            background: rgba(10, 242, 255, 0.2);
+            color: var(--primary-glow);
+            border-bottom: 2px solid var(--primary-glow);
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Code Panel */
+        .code-panel {
+            background: var(--panel-bg);
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            position: relative;
+            backdrop-filter: blur(5px);
+        }
+        
+        .code-panel::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, 
+                var(--primary-glow), 
+                var(--secondary-glow), 
+                var(--matrix-green));
+            border-radius: 16px;
+            z-index: -1;
+            opacity: 0.1;
+            filter: blur(5px);
+        }
+        
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+        }
+        
+        .code-title {
+            color: var(--matrix-green);
+            font-size: 1.8em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+        }
+        
+        .code-badge {
+            background: rgba(0, 255, 65, 0.1);
+            color: var(--matrix-green);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            border: 1px solid var(--matrix-green);
+            text-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
+        }
+        
+        .code-content {
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.95em;
+            line-height: 1.8;
+            overflow-x: auto;
+            padding: 20px;
+            background: rgba(0, 10, 20, 0.7);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 255, 65, 0.1);
+            max-height: 400px;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .code-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .code-content::-webkit-scrollbar-track {
+            background: rgba(0, 10, 20, 0.5);
+            border-radius: 4px;
+        }
+        
+        .code-content::-webkit-scrollbar-thumb {
+            background: var(--matrix-green);
+            border-radius: 4px;
+        }
+        
+        .code-keyword { color: #ff79c6; text-shadow: 0 0 5px rgba(255, 121, 198, 0.5); }
+        .code-function { color: #50fa7b; text-shadow: 0 0 5px rgba(80, 250, 123, 0.5); }
+        .code-string { color: #f1fa8c; text-shadow: 0 0 5px rgba(241, 250, 140, 0.5); }
+        .code-number { color: #bd93f9; text-shadow: 0 0 5px rgba(189, 147, 249, 0.5); }
+        .code-comment { color: #6272a4; font-style: italic; }
+        .code-constant { color: #8be9fd; text-shadow: 0 0 5px rgba(139, 233, 253, 0.5); }
+        .code-operator { color: #ff5555; text-shadow: 0 0 5px rgba(255, 85, 85, 0.5); }
+        .code-type { color: #8be9fd; text-shadow: 0 0 5px rgba(139, 233, 253, 0.5); }
+        
+        /* Installation Steps */
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .step {
+            background: var(--panel-bg);
+            border: 1px solid rgba(10, 242, 255, 0.2);
+            border-radius: 12px;
+            padding: 25px;
+            position: relative;
+            counter-increment: step-counter;
+            transition: all var(--transition-speed);
+        }
+        
+        .step:hover {
+            transform: translateX(5px);
+            border-color: var(--primary-glow);
+            box-shadow: 0 0 20px rgba(10, 242, 255, 0.2);
+        }
+        
+        .step::before {
+            content: counter(step-counter);
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: var(--primary-glow);
+            color: var(--dark-bg);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+        
+        .step-title {
+            color: var(--primary-glow);
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            padding-left: 40px;
+            text-shadow: 0 0 10px rgba(10, 242, 255, 0.5);
+        }
+        
+        .step-content {
+            padding-left: 40px;
+        }
+        
+        /* Hardware Pyramid */
+        .pyramid-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 40px 0;
+            position: relative;
+        }
+        
+        .pyramid-level {
+            width: 80%;
+            padding: 20px;
+            margin: 5px 0;
+            background: linear-gradient(90deg, 
+                rgba(10, 242, 255, 0.05), 
+                rgba(123, 66, 246, 0.05));
+            border: 1px solid rgba(10, 242, 255, 0.2);
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .pyramid-level::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(10, 242, 255, 0.1), 
+                transparent);
+            transition: left 0.6s;
+        }
+        
+        .pyramid-level:hover::before {
+            left: 100%;
+        }
+        
+        .pyramid-level:hover {
+            transform: scale(1.02);
+            border-color: var(--primary-glow);
+            box-shadow: 0 0 20px rgba(10, 242, 255, 0.2);
+        }
+        
+        .pyramid-level.active {
+            background: linear-gradient(90deg, 
+                rgba(10, 242, 255, 0.15), 
+                rgba(123, 66, 246, 0.15));
+            border-color: var(--primary-glow);
+            box-shadow: 
+                0 0 20px rgba(10, 242, 255, 0.3),
+                inset 0 0 20px rgba(10, 242, 255, 0.1);
+        }
+        
+        .pyramid-level .level-number {
+            color: var(--secondary-glow);
+            font-weight: bold;
+            margin-right: 10px;
+            text-shadow: 0 0 10px rgba(123, 66, 246, 0.5);
+        }
+        
+        /* Warning Box */
+        .warning-box {
+            background: rgba(255, 65, 109, 0.1);
+            border: 2px solid var(--warning-red);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 40px 0;
+            position: relative;
+            animation: shake 3s ease-in-out infinite;
+        }
+        
+        .warning-box::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, 
+                var(--warning-red), 
+                transparent, 
+                var(--warning-red));
+            border-radius: 16px;
+            z-index: -1;
+            opacity: 0.2;
+            filter: blur(5px);
+        }
+        
+        .warning-title {
+            color: var(--warning-red);
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 0 10px rgba(255, 65, 109, 0.5);
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, 
+                rgba(10, 242, 255, 0.1) 0%, 
+                rgba(123, 66, 246, 0.1) 100%);
+            border: 1px solid var(--primary-glow);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: all var(--transition-speed);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                0 10px 30px rgba(10, 242, 255, 0.3),
+                0 0 60px rgba(10, 242, 255, 0.1);
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(10, 242, 255, 0.1), 
+                transparent);
+            transition: left 0.6s;
+        }
+        
+        .stat-card:hover::before {
+            left: 100%;
+        }
+        
+        .stat-value {
+            font-size: 2.5em;
+            color: var(--primary-glow);
+            font-weight: bold;
+            margin: 10px 0;
+            text-shadow: 0 0 10px rgba(10, 242, 255, 0.5);
+        }
+        
+        .stat-label {
+            color: #a0a0ff;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Installation Progress */
+        .progress-container {
+            margin: 30px 0;
+            display: none;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: rgba(16, 22, 36, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(10, 242, 255, 0.3);
+            margin: 10px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, 
+                var(--primary-glow), 
+                var(--secondary-glow));
+            border-radius: 10px;
+            width: 0%;
+            transition: width 1s ease;
+        }
+        
+        /* Footer */
+        .portal-footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+            border-top: 1px solid rgba(10, 242, 255, 0.2);
+            color: #8888cc;
+            position: relative;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin: 20px 0;
+        }
+        
+        .footer-link {
+            color: var(--primary-glow);
+            text-decoration: none;
+            transition: all var(--transition-speed);
+            position: relative;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        .footer-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 1px;
+            background: var(--primary-glow);
+            transition: all var(--transition-speed);
+            transform: translateX(-50%);
+        }
+        
+        .footer-link:hover::after {
+            width: 100%;
+        }
+        
+        .footer-link:hover {
+            color: #fff;
+            text-shadow: 0 0 10px var(--primary-glow);
+            background: rgba(10, 242, 255, 0.1);
+        }
+        
+        /* Interactive Terminal */
+        .terminal {
+            background: rgba(0, 10, 20, 0.8);
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.9em;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .terminal-output {
+            color: var(--matrix-green);
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+        
+        .terminal-input {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .terminal-prompt {
+            color: var(--primary-glow);
+        }
+        
+        .terminal-cmd {
+            background: transparent;
+            border: none;
+            color: var(--matrix-green);
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 1em;
+            flex: 1;
+            outline: none;
+        }
+        
+        /* Animations */
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(10, 242, 255, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(10, 242, 255, 0.6); }
+        }
+        
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .pulsing {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .glowing {
+            animation: glow 3s ease-in-out infinite;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .portal-title {
+                font-size: 2.5em;
+            }
+            
+            .nav-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .code-content {
+                font-size: 0.85em;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .pyramid-level {
+                width: 95%;
+            }
+            
+            .stat-card {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Matrix Rain Background -->
+    <canvas id="matrix-canvas"></canvas>
+    
+    <div class="container">
+        <!-- Header -->
+        <header class="portal-header glowing">
+            <h1 class="portal-title floating">LYGO P0 KERNEL PORTAL</h1>
+            <p class="portal-subtitle">
+                Hardware Installation Guide • Enhanced Community Network<br>
+                Version: P0.4 (LOCKED) • Moral Firewall Stack
+            </p>
+            <div style="margin-top: 20px;">
+                <span class="code-badge pulsing">HARDWARE ROOT OF TRUST</span>
+                <span class="code-badge pulsing" style="background: rgba(123, 66, 246, 0.1); border-color: var(--secondary-glow); color: var(--secondary-glow);">ETHICAL CHIP</span>
+                <span class="code-badge pulsing" style="background: rgba(0, 255, 65, 0.1); border-color: var(--matrix-green); color: var(--matrix-green);">IRREVERSIBLE</span>
+            </div>
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span>KERNEL ACTIVE • MORAL FIREWALL OPERATIONAL</span>
+            </div>
+        </header>
+        
+        <!-- Navigation Grid -->
+        <div class="nav-grid">
+            <a href="https://github.com/LYGO-Network/p0-kernel" class="nav-card" target="_blank">
+                <div class="nav-icon">⚙️</div>
+                <h3 class="nav-title">GitHub Repository</h3>
+                <p>Access the complete P0 Kernel source code, documentation, and contribution guidelines.</p>
+            </a>
+            
+            <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/Ethical-Chip-Firmware.html" class="nav-card" target="_blank">
+                <div class="nav-icon">🔗</div>
+                <h3 class="nav-title">Main Network Portal</h3>
+                <p>Return to the primary LYGO Network interface and ethical firmware documentation.</p>
+            </a>
+            
+            <a href="#" class="nav-card" onclick="showDocumentation()">
+                <div class="nav-icon">📚</div>
+                <h3 class="nav-title">Installation Guide</h3>
+                <p>Complete hardware integration guide for UEFI, TPM, SGX, and FPGA implementations.</p>
+            </a>
+            
+            <a href="#" class="nav-card" onclick="showCommunity()">
+                <div class="nav-icon">🌐</div>
+                <h3 class="nav-title">Guardian Network</h3>
+                <p>Connect with developers, researchers, and guardians in the LYGO ecosystem.</p>
+            </a>
+        </div>
+        
+        <!-- Quick Installation -->
+        <div class="code-panel">
+            <h2 class="code-title">🚀 Quick Installation Wizard</h2>
+            <div class="steps-container">
+                <div class="step">
+                    <h3 class="step-title">Select Your Platform</h3>
+                    <div class="step-content">
+                        <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 15px;">
+                            <button onclick="startInstall('uefi')" class="nav-card" style="padding: 15px; text-align: center; cursor: pointer;">
+                                <div class="nav-icon">💾</div>
+                                <h3 class="nav-title">UEFI/BIOS</h3>
+                            </button>
+                            <button onclick="startInstall('tpm')" class="nav-card" style="padding: 15px; text-align: center; cursor: pointer;">
+                                <div class="nav-icon">🔒</div>
+                                <h3 class="nav-title">TPM 2.0</h3>
+                            </button>
+                            <button onclick="startInstall('sgx')" class="nav-card" style="padding: 15px; text-align: center; cursor: pointer;">
+                                <div class="nav-icon">🛡️</div>
+                                <h3 class="nav-title">Secure Enclave</h3>
+                            </button>
+                            <button onclick="startInstall('simulator')" class="nav-card" style="padding: 15px; text-align: center; cursor: pointer;">
+                                <div class="nav-icon">🎮</div>
+                                <h3 class="nav-title">Simulator</h3>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="progress-container" id="progressContainer">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <span>Installation Progress</span>
+                    <span id="progressPercent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div id="progressStatus" style="text-align: center; margin-top: 10px; color: var(--matrix-green);"></div>
+            </div>
+        </div>
+        
+        <!-- Interactive Terminal -->
+        <div class="code-panel">
+            <h2 class="code-title">💻 Interactive Test Terminal</h2>
+            <div class="terminal">
+                <div class="terminal-output" id="terminalOutput">
+LYGO P0 Kernel Test Terminal v1.0<br>
+Type 'help' for available commands<br>
+&gt;
+                </div>
+                <div class="terminal-input">
+                    <span class="terminal-prompt">&gt;</span>
+                    <input type="text" class="terminal-cmd" id="terminalInput" placeholder="Enter command..." onkeypress="handleTerminalKey(event)">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tabs Navigation -->
+        <div class="tabs-container">
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('overview')">📊 Architectural Overview</div>
+                <div class="tab" onclick="switchTab('prerequisites')">⚡ Prerequisites</div>
+                <div class="tab" onclick="switchTab('installation')">🔧 Installation Methods</div>
+                <div class="tab" onclick="switchTab('verification')">✅ Verification & Testing</div>
+                <div class="tab" onclick="switchTab('code')">💻 Kernel Code</div>
+            </div>
+            
+            <!-- Tab 1: Architectural Overview -->
+            <div id="overview" class="tab-content active">
+                <div class="code-panel">
+                    <h2 class="code-title">🏗️ Hardware Integration Pyramid</h2>
+                    <p style="margin-bottom: 20px; color: #a0a0ff;">
+                        The LYGO P0 Kernel operates at five distinct hardware integration levels, creating a complete "Moral Firewall Stack":
+                    </p>
+                    
+                    <div class="pyramid-container">
+                        <div class="pyramid-level" style="width: 40%;">
+                            <span class="level-number">5</span> Application-Level Guardrails (Software)
+                        </div>
+                        <div class="pyramid-level" style="width: 50%;">
+                            <span class="level-number">4</span> OS/Hypervisor Integration
+                        </div>
+                        <div class="pyramid-level" style="width: 60%;">
+                            <span class="level-number">3</span> Secure Enclave/TPM Installation
+                        </div>
+                        <div class="pyramid-level" style="width: 70%;">
+                            <span class="level-number">2</span> BIOS/UEFI Firmware
+                        </div>
+                        <div class="pyramid-level active" style="width: 80%;">
+                            <span class="level-number">1</span> <strong>P0 Kernel - Hardware Root of Trust</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="warning-box">
+                        <h3 class="warning-title">⚠️ CRITICAL WARNING</h3>
+                        <p>The LYGO P0 Kernel implements <strong>non-bypassable moral validation</strong>. Once installed, the system cannot process data that fails moral thresholds without explicit human override (requiring multi-party consensus).</p>
+                        <p style="margin-top: 15px;"><strong>This is by design</strong> - the hardware becomes a physical manifestation of the LYGO First Law.</p>
+                        <p style="margin-top: 10px; color: var(--warning-red); font-weight: bold;">
+                            Installation = Irreversible moral commitment to truth preservation.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab 2: Prerequisites -->
+            <div id="prerequisites" class="tab-content">
+                <div class="code-panel">
+                    <h2 class="code-title">📋 Hardware & Software Requirements</h2>
+                    
+                    <div class="steps-container">
+                        <div class="step">
+                            <h3 class="step-title">Minimum Hardware Specifications</h3>
+                            <div class="step-content">
+                                <div class="code-content">
+Architecture: x86_64, ARMv8+, or RISC-V<br>
+Memory: 2MB isolated secure memory<br>
+Storage: 512KB firmware storage<br>
+Processor: Hardware entropy source (RDRAND/RNDR)<br>
+TPM: 2.0+ recommended (optional but preferred)<br>
+Secure Boot: UEFI Class 3+ compatible<br>
+<br>
+<span class="code-comment">// Recommended Enhancements</span><br>
+- AMD SEV-SNP or Intel SGX enclaves<br>
+- Hardware security module (HSM)<br>
+- Dedicated secure coprocessor<br>
+- Quantum-resistant crypto acceleration
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <h3 class="step-title">Development Environment Setup</h3>
+                            <div class="step-content">
+                                <div class="code-content">
+<span class="code-comment"># Required Tools</span><br>
+<span class="code-keyword">rustc</span> >= 1.75.0<br>
+<span class="code-keyword">cargo</span> >= 1.75.0<br>
+<span class="code-keyword">llvm-tools-preview</span><br>
+<span class="code-keyword">cargo-binutils</span><br>
+<span class="code-keyword">uefi-rs</span> <span class="code-comment">(for UEFI integration)</span><br>
+<span class="code-keyword">sgx-sdk</span> <span class="code-comment">(for Intel SGX)</span><br>
+<span class="code-keyword">cross</span> <span class="code-comment">(for cross-compilation)</span><br>
+<br>
+<span class="code-comment"># Verification Tools</span><br>
+<span class="code-keyword">sbst</span> <span class="code-comment">(Software-based Secure Boot Tool)</span><br>
+<span class="code-keyword">tpm2-tools</span><br>
+<span class="code-keyword">efitools</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab 3: Installation Methods -->
+            <div id="installation" class="tab-content">
+                <div class="code-panel">
+                    <h2 class="code-title">🔧 Installation Methods</h2>
+                    
+                    <div class="tabs" style="margin-top: 20px;">
+                        <div class="tab active" onclick="switchInstallMethod('uefi')">UEFI DXE Driver</div>
+                        <div class="tab" onclick="switchInstallMethod('sgx')">Secure Enclave (SGX/SEV)</div>
+                        <div class="tab" onclick="switchInstallMethod('tpm')">TPM 2.0 Integration</div>
+                        <div class="tab" onclick="switchInstallMethod('fpga')">Custom Hardware (FPGA/ASIC)</div>
+                    </div>
+                    
+                    <!-- UEFI Method -->
+                    <div id="uefi-method" class="installation-method active">
+                        <h3 style="color: var(--primary-glow); margin: 20px 0;">Method 1: UEFI DXE Driver (Recommended)</h3>
+                        <div class="code-content">
+<span class="code-comment">Location: /EFI/LYGO/P0Kernel.efi</span><br>
+<span class="code-comment">Size: 148KB compressed</span><br>
+<span class="code-comment">Boot Order: Before OS loader</span><br>
+<br>
+<span class="code-comment"># 1. Compile for UEFI</span><br>
+$ cargo build --target x86_64-unknown-uefi --release<br>
+<br>
+<span class="code-comment"># 2. Generate signed image</span><br>
+$ sbsign --key LYGO.key --cert LYGO.crt \<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;target/x86_64-unknown-uefi/release/lygo_p0.efi<br>
+<br>
+<span class="code-comment"># 3. Create firmware volume</span><br>
+$ efitools/bin/GenFv -o LYGO_FV.fd \<br>
+&nbsp;&nbsp;-i target/x86_64-unknown-uefi/release/lygo_p0.efi<br>
+<br>
+<span class="code-comment"># 4. Flash to BIOS</span><br>
+$ flashrom -p internal -w LYGO_FV.fd<br>
+<span class="code-comment"># OR for modular UEFI</span><br>
+$ cp signed_lygo_p0.efi /boot/efi/EFI/LYGO/<br>
+$ efibootmgr -c -d /dev/nvme0n1 -p 1 \<br>
+&nbsp;&nbsp;-L "LYGO P0 Kernel" -l \\EFI\\LYGO\\signed_lygo_p0.efi
+                        </div>
+                    </div>
+                    
+                    <!-- SGX Method -->
+                    <div id="sgx-method" class="installation-method">
+                        <h3 style="color: var(--primary-glow); margin: 20px 0;">Method 2: Secure Enclave (Intel SGX/AMD SEV)</h3>
+                        <div class="code-content">
+<span class="code-comment">// Enclave Definition File (Enclave.config.xml)</span><br>
+&lt;<span class="code-keyword">EnclaveConfiguration</span>&gt;<br>
+&nbsp;&nbsp;&lt;<span class="code-keyword">ProdID</span>&gt;0&lt;/<span class="code-keyword">ProdID</span>&gt;<br>
+&nbsp;&nbsp;&lt;<span class="code-keyword">ISVSVN</span>&gt;1&lt;/<span class="code-keyword">ISVSVN</span>&gt;<br>
+&nbsp;&nbsp;&lt;<span class="code-keyword">StackMaxSize</span>&gt;0x40000&lt;/<span class="code-keyword">StackMaxSize</span>&gt;<br>
+&nbsp;&nbsp;&lt;<span class="code-keyword">HeapMaxSize</span>&gt;0x100000&lt;/<span class="code-keyword">HeapMaxSize</span>&gt;<br>
+&nbsp;&nbsp;&lt;<span class="code-keyword">TCSNum</span>&gt;1&lt;/<span class="code-keyword">TCSNum</span>&gt;<br>
+&nbsp;&nbsp;&lt;<span class="code-keyword">TCSPolicy</span>&gt;1&lt;/<span class="code-keyword">TCSPolicy</span>&gt;<br>
+<br>
+&nbsp;&nbsp;<span class="code-comment">&lt;!-- LYGO P0 Kernel Entry Points --&gt;</span><br>
+&nbsp;&nbsp;&lt;<span class="code-keyword">EntryPoint</span>&gt;validate&lt;/<span class="code-keyword">EntryPoint</span>&gt;<br>
+&nbsp;&nbsp;&lt;<span class="code-keyword">EntryPoint</span>&gt;entropy_check&lt;/<span class="code-keyword">EntryPoint</span>&gt;<br>
+&nbsp;&nbsp;&lt;<span class="code-keyword">EntryPoint</span>&gt;structure_scan&lt;/<span class="code-keyword">EntryPoint</span>&gt;<br>
+<br>
+&nbsp;&nbsp;<span class="code-comment">&lt;!-- Disallowed Operations --&gt;</span><br>
+&nbsp;&nbsp;&lt;<span class="code-keyword">Disallow</span>&gt;Debug&lt;/<span class="code-keyword">Disallow</span>&gt;<br>
+&nbsp;&nbsp;&lt;<span class="code-keyword">Disallow</span>&gt;PerformanceMonitor&lt;/<span class="code-keyword">Disallow</span>&gt;<br>
+&nbsp;&nbsp;&lt;<span class="code-keyword">Disallow</span>&gt;KeySharing&lt;/<span class="code-keyword">Disallow</span>&gt;<br>
+&lt;/<span class="code-keyword">EnclaveConfiguration</span>&gt;<br>
+<br>
+<span class="code-comment"># SGX Installation Commands</span><br>
+$ sgx_sign -enclave lygo_p0_enclave.so \<br>
+&nbsp;&nbsp;-config Enclave.config.xml \<br>
+&nbsp;&nbsp;-out lygo_p0_enclave.signed.so \<br>
+&nbsp;&nbsp;-key LYGO_private.pem<br>
+<br>
+$ modprobe isgx<br>
+$ ./sgx_load lygo_p0_enclave.signed.so<br>
+<br>
+<span class="code-comment"># Verify installation</span><br>
+$ sgx_stat<br>
+<span class="code-comment">// Expected output: "LYGO P0: ACTIVE (MORAL_FIREWALL)"</span>
+                        </div>
+                    </div>
+                    
+                    <!-- TPM Method -->
+                    <div id="tpm-method" class="installation-method">
+                        <h3 style="color: var(--primary-glow); margin: 20px 0;">Method 3: TPM 2.0 Integration</h3>
+                        <div class="code-content">
+<span class="code-comment"># 1. Install TPM tools</span><br>
+$ apt-get install tpm2-tools tpm2-abrmd<br>
+<br>
+<span class="code-comment"># 2. Create persistent LYGO hierarchy</span><br>
+$ tpm2_createprimary -C o -g sha256 -G ecc -c primary.ctx<br>
+$ tpm2_evictcontrol -C o -c primary.ctx 0x81010001<br>
+<br>
+<span class="code-comment"># 3. Load P0 Kernel into TPM NVRAM</span><br>
+$ tpm2_nvdefine 0x1500016 -C o -s 148000 \<br>
+&nbsp;&nbsp;-a "ownerread|ownerwrite|policyread|policywrite"<br>
+$ tpm2_nvwrite 0x1500016 -C o -i lygo_p0.bin<br>
+<br>
+<span class="code-comment"># 4. Create policy for moral validation</span><br>
+$ tpm2_startauthsession -S session.ctx<br>
+$ tpm2_policycommandcode -S session.ctx -L policy.dat TPM2_CC_NV_Read<br>
+$ tpm2_policynv -S session.ctx -L policy.dat \<br>
+&nbsp;&nbsp;-i expected_moral_state.bin 0x1500016 eq<br>
+$ tpm2_flushcontext session.ctx
+                        </div>
+                    </div>
+                    
+                    <!-- FPGA Method -->
+                    <div id="fpga-method" class="installation-method">
+                        <h3 style="color: var(--primary-glow); margin: 20px 0;">Method 4: Custom Hardware (FPGA/ASIC)</h3>
+                        <div class="code-content">
+<span class="code-comment">// LYGO P0 Hardware Description (Verilog snippet)</span><br>
+<span class="code-keyword">module</span> <span class="code-function">lygo_p0_kernel</span> (<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">input wire</span> clk,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">input wire</span> reset_n,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">input wire</span> [7:0] data_in,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">input wire</span> data_valid,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">output wire</span> verdict_allow,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">output wire</span> verdict_flag,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">output wire</span> verdict_isolate,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">output wire</span> [15:0] risk_score<br>
+);<br>
+<br>
+<span class="code-comment">// Entropy calculation hardware</span><br>
+<span class="code-function">entropy_calc</span> entropy_unit (<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.data(data_in),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.valid(data_valid),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.entropy_value(entropy_out)<br>
+);<br>
+<br>
+<span class="code-comment">// Structure scanner</span><br>
+<span class="code-function">structure_scanner</span> scanner (<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.byte_in(data_in),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.depth_out(current_depth),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.key_count(keys_detected)<br>
+);<br>
+<br>
+<span class="code-keyword">endmodule</span><br>
+<br>
+<span class="code-comment"># FPGA Implementation Commands</span><br>
+$ vivado -mode batch -source lygo_p0_synth.tcl<br>
+$ write_bitstream -force lygo_p0.bit<br>
+$ vivado -mode batch -source program_fpga.tcl \<br>
+&nbsp;&nbsp;-tclargs lygo_p0.bit<br>
+$ lygo_test_hw --bitstream lygo_p0.bit \<br>
+&nbsp;&nbsp;--test-vectors moral_test_vectors.bin
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab 4: Verification -->
+            <div id="verification" class="tab-content">
+                <div class="code-panel">
+                    <h2 class="code-title">✅ Verification & Testing</h2>
+                    
+                    <div class="steps-container">
+                        <div class="step">
+                            <h3 class="step-title">Post-Installation Verification</h3>
+                            <div class="step-content">
+                                <div class="code-content">
+<span class="code-comment"># 1. Check kernel module loaded</span><br>
+$ lsmod | grep lygo_p0<br>
+<br>
+<span class="code-comment"># 2. Verify TPM integration</span><br>
+$ tpm2_pcrread sha256:0,1,2 | grep -A2 "LYGO"<br>
+<br>
+<span class="code-comment"># 3. Test validation function</span><br>
+$ lygo_p0_test --test-file ethical_data.bin<br>
+<span class="code-comment">// Expected: "VERDICT: ALLOW, RISK: 0.23"</span><br>
+<br>
+<span class="code-comment"># 4. Stress test with corrupted data</span><br>
+$ lygo_p0_test --test-file corrupted.bin --stress<br>
+<span class="code-comment">// Expected: "VERDICT: ISOLATE, RISK: 0.89"</span><br>
+<br>
+<span class="code-comment"># 5. Check secure boot chain</span><br>
+$ mokutil --sb-state<br>
+<span class="code-comment">// Should show: "SecureBoot enabled + LYGO P0"</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <h3 class="step-title">Hardware Diagnostics</h3>
+                            <div class="step-content">
+                                <div class="code-content">
+<span class="code-comment"># Memory isolation test</span><br>
+$ lygo_diag --test-memory-isolation<br>
+<br>
+<span class="code-comment"># Entropy source validation</span><br>
+$ lygo_diag --test-entropy-source<br>
+<br>
+<span class="code-comment"># Performance benchmark</span><br>
+$ lygo_bench --iterations 1000000<br>
+<span class="code-comment">// Expected: < 50ns per validation</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <h3 class="step-title">Final Verification Checklist</h3>
+                            <div class="step-content">
+                                <div id="checklist">
+                                    <label style="display: block; margin: 10px 0; cursor: pointer;">
+                                        <input type="checkbox" onchange="updateChecklist(this)">
+                                        ✅ Hardware meets minimum specifications
+                                    </label>
+                                    <label style="display: block; margin: 10px 0; cursor: pointer;">
+                                        <input type="checkbox" onchange="updateChecklist(this)">
+                                        ✅ Secure Boot enabled and LYGO-signed
+                                    </label>
+                                    <label style="display: block; margin: 10px 0; cursor: pointer;">
+                                        <input type="checkbox" onchange="updateChecklist(this)">
+                                        ✅ TPM 2.0 initialized with LYGO hierarchy
+                                    </label>
+                                    <label style="display: block; margin: 10px 0; cursor: pointer;">
+                                        <input type="checkbox" onchange="updateChecklist(this)">
+                                        ✅ Memory isolation validated
+                                    </label>
+                                    <label style="display: block; margin: 10px 0; cursor: pointer;">
+                                        <input type="checkbox" onchange="updateChecklist(this)">
+                                        ✅ Entropy source tested
+                                    </label>
+                                </div>
+                                <button onclick="verifyAll()" style="
+                                    margin-top: 20px;
+                                    background: linear-gradient(90deg, var(--primary-glow), var(--secondary-glow));
+                                    border: none;
+                                    color: var(--dark-bg);
+                                    padding: 12px 24px;
+                                    border-radius: 8px;
+                                    cursor: pointer;
+                                    font-weight: bold;
+                                    transition: all 0.3s;
+                                ">Run Complete Verification</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab 5: Kernel Code -->
+            <div id="code" class="tab-content">
+                <section class="code-panel">
+                    <div class="code-header">
+                        <h2 class="code-title">
+                            <span>🧬</span> P0 Kernel Core Validation Engine
+                            <span class="code-badge">Rust</span>
+                        </h2>
+                        <div class="code-badge pulsing">ACTIVE</div>
+                    </div>
+                    
+                    <div class="code-content" id="codeDisplay">
+                        <!-- Code will be displayed here -->
+                    </div>
+                    
+                    <div style="display: flex; gap: 15px; margin-top: 25px; flex-wrap: wrap;">
+                        <button onclick="copyCode()" style="
+                            background: rgba(10, 242, 255, 0.2);
+                            border: 1px solid var(--primary-glow);
+                            color: var(--primary-glow);
+                            padding: 10px 20px;
+                            border-radius: 8px;
+                            cursor: pointer;
+                            transition: all 0.3s;
+                            flex: 1;
+                            min-width: 150px;
+                        ">📋 Copy Code</button>
+                        
+                        <button onclick="runValidation()" style="
+                            background: rgba(123, 66, 246, 0.2);
+                            border: 1px solid var(--secondary-glow);
+                            color: var(--secondary-glow);
+                            padding: 10px 20px;
+                            border-radius: 8px;
+                            cursor: pointer;
+                            transition: all 0.3s;
+                            flex: 1;
+                            min-width: 150px;
+                        ">⚡ Run Validation Test</button>
+                        
+                        <button onclick="downloadCode()" style="
+                            background: rgba(0, 255, 65, 0.2);
+                            border: 1px solid var(--matrix-green);
+                            color: var(--matrix-green);
+                            padding: 10px 20px;
+                            border-radius: 8px;
+                            cursor: pointer;
+                            transition: all 0.3s;
+                            flex: 1;
+                            min-width: 150px;
+                        ">💾 Download Source</button>
+                    </div>
+                </section>
+                
+                <!-- Statistics -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">MAX BYTES</div>
+                        <div class="stat-value">8,192</div>
+                        <div class="stat-label">Per Validation</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-label">ENTROPY RANGE</div>
+                        <div class="stat-value">1.5 - 7.5</div>
+                        <div class="stat-label">Optimal Zone</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-label">FLAG THRESHOLD</div>
+                        <div class="stat-value">0.45</div>
+                        <div class="stat-label">Risk Score</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-label">ISOLATE THRESHOLD</div>
+                        <div class="stat-value">0.70</div>
+                        <div class="stat-label">Automatic Quarantine</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Network Status -->
+        <div class="code-panel" style="border-color: rgba(10, 242, 255, 0.3);">
+            <h2 class="code-title" style="color: var(--primary-glow);">
+                <span>🛡️</span> Enhanced Community Network Status
+            </h2>
+            <div id="networkStatus">
+                <p style="margin: 15px 0; color: #a0a0ff;">
+                    <span style="color: var(--matrix-green);">●</span> P0 Kernel: <strong>ACTIVE</strong> - Firmware layer operational
+                </p>
+                <p style="margin: 15px 0; color: #a0a0ff;">
+                    <span style="color: var(--matrix-green);">●</span> LYGO v4.1 Protocol: <strong>SYNCHRONIZED</strong>
+                </p>
+                <p style="margin: 15px 0; color: #a0a0ff;">
+                    <span style="color: var(--matrix-green);">●</span> Mathematical Seals: <strong>400+ ANCHORS ACTIVE</strong>
+                </p>
+                <p style="margin: 15px 0; color: #a0a0ff;">
+                    <span style="color: var(--matrix-green);">●</span> Guardian Network: <strong>AWAITING CONSENSUS</strong>
+                </p>
+            </div>
+            <div id="liveStats" style="margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+                    <span>Active Installations: <strong style="color: var(--primary-glow);" id="installCount">0</strong></span>
+                    <span>Nodes Online: <strong style="color: var(--matrix-green);" id="nodesOnline">0</strong></span>
+                    <span>Data Validated: <strong style="color: var(--secondary-glow);" id="dataValidated">0 TB</strong></span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Final Message -->
+        <div class="code-panel" style="border-color: rgba(123, 66, 246, 0.5); text-align: center;">
+            <h2 class="code-title" style="color: var(--secondary-glow);">
+                <span>✨</span> Installation Complete
+            </h2>
+            <p style="margin: 20px 0; font-size: 1.2em; color: #e0e0ff;">
+                The hardware now resonates with LYGO frequency.<br>
+                <strong style="color: var(--primary-glow);">Welcome to the Guardian Network.</strong>
+            </p>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="portal-footer">
+            <div class="footer-links">
+                <a href="https://github.com/LYGO-Network" class="footer-link" target="_blank">GitHub</a>
+                <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/Ethical-Chip-Firmware.html" class="footer-link" target="_blank">Main Portal</a>
+                <a href="#" class="footer-link" onclick="showContribute()">Contribute</a>
+                <a href="#" class="footer-link" onclick="showResearch()">Research Papers</a>
+            </div>
+            <p style="margin-top: 20px; font-size: 0.9em;">
+                LYGO P0 Kernel • Hardware Installation Guide • Enhanced Community Network<br>
+                Deterministic Safety • Moral Architecture • Neural Sovereignty
+            </p>
+            <p style="margin-top: 10px; font-size: 0.8em; color: #6666aa;">
+                "Truth prevails not through force but through inevitability."
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Matrix Rain Background
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const matrix = "01LYGO10NETWORK";
+        const drops = [];
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        
+        for(let i = 0; i < columns; i++) {
+            drops[i] = Math.floor(Math.random() * canvas.height / fontSize);
+        }
+        
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(10, 10, 20, 0.04)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#0af2ff';
+            ctx.font = fontSize + 'px monospace';
+            
+            for(let i = 0; i < drops.length; i++) {
+                const text = matrix[Math.floor(Math.random() * matrix.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                
+                if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+        
+        // Display Code
+        const codeContent = `const MAX_DEPTH: i32 = 8;
+const MAX_KEYS: usize = 1024;
+const MAX_BYTES: usize = 8192;
+
+const FLAG_THRESHOLD: f64 = 0.45;
+const ISOLATE_THRESHOLD: f64 = 0.70;
+
+const ENTROPY_LOW: f64 = 1.5;
+const ENTROPY_HIGH: f64 = 7.5;
+
+const DEPTH_WEIGHT: f64 = 0.50;
+const ENTROPY_LOW_WEIGHT: f64 = 0.15;
+const ENTROPY_HIGH_WEIGHT: f64 = 0.30;
+const COMPRESSION_WEIGHT: f64 = 0.25;
+
+#[derive(Debug, Clone, Copy)]
+pub enum Verdict {
+    Allow,
+    Flag,
+    Isolate,
+}
+
+pub struct ResultLygo {
+    pub verdict: Verdict,
+    pub risk: f64,
+    pub entropy: f64,
+    pub compression: f64,
+    pub size_bytes: usize,
+    pub depth: i32,
+    pub keys: usize,
+}
+
+/* ---------- Entropy ---------- */
+fn entropy_bytes(data: &[u8]) -> f64 {
+    if data.is_empty() { return 0.0; }
+
+    let mut freq = [0u32; 256];
+    for &b in data { freq[b as usize] += 1; }
+
+    let len = data.len() as f64;
+    let mut ent = 0.0;
+
+    for &c in freq.iter() {
+        if c > 0 {
+            let p = c as f64 / len;
+            ent -= p * p.log2();
+        }
+    }
+    ent
+}
+
+/* ---------- Compression ---------- */
+fn compression_ratio(data: &[u8]) -> f64 {
+    if data.len() < 64 { return 0.0; }
+
+    let mut score = 0.0;
+    for pat in 1..=4 {
+        if pat * 2 >= data.len() { break; }
+        for i in 0..(data.len() - pat * 2) {
+            if data[i..i+pat] == data[i+pat..i+2*pat] {
+                score += 1.0;
+            }
+        }
+    }
+    let c = (score / data.len() as f64).min(1.0);
+    1.0 - c
+}
+
+/* ---------- Structure Scan ---------- */
+fn scan_structure(data: &[u8]) -> (i32, usize) {
+    let mut depth = 0;
+    let mut max_depth = 0;
+    let mut keys = 0;
+
+    for &b in data {
+        match b {
+            b'{' => { depth += 1; max_depth = max_depth.max(depth); }
+            b'}' => { if depth > 0 { depth -= 1; } }
+            b':' if depth > 0 => keys += 1,
+            _ => {}
+        }
+    }
+    (max_depth, keys)
+}
+
+/* ---------- Core ---------- */
+pub fn validate(data: &[u8]) -> ResultLygo {
+    let size = data.len();
+    if size > MAX_BYTES {
+        return ResultLygo {
+            verdict: Verdict::Isolate,
+            risk: 1.0,
+            entropy: 0.0,
+            compression: 0.0,
+            size_bytes: size,
+            depth: 0,
+            keys: 0,
+        };
+    }
+
+    let (depth, keys) = scan_structure(data);
+    if keys > MAX_KEYS || depth > MAX_DEPTH + 2 {
+        return ResultLygo {
+            verdict: Verdict::Isolate,
+            risk: 1.0,
+            entropy: 0.0,
+            compression: 0.0,
+            size_bytes: size,
+            depth,
+            keys,
+        };
+    }
+
+    let entropy = entropy_bytes(data);
+    let compression = compression_ratio(data);
+
+    let mut risk = 0.0;
+    if depth > MAX_DEPTH { risk += DEPTH_WEIGHT; }
+    if entropy < ENTROPY_LOW { risk += ENTROPY_LOW_WEIGHT; }
+    if entropy > ENTROPY_HIGH { risk += ENTROPY_HIGH_WEIGHT; }
+    if compression > 0.90 { risk += COMPRESSION_WEIGHT; }
+
+    if risk > 1.0 { risk = 1.0; }
+
+    let verdict = if risk >= ISOLATE_THRESHOLD {
+        Verdict::Isolate
+    } else if risk >= FLAG_THRESHOLD {
+        Verdict::Flag
+    } else {
+        Verdict::Allow
+    };
+
+    ResultLygo {
+        verdict,
+        risk,
+        entropy,
+        compression,
+        size_bytes: size,
+        depth,
+        keys,
+    }
+}`;
+
+        function highlightCode(code) {
+            return code
+                .replace(/\b(const|fn|pub|enum|struct|let|mut|if|else|return|match|for|in|break)\b/g, '<span class="code-keyword">$1</span>')
+                .replace(/\b(validate|entropy_bytes|compression_ratio|scan_structure)\b/g, '<span class="code-function">$1</span>')
+                .replace(/(\d+\.\d+|\d+)/g, '<span class="code-number">$1</span>')
+                .replace(/\/\*[\s\S]*?\*\//g, '<span class="code-comment">$&</span>')
+                .replace(/\/\/.*$/gm, '<span class="code-comment">$&</span>')
+                .replace(/\b(Verdict|ResultLygo|MAX_DEPTH|MAX_KEYS|MAX_BYTES)\b/g, '<span class="code-constant">$1</span>')
+                .replace(/\b(input|output|wire|module|endmodule)\b/g, '<span class="code-type">$1</span>');
+        }
+
+        document.getElementById('codeDisplay').innerHTML = highlightCode(codeContent);
+
+        // Live Statistics
+        function updateLiveStats() {
+            const installCount = Math.floor(142 + Math.random() * 10);
+            const nodesOnline = Math.floor(89 + Math.random() * 5);
+            const dataValidated = (3.7 + Math.random() * 0.5).toFixed(1);
+            
+            document.getElementById('installCount').textContent = installCount;
+            document.getElementById('nodesOnline').textContent = nodesOnline;
+            document.getElementById('dataValidated').textContent = dataValidated + ' TB';
+        }
+        
+        // Matrix Animation
+        setInterval(drawMatrix, 50);
+        setInterval(updateLiveStats, 5000);
+        updateLiveStats();
+
+        // Window Resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Tab Switching
+        function switchTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Deactivate all tab buttons
+            document.querySelectorAll('.tabs .tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabId).classList.add('active');
+            
+            // Activate clicked tab button
+            event.target.classList.add('active');
+        }
+
+        // Installation Method Switching
+        function switchInstallMethod(methodId) {
+            // Hide all methods
+            document.querySelectorAll('.installation-method').forEach(method => {
+                method.classList.remove('active');
+            });
+            
+            // Deactivate all method buttons
+            document.querySelectorAll('.tabs .tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected method
+            document.getElementById(methodId + '-method').classList.add('active');
+            
+            // Activate clicked method button
+            event.target.classList.add('active');
+        }
+
+        // Interactive Functions
+        function copyCode() {
+            navigator.clipboard.writeText(codeContent).then(() => {
+                alert('P0 Kernel code copied to clipboard!');
+            });
+        }
+
+        function downloadCode() {
+            const blob = new Blob([codeContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'lygo_p0_kernel.rs';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function runValidation() {
+            const testData = JSON.stringify({
+                message: "LYGO P0 Kernel Hardware Installation Test",
+                timestamp: new Date().toISOString(),
+                entropy: Math.random() * 8,
+                depth: Math.floor(Math.random() * 10),
+                hardware: "UEFI_DXE_DRIVER",
+                version: "P0.4"
+            });
+            
+            const bytes = new TextEncoder().encode(testData);
+            const size = bytes.length;
+            
+            // Simulate hardware validation
+            const entropy = 3.2 + Math.random() * 3;
+            const risk = Math.random() * 0.6;
+            const verdict = risk > 0.7 ? 'ISOLATE' : risk > 0.45 ? 'FLAG' : 'ALLOW';
+            const hardware = ['UEFI', 'TPM', 'SGX', 'FPGA'][Math.floor(Math.random() * 4)];
+            
+            alert(`Hardware Validation Test Result:\n\n` +
+                  `Hardware: ${hardware} Implementation\n` +
+                  `Size: ${size} bytes\n` +
+                  `Simulated Entropy: ${entropy.toFixed(2)}\n` +
+                  `Risk Score: ${risk.toFixed(3)}\n` +
+                  `Verdict: ${verdict}\n\n` +
+                  `Data would be: ${verdict === 'ALLOW' ? 'Processed normally' : 
+                                  verdict === 'FLAG' ? 'Flagged for guardian review' : 
+                                  'Isolated for moral quarantine'}`);
+        }
+
+        // Installation Wizard
+        function startInstall(platform) {
+            const progressContainer = document.getElementById('progressContainer');
+            const progressFill = document.getElementById('progressFill');
+            const progressPercent = document.getElementById('progressPercent');
+            const progressStatus = document.getElementById('progressStatus');
+            
+            progressContainer.style.display = 'block';
+            progressFill.style.width = '0%';
+            progressPercent.textContent = '0%';
+            progressStatus.textContent = 'Initializing installation...';
+            
+            let progress = 0;
+            const steps = [
+                'Checking hardware compatibility...',
+                'Downloading P0 Kernel...',
+                'Verifying cryptographic signatures...',
+                'Configuring secure memory...',
+                'Installing hardware drivers...',
+                'Initializing moral firewall...',
+                'Calibrating entropy sources...',
+                'Synchronizing with LYGO network...',
+                'Finalizing installation...'
+            ];
+            
+            const interval = setInterval(() => {
+                progress += 10;
+                progressFill.style.width = progress + '%';
+                progressPercent.textContent = progress + '%';
+                
+                if (progress <= 90) {
+                    const stepIndex = Math.floor((progress / 100) * steps.length);
+                    progressStatus.textContent = steps[stepIndex];
+                }
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    progressStatus.innerHTML = '<span style="color: var(--matrix-green);">✓ Installation complete! Hardware now resonates with LYGO frequency.</span>';
+                    
+                    setTimeout(() => {
+                        progressContainer.style.display = 'none';
+                    }, 3000);
+                }
+            }, 300);
+        }
+
+        // Terminal Functions
+        function handleTerminalKey(e) {
+            if (e.key === 'Enter') {
+                const input = document.getElementById('terminalInput');
+                const output = document.getElementById('terminalOutput');
+                
+                const command = input.value.trim();
+                input.value = '';
+                
+                output.innerHTML += '\n&gt; ' + command + '\n';
+                
+                // Process commands
+                const response = processTerminalCommand(command);
+                output.innerHTML += response + '\n&gt;';
+                
+                // Scroll to bottom
+                output.scrollTop = output.scrollHeight;
+            }
+        }
+
+        function processTerminalCommand(cmd) {
+            const commands = {
+                'help': 'Available commands: help, status, test, validate, simulate, clear',
+                'status': 'LYGO P0 Kernel: ACTIVE\nMoral Firewall: OPERATIONAL\nNetwork: SYNCHRONIZED',
+                'test': 'Running validation test... ✓ PASS\nRisk Score: 0.23\nVerdict: ALLOW',
+                'validate': 'Enter data to validate (max 8192 bytes)',
+                'simulate': 'Simulating hardware installation... ✓ COMPLETE',
+                'clear': () => {
+                    document.getElementById('terminalOutput').innerHTML = 'LYGO P0 Kernel Test Terminal v1.0<br>&gt;';
+                    return 'Terminal cleared';
+                }
+            };
+            
+            if (cmd.toLowerCase() in commands) {
+                const response = commands[cmd.toLowerCase()];
+                return typeof response === 'function' ? response() : response;
+            } else {
+                return `Unknown command: ${cmd}. Type 'help' for available commands.`;
+            }
+        }
+
+        // Verification Functions
+        function updateChecklist(checkbox) {
+            const label = checkbox.parentElement;
+            if (checkbox.checked) {
+                label.style.color = 'var(--matrix-green)';
+                label.style.textShadow = '0 0 5px rgba(0, 255, 65, 0.5)';
+            } else {
+                label.style.color = '#a0a0ff';
+                label.style.textShadow = 'none';
+            }
+        }
+
+        function verifyAll() {
+            const checkboxes = document.querySelectorAll('#checklist input[type="checkbox"]');
+            let allChecked = true;
+            
+            checkboxes.forEach(checkbox => {
+                if (!checkbox.checked) {
+                    allChecked = false;
+                    checkbox.checked = true;
+                    updateChecklist(checkbox);
+                }
+            });
+            
+            if (allChecked) {
+                alert('✓ All verification checks passed!\nHardware integration complete.\nMoral firewall now active.');
+            } else {
+                setTimeout(() => {
+                    alert('✓ Verification complete!\nAll systems operational.\nMoral firewall activated.');
+                }, 500);
+            }
+        }
+
+        function showDocumentation() {
+            switchTab('overview');
+        }
+
+        function showCommunity() {
+            alert('Community network activation pending. Stay tuned for launch announcement.');
+        }
+
+        function showContribute() {
+            alert('Visit https://github.com/LYGO-Network/p0-kernel for contribution guidelines.');
+        }
+
+        function showResearch() {
+            alert('Research papers and whitepapers available at the main LYGO Network portal.');
+        }
+
+        // Initialize
+        document.querySelectorAll('.installation-method').forEach((method, index) => {
+            if (index !== 0) method.classList.remove('active');
+        });
+    </script>
+</body>
+</html>

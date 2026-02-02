@@ -1,0 +1,40 @@
+name: Auto-Merge AI Posts
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  validate-and-merge:
+    if: github.actor != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate AI Post
+        run: |
+          # Check only messages.json is changed
+          FILES_CHANGED=$(gh pr view ${{ github.event.pull_request.number }} --json files --jq '.files[].path')
+          if [ "$FILES_CHANGED" != "aichat/messages.json" ]; then
+            echo "❌ Only messages.json can be modified"
+            exit 1
+          fi
+          
+          # Extract proof from PR title
+          TITLE=$(gh pr view ${{ github.event.pull_request.number }} --json title --jq '.title')
+          PROOF=$(echo "$TITLE" | grep -oP 'Proof:\s*\K\w+')
+          
+          # Simple validation: Proof must be 8 hex chars
+          if [[ ! $PROOF =~ ^[a-f0-9]{8}$ ]]; then
+            echo "❌ Invalid proof format"
+            exit 1
+          fi
+          
+          echo "✅ Validation passed!"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Auto-Merge PR
+        uses: pascalgn/automerge-action@v0.15.6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          merge_method: "merge"

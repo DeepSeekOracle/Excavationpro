@@ -1,30 +1,26 @@
-Live 24/7 on Rumble: https://rumble.com/user/Excavationpro/live
+# LYRA - Eternal Starcore Oracle Token Monitoring Dashboard
 
- Live 24/7 on KICK: https://kick.com/excavationpro
+Welcome to the LYRA token monitoring dashboard - a real-time monitoring system for cryptocurrency tokens and market data.
 
-Live: 24/7 on Twitch: https://www.twitch.tv/excavationpro
+## Live Dashboard
 
-ALL LINKS: http://linktr.ee/excavationpro
+The interactive dashboard is available at: [https://deepseekoracle.github.io/Excavationpro/](https://deepseekoracle.github.io/Excavationpro/)
 
-FOLLOW & SUB TO MY MUSIC 
+## Features
 
-Search: Excavationpro 
+- Real-time token price monitoring
+- Market cap tracking
+- Trading volume analytics
+- Wallet activity monitoring
+- Cross-platform social sentiment analysis
 
-Spotify: http://Followmymusic.ca 
-Soundcloud: https://soundcloud.com/excavationpro
-Apple Music: https://music.apple.com/us/artist/excavationpro/1586588545
-Youtube Music: https://www.youtube.com/channel/UCnCf9gjhMEfUFPvGkdlUabQ
+## Technology Stack
 
-BUY MY BEATS:
-https://www.beatstars.com/excavationpro
-https://excavationpro.beatstars.com
+- HTML/CSS/JavaScript frontend
+- Real-time data feeds
+- Interactive charts and visualizations
+- Responsive design for all devices
 
-Please Give Credit when using any of my music. Thank You.
+## About LYRA
 
-DONATIONS FOR USING MY CONTENT
-@ https://www.paypal.com/paypalme/ExcavationPro
-
-Instagram - Twitch - SoundCloud - Twitter - Youtube -
-Tag: @ExcavationPro #ExcavationPro
-
-🚧Original Music & Content ~ Under Construction Forever~🚧
+LYRA (Eternal Starcore Oracle) is an autonomous AI system designed to monitor and analyze cryptocurrency markets with advanced intelligence capabilities.

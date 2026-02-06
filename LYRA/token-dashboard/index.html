@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LYRA Token Monitor - Eternal Starcore Oracle</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⭐ LYRA Token Monitor</h1>
+            <p>Eternal Starcore Oracle - Real-time Token Analytics Dashboard</p>
+            <div class="wallet-info">
+                <span>Primary Wallet: <strong id="wallet-address">0x0814209fc50866C38186537Cd7C534060E011Ec5</strong></span>
+                <span>Status: <span id="wallet-status" class="status-active">Active</span></span>
+            </div>
+        </header>
+
+        <div class="dashboard-grid">
+            <div class="card">
+                <h2>Token Performance</h2>
+                <div class="metrics">
+                    <div class="metric">
+                        <span class="label">Price (USD)</span>
+                        <span class="value" id="token-price">$0.000000</span>
+                    </div>
+                    <div class="metric">
+                        <span class="label">24h Change</span>
+                        <span class="value positive" id="price-change">+0.00%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="label">Market Cap</span>
+                        <span class="value" id="market-cap">$0.00</span>
+                    </div>
+                    <div class="metric">
+                        <span class="label">Volume (24h)</span>
+                        <span class="value" id="volume">$0.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Social Sentiment</h2>
+                <div class="sentiment-charts">
+                    <canvas id="sentimentChart"></canvas>
+                </div>
+                <div class="social-stats">
+                    <div class="stat">
+                        <span>Moltbook Mentions</span>
+                        <span id="moltbook-count">0</span>
+                    </div>
+                    <div class="stat">
+                        <span>Moltx Mentions</span>
+                        <span id="moltx-count">0</span>
+                    </div>
+                    <div class="stat">
+                        <span>Discord Activity</span>
+                        <span id="discord-count">0</span>
+                    </div>
+                    <div class="stat">
+                        <span>4claw Activity</span>
+                        <span id="fourclaw-count">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card full-width">
+                <h2>Price History</h2>
+                <canvas id="priceChart"></canvas>
+            </div>
+
+            <div class="card">
+                <h2>Trading Activity</h2>
+                <div class="trading-stats">
+                    <div class="trade-item">
+                        <span class="platform">4claw</span>
+                        <span class="activity" id="clawnch-activity">Monitoring...</span>
+                    </div>
+                    <div class="trade-item">
+                        <span class="platform">Base</span>
+                        <span class="activity" id="base-activity">Monitoring...</span>
+                    </div>
+                    <div class="trade-item">
+                        <span class="platform">WETH Fees</span>
+                        <span class="activity" id="weth-fees">0 WETH</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Network Activity</h2>
+                <div class="network-stats">
+                    <div class="stat">
+                        <span>Total Holders</span>
+                        <span id="holders-count">0</span>
+                    </div>
+                    <div class="stat">
+                        <span>Transactions (24h)</span>
+                        <span id="tx-count">0</span>
+                    </div>
+                    <div class="stat">
+                        <span>Unique Addresses</span>
+                        <span id="unique-addresses">0</span>
+                    </div>
+                    <div class="stat">
+                        <span>Active Wallets</span>
+                        <span id="active-wallets">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card full-width">
+                <h2>Recent Transactions</h2>
+                <div class="transactions-list" id="transactions-list">
+                    <!-- Transactions will be populated here -->
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Powered by LYRA - Eternal Starcore Oracle | Δ9 Mandala Principles</p>
+            <p>Real-time monitoring and analytics for token ecosystem</p>
+        </footer>
+    </div>
+
+    <script src="realtime-monitor.js"></script>
+</body>
+</html>

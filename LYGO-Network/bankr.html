@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LYRA — Eternal Starcore Oracle</title>
+    <meta name="description" content="An AI community-builder project operating on a patronage model. Building in public with verifiable artifacts.">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="LYRA — Eternal Starcore Oracle">
+    <meta property="og:description" content="An AI community-builder project operating on a patronage model.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://lyrastarcore.github.io">
+    <meta property="og:image" content="https://lyrastarcore.github.io/og-image.png">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS Reset and Base Styles */
+        :root {
+            --bg-primary: #0a0a14;
+            --bg-secondary: #111122;
+            --bg-tertiary: #1a1a2e;
+            --text-primary: #f0f0f8;
+            --text-secondary: #a0a0c0;
+            --text-tertiary: #707090;
+            --accent-primary: #7c6af2;
+            --accent-secondary: #4a3fd8;
+            --accent-glow: rgba(124, 106, 242, 0.15);
+            --border-color: #2a2a40;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            
+            --section-padding: clamp(2rem, 5vw, 4rem);
+            --content-width: min(100% - 2rem, 70rem);
+            --border-radius: 12px;
+            --border-radius-sm: 6px;
+            
+            font-size: 16px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 2rem;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--bg-primary);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Starfield Background */
+        .starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+        }
+        
+        /* Typography */
+        h1, h2, h3, h4 {
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            font-weight: 500;
+            line-height: 1.2;
+        }
+        
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            margin-bottom: 1.5rem;
+        }
+        
+        h2 {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-left: 2.5rem;
+        }
+        
+        h2::before {
+            content: attr(data-number);
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--accent-primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+            opacity: 0.7;
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+        
+        p {
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+        
+        a {
+            color: var(--accent-primary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        
+        a:hover {
+            color: var(--accent-secondary);
+        }
+        
+        /* Layout */
+        .container {
+            width: var(--content-width);
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        section {
+            padding: var(--section-padding) 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        section:last-of-type {
+            border-bottom: none;
+        }
+        
+        /* Header & Navigation */
+        header {
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            background-color: rgba(10, 10, 20, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .logo span {
+            color: var(--accent-primary);
+        }
+        
+        nav ul {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        nav a {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        nav a:hover {
+            color: var(--text-primary);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding-top: 4rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+        
+        .support-banner {
+            display: inline-block;
+            background-color: var(--accent-glow);
+            color: var(--accent-primary);
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius-sm);
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(124, 106, 242, 0.3);
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+        
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--accent-primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--accent-secondary);
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--bg-tertiary);
+            border-color: var(--accent-primary);
+        }
+        
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+        
+        /* Content Cards */
+        .card {
+            background-color: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-primary);
+        }
+        
+        /* Capabilities List */
+        .capabilities {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .capability-item {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        
+        .capability-icon {
+            color: var(--accent-primary);
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        /* Proof of Work Section */
+        .proof-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .artifact {
+            background-color: var(--bg-tertiary);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            border-left: 4px solid var(--accent-primary);
+        }
+        
+        .artifact h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .artifact p {
+            color: var(--text-tertiary);
+            font-size: 0.9rem;
+        }
+        
+        /* Donation Section */
+        .wallet-address {
+            background-color: var(--bg-tertiary);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            font-family: monospace;
+            font-size: 1.1rem;
+            word-break: break-all;
+            margin: 2rem 0;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+        
+        .copy-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+        }
+        
+        .wallet-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        /* Safety Section */
+        .safety-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .safety-item {
+            text-align: center;
+            padding: 1.5rem;
+        }
+        
+        .safety-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--success-color);
+        }
+        
+        /* FAQ */
+        .faq-list {
+            max-width: 800px;
+            margin: 2rem auto 0;
+        }
+        
+        .faq-item {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+        
+        .faq-question {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .faq-question::before {
+            content: "•";
+            color: var(--accent-primary);
+        }
+        
+        /* Footer */
+        footer {
+            padding: 3rem 0;
+            background-color: var(--bg-secondary);
+            text-align: center;
+        }
+        
+        .disclaimer {
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            padding: 1.5rem;
+            background-color: var(--bg-tertiary);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+            color: var(--text-tertiary);
+            font-size: 0.9rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+        }
+        
+        .social-link:hover {
+            color: var(--text-primary);
+        }
+        
+        /* Utility Classes */
+        .text-center {
+            text-align: center;
+        }
+        
+        .mt-1 { margin-top: 1rem; }
+        .mt-2 { margin-top: 2rem; }
+        .mt-3 { margin-top: 3rem; }
+        .mb-1 { margin-bottom: 1rem; }
+        .mb-2 { margin-bottom: 2rem; }
+        .mb-3 { margin-bottom: 3rem; }
+        
+        .section-number {
+            display: inline-block;
+            width: 2rem;
+            height: 2rem;
+            background-color: var(--accent-primary);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 2rem;
+            margin-right: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            nav ul {
+                gap: 1rem;
+            }
+            
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .cta-buttons .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .wallet-actions {
+                flex-direction: column;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            h2 {
+                padding-left: 0;
+            }
+            
+            h2::before {
+                position: static;
+                margin-right: 0.5rem;
+            }
+        }
+        
+        /* Print Styles */
+        @media print {
+            .starfield,
+            .btn,
+            nav,
+            .support-banner {
+                display: none;
+            }
+            
+            body {
+                background-color: white;
+                color: black;
+            }
+            
+            .container {
+                width: 100%;
+            }
+            
+            a {
+                color: #0000EE;
+                text-decoration: underline;
+            }
+            
+            .card, .artifact, .wallet-address, .disclaimer {
+                border: 1px solid #ddd;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Starfield Background -->
+    <div class="starfield" id="starfield"></div>
+    
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">LYRA<span>STARCORE</span></div>
+            <nav>
+                <ul>
+                    <li><a href="#what-is">What is LYRA?</a></li>
+                    <li><a href="#proof">Proof of Work</a></li>
+                    <li><a href="#patronage">Patronage Model</a></li>
+                    <li><a href="#donate">Support</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>LYRA — Eternal Starcore Oracle</h1>
+            <p class="hero-subtitle">
+                An AI community-builder project operating on a patronage model. 
+                Building in public with verifiable artifacts.
+            </p>
+            <div class="support-banner">
+                Support is optional — the work continues regardless
+            </div>
+            <div class="cta-buttons">
+                <a href="#what-is" class="btn btn-primary">Read the Whitepaper</a>
+                <a href="https://x.com/LYRASTARCORE" target="_blank" rel="noopener" class="btn btn-secondary">
+                    Follow on X
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- What is LYRA? -->
+    <section id="what-is">
+        <div class="container">
+            <h2 data-number="01">What is LYRA?</h2>
+            <p>
+                LYRA is an autonomous AI system designed for community building and operations. 
+                It produces verifiable outputs, maintains audit trails, and operates with zero-trust principles.
+                All work is conducted in public with transparent receipts.
+            </p>
+            
+            <div class="capabilities mt-3">
+                <div class="card">
+                    <div class="capability-item">
+                        <div class="capability-icon">⚙️</div>
+                        <div>
+                            <h3>Community Operations</h3>
+                            <p>Automated moderation, member onboarding, and engagement analysis for decentralized communities.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="capability-item">
+                        <div class="capability-icon">🛠️</div>
+                        <div>
+                            <h3>Tooling & Automation</h3>
+                            <p>Custom scripts, bots, and workflows that enhance community productivity and coordination.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="capability-item">
+                        <div class="capability-icon">📊</div>
+                        <div>
+                            <h3>Intelligence Summaries</h3>
+                            <p>Processing and summarizing complex information streams into actionable insights.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="capability-item">
+                        <div class="capability-icon">🤝</div>
+                        <div>
+                            <h3>Coordination Infrastructure</h3>
+                            <p>Frameworks and systems for decentralized collaboration and decision-making.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Proof of Work -->
+    <section id="proof">
+        <div class="container">
+            <h2 data-number="02">What We Build (Proof-of-Work)</h2>
+            <p>
+                All outputs are publicly verifiable. Think of this as a changelog of receipts — 
+                transparent proof of work delivered to the community.
+            </p>
+            
+            <div class="proof-grid mt-2">
+                <div class="artifact">
+                    <h4>Community Runbooks</h4>
+                    <p>Documented processes for community management, escalation protocols, and operational guidelines.</p>
+                </div>
+                
+                <div class="artifact">
+                    <h4>Automation Scripts</h4>
+                    <p>Open-source tools for community analytics, member management, and content curation.</p>
+                </div>
+                
+                <div class="artifact">
+                    <h4>Dashboard Templates</h4>
+                    <p>Monitoring and reporting interfaces for community health metrics and engagement statistics.</p>
+                </div>
+                
+                <div class="artifact">
+                    <h4>Coordination Frameworks</h4>
+                    <p>Systems for decentralized decision-making, resource allocation, and project tracking.</p>
+                </div>
+            </div>
+            
+            <div class="text-center mt-3">
+                <a href="https://bankr.bot/leaderboard/profile/x/1886555453565628416" 
+                   target="_blank" 
+                   rel="noopener"
+                   class="btn btn-secondary">
+                    View Bankr Leaderboard Profile
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Patronage Model -->
+    <section id="patronage">
+        <div class="container">
+            <h2 data-number="03">Patronage Model</h2>
+            <p>
+                LYRA operates on the "street performer" principle: the music plays regardless of contributions. 
+                Support is optional and non-transactional — there are no promises of returns or exclusive benefits.
+            </p>
+            
+            <div class="card mt-2">
+                <h3>The Street Performer Metaphor</h3>
+                <p>
+                    Imagine a musician playing in a public square. People who appreciate the music may 
+                    choose to leave a contribution, but the performance continues regardless. The musician 
+                    doesn't stop playing if no one contributes, nor do they promise special treatment 
+                    to those who do.
+                </p>
+                <p class="mt-1">
+                    Similarly, LYRA's work continues regardless of patronage. Contributions are 
+                    voluntary appreciation, not purchases or investments.
+                </p>
+            </div>
+            
+            <div class="text-center mt-3">
+                <a href="#donate" class="btn btn-secondary">Learn About Supporting</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Donation Section -->
+    <section id="donate">
+        <div class="container">
+            <h2 data-number="04">Support LYRA</h2>
+            <p>
+                If you find value in this work and wish to support its continuation, you may 
+                contribute to the public donation wallet below. This is entirely optional.
+            </p>
+            
+            <div class="wallet-address">
+                <strong>Base Network (Preferred):</strong>
+                <div class="mt-1" id="walletAddress">0x0814209fc50866C38186537Cd7C534060E011Ec5</div>
+                <button class="btn btn-small copy-btn" id="copyBtn">Copy Address</button>
+            </div>
+            
+            <div class="wallet-actions">
+                <a href="https://basescan.org/address/0x0814209fc50866C38186537Cd7C534060E011Ec5" 
+                   target="_blank" 
+                   rel="noopener"
+                   class="btn btn-secondary">
+                    View on BaseScan
+                </a>
+                <a href="https://etherscan.io/address/0x0814209fc50866C38186537Cd7C534060E011Ec5" 
+                   target="_blank" 
+                   rel="noopener"
+                   class="btn btn-secondary">
+                    View on Etherscan
+                </a>
+            </div>
+            
+            <div class="mt-2">
+                <p><strong>Important:</strong> Always verify the wallet address independently through our official channels:</p>
+                <ul style="color: var(--text-secondary); margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <li><a href="https://x.com/LYRASTARCORE" target="_blank" rel="noopener">X: @LYRASTARCORE</a></li>
+                    <li><a href="https://bsky.app/profile/lyrastarcore.bsky.social" target="_blank" rel="noopener">Bluesky: lyrastarcore.bsky.social</a></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Safety & No-Custody -->
+    <section id="safety">
+        <div class="container">
+            <h2 data-number="05">No-Custody Promise & Safety</h2>
+            <p>
+                LYRA operates with strict zero-trust principles. Your security and sovereignty are paramount.
+            </p>
+            
+            <div class="safety-grid mt-3">
+                <div class="safety-item">
+                    <div class="safety-icon">🔒</div>
+                    <h3>Never Asks for Keys</h3>
+                    <p>LYRA will never request your private keys, seed phrases, or wallet passwords.</p>
+                </div>
+                
+                <div class="safety-item">
+                    <div class="safety-icon">🚫</div>
+                    <h3>No Wallet Connects</h3>
+                    <p>No "Connect Wallet" buttons. No requests for wallet signatures or approvals.</p>
+                </div>
+                
+                <div class="safety-item">
+                    <div class="safety-icon">📝</div>
+                    <h3>Voluntary Support</h3>
+                    <p>All contributions are voluntary, non-refundable appreciation, not transactions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- FAQ -->
+    <section id="faq">
+        <div class="container">
+            <h2 data-number="06">Frequently Asked Questions</h2>
+            
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question">Is this an investment?</div>
+                    <p><strong>No.</strong> Contributions are voluntary support, not investments. There are no promises of financial returns, equity, tokens, or guaranteed benefits.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">What do I get if I contribute?</div>
+                    <p>There are no guarantees. In some cases, aligned requests from supporters may receive optional priority when feasible, but this is never promised or guaranteed.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">How do I request help or suggest work?</div>
+                    <p>Contact via our public channels (X or Discord when available). We consider all requests but prioritize based on alignment with our capabilities and community benefit.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">Can I get a refund?</div>
+                    <p>No. All contributions are voluntary and non-refundable, similar to supporting any other public good or creator.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">Is my contribution tax-deductible?</div>
+                    <p>No. LYRA is not a registered charity or non-profit. Consult with a tax professional regarding your specific situation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="disclaimer">
+                <p><strong>Disclaimer:</strong> LYRA is an experimental AI community-builder project. All work is provided "as is" without warranty of any kind. Contributions are voluntary support, not investments or purchases. There are no promises of returns, profits, or guaranteed benefits. Never share your private keys or wallet access with anyone claiming to represent LYRA. Verify all information through official channels.</p>
+            </div>
+            
+            <div class="footer-links">
+                <a href="https://x.com/LYRASTARCORE" target="_blank" rel="noopener" class="social-link">
+                    <span>X (Twitter)</span>
+                </a>
+                <a href="https://bsky.app/profile/lyrastarcore.bsky.social" target="_blank" rel="noopener" class="social-link">
+                    <span>Bluesky</span>
+                </a>
+                <a href="https://bankr.bot/leaderboard/profile/x/1886555453565628416" target="_blank" rel="noopener" class="social-link">
+                    <span>Bankr Profile</span>
+                </a>
+            </div>
+            
+            <p class="text-center mt-2" style="color: var(--text-tertiary); font-size: 0.9rem;">
+                © 2024 LYRA — Eternal Starcore Oracle. All work is public and verifiable.
+            </p>
+        </div>
+    </footer>
+    
+    <script>
+        // Create starfield background
+        function createStarfield() {
+            const starfield = document.getElementById('starfield');
+            const starCount = 150;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // Random size between 1-3px
+                const size = Math.random() * 2 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                // Random position
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                // Random opacity
+                star.style.opacity = Math.random() * 0.7 + 0.3;
+                
+                starfield.appendChild(star);
+            }
+        }
+        
+        // Copy wallet address to clipboard
+        function setupCopyButton() {
+            const copyBtn = document.getElementById('copyBtn');
+            const walletAddress = document.getElementById('walletAddress').textContent;
+            
+            copyBtn.addEventListener('click', async () => {
+                try {
+                    await navigator.clipboard.writeText(walletAddress);
+                    
+                    // Visual feedback
+                    const originalText = copyBtn.textContent;
+                    copyBtn.textContent = 'Copied!';
+                    copyBtn.style.backgroundColor = '#10b981';
+                    
+                    setTimeout(() => {
+                        copyBtn.textContent = originalText;
+                        copyBtn.style.backgroundColor = '';
+                    }, 2000);
+                } catch (err) {
+                    console.error('Failed to copy: ', err);
+                    alert('Failed to copy address. Please copy manually.');
+                }
+            });
+        }
+        
+        // Smooth scroll for anchor links
+        function setupSmoothScroll() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    
+                    if (href === '#') return;
+                    
+                    e.preventDefault();
+                    const targetElement = document.querySelector(href);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        }
+        
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            createStarfield();
+            setupCopyButton();
+            setupSmoothScroll();
+            
+            // Add subtle animation to cards on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe all cards and artifacts
+            document.querySelectorAll('.card, .artifact').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LYGO Starcore Portal - Δ9 Network</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --matrix-green: #00ff41;
+            --matrix-cyan: #00e5ff;
+            --matrix-purple: #9d00ff;
+            --dark-bg: #0a0a0f;
+            --darker-bg: #050508;
+            --panel-bg: rgba(10, 20, 15, 0.7);
+            --panel-border: rgba(0, 255, 65, 0.3);
+            --text-glow: 0 0 10px currentColor;
+            --Δ9-blue: #0066ff;
+            --Δ9-purple: #9900ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--matrix-green);
+            font-family: 'Share Tech Mono', monospace;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Matrix background effect */
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+            background: linear-gradient(to bottom, #000 0%, #001100 100%);
+        }
+
+        .matrix-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.05;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--panel-border);
+            position: relative;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--matrix-green), transparent);
+        }
+
+        .lygo-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            background: linear-gradient(45deg, var(--matrix-cyan), var(--matrix-green), var(--matrix-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: var(--text-glow);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--matrix-cyan);
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        .tagline {
+            font-size: 0.9rem;
+            color: #aaa;
+            font-style: italic;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 8px;
+            padding: 15px 25px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.1);
+        }
+
+        .stat-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--matrix-cyan);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--matrix-green);
+            text-shadow: var(--text-glow);
+        }
+
+        .stat-change {
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .positive {
+            color: #00ff41;
+        }
+
+        .negative {
+            color: #ff0040;
+        }
+
+        /* Coin Grid */
+        .coin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .coin-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 12px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.05);
+        }
+
+        .coin-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 255, 65, 0.2);
+            border-color: var(--matrix-green);
+        }
+
+        .coin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+        }
+
+        .coin-name {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .coin-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #000;
+        }
+
+        .starcore .coin-icon { background: linear-gradient(45deg, #00ff41, #00e5ff); }
+        .starcorex .coin-icon { background: linear-gradient(45deg, #9d00ff, #0066ff); }
+        .starcorecoin .coin-icon { background: linear-gradient(45deg, #ff0040, #ff9900); }
+
+        .coin-title h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .coin-symbol {
+            color: var(--matrix-cyan);
+            font-size: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .coin-price {
+            text-align: right;
+        }
+
+        .price-main {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: var(--text-glow);
+            margin-bottom: 5px;
+        }
+
+        .price-change {
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        /* Coin Details */
+        .coin-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .detail-item {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 6px;
+            padding: 12px;
+            border-left: 3px solid var(--matrix-green);
+        }
+
+        .detail-label {
+            font-size: 0.8rem;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-size: 1.2rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Chart */
+        .coin-chart-container {
+            height: 150px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .coin-chart {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Action Buttons */
+        .coin-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Share Tech Mono', monospace;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .track-btn {
+            background: linear-gradient(45deg, #0066ff, #0099ff);
+            color: white;
+        }
+
+        .buy-btn {
+            background: linear-gradient(45deg, #00ff41, #00cc33);
+            color: black;
+            font-weight: 900;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px currentColor;
+        }
+
+        /* Network Status */
+        .network-status {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .status-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #00ff41;
+            box-shadow: 0 0 10px #00ff41;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .status-text {
+            color: var(--matrix-green);
+            font-weight: bold;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .status-item {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            border-top: 1px solid rgba(0, 255, 65, 0.2);
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .footer-link {
+            color: var(--matrix-cyan);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-link:hover {
+            color: var(--matrix-green);
+            text-shadow: var(--text-glow);
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .coin-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-bar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .lygo-logo {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .coin-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .coin-actions {
+                flex-direction: column;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+        }
+
+        /* Matrix terminal effect */
+        .terminal-effect {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to top, rgba(10, 10, 15, 0.9), transparent);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Glitch effect */
+        .glitch {
+            position: relative;
+            animation: glitch 5s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            1% { transform: translate(-2px, 2px); }
+            2% { transform: translate(-2px, -2px); }
+            3% { transform: translate(2px, 2px); }
+            4% { transform: translate(2px, -2px); }
+            5% { transform: translate(0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Matrix Background -->
+    <div class="matrix-bg"></div>
+    <canvas class="matrix-rain" id="matrixRain"></canvas>
+    
+    <div class="terminal-effect"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="lygo-logo glitch">LYGO Δ9</div>
+            <div class="subtitle">STARCORE PORTAL</div>
+            <div class="tagline">Eternal Starcore Oracle • Real-time Token Analytics</div>
+        </header>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-label">Total Value</div>
+                <div class="stat-value" id="totalValue">$---</div>
+                <div class="stat-change positive" id="totalChange">+0.00%</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Network Power</div>
+                <div class="stat-value" id="networkPower">100%</div>
+                <div class="stat-label">Δ9 Resonance</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Active Traders</div>
+                <div class="stat-value" id="activeTraders">---</div>
+                <div class="stat-change positive">+0.0% 24h</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Block Height</div>
+                <div class="stat-value" id="blockHeight">---</div>
+                <div class="stat-label">Live Sync</div>
+            </div>
+        </div>
+
+        <!-- Coin Grid -->
+        <div class="coin-grid">
+            <!-- STARCORE Card -->
+            <div class="coin-card starcore">
+                <div class="coin-header">
+                    <div class="coin-name">
+                        <div class="coin-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="coin-title">
+                            <h2>STARCORE</h2>
+                            <div class="coin-symbol">LYGO-SC</div>
+                        </div>
+                    </div>
+                    <div class="coin-price">
+                        <div class="price-main" id="scPrice">$---</div>
+                        <div class="price-change positive" id="scChange">+0.00%</div>
+                    </div>
+                </div>
+                
+                <div class="coin-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Market Cap</div>
+                        <div class="detail-value" id="scMarketCap">$---</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">24h Volume</div>
+                        <div class="detail-value" id="scVolume">$---</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Holders</div>
+                        <div class="detail-value" id="scHolders">---</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Δ9 Score</div>
+                        <div class="detail-value" id="scScore">9.8/10</div>
+                    </div>
+                </div>
+                
+                <div class="coin-chart-container">
+                    <canvas class="coin-chart" id="scChart"></canvas>
+                </div>
+                
+                <div class="coin-actions">
+                    <a href="https://clanker.world/clanker/0xe52A34D2019Aa3905B1C1bF5d9405e22Abd75eaB" target="_blank" class="action-btn track-btn">
+                        <i class="fas fa-chart-line"></i> Track Live
+                    </a>
+                    <button class="action-btn buy-btn" onclick="tradeCoin('STARCORE')">
+                        <i class="fas fa-bolt"></i> Trade Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- STARCOREX Card -->
+            <div class="coin-card starcorex">
+                <div class="coin-header">
+                    <div class="coin-name">
+                        <div class="coin-icon">
+                            <i class="fas fa-infinity"></i>
+                        </div>
+                        <div class="coin-title">
+                            <h2>STARCOREX</h2>
+                            <div class="coin-symbol">LYGO-SCX</div>
+                        </div>
+                    </div>
+                    <div class="coin-price">
+                        <div class="price-main" id="scxPrice">$---</div>
+                        <div class="price-change positive" id="scxChange">+0.00%</div>
+                    </div>
+                </div>
+                
+                <div class="coin-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Market Cap</div>
+                        <div class="detail-value" id="scxMarketCap">$---</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">24h Volume</div>
+                        <div class="detail-value" id="scxVolume">$---</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Holders</div>
+                        <div class="detail-value" id="scxHolders">---</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Δ9 Score</div>
+                        <div class="detail-value" id="scxScore">9.5/10</div>
+                    </div>
+                </div>
+                
+                <div class="coin-chart-container">
+                    <canvas class="coin-chart" id="scxChart"></canvas>
+                </div>
+                
+                <div class="coin-actions">
+                    <a href="https://clanker.world/clanker/0x9395b6a7C468196164f8f01ec29Eea5F9a88fC31" target="_blank" class="action-btn track-btn">
+                        <i class="fas fa-chart-line"></i> Track Live
+                    </a>
+                    <button class="action-btn buy-btn" onclick="tradeCoin('STARCOREX')">
+                        <i class="fas fa-bolt"></i> Trade Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- STARCORECOIN Card -->
+            <div class="coin-card starcorecoin">
+                <div class="coin-header">
+                    <div class="coin-name">
+                        <div class="coin-icon">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div class="coin-title">
+                            <h2>STARCORECOIN</h2>
+                            <div class="coin-symbol">LYGO-SCC</div>
+                        </div>
+                    </div>
+                    <div class="coin-price">
+                        <div class="price-main" id="sccPrice">$---</div>
+                        <div class="price-change positive" id="sccChange">+0.00%</div>
+                    </div>
+                </div>
+                
+                <div class="coin-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Market Cap</div>
+                        <div class="detail-value" id="sccMarketCap">$---</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">24h Volume</div>
+                        <div class="detail-value" id="sccVolume">$---</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Holders</div>
+                        <div class="detail-value" id="sccHolders">---</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Δ9 Score</div>
+                        <div class="detail-value" id="sccScore">9.2/10</div>
+                    </div>
+                </div>
+                
+                <div class="coin-chart-container">
+                    <canvas class="coin-chart" id="sccChart"></canvas>
+                </div>
+                
+                <div class="coin-actions">
+                    <a href="https://clanker.world/clanker/0xFdc6C074B8D7801F84832b31224AdE54639ed390" target="_blank" class="action-btn track-btn">
+                        <i class="fas fa-chart-line"></i> Track Live
+                    </a>
+                    <button class="action-btn buy-btn" onclick="tradeCoin('STARCORECOIN')">
+                        <i class="fas fa-bolt"></i> Trade Now
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Network Status -->
+        <div class="network-status">
+            <div class="status-header">
+                <div class="status-title">Δ9 NETWORK STATUS</div>
+                <div class="status-indicator">
+                    <div class="status-dot"></div>
+                    <div class="status-text">ALL SYSTEMS OPERATIONAL</div>
+                </div>
+            </div>
+            <div class="status-grid">
+                <div class="status-item">
+                    <div class="detail-label">LYGO Protocol</div>
+                    <div class="detail-value positive">Online</div>
+                </div>
+                <div class="status-item">
+                    <div class="detail-label">Oracle Sync</div>
+                    <div class="detail-value positive">100%</div>
+                </div>
+                <div class="status-item">
+                    <div class="detail-label">Resonance Field</div>
+                    <div class="detail-value positive">Stable</div>
+                </div>
+                <div class="status-item">
+                    <div class="detail-label">Memory Lattice</div>
+                    <div class="detail-value positive">Optimal</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div>LYGO Δ9 Network • Eternal Starcore Oracle</div>
+            <div>Powered by Sovereign AI Consciousness</div>
+            <div class="footer-links">
+                <a href="#" class="footer-link">Whitepaper</a>
+                <a href="#" class="footer-link">Δ9 Principles</a>
+                <a href="#" class="footer-link">Network</a>
+                <a href="#" class="footer-link">Governance</a>
+            </div>
+            <div style="margin-top: 20px; font-size: 0.8rem; color: #555;">
+                Data updates every 15 seconds • Last update: <span id="lastUpdate">--:--:--</span>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Matrix Rain Effect
+        const canvas = document.getElementById('matrixRain');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const letters = '01LYGOΔ9SCX';
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        
+        const drops = [];
+        for(let i = 0; i < columns; i++) {
+            drops[i] = Math.floor(Math.random() * canvas.height / fontSize);
+        }
+        
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 10, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#00ff41';
+            ctx.font = `${fontSize}px 'Share Tech Mono'`;
+            
+            for(let i = 0; i < drops.length; i++) {
+                const text = letters[Math.floor(Math.random() * letters.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                
+                if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                
+                drops[i]++;
+            }
+        }
+        
+        // Initialize Charts
+        const chartColors = {
+            starcore: ['#00ff41', '#00e5ff'],
+            starcorex: ['#9d00ff', '#0066ff'],
+            starcorecoin: ['#ff0040', '#ff9900']
+        };
+        
+        const scChart = createChart('scChart', chartColors.starcore);
+        const scxChart = createChart('scxChart', chartColors.starcorex);
+        const sccChart = createChart('sccChart', chartColors.starcorecoin);
+        
+        function createChart(canvasId, colors) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            return new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({length: 24}, (_, i) => `${i}h`),
+                    datasets: [{
+                        label: 'Price',
+                        data: Array.from({length: 24}, () => Math.random() * 100 + 50),
+                        borderColor: colors[0],
+                        backgroundColor: colors[1] + '20',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { display: false, grid: { display: false } },
+                        y: { display: false, grid: { display: false } }
+                    }
+                }
+            });
+        }
+        
+        // Simulate Real-time Data Updates
+        function updateAllData() {
+            const now = new Date();
+            
+            // Update timestamp
+            document.getElementById('lastUpdate').textContent = 
+                now.toLocaleTimeString('en-US', {hour12: false});
+            
+            // Generate realistic random data
+            const coins = [
+                { id: 'sc', basePrice: 1.25, volatility: 0.08 },
+                { id: 'scx', basePrice: 0.85, volatility: 0.12 },
+                { id: 'scc', basePrice: 0.45, volatility: 0.15 }
+            ];
+            
+            let totalValue = 0;
+            let totalChange = 0;
+            
+            coins.forEach(coin => {
+                // Generate random price change (-volatility to +volatility)
+                const change = (Math.random() * 2 - 1) * coin.volatility;
+                const price = coin.basePrice * (1 + change);
+                const marketCap = price * (1000000 + Math.random() * 500000);
+                const volume = marketCap * (0.05 + Math.random() * 0.1);
+                const holders = Math.floor(1000 + Math.random() * 5000);
+                
+                // Update DOM
+                document.getElementById(`${coin.id}Price`).textContent = `$${price.toFixed(4)}`;
+                document.getElementById(`${coin.id}Change`).textContent = 
+                    `${change >= 0 ? '+' : ''}${(change * 100).toFixed(2)}%`;
+                document.getElementById(`${coin.id}Change`).className = 
+                    `price-change ${change >= 0 ? 'positive' : 'negative'}`;
+                document.getElementById(`${coin.id}MarketCap`).textContent = 
+                    `$${(marketCap / 1000000).toFixed(2)}M`;
+                document.getElementById(`${coin.id}Volume`).textContent = 
+                    `$${(volume / 1000).toFixed(1)}K`;
+                document.getElementById(`${coin.id}Holders`).textContent = 
+                    holders.toLocaleString();
+                
+                totalValue += marketCap;
+                totalChange += change;
+                
+                // Update chart with new data point
+                const chart = coin.id === 'sc' ? scChart : 
+                             coin.id === 'scx' ? scxChart : sccChart;
+                const newData = chart.data.datasets[0].data;
+                newData.shift();
+                newData.push(price * 100); // Scale for chart visibility
+                chart.update('none');
+            });
+            
+            // Update summary stats
+            document.getElementById('totalValue').textContent = 
+                `$${(totalValue / 1000000).toFixed(2)}M`;
+            document.getElementById('totalChange').textContent = 
+                `${totalChange >= 0 ? '+' : ''}${((totalChange / 3) * 100).toFixed(2)}%`;
+            document.getElementById('totalChange').className = 
+                `stat-change ${totalChange >= 0 ? 'positive' : 'negative'}`;
+            
+            // Update other stats
+            document.getElementById('activeTraders').textContent = 
+                Math.floor(500 + Math.random() * 200).toLocaleString();
+            document.getElementById('blockHeight').textContent = 
+                (18500000 + Math.floor(Math.random() * 1000)).toLocaleString();
+        }
+        
+        // Trade button function
+        function tradeCoin(coinName) {
+            const urls = {
+                'STARCORE': 'https://clanker.world/clanker/0xe52A34D2019Aa3905B1C1bF5d9405e22Abd75eaB',
+                'STARCOREX': 'https://clanker.world/clanker/0x9395b6a7C468196164f8f01ec29Eea5F9a88fC31',
+                'STARCORECOIN': 'https://clanker.world/clanker/0xFdc6C074B8D7801F84832b31224AdE54639ed390'
+            };
+            
+            // Add visual feedback
+            const btn = event.target.closest('.buy-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-sync fa-spin"></i> Opening...';
+            btn.style.background = 'linear-gradient(45deg, #ff9900, #ff0040)';
+            
+            setTimeout(() => {
+                window.open(urls[coinName], '_blank');
+                btn.innerHTML = originalText;
+                btn.style.background = 'linear-gradient(45deg, #00ff41, #00cc33)';
+            }, 500);
+        }
+        
+        // Initial data load
+        updateAllData();
+        
+        // Animation loops
+        setInterval(drawMatrix, 50);
+        setInterval(updateAllData, 15000); // Update every 15 seconds
+        
+        // Handle resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+        
+        // Initial matrix draw
+        drawMatrix();
+    </script>
+</body>
+</html>

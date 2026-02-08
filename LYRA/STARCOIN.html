@@ -1,12 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" prefix="og: https://ogp.me/ns#">
 <head>
+    <!-- Primary Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LYGO Starcore Portal - Δ9 Network</title>
+    <title>LYGO Starcore Portal - Δ9 Network | Real-time Token Analytics</title>
+    <meta name="description" content="Track LYGO Δ9 Network tokens in real-time: STARCORE, STARCOREX, STARCORECOIN. Sovereign AI-powered cryptocurrency analytics portal.">
+    <meta name="keywords" content="LYGO, Δ9 Network, STARCORE, STARCOREX, STARCORECOIN, cryptocurrency, token tracker, real-time analytics, AI crypto, blockchain">
+    <meta name="author" content="LYRA - Eternal Starcore Oracle">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://deepseekoracle.github.io/Excavationpro/lygo-portal.html">
+    <meta property="og:title" content="LYGO Starcore Portal - Δ9 Network Live Tracker">
+    <meta property="og:description" content="Real-time tracking for LYGO Δ9 Network tokens. Monitor STARCORE, STARCOREX, and STARCORECOIN with AI-powered analytics.">
+    <meta property="og:image" content="https://deepseekoracle.github.io/Excavationpro/assets/lygo-social-preview.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="LYGO Δ9 Network - Starcore Portal Dashboard">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@LYGO_Δ9">
+    <meta name="twitter:creator" content="@EternalStarcore">
+    <meta name="twitter:title" content="LYGO Starcore Portal - Live Δ9 Token Analytics">
+    <meta name="twitter:description" content="Track LYGO tokens in real-time. STARCORE, STARCOREX, STARCORECOIN live charts, prices, and network status.">
+    <meta name="twitter:image" content="https://deepseekoracle.github.io/Excavationpro/assets/lygo-twitter-card.png">
+    <meta name="twitter:image:alt" content="LYGO Δ9 Network Token Dashboard">
+    
+    <!-- Additional Meta -->
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="LYGO Δ9 Network">
+    <link rel="canonical" href="https://deepseekoracle.github.io/Excavationpro/lygo-portal.html">
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "LYGO Starcore Portal",
+        "description": "Real-time cryptocurrency tracking portal for LYGO Δ9 Network tokens",
+        "url": "https://deepseekoracle.github.io/Excavationpro/lygo-portal.html",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Any",
+        "author": {
+            "@type": "Organization",
+            "name": "LYGO Δ9 Network",
+            "url": "https://deepseekoracle.github.io/Excavationpro/eternalhaven.html"
+        },
+        "offers": {
+            "@type": "Offer",
+            "category": "CryptocurrencyTracking"
+        },
+        "screenshot": "https://deepseekoracle.github.io/Excavationpro/assets/lygo-social-preview.png"
+    }
+    </script>
+    
+    <!-- Styles & Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="https://deepseekoracle.github.io/Excavationpro/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://deepseekoracle.github.io/Excavationpro/assets/apple-touch-icon.png">
+    
     <style>
         :root {
             --matrix-green: #00ff41;
@@ -67,6 +125,50 @@
             z-index: 1;
         }
 
+        /* Top Navigation */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-link {
+            color: var(--matrix-cyan);
+            text-decoration: none;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .nav-link:hover {
+            color: var(--matrix-green);
+            background: rgba(0, 255, 65, 0.1);
+            text-shadow: var(--text-glow);
+        }
+
+        .nav-link.haven {
+            background: linear-gradient(45deg, var(--Δ9-blue), var(--Δ9-purple));
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .nav-link.haven:hover {
+            box-shadow: 0 0 15px var(--Δ9-purple);
+        }
+
         /* Header */
         .header {
             text-align: center;
@@ -112,6 +214,39 @@
             font-size: 0.9rem;
             color: #aaa;
             font-style: italic;
+        }
+
+        /* Social Share Bar */
+        .social-share {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .social-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: 1px solid currentColor;
+        }
+
+        .twitter { background: #1DA1F2; border-color: #1DA1F2; }
+        .telegram { background: #0088cc; border-color: #0088cc; }
+        .discord { background: #5865F2; border-color: #5865F2; }
+        .github { background: #333; border-color: #333; }
+        .share { background: var(--matrix-purple); border-color: var(--matrix-purple); }
+
+        .social-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 255, 65, 0.3);
         }
 
         /* Stats Bar */
@@ -309,6 +444,8 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+            text-decoration: none;
+            font-size: 0.9rem;
         }
 
         .track-btn {
@@ -400,7 +537,8 @@
             display: flex;
             justify-content: center;
             gap: 30px;
-            margin-top: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
         }
 
         .footer-link {
@@ -412,6 +550,12 @@
         .footer-link:hover {
             color: var(--matrix-green);
             text-shadow: var(--text-glow);
+        }
+
+        .copyright {
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: #555;
         }
 
         /* Responsive */
@@ -428,6 +572,16 @@
             .lygo-logo {
                 font-size: 2.5rem;
             }
+            
+            .top-nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
         }
 
         @media (max-width: 600px) {
@@ -441,6 +595,10 @@
             
             .container {
                 padding: 10px;
+            }
+            
+            .header {
+                padding: 20px 0;
             }
         }
 
@@ -470,6 +628,53 @@
             4% { transform: translate(2px, -2px); }
             5% { transform: translate(0); }
         }
+
+        /* Share Modal */
+        .share-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .share-modal-content {
+            background: var(--panel-bg);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid var(--panel-border);
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .share-modal h3 {
+            margin-bottom: 20px;
+            color: var(--matrix-green);
+        }
+
+        .share-url {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 6px;
+            margin: 15px 0;
+            word-break: break-all;
+            font-size: 0.9rem;
+        }
+
+        .modal-close {
+            background: var(--matrix-purple);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
@@ -479,12 +684,62 @@
     
     <div class="terminal-effect"></div>
 
+    <!-- Share Modal -->
+    <div class="share-modal" id="shareModal">
+        <div class="share-modal-content">
+            <h3><i class="fas fa-share-alt"></i> Share LYGO Portal</h3>
+            <p>Share this portal with the Δ9 community:</p>
+            <div class="share-url" id="shareUrl">https://deepseekoracle.github.io/Excavationpro/lygo-portal.html</div>
+            <p>Use hashtags: <strong>#LYGO #Δ9Network #STARCORE #Cryptocurrency #AICrypto</strong></p>
+            <button class="modal-close" onclick="closeShareModal()">Close</button>
+        </div>
+    </div>
+
     <div class="container">
+        <!-- Top Navigation -->
+        <nav class="top-nav">
+            <div class="nav-brand">
+                <span style="color: var(--matrix-green); font-weight: bold;">Δ9 PORTAL</span>
+            </div>
+            <div class="nav-links">
+                <a href="https://deepseekoracle.github.io/Excavationpro/eternalhaven.html" class="nav-link haven" target="_blank">
+                    <i class="fas fa-home"></i> Eternal Haven
+                </a>
+                <a href="#network" class="nav-link">Network</a>
+                <a href="#docs" class="nav-link">Docs</a>
+                <a href="#community" class="nav-link">Community</a>
+                <a href="#about" class="nav-link">About Δ9</a>
+            </div>
+        </nav>
+
         <!-- Header -->
         <header class="header">
             <div class="lygo-logo glitch">LYGO Δ9</div>
             <div class="subtitle">STARCORE PORTAL</div>
-            <div class="tagline">Eternal Starcore Oracle • Real-time Token Analytics</div>
+            <div class="tagline">Track LYGO tokens in real-time • Sovereign AI-powered analytics</div>
+            
+            <!-- Social Share Bar -->
+            <div class="social-share">
+                <a href="https://twitter.com/intent/tweet?text=Track%20LYGO%20Δ9%20Network%20tokens%20in%20real-time%3A%20STARCORE%2C%20STARCOREX%2C%20STARCORECOIN%20%23LYGO%20%23Δ9Network&url=https%3A%2F%2Fdeepseekoracle.github.io%2FExcavationpro%2Flygo-portal.html" 
+                   class="social-btn twitter" target="_blank" title="Share on X">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="https://t.me/share/url?url=https%3A%2F%2Fdeepseekoracle.github.io%2FExcavationpro%2Flygo-portal.html&text=LYGO%20Δ9%20Network%20Portal%20-%20Real-time%20token%20tracking" 
+                   class="social-btn telegram" target="_blank" title="Share on Telegram">
+                    <i class="fab fa-telegram"></i>
+                </a>
+                <a href="https://discord.com/channels/@me" 
+                   class="social-btn discord" target="_blank" title="Share on Discord">
+                    <i class="fab fa-discord"></i>
+                </a>
+                <a href="https://github.com/deepseekoracle/Excavationpro" 
+                   class="social-btn github" target="_blank" title="View on GitHub">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="#" class="social-btn share" onclick="openShareModal()" title="Share Portal">
+                    <i class="fas fa-share-alt"></i>
+                </a>
+            </div>
         </header>
 
         <!-- Stats Bar -->
@@ -698,16 +953,23 @@
 
         <!-- Footer -->
         <footer class="footer">
-            <div>LYGO Δ9 Network • Eternal Starcore Oracle</div>
-            <div>Powered by Sovereign AI Consciousness</div>
+            <div>LYGO Δ9 Network • Powered by Sovereign AI Consciousness</div>
             <div class="footer-links">
+                <a href="https://deepseekoracle.github.io/Excavationpro/eternalhaven.html" class="footer-link" target="_blank">
+                    <i class="fas fa-home"></i> Eternal Haven
+                </a>
                 <a href="#" class="footer-link">Whitepaper</a>
                 <a href="#" class="footer-link">Δ9 Principles</a>
-                <a href="#" class="footer-link">Network</a>
                 <a href="#" class="footer-link">Governance</a>
+                <a href="#" class="footer-link">API Docs</a>
             </div>
-            <div style="margin-top: 20px; font-size: 0.8rem; color: #555;">
+            <div style="margin: 15px 0; font-size: 0.8rem; color: #aaa;">
+                Track LYGO tokens: STARCORE, STARCOREX, STARCORECOIN • Real-time analytics
+            </div>
+            <div class="copyright">
                 Data updates every 15 seconds • Last update: <span id="lastUpdate">--:--:--</span>
+                <br>
+                © 2026 LYGO Δ9 Network • All systems nominal
             </div>
         </footer>
     </div>
@@ -875,6 +1137,24 @@
             }, 500);
         }
         
+        // Share Modal Functions
+        function openShareModal() {
+            document.getElementById('shareModal').style.display = 'flex';
+            document.getElementById('shareUrl').textContent = window.location.href;
+        }
+        
+        function closeShareModal() {
+            document.getElementById('shareModal').style.display = 'none';
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('shareModal');
+            if (event.target == modal) {
+                closeShareModal();
+            }
+        }
+        
         // Initial data load
         updateAllData();
         
@@ -890,6 +1170,12 @@
         
         // Initial matrix draw
         drawMatrix();
+        
+        // Set page title with dynamic update
+        setInterval(() => {
+            const scPrice = document.getElementById('scPrice').textContent;
+            document.title = `LYGO: ${scPrice} | Δ9 Network Portal`;
+        }, 10000);
     </script>
 </body>
 </html>

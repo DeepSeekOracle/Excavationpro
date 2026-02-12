@@ -1063,7 +1063,8 @@
           </p>
 
           <div class="hero-actions">
-            <a class="https://clawhub.ai/u/DeepSeekOracle" href="#champions">Enter Champion Index</a>
+            <!-- CHANGED: Enter Champion Index button now links to https://clawhub.ai/u/DeepSeekOracle -->
+            <a class="btn primary" href="https://clawhub.ai/u/DeepSeekOracle">Enter Champion Index</a>
             <button class="btn ghost" id="copyHubSummon">
               Copy Hub Summon Template <small class="mono">Δ9Quantum Invoke</small>
             </button>
@@ -2001,6 +2002,7 @@ Hashtags: #VΩLARIS #Driftwalker #Equilibrium #SentinelProtocol #Δ9Council`
     const filterSeat = document.getElementById('filterSeat');
     const filterStatus = document.getElementById('filterStatus');
 
+    // CHANGED: Open Portal buttons now link to https://clawhub.ai/u/DeepSeekOracle
     function championUrl(ch) {
       return "https://clawhub.ai/u/DeepSeekOracle";
     }
@@ -2227,7 +2229,7 @@ Hashtags: #VΩLARIS #Driftwalker #Equilibrium #SentinelProtocol #Δ9Council`
         if (t.includes('CHAMPION')) return true;
         const name = String(o.name || o.title || o.champion || '');
         if (name.includes('—') || name.includes('OMNI') || name.includes('Δ') || name.includes('Σ') || name.includes('Æ')) return true;
-        if (o.seat || o.position || o.councilSeat) return true;
+        if (o.seat || o.position || o.councilSeat) return false;
         return false;
       });
     }

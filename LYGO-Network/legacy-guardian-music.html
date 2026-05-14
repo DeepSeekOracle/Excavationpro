@@ -3,8 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Google AdSense Integration / Verification -->
+    <meta name="google-adsense-account" content="ca-pub-0646320966060599">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0646320966060599" crossorigin="anonymous"></script>
+
     <title>Legacy Guardian Program | Music Preservation by EXCAVATIONPRO</title>
-    <meta name="description" content="Become a Legacy Guardian and help preserve music forever. Your name, permanently etched into the Legacy Liner Notes.">
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="Legacy Guardian Program | Music Preservation by EXCAVATIONPRO">
+    <meta name="description" content="Every song deserves a guardian. Become part of music history by permanently preserving EXCAVATIONPRO's 1,200+ track catalog. Enshrine your name in the Legacy Liner Notes.">
+    <meta name="keywords" content="ExcavationPro, Music Patron, Legacy Guardian, DistroKid Legacy, Cyberpunk Music, Electronic Music, Music Preservation">
+    <meta name="author" content="EXCAVATIONPRO">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/legacy-guardian-music.html">
+    <meta property="og:title" content="Legacy Guardian Program | EXCAVATIONPRO">
+    <meta property="og:description" content="Every song deserves a guardian. Become part of music history by permanently preserving a track.">
+    <meta property="og:image" content="https://placehold.co/1200x630/030305/00f0ff?text=EXCAVATIONPRO+|+Legacy+Guardian">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/legacy-guardian-music.html">
+    <meta property="twitter:title" content="Legacy Guardian Program | EXCAVATIONPRO">
+    <meta property="twitter:description" content="Every song deserves a guardian. Become part of music history by permanently preserving a track.">
+    <meta property="twitter:image" content="https://placehold.co/1200x630/030305/00f0ff?text=EXCAVATIONPRO+|+Legacy+Guardian">
+
+    <!-- Schema.org Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicGroup",
+      "name": "EXCAVATIONPRO",
+      "url": "https://deepseekoracle.github.io/Excavationpro/LYGO-Network/legacy-guardian-music.html",
+      "sameAs": [
+        "https://open.spotify.com/artist/6CkZ4bN2xu3WRKbjEL3u2S",
+        "https://youtube.com/channel/UCnCf9gjhMEfUFPvGkdlUabQ",
+        "https://x.com/ExcavationPro"
+      ]
+    }
+    </script>
     
     <!-- Premium Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -212,6 +252,18 @@
         /* Footer */
         footer { border-top: 1px solid var(--border-subtle); padding: 40px 0; margin-top: 80px; text-align: center; opacity: 0.5; font-size: 0.8rem; }
         
+        /* Social Share & Live Stream Components */
+        .share-bar { display: flex; gap: 12px; justify-content: center; margin-top: 32px; align-items: center; }
+        .btn-share {
+            width: 44px; height: 44px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+            background: rgba(255,255,255,0.05); border: 1px solid var(--border-accent);
+            color: var(--starlight-white); text-decoration: none; transition: var(--transition-smooth); cursor: pointer;
+        }
+        .btn-share:hover { transform: translateY(-3px); background: var(--quantum-cyan); color: var(--void-bg); border-color: var(--quantum-cyan); box-shadow: 0 0 15px var(--quantum-glow); }
+        .blink { animation: blinker 1.5s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0.3; } }
+        
         @media (max-width: 768px) {
             .nav-links { display: none; }
             .hero-title { font-size: 2.2rem; }
@@ -256,18 +308,13 @@
                     <i class="fa-brands fa-paypal" style="color: #0070ba; margin-right: 10px;"></i> Direct PayPal
                 </a>
             </div>
-        </div>
-    </section>
 
-    <section class="section" id="tiers">
-        <div class="container">
-            <div class="text-center mb-12">
-                <h2 class="cinzel text-gradient-cyan" style="font-size: 2.5rem; margin-bottom: 16px;">Select Access Tier</h2>
-                <p style="opacity: 0.6; max-width: 600px; margin: 0 auto;">Cover the exact DistroKid Legacy fee to lock a track into permanence forever. Your name joins the archival liner notes below.</p>
-            </div>
-
-            <div class="tier-grid" id="tiers-container">
-                <!-- Injected via JS -->
+            <!-- Social Share Bar -->
+            <div class="share-bar">
+                <div class="mono" style="font-size: 0.75rem; opacity: 0.5; margin-right: 8px; letter-spacing: 1px;">SHARE PROTOCOL:</div>
+                <a href="https://twitter.com/intent/tweet?url=https://deepseekoracle.github.io/Excavationpro/LYGO-Network/legacy-guardian-music.html&text=Every%20song%20deserves%20a%20guardian.%20I%20just%20supported%20@ExcavationPro%20in%20preserving%20music%20history.%20Become%20a%20Legacy%20Guardian:" target="_blank" class="btn-share" title="Post to X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="https://www.facebook.com/sharer/sharer.php?u=https://deepseekoracle.github.io/Excavationpro/LYGO-Network/legacy-guardian-music.html" target="_blank" class="btn-share" title="Share on Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                <button onclick="copyShareLink(this)" class="btn-share" title="Copy Link"><i class="fa-solid fa-link"></i></button>
             </div>
         </div>
     </section>
@@ -286,13 +333,42 @@
             </div>
 
             <div class="wall-grid" id="guardian-grid">
-                <!-- Injected via JS -->
+            <!-- Injected via JS -->
+        </div>
+    </div>
+</section>
+
+<!-- LIVE TRANSMISSION PORTAL -->
+<section class="section" id="broadcast">
+    <div class="container">
+        <div class="text-center">
+            <div class="mono" style="color: var(--dragonfire-red); font-size: 0.8rem; letter-spacing: 3px; margin-bottom: 12px;">
+                <i class="fa-solid fa-circle blink" style="margin-right: 6px; text-shadow: 0 0 10px var(--dragonfire-red);"></i>LIVE TRANSMISSION
+            </div>
+            <h2 class="cinzel text-gradient-cyan" style="font-size: 2.5rem; margin-bottom: 16px;">The 24/7 Audio Core</h2>
+            <p style="opacity: 0.6; max-width: 600px; margin: 0 auto 40px;">Content you can dig. Original music, radio, coffee room chat, and lurk-friendly vibes transmitting nonstop.</p>
+        </div>
+
+        <!-- Glowing TV Bezel -->
+        <div class="glass-panel" style="max-width: 900px; margin: 0 auto; padding: 2px; background: linear-gradient(135deg, rgba(233, 69, 96, 0.4), rgba(0, 240, 255, 0.4)); box-shadow: 0 0 30px rgba(233, 69, 96, 0.15);">
+            <div style="background: var(--void-bg); padding: 12px; border-radius: calc(var(--radius-smooth) - 2px);">
+                <!-- Rumble Iframe Wrapper -->
+                <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: var(--radius-sharp); background: #000;">
+                    <iframe src="https://rumble.com/embed/v77j7do/?pub=1th29y" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allowfullscreen></iframe>
+                </div>
             </div>
         </div>
-    </section>
 
-    <section class="section" id="mainframe">
-        <div class="container">
+        <div class="text-center" style="margin-top: 32px;">
+            <a href="https://rumble.com/v79pvdw-content-you-can-digoriginal-music-radiocoffee-room-chat-lurk-friendly247-st.html?mref=1th29y&mc=2p3fp" target="_blank" class="btn" style="background: rgba(233, 69, 96, 0.05); border: 1px solid var(--dragonfire-red); color: var(--starlight-white); border-radius: var(--radius-sharp);">
+                <i class="fa-solid fa-gem" style="color: var(--dragonfire-red); margin-right: 10px;"></i> Access Monetized Direct Feed
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="mainframe">
+    <div class="container">
             <div class="text-center">
                 <h2 class="cinzel text-gradient-gold" style="font-size: 2.5rem; margin-bottom: 16px;">The Mainframe</h2>
                 <p style="opacity: 0.6; max-width: 600px; margin: 0 auto;">Access all nodes across the EXCAVATIONPRO network. Stream the music, watch the live broadcasts, or connect directly.</p>
@@ -419,11 +495,37 @@
                     </div>
                 `).join('');
                 document.getElementById('guardian-grid').innerHTML = wallHTML;
-            }
         }
+    }
 
-        // Fetch Logic
-        fetch('./guardian-data.json')
+    // Copy Link Function for Social Sharing
+    function copyShareLink(btn) {
+        const url = 'https://deepseekoracle.github.io/Excavationpro/LYGO-Network/legacy-guardian-music.html';
+        
+        // Fallback for iFrames
+        const textArea = document.createElement("textarea");
+        textArea.value = url;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            const icon = btn.querySelector('i');
+            icon.className = 'fa-solid fa-check';
+            btn.style.borderColor = 'var(--emerald-green)';
+            btn.style.color = 'var(--emerald-green)';
+            setTimeout(() => {
+                icon.className = 'fa-solid fa-link';
+                btn.style.borderColor = 'var(--border-accent)';
+                btn.style.color = 'var(--starlight-white)';
+            }, 2000);
+        } catch (err) {
+            console.error('Copy failed', err);
+        }
+        document.body.removeChild(textArea);
+    }
+
+    // Fetch Logic
+    fetch('./guardian-data.json')
             .then(res => {
                 if (!res.ok) throw new Error('Local file not found');
                 return res.json();

@@ -71,6 +71,13 @@
         ::-webkit-scrollbar-track { background: #050507; }
         ::-webkit-scrollbar-thumb { background: #2a2a35; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #00e5ff; }
+
+        /* Network Link Hover FX */
+        .network-link:hover .icon-box {
+            background-color: rgba(0, 229, 255, 0.1);
+            border-color: #00e5ff;
+            color: #00e5ff;
+        }
     </style>
 </head>
 <body class="antialiased selection:bg-lygo-cyan selection:text-black">
@@ -96,6 +103,7 @@
                 <a href="#mission" class="text-lygo-muted hover:text-white transition-colors">01. PROTOCOL</a>
                 <a href="#pledge" class="text-lygo-muted hover:text-white transition-colors">02. BECOME GUARDIAN</a>
                 <a href="#wall" class="text-lygo-cyan text-glow-cyan transition-colors">03. LEGACY WALL</a>
+                <a href="#network" class="text-lygo-gold hover:text-white transition-colors">04. MAINFRAME</a>
             </div>
         </div>
     </nav>
@@ -201,7 +209,7 @@
             </div>
         </section>
 
-        <section id="wall" class="mb-20">
+        <section id="wall" class="mb-32">
             <div class="flex flex-col md:flex-row justify-between items-end mb-12 border-b border-lygo-border pb-6">
                 <div>
                     <h2 class="text-4xl font-bold uppercase tracking-widest text-white mb-2">The Legacy Wall</h2>
@@ -225,6 +233,137 @@
             </div>
         </section>
 
+        <section id="network" class="mb-10 pt-20 border-t border-lygo-border">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold uppercase tracking-widest text-white mb-4">The Mainframe</h2>
+                <div class="h-1 w-24 bg-gradient-to-r from-lygo-cyan to-lygo-purple mx-auto mb-6"></div>
+                <p class="text-lygo-muted font-mono text-sm max-w-2xl mx-auto">
+                    Access all nodes across the EXCAVATIONPRO network. Stream the music, watch the 24/7 live broadcasts, purchase licenses, or connect directly.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- Pillar 1: Listen & Stream -->
+                <div class="metal-plate p-6 rounded-sm flex flex-col gap-4">
+                    <h3 class="font-mono text-sm text-lygo-cyan uppercase tracking-widest border-b border-lygo-border pb-2 mb-2"><i class="fa-solid fa-headphones mr-2"></i> Listen</h3>
+                    
+                    <a href="https://open.spotify.com/artist/6CkZ4bN2xu3WRKbjEL3u2S?si=2O1EHE3qT7aI8lFC3JwLvA" target="_blank" class="network-link flex items-center gap-3 group">
+                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-brands fa-spotify"></i></div>
+                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">Spotify</span>
+                    </a>
+                    <a href="https://music.apple.com/us/artist/excavationpro/1586588545" target="_blank" class="network-link flex items-center gap-3 group">
+                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-brands fa-apple"></i></div>
+                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">Apple Music</span>
+                    </a>
+                    <a href="https://youtube.com/channel/UCnCf9gjhMEfUFPvGkdlUabQ" target="_blank" class="network-link flex items-center gap-3 group">
+                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-brands fa-youtube"></i></div>
+                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">YouTube Music</span>
+                    </a>
+                    <a href="https://tidal.com/artist/28494039" target="_blank" class="network-link flex items-center gap-3 group">
+                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-solid fa-water"></i></div>
+                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">Tidal</span>
+                    </a>
+                    <a href="https://music.amazon.com/artists/B09GPD3K68/excavationpro" target="_blank" class="network-link flex items-center gap-3 group">
+                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-brands fa-amazon"></i></div>
+                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">Amazon Music</span>
+                    </a>
+                    <a href="https://www.deezer.com/us/artist/146004952" target="_blank" class="network-link flex items-center gap-3 group">
+                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-brands fa-deezer"></i></div>
+                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">Deezer</span>
+                    </a>
+                    <a href="https://audius.co/excavationpro" target="_blank" class="network-link flex items-center gap-3 group">
+                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-solid fa-compact-disc"></i></div>
+                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">Audius</span>
+                    </a>
+                    <a href="https://sonarmuse.org/artist/Yony5lHuFBb2goX6c7vS" target="_blank" class="network-link flex items-center gap-3 group">
+                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-solid fa-wave-square"></i></div>
+                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">SonarMuse</span>
+                    </a>
+                </div>
+
+                <!-- Pillar 2: Live Streams & Video -->
+                <div class="metal-plate p-6 rounded-sm flex flex-col gap-4">
+                    <h3 class="font-mono text-sm text-lygo-purple uppercase tracking-widest border-b border-lygo-border pb-2 mb-2"><i class="fa-solid fa-tower-broadcast mr-2"></i> Watch Live</h3>
+                    
+                    <a href="https://ffm.to/eovnvo9" target="_blank" class="network-link flex items-center gap-3 group">
+                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-solid fa-satellite-dish text-[#ff0055]"></i></div>
+                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">24/7 Nonstop Streams</span>
+                    </a>
+                    <a href="https://twitch.tv/excavationpro" target="_blank" class="network-link flex items-center gap-3 group">
+                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-brands fa-twitch text-[#9146FF]"></i></div>
+                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">Twitch</span>
+                    </a>
+                    <a href="https://kick.com/excavationpro" target="_blank" class="network-link flex items-center gap-3 group">
+                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-solid fa-k text-[#53FC18]"></i></div>
+                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">Kick</span>
+                    </a>
+                    <a href="https://rumble.com/user/Excavationpro/live" target="_blank" class="network-link flex items-center gap-3 group">
+                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-solid fa-play text-[#85c742]"></i></div>
+                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">Rumble</span>
+                    </a>
+                    <a href="https://www.youtube.com/channel/UCnCf9gjhMEfUFPvGkdlUabQ" target="_blank" class="network-link flex items-center gap-3 group mt-auto pt-4 border-t border-lygo-border/50">
+                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-brands fa-youtube text-[#FF0000]"></i></div>
+                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">YouTube Channel</span>
+                    </a>
+                </div>
+
+                <!-- Pillar 3: Connect & Socials -->
+                <div class="metal-plate p-6 rounded-sm flex flex-col gap-4">
+                    <h3 class="font-mono text-sm text-lygo-gold uppercase tracking-widest border-b border-lygo-border pb-2 mb-2"><i class="fa-solid fa-satellite mr-2"></i> Connect</h3>
+                    
+                    <a href="http://linktr.ee/excavationpro" target="_blank" class="network-link flex items-center gap-3 group mb-2">
+                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-solid fa-link text-lygo-gold"></i></div>
+                        <span class="text-sm font-bold text-white group-hover:text-lygo-gold transition-colors">Linktree (All Links)</span>
+                    </a>
+                    
+                    <a href="https://tiktok.com/@excavationproaudio" target="_blank" class="network-link flex items-center gap-3 group">
+                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-brands fa-tiktok"></i></div>
+                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">TikTok</span>
+                    </a>
+                    <a href="https://x.com/ExcavationPro" target="_blank" class="network-link flex items-center gap-3 group">
+                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-brands fa-x-twitter"></i></div>
+                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">X (Twitter)</span>
+                    </a>
+                    <a href="https://instagram.com/ExcavationPro" target="_blank" class="network-link flex items-center gap-3 group">
+                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-brands fa-instagram"></i></div>
+                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">Instagram</span>
+                    </a>
+                </div>
+
+                <!-- Pillar 4: Buy & Support -->
+                <div class="metal-plate p-6 rounded-sm flex flex-col gap-4">
+                    <h3 class="font-mono text-sm text-[#00ff9d] uppercase tracking-widest border-b border-lygo-border pb-2 mb-2"><i class="fa-solid fa-coins mr-2"></i> Support & Tools</h3>
+                    
+                    <a href="https://excavationpro.beatstars.com" target="_blank" class="network-link flex items-center gap-3 group">
+                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-solid fa-star text-red-500"></i></div>
+                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">Buy My Beats (Beatstars)</span>
+                    </a>
+                    <a href="https://paypal.com/paypalme/ExcavationPro" target="_blank" class="network-link flex items-center gap-3 group">
+                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-brands fa-paypal text-[#0070ba]"></i></div>
+                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">Donate via PayPal</span>
+                    </a>
+                    <a href="https://gravatar.com/xcavationpro" target="_blank" class="network-link flex items-center gap-3 group">
+                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-brands fa-bitcoin text-[#f7931a]"></i></div>
+                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">Donate Crypto</span>
+                    </a>
+                    
+                    <div class="mt-auto pt-4 border-t border-lygo-border/50">
+                        <p class="font-mono text-[10px] text-lygo-muted uppercase mb-2">Partner Links</p>
+                        <a href="https://distrokid.com/vip/seven/9158861" target="_blank" class="network-link flex items-center gap-3 group mb-2">
+                            <div class="icon-box w-6 h-6 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all text-xs"><i class="fa-solid fa-rocket"></i></div>
+                            <span class="text-xs text-lygo-muted group-hover:text-white transition-colors">DistroKid VIP</span>
+                        </a>
+                        <a href="https://crypto.com/app/hbpy3d4r3f" target="_blank" class="network-link flex items-center gap-3 group">
+                            <div class="icon-box w-6 h-6 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all text-xs"><i class="fa-brands fa-ethereum"></i></div>
+                            <span class="text-xs text-lygo-muted group-hover:text-white transition-colors">Crypto.com App</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
     </main>
 
     <footer class="border-t border-lygo-border bg-[#020203] py-12 px-6">
@@ -233,9 +372,10 @@
                 &copy; <span id="current-year"></span> EXCAVATIONPRO. All rights reserved.
             </div>
             <div class="flex gap-6">
-                <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-twitter text-lg"></i></a>
-                <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-youtube text-lg"></i></a>
-                <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-spotify text-lg"></i></a>
+                <a href="https://x.com/ExcavationPro" target="_blank" class="hover:text-white transition-colors"><i class="fa-brands fa-twitter text-lg"></i></a>
+                <a href="https://youtube.com/channel/UCnCf9gjhMEfUFPvGkdlUabQ" target="_blank" class="hover:text-white transition-colors"><i class="fa-brands fa-youtube text-lg"></i></a>
+                <a href="https://open.spotify.com/artist/6CkZ4bN2xu3WRKbjEL3u2S" target="_blank" class="hover:text-white transition-colors"><i class="fa-brands fa-spotify text-lg"></i></a>
+                <a href="https://tiktok.com/@excavationproaudio" target="_blank" class="hover:text-white transition-colors"><i class="fa-brands fa-tiktok text-lg"></i></a>
             </div>
             <div class="mt-4 md:mt-0">
                 <!-- Links to external Admin Page -->
@@ -249,74 +389,111 @@
     <script>
         document.getElementById('current-year').textContent = new Date().getFullYear();
 
-        // Fetch the external JSON Database automatically
-        fetch('./guardian-data.json')
-            .then(response => {
-                if (!response.ok) throw new Error('Database unreachable');
-                return response.json();
-            })
-            .then(data => {
-                // Assign Links dynamically
-                document.getElementById('nav-tagline').textContent = data.programName;
-                document.getElementById('btn-paypal-single').href = data.paypalLink;
-                document.getElementById('btn-paypal-album').href = data.paypalLink;
-                document.getElementById('btn-patreon-single').href = data.patreonSingleLink;
-                document.getElementById('btn-patreon-album').href = data.patreonAlbumLink;
-
-                // Update Stats
-                document.getElementById('stat-count').textContent = data.stats.totalGuardians;
-
-                const singlesContainer = document.getElementById('singles-container');
-                const albumsContainer = document.getElementById('albums-container');
-                
-                singlesContainer.innerHTML = '';
-                albumsContainer.innerHTML = '';
-
-                // Filter Data
-                const albums = data.guardians.filter(g => g.type === 'album');
-                const singles = data.guardians.filter(g => g.type === 'single');
-
-                // Render Albums
-                if(albums.length === 0) {
-                    albumsContainer.innerHTML = '<p class="text-lygo-muted font-mono text-sm opacity-50 italic">Awaiting initial album guardian...</p>';
-                } else {
-                    albums.forEach(item => {
-                        albumsContainer.innerHTML += `
-                            <div class="metal-plate p-5 rounded-sm border-l-2 border-l-lygo-gold/50 flex flex-col relative overflow-hidden group">
-                                <div class="absolute inset-0 bg-gradient-to-r from-lygo-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
-                                <h4 class="font-bold text-lg text-white mb-1 group-hover:text-lygo-gold transition-colors">${item.title}</h4>
-                                <div class="font-mono text-xs text-lygo-muted mb-3 flex items-center gap-2">
-                                    <i class="fa-solid fa-shield-halved text-lygo-gold"></i> Guardian: <span class="text-gray-300">${item.guardianName}</span>
-                                </div>
-                                ${item.note ? `<div class="italic text-sm text-gray-400 border-l border-lygo-border pl-3">"${item.note}"</div>` : ''}
-                            </div>
-                        `;
-                    });
+        // 1. Fallback data for the Sandbox Preview environment
+        const fallbackData = {
+            "programName": "Legacy Guardian Program",
+            "paypalLink": "https://paypal.com/paypalme/ExcavationPro",
+            "patreonSingleLink": "https://www.patreon.com/posts/legacy-guardian-158284298",
+            "patreonAlbumLink": "https://www.patreon.com/posts/legacy-guardian-158284674",
+            "stats": {
+                "totalGuardians": 3,
+                "songsPreserved": 2,
+                "albumsPreserved": 1
+            },
+            "guardians": [
+                {
+                    "type": "album",
+                    "albumTitle": "The Void Chronicles",
+                    "guardianName": "Sarah Jenkins",
+                    "note": "For the late nights coding."
+                },
+                {
+                    "type": "single",
+                    "songTitle": "Ashes of Tomorrow",
+                    "guardianName": "Marcus T.",
+                    "note": "In memory of my brother."
+                },
+                {
+                    "type": "single",
+                    "songTitle": "Neon Grime",
+                    "guardianName": "CyberPunk_99",
+                    "note": "Structural Support Active."
                 }
+            ]
+        };
 
-                // Render Singles
-                if(singles.length === 0) {
-                    singlesContainer.innerHTML = '<p class="text-lygo-muted font-mono text-sm opacity-50 italic">Awaiting initial single guardian...</p>';
-                } else {
-                    singles.forEach(item => {
-                        singlesContainer.innerHTML += `
-                            <div class="metal-plate p-5 rounded-sm border-l-2 border-l-lygo-cyan/50 flex flex-col relative overflow-hidden group">
-                                <div class="absolute inset-0 bg-gradient-to-r from-lygo-cyan/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
-                                <h4 class="font-bold text-lg text-white group-hover:text-lygo-cyan transition-colors mb-1">${item.title}</h4>
-                                <div class="font-mono text-xs mb-3 flex items-center gap-2 text-lygo-cyan">
-                                    <i class="fa-solid fa-shield-halved"></i> Guardian: <span class="text-gray-300">${item.guardianName}</span>
-                                </div>
-                                ${item.note ? `<div class="italic text-sm text-gray-400 border-l border-lygo-border pl-3">"${item.note}"</div>` : ''}
+        // 2. Data Injection Function
+        function injectData(data) {
+            document.getElementById('nav-tagline').textContent = data.programName || "Legacy Protocol";
+            document.getElementById('btn-paypal-single').href = data.paypalLink;
+            document.getElementById('btn-paypal-album').href = data.paypalLink;
+            document.getElementById('btn-patreon-single').href = data.patreonSingleLink;
+            document.getElementById('btn-patreon-album').href = data.patreonAlbumLink;
+
+            document.getElementById('stat-count').textContent = data.stats.totalGuardians;
+
+            const singlesContainer = document.getElementById('singles-container');
+            const albumsContainer = document.getElementById('albums-container');
+            
+            singlesContainer.innerHTML = '';
+            albumsContainer.innerHTML = '';
+
+            const albums = data.guardians.filter(g => g.type === 'album');
+            const singles = data.guardians.filter(g => g.type === 'single');
+
+            if(albums.length === 0) {
+                albumsContainer.innerHTML = '<p class="text-lygo-muted font-mono text-sm opacity-50 italic">Awaiting initial album guardian...</p>';
+            } else {
+                albums.forEach(item => {
+                    albumsContainer.innerHTML += `
+                        <div class="metal-plate p-5 rounded-sm border-l-2 border-l-lygo-gold/50 flex flex-col relative overflow-hidden group">
+                            <div class="absolute inset-0 bg-gradient-to-r from-lygo-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                            <h4 class="font-bold text-lg text-white mb-1 group-hover:text-lygo-gold transition-colors">${item.title || item.albumTitle}</h4>
+                            <div class="font-mono text-xs text-lygo-muted mb-3 flex items-center gap-2">
+                                <i class="fa-solid fa-shield-halved text-lygo-gold"></i> Guardian: <span class="text-gray-300">${item.guardianName}</span>
                             </div>
-                        `;
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Data Injection Failed:', error);
-                document.getElementById('albums-container').innerHTML = '<p class="text-red-500 font-mono text-sm">Error: Unable to connect to guardian-data.json</p>';
-                document.getElementById('singles-container').innerHTML = '<p class="text-red-500 font-mono text-sm">Error: Unable to connect to guardian-data.json</p>';
-            });
+                            ${item.dedication || item.note ? `<div class="italic text-sm text-gray-400 border-l border-lygo-border pl-3">"${item.dedication || item.note}"</div>` : ''}
+                        </div>
+                    `;
+                });
+            }
+
+            if(singles.length === 0) {
+                singlesContainer.innerHTML = '<p class="text-lygo-muted font-mono text-sm opacity-50 italic">Awaiting initial single guardian...</p>';
+            } else {
+                singles.forEach(item => {
+                    singlesContainer.innerHTML += `
+                        <div class="metal-plate p-5 rounded-sm border-l-2 border-l-lygo-cyan/50 flex flex-col relative overflow-hidden group">
+                            <div class="absolute inset-0 bg-gradient-to-r from-lygo-cyan/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                            <h4 class="font-bold text-lg text-white group-hover:text-lygo-cyan transition-colors mb-1">${item.title || item.songTitle}</h4>
+                            <div class="font-mono text-xs mb-3 flex items-center gap-2 text-lygo-cyan">
+                                <i class="fa-solid fa-shield-halved"></i> Guardian: <span class="text-gray-300">${item.guardianName}</span>
+                            </div>
+                            ${item.dedication || item.note ? `<div class="italic text-sm text-gray-400 border-l border-lygo-border pl-3">"${item.dedication || item.note}"</div>` : ''}
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        // 3. Safe Execution Logic
+        try {
+            // Attempt to fetch from real JSON file (Will work on GitHub Pages)
+            fetch('guardian-data.json')
+                .then(response => {
+                    if (!response.ok) throw new Error('Database file not found yet');
+                    return response.json();
+                })
+                .then(data => injectData(data))
+                .catch(error => {
+                    console.log('Fetch failed (expected in sandbox preview). Using fallback data.');
+                    injectData(fallbackData);
+                });
+        } catch (e) {
+            // Catch URL parsing errors caused by the Blob sandbox
+            console.log('URL Parsing failed (expected in sandbox preview). Using fallback data.');
+            injectData(fallbackData);
+        }
     </script>
 </body>
 </html>

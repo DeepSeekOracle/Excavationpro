@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legacy Guardian Program | Music Preservation by EXCAVATIONPRO</title>
+    <meta name="description" content="Become a Legacy Guardian and help preserve music forever. Your name, permanently etched into the Legacy Liner Notes.">
+    <meta property="og:title" content="Legacy Guardian Program | EXCAVATIONPRO">
+    <meta property="og:description" content="Every song deserves a guardian. Become part of music history.">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --void: #0a0a12;
+            --stardust: #1a1a2e;
+            --nebula: #16213e;
+            --quantum: #00f0ff;
+            --moonlight: #7d00ff;
+            --dragonfire: #e94560;
+            --starlight: #f5f5f5;
+            --gold: #d4af37;
+            --emerald: #2ecc71;
+            --amber: #f39c12;
+            --surface: #12121f;
+            --border: rgba(125, 0, 255, 0.3);
+            --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --glow: 0 0 15px currentColor;
+            --deep-glow: 0 0 30px currentColor;
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; scroll-padding-top: 100px; }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background-color: var(--void);
+            color: var(--starlight);
+            line-height: 1.7;
+            overflow-x: hidden;
+            background-image:
+                radial-gradient(circle at 5% 15%, rgba(125, 0, 255, 0.08) 0%, transparent 30%),
+                radial-gradient(circle at 85% 75%, rgba(0, 240, 255, 0.06) 0%, transparent 30%),
+                radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.04) 0%, transparent 50%),
+                radial-gradient(circle at 30% 60%, rgba(233, 69, 96, 0.04) 0%, transparent 25%);
+        }
+
+        h1, h2, h3, h4 { font-family: 'Cinzel', serif; font-weight: 700; }
+        .special-font { font-family: 'Special Elite', monospace; }
+
+        h1 {
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            background: linear-gradient(135deg, var(--quantum), var(--moonlight), var(--gold));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            filter: drop-shadow(0 0 20px rgba(125, 0, 255, 0.4));
+        }
+
+        h2 {
+            font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+            color: var(--quantum);
+            border-bottom: 2px solid var(--moonlight);
+            display: inline-block;
+            padding-bottom: 0.4rem;
+            margin-bottom: 2rem;
+        }
+
+        h3 { color: var(--gold); font-size: 1.3rem; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+        .section { padding: clamp(50px, 7vw, 90px) 0; position: relative; }
+        .text-center { text-align: center; }
+
+        /* ---- Header ---- */
+        .site-header {
+            background: rgba(10, 10, 18, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 16px 0;
+            position: fixed; width: 100%; top: 0; z-index: 1000;
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+        .header-inner {
+            display: flex; justify-content: space-between; align-items: center;
+            max-width: 1100px; margin: 0 auto; padding: 0 24px;
+        }
+        .logo-text {
+            font-family: 'Cinzel', serif; font-size: 1.4rem; font-weight: 700;
+            background: linear-gradient(to right, var(--starlight), var(--quantum));
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+        }
+        .logo-sub {
+            font-family: 'Special Elite', monospace; font-size: 0.65rem;
+            color: var(--gold); letter-spacing: 2px; text-transform: uppercase;
+        }
+        .header-nav a {
+            color: var(--starlight); text-decoration: none; margin-left: 24px;
+            font-size: 0.9rem; transition: var(--transition); font-weight: 500;
+        }
+        .header-nav a:hover { color: var(--quantum); text-shadow: var(--glow); }
+
+        /* ---- Hero ---- */
+        .hero-section {
+            padding-top: 160px; padding-bottom: 80px; text-align: center; position: relative;
+        }
+        .hero-badge {
+            display: inline-block; padding: 6px 20px; border-radius: 50px;
+            border: 1px solid var(--gold); color: var(--gold);
+            font-family: 'Special Elite', monospace; font-size: 0.8rem;
+            letter-spacing: 2px; margin-bottom: 24px; text-transform: uppercase;
+        }
+        .hero-tagline {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            color: var(--starlight); opacity: 0.8; max-width: 600px;
+            margin: 16px auto 0; font-weight: 300;
+        }
+
+        /* ---- Cards ---- */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
+            transition: var(--transition);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        .card:hover {
+            border-color: var(--quantum);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.1), 0 8px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* ---- Tier Cards ---- */
+        .tiers-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 28px; margin-top: 40px;
+        }
+        .tier-card {
+            position: relative; overflow: hidden; text-align: center;
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 40px 28px 32px;
+            transition: var(--transition);
+        }
+        .tier-card.featured { border-color: var(--gold); }
+        .tier-card:hover {
+            border-color: var(--quantum);
+            box-shadow: 0 0 35px rgba(0, 240, 255, 0.12), 0 10px 50px rgba(0, 0, 0, 0.5);
+        }
+        .tier-badge {
+            position: absolute; top: 16px; right: -32px;
+            background: var(--gold); color: var(--void); padding: 4px 40px;
+            font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+            transform: rotate(45deg); letter-spacing: 1px;
+        }
+        .tier-icon {
+            font-size: 2.8rem; margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--quantum), var(--moonlight));
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+        }
+        .tier-price {
+            font-size: 2.5rem; font-weight: 700; font-family: 'Cinzel', serif;
+            color: var(--starlight); margin: 12px 0;
+        }
+        .tier-price span { font-size: 1rem; opacity: 0.6; }
+        .tier-desc { font-size: 0.95rem; opacity: 0.75; margin-bottom: 24px; line-height: 1.6; }
+
+        /* ---- Buttons ---- */
+        .btn {
+            display: inline-block; padding: 12px 28px; border-radius: 50px;
+            font-weight: 600; font-size: 0.95rem; text-decoration: none;
+            transition: var(--transition); cursor: pointer; border: none;
+            letter-spacing: 0.5px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--quantum), var(--moonlight));
+            color: var(--void); box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+        }
+        .btn-primary:hover {
+            box-shadow: 0 0 35px rgba(125, 0, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        .btn-outline {
+            border: 2px solid var(--gold); color: var(--gold);
+            background: transparent;
+        }
+        .btn-outline:hover {
+            background: var(--gold); color: var(--void);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
+        }
+        .btn-paypal {
+            background: #0070ba; color: white; box-shadow: 0 0 15px rgba(0, 112, 186, 0.3);
+        }
+        .btn-paypal:hover {
+            background: #005ea6; box-shadow: 0 0 30px rgba(0, 112, 186, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* ---- Link Strip (Compact) ---- */
+        .link-strip {
+            display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;
+            margin-top: 20px;
+        }
+        .link-strip .btn { padding: 10px 22px; font-size: 0.85rem; }
+
+        /* ---- Legacy Wall ---- */
+        .guardian-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px; margin-top: 32px;
+        }
+        .guardian-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--quantum);
+            border-radius: var(--radius-sm);
+            padding: 24px;
+            transition: var(--transition);
+        }
+        .guardian-card.album { border-left-color: var(--gold); }
+        .guardian-card:hover {
+            border-color: var(--quantum);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.08);
+        }
+        .guardian-card .g-type {
+            font-family: 'Special Elite', monospace;
+            font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px;
+            color: var(--quantum); margin-bottom: 8px;
+        }
+        .guardian-card.album .g-type { color: var(--gold); }
+        .guardian-card .g-title {
+            font-family: 'Cinzel', serif; font-size: 1.2rem;
+            color: var(--starlight); margin-bottom: 6px;
+        }
+        .guardian-card .g-guardian {
+            font-size: 0.9rem; color: var(--gold); margin-bottom: 4px;
+        }
+        .guardian-card .g-dedication {
+            font-style: italic; font-size: 0.85rem; opacity: 0.65;
+            margin-top: 8px; line-height: 1.5;
+        }
+        .guardian-card .g-date {
+            font-size: 0.75rem; opacity: 0.4; margin-top: 12px;
+        }
+
+        /* ---- Stats ---- */
+        .stats-row {
+            display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;
+            margin-top: 40px;
+        }
+        .stat-box {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius-sm); padding: 24px 32px; text-align: center;
+            min-width: 140px;
+        }
+        .stat-number {
+            font-size: 2.5rem; font-weight: 700; font-family: 'Cinzel', serif;
+            background: linear-gradient(to bottom, var(--quantum), var(--gold));
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+        }
+        .stat-label {
+            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;
+            opacity: 0.6; margin-top: 4px;
+        }
+
+        /* ---- Footer ---- */
+        .site-footer {
+            text-align: center; padding: 48px 24px; opacity: 0.5;
+            font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 60px;
+        }
+        .site-footer a { color: var(--quantum); text-decoration: none; }
+
+        /* ---- Responsive ---- */
+        @media (max-width: 768px) {
+            .header-nav { display: none; }
+            .hero-section { padding-top: 120px; }
+            .tiers-grid { grid-template-columns: 1fr; }
+            .guardian-grid { grid-template-columns: 1fr; }
+            .link-strip { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="site-header">
+        <div class="header-inner">
+            <div>
+                <div class="logo-text">EXCAVATIONPRO</div>
+                <div class="logo-sub">Legacy Guardian Program</div>
+            </div>
+            <nav class="header-nav">
+                <a href="#program">Program</a>
+                <a href="#tiers">Tiers</a>
+                <a href="#wall">Legacy Wall</a>
+                <a href="#support">Support</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-badge">⚡ Music Preservation Initiative</div>
+            <h1 id="program-title">Legacy Guardian Program</h1>
+            <p class="hero-tagline" id="program-tagline">Loading...</p>
+            <p class="hero-tagline" id="program-desc" style="font-size: 0.95rem; margin-top: 20px;"></p>
+            <div class="link-strip" style="margin-top: 32px;">
+                <a id="link-paypal" href="#" class="btn btn-paypal">
+                    <i class="fab fa-paypal"></i>&nbsp; Donate via PayPal
+                </a>
+                <a id="link-patreon-single" href="#" class="btn btn-outline">
+                    <i class="fa-solid fa-music"></i>&nbsp; Single Guardian ($30)
+                </a>
+                <a id="link-patreon-album" href="#" class="btn btn-outline">
+                    <i class="fa-solid fa-compact-disc"></i>&nbsp; Album Guardian ($50)
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tiers -->
+    <section class="section" id="tiers">
+        <div class="container">
+            <h2>⚔️ Guardian Tiers</h2>
+            <div class="tiers-grid" id="tiers-container"></div>
+        </div>
+    </section>
+
+    <!-- Legacy Wall -->
+    <section class="section" id="wall">
+        <div class="container">
+            <h2>📜 The Legacy Wall</h2>
+            <p style="opacity: 0.7; margin-bottom: 0;">Every name etched here represents a song or album that will live forever.</p>
+            <div class="stats-row" id="stats-container"></div>
+            <div class="guardian-grid" id="guardian-grid"></div>
+            <div id="empty-state" style="display: none; text-align: center; padding: 60px 0; opacity: 0.5;">
+                <i class="fa-solid fa-hourglass-half" style="font-size: 3rem; margin-bottom: 16px; display: block;"></i>
+                <p>No guardians yet. Be the first to claim a song.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="section" id="program">
+        <div class="container text-center">
+            <h2>🔮 How It Works</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; margin-top: 32px;">
+                <div class="card">
+                    <div style="font-size: 2rem; color: var(--quantum); margin-bottom: 12px;">1</div>
+                    <h3>Choose</h3>
+                    <p style="opacity: 0.7; font-size: 0.9rem;">Pick a song or album that means something to you.</p>
+                </div>
+                <div class="card">
+                    <div style="font-size: 2rem; color: var(--moonlight); margin-bottom: 12px;">2</div>
+                    <h3>Guard</h3>
+                    <p style="opacity: 0.7; font-size: 0.9rem;">Contribute $30 (single) or $50 (album) via PayPal or Patreon.</p>
+                </div>
+                <div class="card">
+                    <div style="font-size: 2rem; color: var(--gold); margin-bottom: 12px;">3</div>
+                    <h3>Eternalize</h3>
+                    <p style="opacity: 0.7; font-size: 0.9rem;">Your name is added to the permanent Legacy Liner Notes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>Part of the <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/LYGOGUARDIAN.html">LYGO Network</a> &nbsp;|&nbsp;
+        <a href="https://deepseekoracle.github.io/Excavationpro/eternalhaven.html">Eternal Haven</a></p>
+        <p style="margin-top: 8px;">© EXCAVATIONPRO — Justin Helmer. All music preserved with intention.</p>
+    </footer>
+
+    <script>
+        // Load data from JSON
+        fetch('./guardian-data.json')
+            .then(res => res.json())
+            .then(data => {
+                // Populate program info
+                document.getElementById('program-title').textContent = data.programName;
+                document.getElementById('program-tagline').textContent = data.tagline;
+                document.getElementById('program-desc').textContent = data.description;
+                document.title = data.programName + ' | EXCAVATIONPRO';
+
+                // Populate links
+                document.getElementById('link-paypal').href = data.paypalLink;
+                document.getElementById('link-patreon-single').href = data.patreonSingleLink;
+                document.getElementById('link-patreon-album').href = data.patreonAlbumLink;
+
+                // Build tier cards
+                const tierIcons = { single: 'fa-music', album: 'fa-compact-disc' };
+                const tiersHTML = data.tiers.map((t, i) => `
+                    <div class="tier-card${i === 0 ? ' featured' : ''}">
+                        ${i === 0 ? '<div class="tier-badge">Popular</div>' : ''}
+                        <div class="tier-icon"><i class="fa-solid ${tierIcons[t.id] || 'fa-star'}"></i></div>
+                        <h3>${t.name}</h3>
+                        <div class="tier-price">$${t.price}<span> one-time</span></div>
+                        <p class="tier-desc">${t.description}</p>
+                        <a href="${t.id === 'single' ? data.patreonSingleLink : data.patreonAlbumLink}" class="btn btn-primary" style="width: 100%;">
+                            Become a ${t.name}
+                        </a>
+                    </div>
+                `).join('');
+                document.getElementById('tiers-container').innerHTML = tiersHTML;
+
+                // Build stats
+                document.getElementById('stats-container').innerHTML = `
+                    <div class="stat-box">
+                        <div class="stat-number">${data.stats.totalGuardians}</div>
+                        <div class="stat-label">Guardians</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">${data.stats.songsPreserved}</div>
+                        <div class="stat-label">Songs Preserved</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">${data.stats.albumsPreserved}</div>
+                        <div class="stat-label">Albums Preserved</div>
+                    </div>
+                `;
+
+                // Build guardian wall
+                const grid = document.getElementById('guardian-grid');
+                const empty = document.getElementById('empty-state');
+                if (data.guardians.length === 0) {
+                    grid.style.display = 'none';
+                    empty.style.display = 'block';
+                } else {
+                    grid.innerHTML = data.guardians.map(g => `
+                        <div class="guardian-card${g.type === 'album' ? ' album' : ''}">
+                            <div class="g-type">${g.type === 'album' ? 'Album Guardian' : 'Single Guardian'}</div>
+                            <div class="g-title">${g.songTitle || g.albumTitle}</div>
+                            <div class="g-guardian">Guarded by ${g.guardianName}</div>
+                            ${g.dedication ? `<div class="g-dedication">"${g.dedication}"</div>` : ''}
+                            <div class="g-date">Preserved ${g.dateAdded}</div>
+                        </div>
+                    `).join('');
+                }
+            })
+            .catch(err => {
+                console.error('Failed to load guardian data:', err);
+            });
+    </script>
+</body>
+</html>

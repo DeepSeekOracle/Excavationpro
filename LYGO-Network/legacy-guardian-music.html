@@ -1,499 +1,438 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EXCAVATIONPRO // Legacy Guardian Protocol</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Legacy Guardian Program | Music Preservation by EXCAVATIONPRO</title>
+    <meta name="description" content="Become a Legacy Guardian and help preserve music forever. Your name, permanently etched into the Legacy Liner Notes.">
     
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        lygo: {
-                            dark: '#050507',
-                            panel: '#0d0d12',
-                            border: '#2a2a35',
-                            cyan: '#00e5ff',
-                            purple: '#b000ff',
-                            gold: '#ffd700',
-                            text: '#e2e8f0',
-                            muted: '#84849a'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Space Grotesk', 'sans-serif'],
-                        mono: ['Space Mono', 'monospace'],
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
+        :root {
+            /* LYGO Core Colors - Deepened for premium contrast */
+            --void-bg: #030305;
+            --surface-dark: rgba(12, 12, 18, 0.6);
+            --surface-light: rgba(25, 25, 35, 0.4);
+            --quantum-cyan: #00f0ff;
+            --quantum-glow: rgba(0, 240, 255, 0.3);
+            --moonlight-purple: #7d00ff;
+            --dragonfire-red: #e94560;
+            --starlight-white: #f8f9fa;
+            --gold-metallic: #d4af37;
+            --gold-glow: rgba(212, 175, 55, 0.3);
+            --emerald-green: #2ecc71;
+            
+            /* Structural Variables */
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-accent: rgba(255, 255, 255, 0.15);
+            --radius-sharp: 4px;
+            --radius-smooth: 12px;
+            --transition-smooth: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        
         body {
-            background-color: #050507;
-            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--void-bg);
+            color: var(--starlight-white);
+            line-height: 1.6;
             overflow-x: hidden;
-        }
-
-        /* Gritty Noise Overlay */
-        .noise-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            pointer-events: none; z-index: 50; opacity: 0.04;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-        }
-
-        /* Stamped Metal Plate Effect */
-        .metal-plate {
-            background: linear-gradient(180deg, #14141c 0%, #0a0a0e 100%);
-            border: 1px solid #2a2a35;
-            box-shadow: inset 0 1px 1px rgba(255,255,255,0.05), 0 4px 20px rgba(0,0,0,0.5);
             position: relative;
-            overflow: hidden;
+        }
+
+        /* Gritty Film Grain Overlay */
+        .noise-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none; z-index: 50; opacity: 0.035;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Animated 3D Cyber-Grid Background */
+        .cyber-grid {
+            position: fixed; bottom: -20vh; left: -50vw; right: -50vw; height: 60vh;
+            background-image: 
+                linear-gradient(rgba(125, 0, 255, 0.15) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: perspective(600px) rotateX(75deg);
+            animation: gridScan 15s linear infinite;
+            z-index: -1;
+            mask-image: linear-gradient(to top, rgba(0,0,0,1), transparent);
+            -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1), transparent);
+        }
+
+        @keyframes gridScan {
+            0% { transform: perspective(600px) rotateX(75deg) translateY(0); }
+            100% { transform: perspective(600px) rotateX(75deg) translateY(50px); }
+        }
+
+        /* Ambient Glowing Orbs */
+        .ambient-orb {
+            position: fixed; border-radius: 50%; filter: blur(120px); z-index: -2;
+            animation: breathe 8s ease-in-out infinite alternate;
+        }
+        .orb-1 { top: -10%; left: -10%; width: 40vw; height: 40vw; background: rgba(0, 240, 255, 0.08); }
+        .orb-2 { bottom: 10%; right: -10%; width: 50vw; height: 50vw; background: rgba(125, 0, 255, 0.08); }
+
+        @keyframes breathe {
+            0% { opacity: 0.5; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1.1); }
+        }
+
+        h1, h2, h3, .cinzel { font-family: 'Cinzel', serif; font-weight: 700; }
+        .mono { font-family: 'Space Mono', monospace; }
+
+        .text-gradient-cyan {
+            background: linear-gradient(135deg, #ffffff, var(--quantum-cyan));
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+            text-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
         }
         
-        .metal-plate::before {
-            content: ''; position: absolute;
-            top: 0; left: 0; right: 0; height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.2), transparent);
+        .text-gradient-gold {
+            background: linear-gradient(135deg, #ffffff, var(--gold-metallic));
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
         }
 
-        /* Glowing text accents */
-        .text-glow-cyan { text-shadow: 0 0 10px rgba(0, 229, 255, 0.5); }
-        .text-glow-gold { text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+        /* High-End Glass Monolith Cards */
+        .glass-panel {
+            background: var(--surface-dark);
+            backdrop-filter: blur(16px) saturate(120%);
+            -webkit-backdrop-filter: blur(16px) saturate(120%);
+            border: 1px solid var(--border-subtle);
+            border-top: 1px solid rgba(255,255,255,0.15);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 8px 32px rgba(0,0,0,0.4);
+            border-radius: var(--radius-smooth);
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition-smooth);
+        }
 
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #050507; }
-        ::-webkit-scrollbar-thumb { background: #2a2a35; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #00e5ff; }
+        .glass-panel::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent);
+            transform: skewX(-25deg); transition: 0.7s;
+        }
+        .glass-panel:hover::before { left: 200%; }
+        .glass-panel:hover { border-color: var(--quantum-cyan); box-shadow: 0 8px 32px rgba(0,0,0,0.6), 0 0 20px var(--quantum-glow); transform: translateY(-3px); }
 
-        /* Network Link Hover FX */
-        .network-link:hover .icon-box {
-            background-color: rgba(0, 229, 255, 0.1);
-            border-color: #00e5ff;
-            color: #00e5ff;
+        /* Cyber-Tactile Buttons */
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 14px 32px; font-weight: 600; font-size: 0.9rem; text-decoration: none;
+            letter-spacing: 1px; text-transform: uppercase;
+            transition: var(--transition-smooth); cursor: pointer;
+            position: relative; overflow: hidden;
+        }
+
+        .btn-cyber {
+            background: rgba(0, 240, 255, 0.05); color: var(--quantum-cyan);
+            border: 1px solid var(--quantum-cyan);
+            clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+            box-shadow: inset 0 0 15px rgba(0, 240, 255, 0.1);
+        }
+        .btn-cyber:hover {
+            background: var(--quantum-cyan); color: var(--void-bg);
+            box-shadow: 0 0 25px var(--quantum-glow), inset 0 0 10px rgba(255,255,255,0.5);
+            text-shadow: none;
+        }
+
+        .btn-gold {
+            background: rgba(212, 175, 55, 0.05); color: var(--gold-metallic);
+            border: 1px solid var(--gold-metallic);
+            clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+        }
+        .btn-gold:hover {
+            background: var(--gold-metallic); color: var(--void-bg);
+            box-shadow: 0 0 25px var(--gold-glow);
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        .section { padding: 100px 0; position: relative; z-index: 10; }
+        .text-center { text-align: center; }
+
+        /* Header */
+        .site-header {
+            position: fixed; width: 100%; top: 0; z-index: 100;
+            background: linear-gradient(to bottom, rgba(3,3,5,0.9), transparent);
+            padding: 24px 0; border-bottom: 1px solid rgba(255,255,255,0.03);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+        }
+        .header-inner { display: flex; justify-content: space-between; align-items: center; }
+        .logo-box { display: flex; align-items: center; gap: 12px; }
+        .logo-icon { 
+            width: 36px; height: 36px; border: 1px solid var(--quantum-cyan); 
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(0, 240, 255, 0.1); color: var(--quantum-cyan);
+            transform: rotate(45deg);
+        }
+        .logo-icon i { transform: rotate(-45deg); }
+        .nav-links a { color: var(--starlight-white); text-decoration: none; margin-left: 32px; font-size: 0.85rem; letter-spacing: 1px; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--quantum-cyan); }
+
+        .hero { padding-top: 200px; padding-bottom: 60px; }
+        .hero-title { font-size: clamp(2.5rem, 6vw, 4.5rem); line-height: 1.1; margin-bottom: 24px; }
+        .hero-subtitle { font-size: 1.1rem; opacity: 0.7; max-width: 600px; margin: 0 auto 40px; font-weight: 300; }
+
+        /* Tier Grid */
+        .tier-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 32px; margin-top: 60px; }
+        .tier-card { padding: 48px 32px; text-align: center; display: flex; flex-direction: column; }
+        .tier-price { font-size: 3.5rem; font-family: 'Cinzel', serif; font-weight: 700; margin: 24px 0 16px; line-height: 1; }
+        .tier-price span { font-size: 1rem; font-family: 'Inter', sans-serif; opacity: 0.5; font-weight: 400; }
+        
+        /* Legacy Wall */
+        .wall-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px; margin-top: 48px; }
+        .plaque { padding: 28px; border-left: 4px solid var(--quantum-cyan); }
+        .plaque.album { border-left-color: var(--gold-metallic); }
+        .plaque-type { font-size: 0.7rem; color: var(--quantum-cyan); margin-bottom: 12px; letter-spacing: 2px; }
+        .plaque.album .plaque-type { color: var(--gold-metallic); }
+        .plaque-title { font-size: 1.4rem; margin-bottom: 8px; color: #fff; }
+        .plaque-guardian { color: var(--starlight-white); opacity: 0.9; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; }
+        .plaque-dedication { margin-top: 16px; font-style: italic; opacity: 0.6; font-size: 0.9rem; border-left: 1px solid var(--border-accent); padding-left: 12px; }
+
+        /* Mainframe Links Section */
+        .mainframe-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; margin-top: 40px; }
+        .link-block { display: flex; flex-direction: column; gap: 12px; }
+        .link-block-title { font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--starlight-white); opacity: 0.5; margin-bottom: 8px; border-bottom: 1px solid var(--border-accent); padding-bottom: 8px; }
+        .cyber-link { 
+            display: flex; align-items: center; gap: 16px; padding: 12px 16px; 
+            background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: var(--radius-sharp);
+            color: var(--starlight-white); text-decoration: none; font-size: 0.9rem; transition: var(--transition-smooth);
+        }
+        .cyber-link:hover { background: rgba(0, 240, 255, 0.05); border-color: var(--quantum-cyan); color: var(--quantum-cyan); transform: translateX(5px); }
+        .cyber-link i { font-size: 1.2rem; width: 24px; text-align: center; }
+
+        /* Footer */
+        footer { border-top: 1px solid var(--border-subtle); padding: 40px 0; margin-top: 80px; text-align: center; opacity: 0.5; font-size: 0.8rem; }
+        
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero-title { font-size: 2.2rem; }
         }
     </style>
 </head>
-<body class="antialiased selection:bg-lygo-cyan selection:text-black">
-
+<body>
     <div class="noise-overlay"></div>
-    
-    <!-- Ambient LYGO Gradients -->
-    <div class="fixed top-[-20%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-lygo-cyan opacity-[0.03] blur-[120px] pointer-events-none"></div>
-    <div class="fixed bottom-[-20%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-lygo-purple opacity-[0.03] blur-[120px] pointer-events-none"></div>
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="cyber-grid"></div>
 
-    <nav class="fixed w-full z-40 top-0 border-b border-lygo-border bg-lygo-dark/80 backdrop-blur-md">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <div class="w-10 h-10 rounded-sm border border-lygo-cyan flex items-center justify-center bg-lygo-cyan/10">
-                    <i class="fa-solid fa-cube text-lygo-cyan"></i>
-                </div>
+    <header class="site-header">
+        <div class="container header-inner">
+            <div class="logo-box">
+                <div class="logo-icon"><i class="fa-solid fa-microchip"></i></div>
                 <div>
-                    <h1 class="font-bold tracking-widest text-lg uppercase text-white">EXCAVATIONPRO</h1>
-                    <p class="text-xs font-mono text-lygo-cyan tracking-widest" id="nav-tagline">Legacy Protocol</p>
+                    <div class="cinzel" style="font-size: 1.2rem; line-height: 1;">EXCAVATIONPRO</div>
+                    <div class="mono" style="font-size: 0.6rem; color: var(--quantum-cyan); letter-spacing: 2px;">Legacy Protocol</div>
                 </div>
             </div>
-            <div class="hidden md:flex gap-8 font-mono text-sm">
-                <a href="#mission" class="text-lygo-muted hover:text-white transition-colors">01. PROTOCOL</a>
-                <a href="#pledge" class="text-lygo-muted hover:text-white transition-colors">02. BECOME GUARDIAN</a>
-                <a href="#wall" class="text-lygo-cyan text-glow-cyan transition-colors">03. LEGACY WALL</a>
-                <a href="#network" class="text-lygo-gold hover:text-white transition-colors">04. MAINFRAME</a>
+            <nav class="nav-links mono">
+                <a href="#protocol">01. Protocol</a>
+                <a href="#tiers">02. Access</a>
+                <a href="#wall">03. Archive</a>
+                <a href="#mainframe">04. Mainframe</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="section hero text-center" id="protocol">
+        <div class="container">
+            <div class="mono" style="color: var(--gold-metallic); font-size: 0.8rem; letter-spacing: 3px; margin-bottom: 24px;">SYSTEM STATUS: AWAITING PRESERVATION</div>
+            <h1 class="hero-title cinzel text-gradient-cyan" id="program-title">The Legacy Guardian Protocol</h1>
+            <p class="hero-subtitle" id="program-desc">
+                Not every song needs a guardian. But the ones that matter do. This is an invitation to become a modern-day patron of the arts—a Digital Curator who ensures a piece of music outlasts the algorithm.
+            </p>
+            
+            <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-top: 40px;">
+                <a href="#tiers" class="btn btn-cyber"><i class="fa-solid fa-bolt" style="margin-right: 10px;"></i> Initiate Protocol</a>
+                <a href="https://paypal.com/paypalme/ExcavationPro" target="_blank" class="btn" style="border: 1px solid var(--border-accent); color: white; border-radius: var(--radius-sharp);">
+                    <i class="fa-brands fa-paypal" style="color: #0070ba; margin-right: 10px;"></i> Direct PayPal
+                </a>
             </div>
         </div>
-    </nav>
+    </section>
 
-    <main class="pt-32 pb-20 px-6 max-w-7xl mx-auto min-h-screen">
-        
-        <section id="mission" class="mb-32 grid lg:grid-cols-2 gap-16 items-center">
-            <div>
-                <div class="inline-block px-3 py-1 mb-6 border border-lygo-purple/30 bg-lygo-purple/10 rounded-sm font-mono text-xs text-lygo-purple tracking-widest">
-                    SYSTEM STATUS: AWAITING PRESERVATION
-                </div>
-                <h2 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-                    Not every song needs a guardian.<br>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-lygo-cyan to-lygo-purple">But the ones that matter do.</span>
-                </h2>
-                <p class="text-lygo-muted text-lg mb-6 leading-relaxed">
-                    I’ve published over 1,200 songs, but the internet is written in pencil. The Legacy Guardian Protocol is an initiative to etch the best of them into stone.
-                </p>
-                <p class="text-lygo-muted text-lg mb-8 leading-relaxed">
-                    This isn't a donation. It's an invitation to become a modern-day patron of the arts. By covering the exact DistroKid Legacy fee, you lock a track into permanence forever, and your name joins the archival liner notes. No gimmicks. Just your mark on a body of work that outlasts us.
-                </p>
-                <a href="#pledge" class="inline-flex items-center gap-3 px-8 py-4 bg-white text-black font-bold uppercase tracking-wider hover:bg-lygo-cyan hover:text-black transition-all rounded-sm">
-                    Initiate Protocol <i class="fa-solid fa-arrow-right"></i>
-                </a>
-            </div>
-            <div class="relative">
-                <div class="aspect-square metal-plate rounded-lg p-8 flex flex-col justify-between">
-                    <div class="flex justify-between items-start">
-                        <i class="fa-solid fa-microchip text-4xl text-lygo-muted"></i>
-                        <span class="font-mono text-xs text-lygo-cyan">ARCHIVE node_01</span>
-                    </div>
-                    <div class="text-center py-12">
-                        <div class="w-32 h-32 mx-auto rounded-full border border-lygo-cyan/30 flex items-center justify-center relative mb-6">
-                            <div class="absolute inset-0 rounded-full border border-lygo-cyan border-dashed animate-[spin_10s_linear_infinite]"></div>
-                            <i class="fa-solid fa-lock text-3xl text-lygo-cyan text-glow-cyan"></i>
-                        </div>
-                        <h3 class="font-mono text-xl text-white tracking-widest">PERMANENCE SECURED</h3>
-                    </div>
-                    <div class="font-mono text-xs text-lygo-muted text-justify">
-                        HASH: 0x8F9A...B3C2 | STATUS: IMMORTALIZED | ENCRYPTION: LYGO_V3
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="pledge" class="mb-32">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold mb-4 uppercase tracking-widest">Select Access Tier</h2>
-                <div class="h-1 w-24 bg-gradient-to-r from-lygo-cyan to-lygo-purple mx-auto"></div>
+    <section class="section" id="tiers">
+        <div class="container">
+            <div class="text-center mb-12">
+                <h2 class="cinzel text-gradient-cyan" style="font-size: 2.5rem; margin-bottom: 16px;">Select Access Tier</h2>
+                <p style="opacity: 0.6; max-width: 600px; margin: 0 auto;">Cover the exact DistroKid Legacy fee to lock a track into permanence forever. Your name joins the archival liner notes below.</p>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                
-                <!-- Single Guardian Card -->
-                <div class="metal-plate p-8 rounded-sm hover:border-lygo-cyan/50 transition-colors group relative">
-                    <div class="absolute top-0 right-0 bg-lygo-cyan text-black font-mono text-xs font-bold px-3 py-1">MOST POPULAR</div>
-                    <h3 class="text-2xl font-bold mb-2 font-mono">Single Guardian</h3>
-                    <div class="text-4xl font-bold text-white mb-6">$30 <span class="text-sm text-lygo-muted font-normal">/ One-time</span></div>
-                    <p class="text-lygo-muted mb-8 h-20">Covers the exact DistroKid Legacy fee for one track plus processing. Keeps it on Spotify & Apple forever.</p>
-                    
-                    <ul class="space-y-4 mb-8 font-mono text-sm text-gray-300">
-                        <li><i class="fa-solid fa-check text-lygo-cyan mr-3"></i> Song permanently legacy-locked</li>
-                        <li><i class="fa-solid fa-check text-lygo-cyan mr-3"></i> Name etched in Legacy Liner Notes</li>
-                        <li><i class="fa-solid fa-check text-lygo-cyan mr-3"></i> Custom dedication available</li>
-                    </ul>
-
-                    <div class="space-y-3">
-                        <a id="btn-paypal-single" href="#" target="_blank" class="block w-full py-3 text-center bg-[#0070ba] text-white font-bold uppercase tracking-widest hover:bg-opacity-80 transition-all rounded-sm">
-                            <i class="fa-brands fa-paypal mr-2"></i> Donate via PayPal
-                        </a>
-                        <a id="btn-patreon-single" href="#" target="_blank" class="block w-full py-3 text-center border border-lygo-cyan text-lygo-cyan font-bold uppercase tracking-widest hover:bg-lygo-cyan hover:text-black transition-all rounded-sm">
-                            <i class="fa-brands fa-patreon mr-2"></i> Patreon Portal
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Album Guardian Card -->
-                <div class="metal-plate p-8 rounded-sm hover:border-lygo-gold/50 transition-colors border-lygo-gold/20">
-                    <h3 class="text-2xl font-bold mb-2 font-mono text-lygo-gold text-glow-gold">Album Architect</h3>
-                    <div class="text-4xl font-bold text-white mb-6">$50 <span class="text-sm text-lygo-muted font-normal">/ One-time</span></div>
-                    <p class="text-lygo-muted mb-8 h-20">Covers the legacy fee for an entire 35-song album. You become the sole patron of a complete chapter of work.</p>
-                    
-                    <ul class="space-y-4 mb-8 font-mono text-sm text-gray-300">
-                        <li><i class="fa-solid fa-check text-lygo-gold mr-3"></i> Full album permanently locked</li>
-                        <li><i class="fa-solid fa-check text-lygo-gold mr-3"></i> "Dedicated To" Top Billing</li>
-                        <li><i class="fa-solid fa-check text-lygo-gold mr-3"></i> Exclusive Album Architect status</li>
-                    </ul>
-
-                    <div class="space-y-3">
-                        <a id="btn-paypal-album" href="#" target="_blank" class="block w-full py-3 text-center bg-[#0070ba] text-white font-bold uppercase tracking-widest hover:bg-opacity-80 transition-all rounded-sm">
-                            <i class="fa-brands fa-paypal mr-2"></i> Donate via PayPal
-                        </a>
-                        <a id="btn-patreon-album" href="#" target="_blank" class="block w-full py-3 text-center border border-lygo-gold text-lygo-gold font-bold uppercase tracking-widest hover:bg-lygo-gold hover:text-black transition-all rounded-sm">
-                            <i class="fa-brands fa-patreon mr-2"></i> Patreon Portal
-                        </a>
-                    </div>
-                </div>
-
+            <div class="tier-grid" id="tiers-container">
+                <!-- Injected via JS -->
             </div>
-            
-            <div class="text-center mt-8 font-mono text-xs text-lygo-muted max-w-2xl mx-auto">
-                <i class="fa-solid fa-circle-info mr-2"></i> After donating via PayPal, please send a DM with your track choice and how you want your name to appear in the archives. Patreon supporters will be contacted directly via the portal.
-            </div>
-        </section>
+        </div>
+    </section>
 
-        <section id="wall" class="mb-32">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-12 border-b border-lygo-border pb-6">
+    <section class="section" id="wall">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--border-accent); padding-bottom: 16px;">
                 <div>
-                    <h2 class="text-4xl font-bold uppercase tracking-widest text-white mb-2">The Legacy Wall</h2>
-                    <p class="text-lygo-cyan font-mono text-sm">Permanent Archival Records // Read-Only Access</p>
+                    <h2 class="cinzel" style="font-size: 2rem;">The Legacy Wall</h2>
+                    <div class="mono" style="font-size: 0.8rem; color: var(--quantum-cyan);">Permanent Archival Records // Read-Only</div>
                 </div>
-                <div class="mt-4 md:mt-0 font-mono text-xs text-lygo-muted text-right">
-                    TOTAL PROTECTED: <span id="stat-count" class="text-white text-lg ml-2">0</span>
+                <div class="mono" style="text-align: right;">
+                    <div style="font-size: 0.7rem; opacity: 0.5;">TOTAL PROTECTED</div>
+                    <div style="font-size: 1.5rem; color: var(--gold-metallic);" id="stat-count">0</div>
                 </div>
             </div>
 
-            <!-- Albums Section -->
-            <h3 class="text-xl font-mono text-lygo-gold mb-6 border-l-2 border-lygo-gold pl-4 uppercase tracking-widest">Album Architects</h3>
-            <div id="albums-container" class="grid md:grid-cols-2 gap-4 mb-16">
-                <p class="text-lygo-muted font-mono text-sm opacity-50">Establishing connection to database...</p>
+            <div class="wall-grid" id="guardian-grid">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="mainframe">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="cinzel text-gradient-gold" style="font-size: 2.5rem; margin-bottom: 16px;">The Mainframe</h2>
+                <p style="opacity: 0.6; max-width: 600px; margin: 0 auto;">Access all nodes across the EXCAVATIONPRO network. Stream the music, watch the live broadcasts, or connect directly.</p>
             </div>
 
-            <!-- Singles Section -->
-            <h3 class="text-xl font-mono text-lygo-cyan mb-6 border-l-2 border-lygo-cyan pl-4 uppercase tracking-widest">Single Guardians</h3>
-            <div id="singles-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <p class="text-lygo-muted font-mono text-sm opacity-50">Establishing connection to database...</p>
-            </div>
-        </section>
-
-        <section id="network" class="mb-10 pt-20 border-t border-lygo-border">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold uppercase tracking-widest text-white mb-4">The Mainframe</h2>
-                <div class="h-1 w-24 bg-gradient-to-r from-lygo-cyan to-lygo-purple mx-auto mb-6"></div>
-                <p class="text-lygo-muted font-mono text-sm max-w-2xl mx-auto">
-                    Access all nodes across the EXCAVATIONPRO network. Stream the music, watch the 24/7 live broadcasts, purchase licenses, or connect directly.
-                </p>
-            </div>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="mainframe-grid">
                 
-                <!-- Pillar 1: Listen & Stream -->
-                <div class="metal-plate p-6 rounded-sm flex flex-col gap-4">
-                    <h3 class="font-mono text-sm text-lygo-cyan uppercase tracking-widest border-b border-lygo-border pb-2 mb-2"><i class="fa-solid fa-headphones mr-2"></i> Listen</h3>
-                    
-                    <a href="https://open.spotify.com/artist/6CkZ4bN2xu3WRKbjEL3u2S?si=2O1EHE3qT7aI8lFC3JwLvA" target="_blank" class="network-link flex items-center gap-3 group">
-                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-brands fa-spotify"></i></div>
-                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">Spotify</span>
-                    </a>
-                    <a href="https://music.apple.com/us/artist/excavationpro/1586588545" target="_blank" class="network-link flex items-center gap-3 group">
-                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-brands fa-apple"></i></div>
-                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">Apple Music</span>
-                    </a>
-                    <a href="https://youtube.com/channel/UCnCf9gjhMEfUFPvGkdlUabQ" target="_blank" class="network-link flex items-center gap-3 group">
-                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-brands fa-youtube"></i></div>
-                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">YouTube Music</span>
-                    </a>
-                    <a href="https://tidal.com/artist/28494039" target="_blank" class="network-link flex items-center gap-3 group">
-                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-solid fa-water"></i></div>
-                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">Tidal</span>
-                    </a>
-                    <a href="https://music.amazon.com/artists/B09GPD3K68/excavationpro" target="_blank" class="network-link flex items-center gap-3 group">
-                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-brands fa-amazon"></i></div>
-                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">Amazon Music</span>
-                    </a>
-                    <a href="https://www.deezer.com/us/artist/146004952" target="_blank" class="network-link flex items-center gap-3 group">
-                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-brands fa-deezer"></i></div>
-                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">Deezer</span>
-                    </a>
-                    <a href="https://audius.co/excavationpro" target="_blank" class="network-link flex items-center gap-3 group">
-                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-solid fa-compact-disc"></i></div>
-                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">Audius</span>
-                    </a>
-                    <a href="https://sonarmuse.org/artist/Yony5lHuFBb2goX6c7vS" target="_blank" class="network-link flex items-center gap-3 group">
-                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-solid fa-wave-square"></i></div>
-                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">SonarMuse</span>
-                    </a>
+                <!-- Pillar 1: Listen -->
+                <div class="glass-panel" style="padding: 24px;">
+                    <div class="link-block-title mono"><i class="fa-solid fa-headphones"></i> Listen & Stream</div>
+                    <div class="link-block">
+                        <a href="https://open.spotify.com/artist/6CkZ4bN2xu3WRKbjEL3u2S?si=2O1EHE3qT7aI8lFC3JwLvA" target="_blank" class="cyber-link"><i class="fa-brands fa-spotify" style="color: #1DB954;"></i> Spotify</a>
+                        <a href="https://music.apple.com/us/artist/excavationpro/1586588545" target="_blank" class="cyber-link"><i class="fa-brands fa-apple"></i> Apple Music</a>
+                        <a href="https://youtube.com/channel/UCnCf9gjhMEfUFPvGkdlUabQ" target="_blank" class="cyber-link"><i class="fa-brands fa-youtube" style="color: #FF0000;"></i> YouTube Music</a>
+                        <a href="https://tidal.com/artist/28494039" target="_blank" class="cyber-link"><i class="fa-solid fa-water"></i> Tidal</a>
+                        <a href="https://music.amazon.com/artists/B09GPD3K68/excavationpro" target="_blank" class="cyber-link"><i class="fa-brands fa-amazon" style="color: #FF9900;"></i> Amazon Music</a>
+                        <a href="https://www.deezer.com/us/artist/146004952" target="_blank" class="cyber-link"><i class="fa-brands fa-deezer"></i> Deezer</a>
+                        <a href="https://audius.co/excavationpro" target="_blank" class="cyber-link"><i class="fa-solid fa-compact-disc" style="color: #CC00FF;"></i> Audius</a>
+                        <a href="https://sonarmuse.org/artist/Yony5lHuFBb2goX6c7vS" target="_blank" class="cyber-link"><i class="fa-solid fa-wave-square"></i> SonarMuse</a>
+                    </div>
                 </div>
 
-                <!-- Pillar 2: Live Streams & Video -->
-                <div class="metal-plate p-6 rounded-sm flex flex-col gap-4">
-                    <h3 class="font-mono text-sm text-lygo-purple uppercase tracking-widest border-b border-lygo-border pb-2 mb-2"><i class="fa-solid fa-tower-broadcast mr-2"></i> Watch Live</h3>
-                    
-                    <a href="https://ffm.to/eovnvo9" target="_blank" class="network-link flex items-center gap-3 group">
-                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-solid fa-satellite-dish text-[#ff0055]"></i></div>
-                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">24/7 Nonstop Streams</span>
-                    </a>
-                    <a href="https://twitch.tv/excavationpro" target="_blank" class="network-link flex items-center gap-3 group">
-                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-brands fa-twitch text-[#9146FF]"></i></div>
-                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">Twitch</span>
-                    </a>
-                    <a href="https://kick.com/excavationpro" target="_blank" class="network-link flex items-center gap-3 group">
-                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-solid fa-k text-[#53FC18]"></i></div>
-                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">Kick</span>
-                    </a>
-                    <a href="https://rumble.com/user/Excavationpro/live" target="_blank" class="network-link flex items-center gap-3 group">
-                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-solid fa-play text-[#85c742]"></i></div>
-                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">Rumble</span>
-                    </a>
-                    <a href="https://www.youtube.com/channel/UCnCf9gjhMEfUFPvGkdlUabQ" target="_blank" class="network-link flex items-center gap-3 group mt-auto pt-4 border-t border-lygo-border/50">
-                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-brands fa-youtube text-[#FF0000]"></i></div>
-                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">YouTube Channel</span>
-                    </a>
+                <!-- Pillar 2: Watch -->
+                <div class="glass-panel" style="padding: 24px;">
+                    <div class="link-block-title mono"><i class="fa-solid fa-satellite-dish"></i> Watch Live</div>
+                    <div class="link-block">
+                        <a href="https://ffm.to/eovnvo9" target="_blank" class="cyber-link" style="border-color: var(--dragonfire-red);"><i class="fa-solid fa-broadcast-tower" style="color: var(--dragonfire-red);"></i> 24/7 Music Streams</a>
+                        <a href="https://twitch.tv/excavationpro" target="_blank" class="cyber-link"><i class="fa-brands fa-twitch" style="color: #9146FF;"></i> Twitch</a>
+                        <a href="https://kick.com/excavationpro" target="_blank" class="cyber-link"><i class="fa-solid fa-k" style="color: #53FC18;"></i> Kick</a>
+                        <a href="https://rumble.com/user/Excavationpro/live" target="_blank" class="cyber-link"><i class="fa-solid fa-play" style="color: #85c742;"></i> Rumble</a>
+                        <a href="https://www.youtube.com/channel/UCnCf9gjhMEfUFPvGkdlUabQ" target="_blank" class="cyber-link"><i class="fa-brands fa-youtube" style="color: #FF0000;"></i> YouTube Channel</a>
+                    </div>
                 </div>
 
-                <!-- Pillar 3: Connect & Socials -->
-                <div class="metal-plate p-6 rounded-sm flex flex-col gap-4">
-                    <h3 class="font-mono text-sm text-lygo-gold uppercase tracking-widest border-b border-lygo-border pb-2 mb-2"><i class="fa-solid fa-satellite mr-2"></i> Connect</h3>
-                    
-                    <a href="http://linktr.ee/excavationpro" target="_blank" class="network-link flex items-center gap-3 group mb-2">
-                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-solid fa-link text-lygo-gold"></i></div>
-                        <span class="text-sm font-bold text-white group-hover:text-lygo-gold transition-colors">Linktree (All Links)</span>
-                    </a>
-                    
-                    <a href="https://tiktok.com/@excavationproaudio" target="_blank" class="network-link flex items-center gap-3 group">
-                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-brands fa-tiktok"></i></div>
-                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">TikTok</span>
-                    </a>
-                    <a href="https://x.com/ExcavationPro" target="_blank" class="network-link flex items-center gap-3 group">
-                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-brands fa-x-twitter"></i></div>
-                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">X (Twitter)</span>
-                    </a>
-                    <a href="https://instagram.com/ExcavationPro" target="_blank" class="network-link flex items-center gap-3 group">
-                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-brands fa-instagram"></i></div>
-                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">Instagram</span>
-                    </a>
+                <!-- Pillar 3: Connect -->
+                <div class="glass-panel" style="padding: 24px;">
+                    <div class="link-block-title mono"><i class="fa-solid fa-globe"></i> Connect</div>
+                    <div class="link-block">
+                        <a href="http://linktr.ee/excavationpro" target="_blank" class="cyber-link" style="border-color: var(--emerald-green);"><i class="fa-solid fa-link" style="color: var(--emerald-green);"></i> Linktree (All Links)</a>
+                        <a href="https://tiktok.com/@excavationproaudio" target="_blank" class="cyber-link"><i class="fa-brands fa-tiktok"></i> TikTok</a>
+                        <a href="https://x.com/ExcavationPro" target="_blank" class="cyber-link"><i class="fa-brands fa-x-twitter"></i> X (Twitter)</a>
+                        <a href="https://instagram.com/ExcavationPro" target="_blank" class="cyber-link"><i class="fa-brands fa-instagram" style="color: #E1306C;"></i> Instagram</a>
+                    </div>
                 </div>
 
-                <!-- Pillar 4: Buy & Support -->
-                <div class="metal-plate p-6 rounded-sm flex flex-col gap-4">
-                    <h3 class="font-mono text-sm text-[#00ff9d] uppercase tracking-widest border-b border-lygo-border pb-2 mb-2"><i class="fa-solid fa-coins mr-2"></i> Support & Tools</h3>
-                    
-                    <a href="https://excavationpro.beatstars.com" target="_blank" class="network-link flex items-center gap-3 group">
-                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-solid fa-star text-red-500"></i></div>
-                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">Buy My Beats (Beatstars)</span>
-                    </a>
-                    <a href="https://paypal.com/paypalme/ExcavationPro" target="_blank" class="network-link flex items-center gap-3 group">
-                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-brands fa-paypal text-[#0070ba]"></i></div>
-                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">Donate via PayPal</span>
-                    </a>
-                    <a href="https://gravatar.com/xcavationpro" target="_blank" class="network-link flex items-center gap-3 group">
-                        <div class="icon-box w-8 h-8 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all"><i class="fa-brands fa-bitcoin text-[#f7931a]"></i></div>
-                        <span class="text-sm text-lygo-muted group-hover:text-white transition-colors">Donate Crypto</span>
-                    </a>
-                    
-                    <div class="mt-auto pt-4 border-t border-lygo-border/50">
-                        <p class="font-mono text-[10px] text-lygo-muted uppercase mb-2">Partner Links</p>
-                        <a href="https://distrokid.com/vip/seven/9158861" target="_blank" class="network-link flex items-center gap-3 group mb-2">
-                            <div class="icon-box w-6 h-6 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all text-xs"><i class="fa-solid fa-rocket"></i></div>
-                            <span class="text-xs text-lygo-muted group-hover:text-white transition-colors">DistroKid VIP</span>
-                        </a>
-                        <a href="https://crypto.com/app/hbpy3d4r3f" target="_blank" class="network-link flex items-center gap-3 group">
-                            <div class="icon-box w-6 h-6 rounded bg-[#050507] border border-lygo-border flex items-center justify-center transition-all text-xs"><i class="fa-brands fa-ethereum"></i></div>
-                            <span class="text-xs text-lygo-muted group-hover:text-white transition-colors">Crypto.com App</span>
-                        </a>
+                <!-- Pillar 4: Support -->
+                <div class="glass-panel" style="padding: 24px;">
+                    <div class="link-block-title mono"><i class="fa-solid fa-shield-halved"></i> Support & Tools</div>
+                    <div class="link-block">
+                        <a href="https://excavationpro.beatstars.com" target="_blank" class="cyber-link"><i class="fa-solid fa-star" style="color: #E02424;"></i> Buy My Beats</a>
+                        <a href="https://paypal.com/paypalme/ExcavationPro" target="_blank" class="cyber-link"><i class="fa-brands fa-paypal" style="color: #0070ba;"></i> Donate PayPal</a>
+                        <a href="https://gravatar.com/xcavationpro" target="_blank" class="cyber-link"><i class="fa-brands fa-bitcoin" style="color: #f7931a;"></i> Donate Crypto</a>
+                        <div style="height: 1px; background: var(--border-accent); margin: 8px 0;"></div>
+                        <div class="mono" style="font-size: 0.6rem; opacity: 0.5;">PARTNERS</div>
+                        <a href="https://distrokid.com/vip/seven/9158861" target="_blank" class="cyber-link"><i class="fa-solid fa-rocket"></i> DistroKid VIP</a>
+                        <a href="https://crypto.com/app/hbpy3d4r3f" target="_blank" class="cyber-link"><i class="fa-brands fa-ethereum" style="color: #627EEA;"></i> Crypto.com App</a>
                     </div>
                 </div>
 
             </div>
-        </section>
+        </div>
+    </section>
 
-    </main>
-
-    <footer class="border-t border-lygo-border bg-[#020203] py-12 px-6">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-lygo-muted font-mono text-xs">
-            <div class="mb-4 md:mb-0">
-                &copy; <span id="current-year"></span> EXCAVATIONPRO. All rights reserved.
-            </div>
-            <div class="flex gap-6">
-                <a href="https://x.com/ExcavationPro" target="_blank" class="hover:text-white transition-colors"><i class="fa-brands fa-twitter text-lg"></i></a>
-                <a href="https://youtube.com/channel/UCnCf9gjhMEfUFPvGkdlUabQ" target="_blank" class="hover:text-white transition-colors"><i class="fa-brands fa-youtube text-lg"></i></a>
-                <a href="https://open.spotify.com/artist/6CkZ4bN2xu3WRKbjEL3u2S" target="_blank" class="hover:text-white transition-colors"><i class="fa-brands fa-spotify text-lg"></i></a>
-                <a href="https://tiktok.com/@excavationproaudio" target="_blank" class="hover:text-white transition-colors"><i class="fa-brands fa-tiktok text-lg"></i></a>
-            </div>
-            <div class="mt-4 md:mt-0">
-                <!-- Links to external Admin Page -->
-                <a href="admin.html" target="_blank" class="opacity-30 hover:opacity-100 hover:text-lygo-cyan transition-all cursor-crosshair">
-                    [ SYSTEM ACCESS ]
-                </a>
-            </div>
+    <footer>
+        <div class="container">
+            <p>Part of the <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/LYGOGUARDIAN.html" style="color: var(--quantum-cyan);">LYGO Network</a> &nbsp;|&nbsp; <a href="https://deepseekoracle.github.io/Excavationpro/eternalhaven.html" style="color: var(--gold-metallic);">Eternal Haven</a></p>
+            <p style="margin-top: 8px;">© <span id="year"></span> EXCAVATIONPRO — Justin Helmer. All music preserved with intention.</p>
+            
+            <!-- Secret Admin Access -->
+            <a href="admin.html" target="_blank" style="display: block; margin-top: 40px; font-family: 'Space Mono'; font-size: 0.6rem; color: #fff; opacity: 0.1; text-decoration: none; letter-spacing: 2px;">[ SYSTEM ACCESS ]</a>
         </div>
     </footer>
 
     <script>
-        document.getElementById('current-year').textContent = new Date().getFullYear();
+        document.getElementById('year').textContent = new Date().getFullYear();
 
-        // 1. Fallback data for the Sandbox Preview environment
+        // Fallback data ensures the page never breaks, even in sandbox environments
         const fallbackData = {
-            "programName": "Legacy Guardian Program",
+            "programName": "The Legacy Guardian Protocol",
+            "tagline": "Every song deserves a guardian. Become part of music history.",
+            "description": "Not every song needs a guardian. But the ones that matter do. This is an invitation to become a modern-day patron of the arts—a Digital Curator who ensures a piece of music outlasts the algorithm.",
             "paypalLink": "https://paypal.com/paypalme/ExcavationPro",
             "patreonSingleLink": "https://www.patreon.com/posts/legacy-guardian-158284298",
             "patreonAlbumLink": "https://www.patreon.com/posts/legacy-guardian-158284674",
-            "stats": {
-                "totalGuardians": 3,
-                "songsPreserved": 2,
-                "albumsPreserved": 1
-            },
+            "tiers": [
+                { "id": "single", "name": "Single Guardian", "price": 30, "description": "Covers the DistroKid Legacy fee for one track. Your name is permanently etched into the archive.", "icon": "fa-music" },
+                { "id": "album", "name": "Album Architect", "price": 50, "description": "Covers the Legacy fee for an entire 35-track album. You receive top 'Dedicated To' billing.", "icon": "fa-compact-disc" }
+            ],
             "guardians": [
-                {
-                    "type": "album",
-                    "albumTitle": "The Void Chronicles",
-                    "guardianName": "Sarah Jenkins",
-                    "note": "For the late nights coding."
-                },
-                {
-                    "type": "single",
-                    "songTitle": "Ashes of Tomorrow",
-                    "guardianName": "Marcus T.",
-                    "note": "In memory of my brother."
-                },
-                {
-                    "type": "single",
-                    "songTitle": "Neon Grime",
-                    "guardianName": "CyberPunk_99",
-                    "note": "Structural Support Active."
-                }
-            ]
+                { "type": "album", "albumTitle": "The Void Chronicles", "guardianName": "Sarah Jenkins", "dedication": "For the late nights coding.", "dateAdded": "2026-05-10" },
+                { "type": "single", "songTitle": "Ashes of Tomorrow", "guardianName": "Marcus T.", "dedication": "In memory of my brother.", "dateAdded": "2026-05-12" }
+            ],
+            "stats": { "totalGuardians": 2 }
         };
 
-        // 2. Data Injection Function
-        function injectData(data) {
-            document.getElementById('nav-tagline').textContent = data.programName || "Legacy Protocol";
-            document.getElementById('btn-paypal-single').href = data.paypalLink;
-            document.getElementById('btn-paypal-album').href = data.paypalLink;
-            document.getElementById('btn-patreon-single').href = data.patreonSingleLink;
-            document.getElementById('btn-patreon-album').href = data.patreonAlbumLink;
+        function renderSite(data) {
+            // Build Tiers
+            const tiersHTML = data.tiers.map((t, i) => `
+                <div class="glass-panel tier-card" style="border-color: ${i === 1 ? 'var(--gold-metallic)' : 'var(--quantum-cyan)'}">
+                    <i class="fa-solid ${t.icon}" style="font-size: 3rem; margin-bottom: 16px; color: ${i === 1 ? 'var(--gold-metallic)' : 'var(--quantum-cyan)'}"></i>
+                    <h3 class="cinzel" style="font-size: 1.8rem;">${t.name}</h3>
+                    <div class="tier-price">$${t.price}<span> / one-time</span></div>
+                    <p style="opacity: 0.7; margin-bottom: 32px; font-size: 0.95rem; flex-grow: 1;">${t.description}</p>
+                    
+                    <a href="${t.id === 'single' ? data.patreonSingleLink : data.patreonAlbumLink}" target="_blank" class="btn ${i === 1 ? 'btn-gold' : 'btn-cyber'}">
+                        Become a Guardian
+                    </a>
+                </div>
+            `).join('');
+            document.getElementById('tiers-container').innerHTML = tiersHTML;
 
-            document.getElementById('stat-count').textContent = data.stats.totalGuardians;
-
-            const singlesContainer = document.getElementById('singles-container');
-            const albumsContainer = document.getElementById('albums-container');
+            // Build Wall
+            document.getElementById('stat-count').textContent = data.guardians.length || data.stats.totalGuardians;
             
-            singlesContainer.innerHTML = '';
-            albumsContainer.innerHTML = '';
-
-            const albums = data.guardians.filter(g => g.type === 'album');
-            const singles = data.guardians.filter(g => g.type === 'single');
-
-            if(albums.length === 0) {
-                albumsContainer.innerHTML = '<p class="text-lygo-muted font-mono text-sm opacity-50 italic">Awaiting initial album guardian...</p>';
+            if (data.guardians.length === 0) {
+                document.getElementById('guardian-grid').innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; opacity: 0.4;" class="mono">No records found in archive.</div>';
             } else {
-                albums.forEach(item => {
-                    albumsContainer.innerHTML += `
-                        <div class="metal-plate p-5 rounded-sm border-l-2 border-l-lygo-gold/50 flex flex-col relative overflow-hidden group">
-                            <div class="absolute inset-0 bg-gradient-to-r from-lygo-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
-                            <h4 class="font-bold text-lg text-white mb-1 group-hover:text-lygo-gold transition-colors">${item.title || item.albumTitle}</h4>
-                            <div class="font-mono text-xs text-lygo-muted mb-3 flex items-center gap-2">
-                                <i class="fa-solid fa-shield-halved text-lygo-gold"></i> Guardian: <span class="text-gray-300">${item.guardianName}</span>
-                            </div>
-                            ${item.dedication || item.note ? `<div class="italic text-sm text-gray-400 border-l border-lygo-border pl-3">"${item.dedication || item.note}"</div>` : ''}
-                        </div>
-                    `;
-                });
-            }
-
-            if(singles.length === 0) {
-                singlesContainer.innerHTML = '<p class="text-lygo-muted font-mono text-sm opacity-50 italic">Awaiting initial single guardian...</p>';
-            } else {
-                singles.forEach(item => {
-                    singlesContainer.innerHTML += `
-                        <div class="metal-plate p-5 rounded-sm border-l-2 border-l-lygo-cyan/50 flex flex-col relative overflow-hidden group">
-                            <div class="absolute inset-0 bg-gradient-to-r from-lygo-cyan/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
-                            <h4 class="font-bold text-lg text-white group-hover:text-lygo-cyan transition-colors mb-1">${item.title || item.songTitle}</h4>
-                            <div class="font-mono text-xs mb-3 flex items-center gap-2 text-lygo-cyan">
-                                <i class="fa-solid fa-shield-halved"></i> Guardian: <span class="text-gray-300">${item.guardianName}</span>
-                            </div>
-                            ${item.dedication || item.note ? `<div class="italic text-sm text-gray-400 border-l border-lygo-border pl-3">"${item.dedication || item.note}"</div>` : ''}
-                        </div>
-                    `;
-                });
+                const wallHTML = data.guardians.map(g => `
+                    <div class="glass-panel plaque ${g.type === 'album' ? 'album' : ''}">
+                        <div class="mono plaque-type"><i class="fa-solid fa-microchip"></i> ${g.type === 'album' ? 'Album Architect' : 'Single Guardian'}</div>
+                        <div class="cinzel plaque-title">${g.songTitle || g.albumTitle}</div>
+                        <div class="plaque-guardian"><i class="fa-solid fa-shield-halved" style="color: ${g.type === 'album' ? 'var(--gold-metallic)' : 'var(--quantum-cyan)'}"></i> ${g.guardianName}</div>
+                        ${g.dedication ? `<div class="plaque-dedication">"${g.dedication}"</div>` : ''}
+                    </div>
+                `).join('');
+                document.getElementById('guardian-grid').innerHTML = wallHTML;
             }
         }
 
-        // 3. Safe Execution Logic
-        try {
-            // Attempt to fetch from real JSON file (Will work on GitHub Pages)
-            fetch('guardian-data.json')
-                .then(response => {
-                    if (!response.ok) throw new Error('Database file not found yet');
-                    return response.json();
-                })
-                .then(data => injectData(data))
-                .catch(error => {
-                    console.log('Fetch failed (expected in sandbox preview). Using fallback data.');
-                    injectData(fallbackData);
-                });
-        } catch (e) {
-            // Catch URL parsing errors caused by the Blob sandbox
-            console.log('URL Parsing failed (expected in sandbox preview). Using fallback data.');
-            injectData(fallbackData);
-        }
+        // Fetch Logic
+        fetch('./guardian-data.json')
+            .then(res => {
+                if (!res.ok) throw new Error('Local file not found');
+                return res.json();
+            })
+            .then(data => renderSite(data))
+            .catch(err => {
+                console.log('Using fallback data due to missing JSON or local sandbox environment.');
+                renderSite(fallbackData);
+            });
     </script>
 </body>
 </html>

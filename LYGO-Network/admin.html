@@ -3,411 +3,291 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LYGO // Admin Control Matrix</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <title>Legacy Guardian — Offline Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        lygo: {
-                            dark: '#050507', panel: '#0d0d12', border: '#2a2a35',
-                            cyan: '#00e5ff', purple: '#b000ff', gold: '#ffd700',
-                            text: '#e2e8f0', muted: '#84849a', danger: '#ff4444'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Space Grotesk', 'sans-serif'],
-                        mono: ['Space Mono', 'monospace'],
-                    }
-                }
-            }
-        }
-    </script>
     <style>
-        body { background-color: #050507; color: #e2e8f0; }
-        .metal-plate {
-            background: linear-gradient(180deg, #14141c 0%, #0a0a0e 100%);
-            border: 1px solid #2a2a35;
-            box-shadow: inset 0 1px 1px rgba(255,255,255,0.05), 0 4px 20px rgba(0,0,0,0.5);
-            position: relative; overflow: hidden;
+        :root {
+            --void: #0a0a12; --stardust: #1a1a2e; --quantum: #00f0ff;
+            --moonlight: #7d00ff; --dragonfire: #e94560; --starlight: #f5f5f5;
+            --gold: #d4af37; --emerald: #2ecc71; --surface: #12121f;
+            --border: rgba(125, 0, 255, 0.3); --radius: 12px;
         }
-        .metal-plate::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.2), transparent);
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif; background: var(--void);
+            color: var(--starlight); min-height: 100vh;
+            background-image: radial-gradient(circle at 20% 10%, rgba(125, 0, 255, 0.06) 0%, transparent 40%);
         }
-        input, select {
-            background-color: #050507; border: 1px solid #2a2a35; color: white;
-            padding: 0.75rem; border-radius: 0.25rem; font-family: 'Space Mono', monospace;
-            font-size: 0.875rem; outline: none; width: 100%; transition: border-color 0.2s;
+        .admin-header {
+            background: rgba(10, 10, 18, 0.97); backdrop-filter: blur(20px);
+            padding: 16px 24px; display: flex; justify-content: space-between;
+            align-items: center; border-bottom: 1px solid var(--border);
         }
-        input:focus, select:focus { border-color: #00e5ff; }
-        label { display: block; font-family: 'Space Mono', monospace; font-size: 0.75rem; color: #84849a; margin-bottom: 0.25rem; margin-top: 1rem; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
+        .admin-header h1 { font-family: 'Cinzel', serif; font-size: 1.3rem; color: var(--quantum); }
+        .admin-layout { display: flex; min-height: calc(100vh - 68px); flex-wrap: wrap; }
+        
+        .main-content { flex: 1; padding: 32px; max-width: 600px; }
+        .export-panel { 
+            width: 450px; background: #050508; border-left: 1px solid var(--border); 
+            padding: 32px; display: flex; flex-direction: column;
+        }
+
+        .card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 28px; margin-bottom: 24px;
+        }
+        label {
+            display: block; margin-bottom: 6px; font-weight: 600;
+            font-size: 0.85rem; color: var(--gold); text-transform: uppercase;
+            letter-spacing: 1px; margin-top: 16px;
+        }
+        input, textarea, select {
+            width: 100%; padding: 12px 16px; margin-bottom: 8px;
+            background: var(--void); border: 1px solid var(--border);
+            border-radius: 8px; color: var(--starlight); font-size: 0.95rem;
+            font-family: 'Inter', sans-serif; transition: all 0.3s;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none; border-color: var(--quantum);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
+        }
+
+        .btn {
+            display: inline-block; padding: 12px 28px; border-radius: 50px;
+            font-weight: 600; border: none; cursor: pointer; font-size: 0.95rem;
+            transition: all 0.3s; text-align: center; width: 100%; margin-top: 16px;
+        }
+        .btn-save {
+            background: linear-gradient(135deg, var(--quantum), var(--moonlight));
+            color: var(--void); box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+        }
+        .btn-save:hover { box-shadow: 0 0 35px rgba(125, 0, 255, 0.5); transform: translateY(-2px); }
+        .btn-copy {
+            background: transparent; border: 2px solid var(--emerald); color: var(--emerald);
+        }
+        .btn-copy:hover { background: var(--emerald); color: var(--void); box-shadow: 0 0 20px rgba(46, 204, 113, 0.4); }
+        
+        pre {
+            background: #000; padding: 16px; border-radius: 8px; border: 1px solid #333;
+            color: #a5d6ff; font-family: 'Special Elite', monospace; font-size: 0.8rem;
+            overflow-y: auto; flex-grow: 1; margin-top: 16px; max-height: 60vh; white-space: pre-wrap;
+        }
+
+        .alert {
+            padding: 12px 18px; border-radius: 8px; margin-bottom: 18px;
+            font-size: 0.9rem; display: none; background: rgba(46, 204, 113, 0.15); 
+            border: 1px solid var(--emerald); color: var(--emerald);
+        }
+        @media (max-width: 1000px) {
+            .export-panel { width: 100%; border-left: none; border-top: 1px solid var(--border); }
+            .main-content { max-width: 100%; }
+        }
     </style>
 </head>
-<body class="antialiased h-screen flex flex-col">
+<body>
 
-    <header class="h-16 border-b border-lygo-border bg-lygo-panel flex items-center justify-between px-6 shrink-0">
-        <div class="flex items-center gap-3">
-            <i class="fa-solid fa-microchip text-lygo-cyan"></i>
-            <h1 class="font-bold tracking-widest text-sm uppercase text-white">LYGO Admin Matrix</h1>
+<div class="admin-header">
+    <h1><i class="fa-solid fa-microchip"></i> EXCAVATIONPRO // Offline Data Matrix</h1>
+    <a href="legacy-guardian-music.html" target="_blank" style="color: var(--gold); text-decoration: none; font-size: 0.9rem;">
+        View Live Site <i class="fa-solid fa-arrow-up-right-from-square"></i>
+    </a>
+</div>
+
+<div class="admin-layout">
+    
+    <main class="main-content">
+        <div class="card">
+            <h2 style="font-family: 'Cinzel', serif; color: var(--quantum); margin-bottom: 8px;">Register New Guardian</h2>
+            <p style="opacity: 0.7; font-size: 0.9rem; margin-bottom: 24px;">Add a fan to the database locally, then copy the output code to GitHub.</p>
+            
+            <form id="form-add-guardian">
+                <label for="g-type">Guardian Tier</label>
+                <select id="g-type" required>
+                    <option value="single">Single Guardian ($30)</option>
+                    <option value="album">Album Guardian ($50)</option>
+                </select>
+
+                <div id="field-song">
+                    <label for="g-song">Song Title</label>
+                    <input type="text" id="g-song" placeholder="e.g. Ashes of Tomorrow">
+                </div>
+
+                <div id="field-album" style="display: none;">
+                    <label for="g-album">Album Title</label>
+                    <input type="text" id="g-album" placeholder="e.g. Echoes from the Machine">
+                </div>
+
+                <label for="g-name">Guardian's Name</label>
+                <input type="text" id="g-name" required placeholder="Name or handle of the patron">
+
+                <label for="g-dedication">Dedication (Optional)</label>
+                <input type="text" id="g-dedication" placeholder="What they said about the song...">
+
+                <button type="submit" class="btn btn-save"><i class="fa-solid fa-bolt"></i> Generate Database Code</button>
+            </form>
         </div>
-        <div class="font-mono text-xs flex items-center gap-2">
-            <span id="status-dot" class="text-lygo-danger"><i class="fa-solid fa-circle"></i></span>
-            <span id="status-text" class="text-lygo-muted">Disconnected</span>
+        
+        <div class="card" style="border-color: rgba(233, 69, 96, 0.5);">
+            <h3 style="color: var(--dragonfire); margin-bottom: 12px;"><i class="fa-solid fa-triangle-exclamation"></i> Emergency Database Reset</h3>
+            <p style="opacity: 0.7; font-size: 0.85rem; margin-bottom: 12px;">If the live site gets out of sync, you can manually paste your current `guardian-data.json` text here to reset this offline generator.</p>
+            <textarea id="manual-json-input" rows="3" placeholder="Paste current JSON here if needed..."></textarea>
+            <button type="button" class="btn" onclick="loadManualJSON()" style="background: transparent; border: 1px solid var(--border); color: var(--starlight);">Load Manual JSON</button>
         </div>
-    </header>
+    </main>
 
-    <div class="flex flex-1 overflow-hidden">
-        <!-- Sidebar -->
-        <aside class="w-64 border-r border-lygo-border bg-[#0a0a0e] flex flex-col shrink-0 py-6 px-4 gap-2 font-mono text-sm">
-            <button onclick="switchTab('add')" id="nav-add" class="text-left px-4 py-3 rounded-sm text-lygo-cyan bg-lygo-cyan/10 border border-lygo-cyan transition-all">
-                <i class="fa-solid fa-plus w-5"></i> Add Guardian
-            </button>
-            <button onclick="switchTab('list')" id="nav-list" class="text-left px-4 py-3 rounded-sm text-lygo-muted hover:text-white hover:bg-lygo-border/50 transition-all border border-transparent">
-                <i class="fa-solid fa-list w-5"></i> View Database
-            </button>
-            <button onclick="switchTab('token')" id="nav-token" class="text-left px-4 py-3 rounded-sm text-lygo-muted hover:text-white hover:bg-lygo-border/50 transition-all border border-transparent">
-                <i class="fa-solid fa-key w-5"></i> GitHub API Auth
-            </button>
-            <div class="mt-auto border-t border-lygo-border pt-4">
-                <a href="legacy-guardian-music.html" target="_blank" class="block text-left px-4 py-3 rounded-sm text-lygo-gold hover:bg-lygo-gold/10 transition-all">
-                    <i class="fa-solid fa-arrow-up-right-from-square w-5"></i> View Live Page
-                </a>
-            </div>
-        </aside>
+    <aside class="export-panel">
+        <h2 style="font-family: 'Cinzel', serif; color: var(--emerald);"><i class="fa-solid fa-code"></i> Output Code</h2>
+        <p style="opacity: 0.7; font-size: 0.85rem; margin-top: 8px; margin-bottom: 16px;">
+            1. Click the Copy button below.<br>
+            2. Open <b>guardian-data.json</b> on GitHub.<br>
+            3. Click the Pencil icon, paste the copied code, and commit.
+        </p>
 
-        <main class="flex-1 overflow-y-auto p-8 bg-[#050507]">
-            <div class="max-w-2xl mx-auto">
-                
-                <!-- Tab: Add Guardian -->
-                <div id="tab-add" class="tab-content active metal-plate p-8 rounded-sm">
-                    <h2 class="text-xl font-bold text-white uppercase tracking-widest mb-6 border-b border-lygo-border pb-4">Inject New Entry</h2>
-                    <form id="form-add" onsubmit="addGuardian(event)">
-                        <label>Tier / Entry Type</label>
-                        <select id="g-type" required>
-                            <option value="single">Single Guardian ($30)</option>
-                            <option value="album">Album Guardian ($50)</option>
-                        </select>
+        <div id="copy-alert" class="alert"><i class="fa-solid fa-check"></i> JSON Copied to Clipboard!</div>
 
-                        <label>Track / Album Title</label>
-                        <input type="text" id="g-title" required placeholder="e.g. Ashes of Tomorrow">
+        <button type="button" class="btn btn-copy" id="btn-copy"><i class="fa-regular fa-copy"></i> COPY JSON TO CLIPBOARD</button>
 
-                        <label>Guardian Name</label>
-                        <input type="text" id="g-name" required placeholder="Name or handle">
+        <pre id="json-output">// Loading current database...</pre>
+    </aside>
 
-                        <label>Dedication / Note (Optional)</label>
-                        <input type="text" id="g-note" placeholder="e.g. In memory of...">
+</div>
 
-                        <button type="submit" class="w-full mt-8 py-3 bg-lygo-cyan/10 border border-lygo-cyan text-lygo-cyan font-bold uppercase tracking-widest hover:bg-lygo-cyan hover:text-black transition-all rounded-sm">
-                            <i class="fa-solid fa-upload mr-2"></i> Commit to GitHub
-                        </button>
-                    </form>
-                </div>
+<script>
+    let currentData = null;
+    const outputElement = document.getElementById('json-output');
+    const typeSelect = document.getElementById('g-type');
+    
+    // Toggle song/album inputs based on selection
+    typeSelect.addEventListener('change', function() {
+        document.getElementById('field-song').style.display = this.value === 'single' ? 'block' : 'none';
+        document.getElementById('field-album').style.display = this.value === 'album' ? 'block' : 'none';
+    });
 
-                <!-- Tab: Database List -->
-                <div id="tab-list" class="tab-content metal-plate p-8 rounded-sm">
-                    <h2 class="text-xl font-bold text-white uppercase tracking-widest mb-6 border-b border-lygo-border pb-4">Live Database</h2>
-                    <div id="db-list" class="space-y-3">
-                        <p class="text-lygo-muted font-mono text-sm opacity-50">Fetching from remote repository...</p>
-                    </div>
-                </div>
+    // Default template just in case fetch fails
+    const defaultTemplate = {
+        "programName": "Legacy Guardian Program",
+        "tagline": "Every song deserves a guardian. Become part of music history.",
+        "description": "This is not a donation. It's an invitation to become a modern-day patron of the arts—a Digital Curator who ensures a piece of music outlasts the algorithm. Your name, etched into the permanent Legacy Liner Notes, stands as a testament to the music that moved you.",
+        "paypalLink": "https://paypal.me/ExcavationPro",
+        "patreonSingleLink": "https://www.patreon.com/posts/legacy-guardian-158284298",
+        "patreonAlbumLink": "https://www.patreon.com/posts/legacy-guardian-158284674",
+        "tiers": [
+            { "id": "single", "name": "Single Guardian", "price": 30, "description": "Covers the DistroKid Legacy fee for one track.", "icon": "music" },
+            { "id": "album", "name": "Album Guardian", "price": 50, "description": "Covers the Legacy fee for an entire album.", "icon": "album" }
+        ],
+        "guardians": [],
+        "stats": { "totalGuardians": 0, "songsPreserved": 0, "albumsPreserved": 0 }
+    };
 
-                <!-- Tab: Token Auth -->
-                <div id="tab-token" class="tab-content metal-plate p-8 rounded-sm">
-                    <h2 class="text-xl font-bold text-white uppercase tracking-widest mb-4 border-b border-lygo-border pb-4">API Configuration</h2>
-                    <p class="text-xs text-lygo-muted mb-6 leading-relaxed font-mono border-l-2 border-lygo-purple pl-3">
-                        Requires a GitHub Personal Access Token (classic) with `repo` scope. This allows this local panel to write directly to your repository's JSON file.
-                    </p>
-                    
-                    <label>GitHub Username</label>
-                    <input type="text" id="gh-username" placeholder="deepseekoracle">
-                    
-                    <label>Repository Name</label>
-                    <input type="text" id="gh-repo" placeholder="deepseekoracle.github.io">
-                    
-                    <label>Personal Access Token (PAT)</label>
-                    <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
-                    
-                    <div class="flex gap-4 mt-8">
-                        <button onclick="saveToken()" class="flex-1 py-3 bg-lygo-cyan/10 border border-lygo-cyan text-lygo-cyan font-bold uppercase tracking-widest hover:bg-lygo-cyan hover:text-black transition-all rounded-sm">
-                            Save Auth
-                        </button>
-                        <button onclick="clearToken()" class="px-6 py-3 border border-lygo-danger text-lygo-danger font-bold uppercase tracking-widest hover:bg-lygo-danger hover:text-white transition-all rounded-sm">
-                            Clear
-                        </button>
-                    </div>
-                </div>
+    // Attempt to load existing JSON on startup
+    fetch('./guardian-data.json')
+        .then(res => {
+            if (!res.ok) throw new Error('Could not fetch file locally');
+            return res.json();
+        })
+        .then(data => {
+            currentData = data;
+            updateOutput();
+        })
+        .catch(err => {
+            console.log("Using default template (Expected if running locally via file://)", err);
+            currentData = defaultTemplate;
+            updateOutput();
+        });
 
-            </div>
-        </main>
-    </div>
+    function updateOutput() {
+        // Pretty print JSON with 2 spaces
+        const formattedJSON = JSON.stringify(currentData, null, 2);
+        outputElement.textContent = formattedJSON;
+    }
 
-    <!-- Custom Toast -->
-    <div id="toast" class="fixed bottom-6 right-6 translate-y-[150%] transition-transform duration-300 z-50 metal-plate px-6 py-4 rounded-sm flex items-center gap-4 border-l-4 border-l-lygo-cyan">
-        <i id="toast-icon" class="fa-solid fa-circle-check text-lygo-cyan"></i>
-        <span id="toast-msg" class="font-mono text-sm text-white">Action successful</span>
-    </div>
+    // Handle Form Submission
+    document.getElementById('form-add-guardian').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        if (!currentData) return;
 
-    <script>
-        // System Config
-        const DATA_PATH = 'Excavationpro/LYGO-Network/guardian-data.json';
-        const BRANCH = 'main';
-        let currentData = null;
+        const type = typeSelect.value;
+        const newGuardian = {
+            id: 'g_' + Date.now(),
+            type: type,
+            guardianName: document.getElementById('g-name').value,
+            dedication: document.getElementById('g-dedication').value || '',
+            dateAdded: new Date().toISOString().split('T')[0],
+            spotifyUrl: "", // Placeholders for future expansion
+            youtubeUrl: ""
+        };
 
-        // UI Functions
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.getElementById('tab-' + tabId).classList.add('active');
-            
-            // Reset Nav Styling
-            const navs = ['add', 'list', 'token'];
-            navs.forEach(n => {
-                const el = document.getElementById('nav-' + n);
-                el.className = "text-left px-4 py-3 rounded-sm text-lygo-muted hover:text-white hover:bg-lygo-border/50 transition-all border border-transparent";
-            });
-            
-            // Active Nav Styling
-            const activeEl = document.getElementById('nav-' + tabId);
-            activeEl.className = "text-left px-4 py-3 rounded-sm text-lygo-cyan bg-lygo-cyan/10 border border-lygo-cyan transition-all";
-
-            if (tabId === 'list') renderList();
+        if (type === 'single') {
+            newGuardian.songTitle = document.getElementById('g-song').value;
+        } else {
+            newGuardian.albumTitle = document.getElementById('g-album').value;
         }
 
-        function showToast(msg, isError = false) {
-            const toast = document.getElementById('toast');
-            const icon = document.getElementById('toast-icon');
-            document.getElementById('toast-msg').textContent = msg;
-            
-            if(isError) {
-                toast.classList.replace('border-l-lygo-cyan', 'border-l-lygo-danger');
-                icon.className = "fa-solid fa-circle-exclamation text-lygo-danger";
-            } else {
-                toast.classList.replace('border-l-lygo-danger', 'border-l-lygo-cyan');
-                icon.className = "fa-solid fa-circle-check text-lygo-cyan";
-            }
+        // Add to the front of the array
+        currentData.guardians.unshift(newGuardian);
+        
+        // Update stats
+        currentData.stats.totalGuardians = currentData.guardians.length;
+        currentData.stats.songsPreserved = currentData.guardians.filter(g => g.type === 'single').length;
+        currentData.stats.albumsPreserved = currentData.guardians.filter(g => g.type === 'album').length;
 
-            toast.classList.remove('translate-y-[150%]');
-            setTimeout(() => toast.classList.add('translate-y-[150%]'), 4000);
-        }
+        // Render to screen
+        updateOutput();
+        this.reset();
+        
+        // Auto-trigger copy button feedback to indicate success
+        document.getElementById('btn-copy').style.boxShadow = "0 0 20px rgba(0,240,255,0.5)";
+        setTimeout(() => document.getElementById('btn-copy').style.boxShadow = "none", 1000);
+    });
 
-        function updateStatus(isConnected) {
-            const dot = document.getElementById('status-dot');
-            const text = document.getElementById('status-text');
-            if(isConnected) {
-                dot.className = "text-[#00ff9d]";
-                text.textContent = "Uplink Established";
-            } else {
-                dot.className = "text-lygo-danger";
-                text.textContent = "Offline / Token Missing";
-            }
-        }
-
-        // GitHub API Core Logic
-        function getAuthData() {
-            return {
-                token: localStorage.getItem('lygo_gh_token'),
-                owner: localStorage.getItem('lygo_gh_owner') || 'deepseekoracle',
-                repo: localStorage.getItem('lygo_gh_repo') || 'deepseekoracle.github.io'
-            };
-        }
-
-        async function fetchDatabase() {
-            const auth = getAuthData();
-            if (!auth.token) {
-                updateStatus(false);
-                return null;
-            }
-
+    // Handle Copy to Clipboard
+    document.getElementById('btn-copy').addEventListener('click', function() {
+        const textToCopy = outputElement.textContent;
+        
+        // Use modern clipboard API if available, fallback to execCommand
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            showCopyAlert();
+        }).catch(err => {
+            // Fallback for sandboxed iframes
+            const textArea = document.createElement("textarea");
+            textArea.value = textToCopy;
+            document.body.appendChild(textArea);
+            textArea.select();
             try {
-                const res = await fetch(`https://api.github.com/repos/${auth.owner}/${auth.repo}/contents/${DATA_PATH}`, {
-                    headers: { 'Authorization': `Bearer ${auth.token}`, 'Accept': 'application/vnd.github.v3+json' }
-                });
-                
-                if (!res.ok) throw new Error('Repository fetch failed');
-                
-                const file = await res.json();
-                // Decode base64 handling unicode safely
-                const jsonStr = decodeURIComponent(escape(atob(file.content)));
-                currentData = JSON.parse(jsonStr);
-                currentData._sha = file.sha; // required for updating
-                
-                updateStatus(true);
-                return currentData;
+                document.execCommand('copy');
+                showCopyAlert();
             } catch (err) {
-                console.error(err);
-                updateStatus(false);
-                showToast("Connection Error. Check token & repo settings.", true);
-                return null;
+                alert("Failed to copy. Please manually highlight and copy the text box.");
             }
+            document.body.removeChild(textArea);
+        });
+    });
+
+    function showCopyAlert() {
+        const alertBox = document.getElementById('copy-alert');
+        alertBox.style.display = 'block';
+        setTimeout(() => alertBox.style.display = 'none', 3000);
+    }
+
+    // Manual JSON reset function
+    function loadManualJSON() {
+        try {
+            const val = document.getElementById('manual-json-input').value;
+            if (!val.trim()) return;
+            const parsed = JSON.parse(val);
+            currentData = parsed;
+            updateOutput();
+            document.getElementById('manual-json-input').value = '';
+            alert("Database re-synced from manual input!");
+        } catch (e) {
+            alert("Invalid JSON format. Please make sure you copied the entire file correctly.");
         }
+    }
+</script>
 
-        async function commitToGitHub(dataObj, commitMessage) {
-            const auth = getAuthData();
-            if (!auth.token || !dataObj._sha) return false;
-
-            try {
-                // Remove sha before saving to actual JSON
-                const shaToUpdate = dataObj._sha;
-                const cleanData = { ...dataObj };
-                delete cleanData._sha;
-
-                // Encode unicode strings to base64
-                const contentStr = unescape(encodeURIComponent(JSON.stringify(cleanData, null, 2)));
-                const b64Content = btoa(contentStr);
-
-                const body = {
-                    message: commitMessage,
-                    content: b64Content,
-                    sha: shaToUpdate,
-                    branch: BRANCH
-                };
-
-                const res = await fetch(`https://api.github.com/repos/${auth.owner}/${auth.repo}/contents/${DATA_PATH}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': `Bearer ${auth.token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(body)
-                });
-
-                if (!res.ok) throw new Error('Commit rejected');
-                const result = await res.json();
-                currentData._sha = result.content.sha; // Update local sha
-                return true;
-            } catch (err) {
-                console.error(err);
-                return false;
-            }
-        }
-
-        // Action Functions
-        async function addGuardian(e) {
-            e.preventDefault();
-            const btn = e.target.querySelector('button[type="submit"]');
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Encrypting...';
-            btn.disabled = true;
-
-            const db = await fetchDatabase();
-            if (!db) {
-                btn.innerHTML = '<i class="fa-solid fa-upload mr-2"></i> Commit to GitHub';
-                btn.disabled = false;
-                return;
-            }
-
-            const newEntry = {
-                id: 'g_' + Date.now(),
-                type: document.getElementById('g-type').value,
-                title: document.getElementById('g-title').value,
-                guardianName: document.getElementById('g-name').value,
-                note: document.getElementById('g-note').value,
-                dateAdded: new Date().toISOString().split('T')[0]
-            };
-
-            // Prepend to array
-            db.guardians.unshift(newEntry);
-            
-            // Update Stats
-            db.stats.totalGuardians++;
-            if(newEntry.type === 'album') db.stats.albumsPreserved++;
-            if(newEntry.type === 'single') db.stats.songsPreserved++;
-
-            const success = await commitToGitHub(db, `LYGO Protocol: Inject Guardian ${newEntry.guardianName}`);
-            
-            if(success) {
-                showToast("Entry successfully committed to GitHub.");
-                e.target.reset();
-            } else {
-                showToast("Commit failed. Verify Permissions.", true);
-            }
-
-            btn.innerHTML = '<i class="fa-solid fa-upload mr-2"></i> Commit to GitHub';
-            btn.disabled = false;
-        }
-
-        async function renderList() {
-            const listDiv = document.getElementById('db-list');
-            listDiv.innerHTML = '<p class="text-lygo-muted font-mono text-sm opacity-50"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Syncing...</p>';
-            
-            const db = await fetchDatabase();
-            if(!db) {
-                listDiv.innerHTML = '<p class="text-lygo-danger font-mono text-sm">Failed to sync database.</p>';
-                return;
-            }
-
-            listDiv.innerHTML = '';
-            db.guardians.forEach((g, i) => {
-                const color = g.type === 'album' ? 'text-lygo-gold' : 'text-lygo-cyan';
-                listDiv.innerHTML += `
-                    <div class="bg-[#050507] border border-lygo-border p-4 flex justify-between items-center rounded-sm">
-                        <div>
-                            <p class="font-bold text-white">${g.title}</p>
-                            <p class="font-mono text-xs ${color}">[${g.type.toUpperCase()}] Guarded by: ${g.guardianName}</p>
-                        </div>
-                        <button onclick="deleteEntry(${i})" class="text-lygo-muted hover:text-lygo-danger transition-colors p-2">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-                    </div>
-                `;
-            });
-        }
-
-        async function deleteEntry(index) {
-            if(!confirm("Erase this record from permanence?")) return;
-            
-            const db = currentData; // Use already loaded data
-            const removed = db.guardians.splice(index, 1)[0];
-            
-            // Adjust stats
-            db.stats.totalGuardians--;
-            if(removed.type === 'album') db.stats.albumsPreserved--;
-            if(removed.type === 'single') db.stats.songsPreserved--;
-
-            showToast("Processing deletion...");
-            const success = await commitToGitHub(db, `LYGO Protocol: Remove Guardian ${removed.guardianName}`);
-            
-            if(success) {
-                showToast("Record erased.");
-                renderList();
-            } else {
-                showToast("Deletion failed.", true);
-            }
-        }
-
-        // Token Management
-        function saveToken() {
-            localStorage.setItem('lygo_gh_owner', document.getElementById('gh-username').value);
-            localStorage.setItem('lygo_gh_repo', document.getElementById('gh-repo').value);
-            localStorage.setItem('lygo_gh_token', document.getElementById('gh-token').value);
-            showToast("API Credentials Saved.");
-            fetchDatabase(); // Try connecting immediately
-        }
-
-        function clearToken() {
-            localStorage.removeItem('lygo_gh_owner');
-            localStorage.removeItem('lygo_gh_repo');
-            localStorage.removeItem('lygo_gh_token');
-            document.getElementById('gh-token').value = '';
-            updateStatus(false);
-            showToast("Credentials Cleared.");
-        }
-
-        // Init
-        window.onload = () => {
-            const auth = getAuthData();
-            if(auth.owner) document.getElementById('gh-username').value = auth.owner;
-            if(auth.repo) document.getElementById('gh-repo').value = auth.repo;
-            if(auth.token) {
-                document.getElementById('gh-token').value = auth.token;
-                fetchDatabase();
-            }
-        }
-    </script>
 </body>
 </html>

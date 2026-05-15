@@ -261,27 +261,29 @@
             letter-spacing: 2px;
         }
 
-        .quote-display-container {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 400px;
-            text-align: center;
-            z-index: 99;
+        .hero-quote-container {
+            position: relative;
+            margin: 50px auto 0;
+            width: 100%;
+            max-width: 600px;
+            height: 60px; /* Fixed height to prevent page jumping */
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .animated-quote {
             font-family: 'Playfair Display', serif;
             font-style: italic;
-            font-size: 1rem;
+            font-size: clamp(1rem, 2vw, 1.2rem);
             color: var(--gold);
             opacity: 0;
             position: absolute;
             width: 100%;
-            top: 50%;
-            transform: translateY(-50%);
+            text-align: center;
             transition: opacity 1s ease-in-out;
-            text-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
+            text-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+            letter-spacing: 0.5px;
         }
 
         .animated-quote.active { opacity: 1; }
@@ -633,7 +635,6 @@
             }
             .nav-links.active { display: flex; }
             .mobile-menu-btn { display: block; }
-            .quote-display-container { display: none; }
             .author-info { grid-template-columns: 1fr; text-align: center; }
             .author-photo { margin: 0 auto; }
             .stats-grid { grid-template-columns: 1fr; }
@@ -704,13 +705,6 @@
                 </div>
             </div>
 
-            <div class="quote-display-container">
-                <div class="animated-quote active">"The moon remembers what the world forgets."</div>
-                <div class="animated-quote">"Dragons don't hoard gold—they guard time itself."</div>
-                <div class="animated-quote">"Every ending is a beginning written in starlight."</div>
-                <div class="animated-quote">"Between the pages of reality, fantasy writes its truth."</div>
-            </div>
-
             <nav>
                 <button class="mobile-menu-btn" id="mobileMenuBtn">
                     <i class="fas fa-bars"></i>
@@ -736,6 +730,13 @@
             <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                 <a href="#audiobooks" class="btn btn-large"><i class="fas fa-headphones"></i> Listen Free</a>
                 <a href="#books" class="btn btn-large btn-gold"><i class="fas fa-shopping-cart"></i> Buy Books</a>
+            </div>
+
+            <div class="hero-quote-container">
+                <div class="animated-quote active">"The moon remembers what the world forgets."</div>
+                <div class="animated-quote">"Dragons don't hoard gold—they guard time itself."</div>
+                <div class="animated-quote">"Every ending is a beginning written in starlight."</div>
+                <div class="animated-quote">"Between the pages of reality, fantasy writes its truth."</div>
             </div>
         </div>
     </section>

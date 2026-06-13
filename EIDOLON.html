@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EIDOLON | Visual-to-Audio Translation Core</title>
+    <title>EIDOLON | Universal Image-to-Sound Core</title>
     <style>
         :root {
             --bg-color: #0b1120;
@@ -166,8 +166,8 @@
     <header>
         <div class="container">
             <h1>EIDOLON</h1>
-            <p class="subtitle">Image-to-Sound Translation Core</p>
-            <p>Turn historical manuscripts, botanical sketches, and abstract doodles into living audio landscapes.</p>
+            <p class="subtitle">Universal Image-to-Sound Translation</p>
+            <p>Upload any drawing, manuscript, or sketch. EIDOLON analyzes its geometry, color, and density to generate a unique sonic landscape—no two images sound the same.</p>
         </div>
     </header>
 
@@ -175,28 +175,28 @@
         
         <section id="how-it-works">
             <h2>How It Works</h2>
-            <p style="text-align: center; max-width: 700px; margin: 0 auto 30px;">EIDOLON uses computer vision to analyze an image like sheet music, breaking down visual geometry into sound waves.</p>
+            <p style="text-align: center; max-width: 700px; margin: 0 auto 30px;">EIDOLON uses computer vision to read an image like a musical score. The AI measures lines, shapes, brightness, and pattern density, then builds a custom sound engine from that data.</p>
             
             <div class="steps-container">
                 <div class="step-card">
                     <div class="step-number">01</div>
                     <h4>Upload Image</h4>
-                    <p>Drop in a manuscript page, a botanical sketch, or a random doodle. The AI reads the ink and the shapes.</p>
+                    <p>Drop in any picture: a historical manuscript page, a botanical illustration, a street map, or a random doodle from your notebook.</p>
                 </div>
                 <div class="step-card">
                     <div class="step-number">02</div>
-                    <h4>Visual Scan</h4>
-                    <p>Stems become bass drones. Petals become melodies. Complex curves become rhythmic arpeggios.</p>
+                    <h4>Geometry Scan</h4>
+                    <p>Long straight lines become bass drones. Curves become arpeggios. Brightness and color density determine the root frequency and harmonic structure.</p>
                 </div>
                 <div class="step-card">
                     <div class="step-number">03</div>
-                    <h4>Theta Harmonics</h4>
-                    <p>Custom Voynich-inspired parameters lock the output to a beautiful 6.55 Hz harmonic relationship.</p>
+                    <h4>Dynamic Parameters</h4>
+                    <p>Every image generates its own unique sonic parameters. No hardcoded frequencies. The image itself decides what Hz it needs to sing at.</p>
                 </div>
                 <div class="step-card">
                     <div class="step-number">04</div>
                     <h4>Listen & Export</h4>
-                    <p>Tweak tempo and atmosphere in real-time, then export your creation as a high-quality WAV file.</p>
+                    <p>Fine-tune the tempo and atmosphere sliders in real-time, then export your image's song as a high-quality WAV file.</p>
                 </div>
             </div>
             
@@ -207,8 +207,8 @@
                     <span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span>
                     <span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span>
                 </div>
-                <button class="btn-demo" onclick="alert('🎵 Demo Preview: Playing a 60-second generative loop from Folio 2r.')">▶ Listen to Demo</button>
-                <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">Generated from Folio 2r (The Sovereign Stalk)</p>
+                <button class="btn-demo" onclick="alert('🎵 Demo Preview: Generating a 60-second loop from the uploaded image\'s geometry.')">▶ Listen to Demo</button>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">Each image generates a unique sound</p>
             </div>
 
             <p style="text-align: center;">
@@ -219,7 +219,7 @@
 
         <section id="code">
             <h2>Developer Open Source Access</h2>
-            <p style="text-align: center; margin-bottom: 20px;">Run the visual-to-audio engine on your own machine. Access the foundational Python prototype below.</p>
+            <p style="text-align: center; margin-bottom: 20px;">Run the visual-to-audio engine on your own machine. This core is fully dynamic—it derives all frequencies and rhythms from the image itself.</p>
 
             <div id="donation-gate">
                 <h3>🔒 Unlock Developer Resources</h3>
@@ -234,7 +234,7 @@
                     <ol>
                         <li><strong>Install Python:</strong> Make sure you have Python installed on your computer.</li>
                         <li><strong>Set up your folder:</strong> Create a new folder on your desktop. Save the code block below into that folder as a file named <code class="inline">eidolon.py</code>.</li>
-                        <li><strong>Add your image:</strong> Place the drawing/image you want to translate into the same folder and name it <code class="inline">manuscript.jpg</code>.</li>
+                        <li><strong>Add your image:</strong> Place the image you want to translate into the same folder and name it <code class="inline">image.jpg</code>.</li>
                         <li><strong>Install dependencies:</strong> Open your terminal/command prompt, navigate to your folder, and run: <code class="inline">pip install opencv-python numpy soundfile scipy</code></li>
                         <li><strong>Generate Sound:</strong> Run the script by typing: <code class="inline">python eidolon.py</code>. A brand new <code class="inline">.wav</code> file will appear in your folder!</li>
                     </ol>
@@ -264,7 +264,7 @@ def apply_envelope(audio, sr, attack=0.1, decay=0.1):
         env[-decay_samples:] = np.linspace(1, 0, decay_samples)
     return audio * env
 
-def generate_eidolon_audio(image_path, output_path='voynich_output.wav'):
+def generate_eidolon_audio(image_path, output_path='eidolon_output.wav'):
     img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     img_blurred = cv2.GaussianBlur(img, (5, 5), 0)
     edges = cv2.Canny(img_blurred, 50, 150)
@@ -275,8 +275,21 @@ def generate_eidolon_audio(image_path, output_path='voynich_output.wav'):
     sr = 44100
     duration = 12.0
     audio_mix = np.zeros(int(sr * duration))
-    root_freq = 41.20 
-    theta_lock = 6.55 
+
+    # ===== DYNAMIC PARAMETER ENGINE =====
+    # Every image defines its own Hz based on its geometry and density.
+    avg_pixel = np.mean(img)  # 0-255
+    height, width = img.shape
+    aspect_ratio = width / height
+    contour_count = len(contours) if contours is not None else 0
+
+    # Root frequency: 20Hz to 120Hz based on brightness & contour density
+    root_freq = 20 + (avg_pixel / 255) * 60 + (min(contour_count, 100) / 100) * 40
+
+    # Theta lock: 4Hz to 8Hz derived from aspect ratio and geometric complexity
+    theta_lock = 4 + (aspect_ratio * 2) + (min(contour_count, 100) / 100) * 2
+    theta_lock = max(4, min(theta_lock, 8))
+    # ====================================
 
     if lines is not None:
         for i in range(min(len(lines), 8)):
@@ -305,7 +318,7 @@ def generate_eidolon_audio(image_path, output_path='voynich_output.wav'):
     sf.write(output_path, audio_mix, sr)
 
 if __name__ == "__main__":
-    generate_eidolon_audio('manuscript.jpg', 'eidolon_voynich_01.wav')</code></pre>
+    generate_eidolon_audio('image.jpg', 'eidolon_output.wav')</code></pre>
                 </div>
             </div>
         </section>

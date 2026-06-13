@@ -478,10 +478,21 @@
                     <h3>How to Run the Engines Locally</h3>
                     <ol>
                         <li><strong>Install Python:</strong> Make sure you have Python installed on your computer.</li>
-                        <li><strong>Set up your folder:</strong> Create a new folder on your desktop. Save the desired code block below into that folder as a file named <code class="inline">resonance_engine.py</code> (for audio) or <code class="inline">lygo_profile.py</code> (for JSON).</li>
+                        <li><strong>Create your folder:</strong> Create a new folder on your Desktop (or anywhere you like) and name it something simple, like <code class="inline">eidolon</code> or <code class="inline">lygo</code>.</li>
+                        <li><strong>Save your script:</strong> Inside that folder, save the desired code block below as <code class="inline">resonance_engine.py</code> (for audio) or <code class="inline">lygo_profile.py</code> (for JSON).</li>
                         <li><strong>Add your image:</strong> Place the image you want to translate into the same folder and name it <code class="inline">image.jpg</code>.</li>
-                        <li><strong>Install dependencies:</strong> Open your terminal/command prompt, navigate to your folder, and run: <code class="inline">pip install opencv-python numpy soundfile</code></li>
-                        <li><strong>Generate Output:</strong> Run the script by typing: <code class="inline">python resonance_engine.py image.jpg --style cinematic</code> or <code class="inline">python lygo_profile.py image.jpg --brief</code>. A new WAV file or JSON file will appear in your folder!</li>
+                        <li><strong>Navigate to your folder (CRITICAL STEP):</strong> Open your terminal/command prompt and change to the directory where you saved your script. <br><br>
+                            <strong>Example for macOS/Linux:</strong> <code class="inline">cd Desktop/eidolon</code><br>
+                            <strong>Example for Windows:</strong> <code class="inline">cd Desktop\eidolon</code><br><br>
+                            <em>💡 Tip: In Windows Explorer, you can type <code>cmd</code> in the address bar and hit Enter to instantly open a command prompt inside your folder. On macOS, right-click the folder and select "Open in Terminal".</em>
+                        </li>
+                        <li><strong>Install dependencies:</strong> Type the following and hit Enter: <code class="inline">pip install opencv-python numpy soundfile</code></li>
+                        <li><strong>Generate Output:</strong> Run the script by typing:<br><br>
+                            <code class="inline">python resonance_engine.py image.jpg --style cinematic</code><br>
+                            or<br>
+                            <code class="inline">python lygo_profile.py image.jpg --brief</code><br><br>
+                            A new WAV file or JSON file will appear in your folder!
+                        </li>
                     </ol>
                 </div>
                 

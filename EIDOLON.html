@@ -119,6 +119,38 @@
             font-size: 1.1rem;
         }
 
+        /* Installation Guide Box */
+        .install-box {
+            background-color: #111827;
+            border-left: 4px solid var(--accent);
+            padding: 25px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+
+        .install-box h3 {
+            margin-top: 0;
+            color: var(--text-main);
+        }
+
+        .install-box ol {
+            margin-left: 20px;
+            color: var(--text-muted);
+        }
+
+        .install-box li {
+            margin-bottom: 10px;
+        }
+
+        .install-box code.inline {
+            background-color: #000;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #4ade80;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9em;
+        }
+
         /* Code Block */
         pre {
             background-color: #000;
@@ -129,7 +161,7 @@
             margin: 20px 0;
         }
 
-        code {
+        pre code {
             font-family: 'Courier New', Courier, monospace;
             color: #4ade80;
             font-size: 0.9rem;
@@ -202,7 +234,6 @@
 
     <div class="container">
         
-        <!-- How It Works Section -->
         <section id="how-it-works">
             <h2>How It Works</h2>
             <p style="text-align: center; max-width: 700px; margin: 0 auto 30px;">EIDOLON uses advanced computer vision to analyze an image like sheet music. It breaks down what you drew into geometric data and translates it directly into sound waves.</p>
@@ -230,16 +261,27 @@
                 </div>
             </div>
 
-            <p style="text-align: center;">
+            <p style="text-align: center; margin-top: 30px;">
                 <a href="https://deepseekoracle.github.io/Excavationpro/eternalhaven.html" target="_blank">Explore Eternal Haven</a> | 
                 <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/legacy-guardian-music.html" target="_blank">The LYGO Network</a>
             </p>
         </section>
 
-        <!-- Code Section -->
         <section id="code">
             <h2>Developer Open Source Access</h2>
-            <p>Building or modifying the desktop engine? Use our foundational Phase 1 Python prototype script below to begin working with the LYGO core logic locally.</p>
+            <p style="text-align: center; margin-bottom: 40px;">Want to run the visual-to-audio engine on your own machine? Use our foundational Python prototype below.</p>
+
+            <div class="install-box">
+                <h3>How to Run the Audio Engine Locally</h3>
+                <ol>
+                    <li><strong>Install Python:</strong> Make sure you have Python installed on your computer.</li>
+                    <li><strong>Set up your folder:</strong> Create a new folder on your desktop. Save the code block below into that folder as a file named <code class="inline">eidolon.py</code>.</li>
+                    <li><strong>Add your image:</strong> Place the drawing/image you want to translate into the same folder and name it <code class="inline">manuscript.jpg</code>.</li>
+                    <li><strong>Install dependencies:</strong> Open your terminal/command prompt, navigate to your folder, and run: <code class="inline">pip install opencv-python numpy soundfile scipy</code></li>
+                    <li><strong>Generate Sound:</strong> Run the script by typing: <code class="inline">python eidolon.py</code>. A brand new <code class="inline">.wav</code> file will appear in your folder!</li>
+                </ol>
+            </div>
+
             <pre><code>import cv2
 import numpy as np
 import soundfile as sf
@@ -303,14 +345,12 @@ if __name__ == "__main__":
     generate_eidolon_audio('manuscript.jpg', 'eidolon_voynich_01.wav')</code></pre>
         </section>
 
-        <!-- Links Hub -->
         <section id="links">
             <h2>The ExcavationPro Network</h2>
             <p style="text-align: center;">Connect, listen, and support the audio-visual paradigm shift.</p>
             <p style="text-align: center;"><a href="http://linktr.ee/excavationpro" target="_blank" class="btn">View All Links on Linktree</a></p>
 
             <div class="grid">
-                <!-- Music -->
                 <div class="card">
                     <h4>🎶 Listen & Follow</h4>
                     <a href="https://open.spotify.com/artist/6CkZ4bN2xu3WRKbjEL3u2S?si=2O1EHE3qT7aI8lFC3JwLvA" target="_blank">Spotify</a>
@@ -320,14 +360,12 @@ if __name__ == "__main__":
                     <a href="https://sonarmuse.org/artist/Yony5lHuFBb2goX6c7vS" target="_blank">SonarMuse</a>
                 </div>
 
-                <!-- Beats -->
                 <div class="card">
                     <h4>🎹 Buy My Beats</h4>
                     <a href="https://beatstars.com/excavationpro" target="_blank">Beatstars Profile</a>
                     <a href="https://excavationpro.beatstars.com" target="_blank">Beatstars Store</a>
                 </div>
 
-                <!-- Live Streams -->
                 <div class="card">
                     <h4>🎧 Live 24/7 Streams</h4>
                     <p style="font-size: 0.8rem; margin-bottom: 10px; color: var(--text-muted);">Nonstop vibes 💃🪩🕺 tune in anytime!</p>
@@ -337,14 +375,12 @@ if __name__ == "__main__":
                     <a href="https://twitch.tv/excavationpro" target="_blank">🟣 Twitch Live</a>
                 </div>
 
-                <!-- Support -->
                 <div class="card">
                     <h4>💎 Support & Donate</h4>
                     <a href="https://paypal.com/paypalme/ExcavationPro" target="_blank">💸 Donate via PayPal</a>
                     <a href="https://gravatar.com/xcavationpro" target="_blank">💸 Donate Crypto</a>
                 </div>
                 
-                <!-- Tools -->
                 <div class="card">
                     <h4>🛠️ Recommended Creator Tools</h4>
                     <a href="https://veed.cello.so/SAo0Q5IPyqF" target="_blank">Veed Video Editor</a>
@@ -352,7 +388,6 @@ if __name__ == "__main__":
                     <a href="https://crypto.com/app/hbpy3d4r3f" target="_blank">Crypto.com Wallet</a>
                 </div>
 
-                <!-- Socials -->
                 <div class="card">
                     <h4>📲 Connect</h4>
                     <a href="https://tiktok.com/@excavationproaudio" target="_blank">TikTok</a>
@@ -365,7 +400,7 @@ if __name__ == "__main__":
     <footer>
         <div class="container">
             <p>Please credit <span class="highlight">@ExcavationPro</span> when using my content. Thank you!</p>
-            <p>&copy; 2026 ExcavationPro. All rights reserved.</p>
+            <p>© 2026 ExcavationPro. All rights reserved.</p>
         </div>
     </footer>
 

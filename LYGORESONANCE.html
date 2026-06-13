@@ -7,7 +7,7 @@
     <!-- SEO & Social -->
     <title>LYGO RESONANCE | Image-to-Sound &amp; Creative Profiles</title>
     <meta name="description" content="LYGO RESONANCE transforms any image into rich stereo soundscapes or structured creative profiles. Analyze geometry, color, and texture to generate cinematic audio or AI-ready music prompts.">
-    <meta name="keywords" content="image to sound, visual to audio, generative music, AI music, LYGO protocol, ExcavationPro, stereo audio, JSON profile, creative brief">
+    <meta name="keywords" content="image to sound, visual to audio, generative music, AI music, LYGO protocol, ExcavationPro, stereo audio, JSON profile, creative brief, batch processing, MIDI export, Gradio GUI, video audio">
     <meta name="author" content="ExcavationPro">
     
     <!-- Open Graph -->
@@ -595,7 +595,7 @@
                             <strong>Example for Windows:</strong> <code class="inline">cd Desktop\eidolon</code><br><br>
                             <em>💡 Tip: In Windows Explorer, you can type <code>cmd</code> in the address bar and hit Enter to instantly open a command prompt inside your folder. On macOS, right-click the folder and select "Open in Terminal".</em>
                         </li>
-                        <li><strong>Install dependencies:</strong> Type the following and hit Enter: <code class="inline">pip install opencv-python numpy soundfile</code></li>
+                        <li><strong>Install dependencies:</strong> Type the following and hit Enter: <code class="inline">pip install opencv-python numpy soundfile mido gradio</code></li>
                         <li><strong>Generate Output:</strong> Run the script by typing:<br><br>
                             <code class="inline">python resonance_engine.py image.jpg --style cinematic</code><br>
                             or<br>
@@ -609,6 +609,9 @@
                 <div class="code-tabs">
                     <div class="code-tab active" data-target="resonance">Resonance Engine (Audio)</div>
                     <div class="code-tab" data-target="profile">Profile Generator (JSON)</div>
+                    <div class="code-tab" data-target="gui">Gradio GUI (Web Interface)</div>
+                    <div class="code-tab" data-target="video">Video Engine (Motion Audio)</div>
+                    <div class="code-tab" data-target="llm">LLM Integration (Lyrics)</div>
                 </div>
                 
                 <!-- Resonance Engine Panel -->
@@ -617,7 +620,7 @@
                         <button class="copy-btn" data-target="resonance">Copy Code</button>
                         <pre><code>#!/usr/bin/env python3
 """
-LYGO Resonance Engine v0.2
+LYGO Resonance Engine v0.3
 Image → Living Stereo Soundscape
 A spectral translator that gives voice to the hidden geometry, texture, and color of any image.
 """
@@ -630,8 +633,10 @@ import argparse
 import sys
 from pathlib import Path
 from typing import Optional, Dict, Any
+import mido
+from mido import MidiFile, MidiTrack, Message
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 # Artistic Presets
 PRESETS = {
@@ -708,6 +713,8 @@ class ResonanceEngine:
             "noise_lowpass_hz": 0,
             "random_seed": None,
             "verbose": True,
+            "export_stems": False,
+            "export_midi": False,
         }
         if config:
             self.config.update(config)
@@ -789,6 +796,11 @@ class ResonanceEngine:
             return np.tanh(audio * amt) / np.tanh(amt)
         return audio
 
+    def _freq_to_midi(self, freq: float) -> int:
+        if freq <= 0:
+            return 0
+        return max(0, min(127, int(12 * math.log2(freq / 440) + 69)))
+
     def synthesize(self, features: Dict[str, Any], output_path: str):
         cfg = self.config
         if cfg["random_seed"] is not None:
@@ -802,6 +814,13 @@ class ResonanceEngine:
         theta = np.interp(features["avg_green"], [0, 255], cfg["theta_lock_range"])
         w, h = features["width"], features["height"]
 
+        # Initialize stem collections
+        audio_noise = np.zeros((int(sr * duration), 2), dtype=np.float32)
+        audio_drone = np.zeros((int(sr * duration), 2), dtype=np.float32)
+        audio_melody = np.zeros((int(sr * duration), 2), dtype=np.float32)
+        audio_glitch = np.zeros((int(sr * duration), 2), dtype=np.float32)
+        melody_events = []
+
         # Layer 1: Texture Floor
         if features["edge_density"] > 0.007:
             noise = self._generate_tone(0, duration, "noise")
@@ -809,7 +828,9 @@ class ResonanceEngine:
                 noise = self._fft_lowpass(noise, cfg["noise_lowpass_hz"])
             noise = self._apply_envelope(noise, cfg["drone_attack"], cfg["drone_decay"])
             vol = min(features["edge_density"] * 1.6, cfg["noise_vol"])
-            audio += self._stereo_pan(noise, 0.0) * vol
+            stereo_noise = self._stereo_pan(noise, 0.0) * vol
+            audio += stereo_noise
+            audio_noise += stereo_noise
 
         # Layer 2: Drones
         for i, line in enumerate(features["lines"][:cfg["max_drones"]]):
@@ -820,7 +841,9 @@ class ResonanceEngine:
             tone = self._generate_tone(freq, duration, "sawtooth")
             tone = self._apply_envelope(tone, cfg["drone_attack"], cfg["drone_decay"])
             pan = (x1 / w) * 2 - 1
-            audio += self._stereo_pan(tone, pan) * cfg["drone_vol"]
+            stereo_drone = self._stereo_pan(tone, pan) * cfg["drone_vol"]
+            audio += stereo_drone
+            audio_drone += stereo_drone
 
         # Layer 3: Contours → Melody
         valid = [c for c in features["contours"] if 90 < cv2.contourArea(c) < (w * h * 0.6)]
@@ -840,7 +863,10 @@ class ResonanceEngine:
             idx = int(start * sr)
             end = min(idx + len(tone), len(audio))
             pan = (cx / w) * 2 - 1
-            audio[idx:end] += self._stereo_pan(tone[:end-idx], pan) * cfg["note_vol"]
+            stereo_note = self._stereo_pan(tone[:end-idx], pan) * cfg["note_vol"]
+            audio[idx:end] += stereo_note
+            audio_melody[idx:end] += stereo_note
+            melody_events.append((freq, dur, start))
 
         # Layer 4: Glitch / Micro events
         for i, kp in enumerate(features["keypoints"][:cfg["max_glitches"]]):
@@ -852,7 +878,9 @@ class ResonanceEngine:
             idx = int(start * sr)
             end = min(idx + len(tone), len(audio))
             pan = (x / w) * 2 - 1
-            audio[idx:end] += self._stereo_pan(tone[:end-idx], pan) * cfg["glitch_vol"]
+            stereo_glitch = self._stereo_pan(tone[:end-idx], pan) * cfg["glitch_vol"]
+            audio[idx:end] += stereo_glitch
+            audio_glitch[idx:end] += stereo_glitch
 
         # Final polish
         audio = self._soft_limit(audio)
@@ -867,6 +895,36 @@ class ResonanceEngine:
 
         sf.write(output_path, audio, sr)
         self._log(f"✓ Saved: {output_path}  |  Peak: {peak:.3f}")
+
+        # Export Stems
+        if cfg.get("export_stems"):
+            base = output_path.replace(".wav", "")
+            for stem, name in [(audio_noise, "noise"), (audio_drone, "drone"),
+                               (audio_melody, "melody"), (audio_glitch, "glitch")]:
+                max_val = np.max(np.abs(stem))
+                if max_val > 0:
+                    stem = stem / max_val * 0.97
+                sf.write(f"{base}_{name}.wav", stem, sr)
+                self._log(f"✓ Stem saved: {base}_{name}.wav")
+
+        # Export MIDI
+        if cfg.get("export_midi") and melody_events:
+            mid = MidiFile()
+            track = MidiTrack()
+            mid.tracks.append(track)
+            ticks_per_beat = 480
+            tempo = 120
+            tick_offset = 0
+            for freq, dur, start in melody_events:
+                midi_note = self._freq_to_midi(freq)
+                duration_ticks = int(dur * ticks_per_beat * (tempo / 60))
+                start_ticks = int(start * ticks_per_beat * (tempo / 60))
+                track.append(Message('note_on', note=midi_note, velocity=64, time=start_ticks - tick_offset))
+                track.append(Message('note_off', note=midi_note, velocity=64, time=duration_ticks))
+                tick_offset = start_ticks + duration_ticks
+            mid_path = output_path.replace(".wav", ".mid")
+            mid.save(mid_path)
+            self._log(f"✓ MIDI saved: {mid_path}")
 
     def process(self, image_path: str, output_path: str):
         self._log(f"\n╔════════════════════════════════════════════╗")
@@ -890,23 +948,42 @@ def main():
     parser.add_argument("--seed", type=int, default=None, help="Random seed for reproducibility")
     parser.add_argument("--noise-filter", type=float, default=None,
                         help="Lowpass cutoff Hz for noise layer (0 = off)")
+    parser.add_argument("--stems", action="store_true", help="Export individual stems (noise, drone, melody, glitch)")
+    parser.add_argument("--midi", action="store_true", help="Export MIDI file from melody events")
+    parser.add_argument("--batch", action="store_true", help="Process all images in a folder")
     parser.add_argument("--quiet", action="store_true")
     args = parser.parse_args()
-
-    out_path = args.output or f"resonance_{Path(args.image).stem}.wav"
 
     config = {
         "duration": args.duration,
         "random_seed": args.seed,
         "verbose": not args.quiet,
+        "export_stems": args.stems,
+        "export_midi": args.midi,
     }
     if args.noise_filter is not None:
         config["noise_lowpass_hz"] = args.noise_filter
 
-    # Apply preset
     preset = PRESETS.get(args.style, {})
     config.update(preset)
 
+    if args.batch:
+        folder = Path(args.image)
+        if not folder.is_dir():
+            print("Error: --batch requires a folder path")
+            return
+        images = sorted(folder.glob("*.jpg")) + sorted(folder.glob("*.png")) + sorted(folder.glob("*.jpeg"))
+        if not images:
+            print("No images found in folder")
+            return
+        for img in images:
+            print(f"\nProcessing: {img.name}")
+            out_path = f"resonance_{img.stem}.wav"
+            engine = ResonanceEngine(config)
+            engine.process(str(img), out_path)
+        return
+
+    out_path = args.output or f"resonance_{Path(args.image).stem}.wav"
     engine = ResonanceEngine(config)
     engine.process(args.image, out_path)
 
@@ -1180,11 +1257,421 @@ def main():
     parser.add_argument("image", help="Path to input image")
     parser.add_argument("-o", "--output", default="lygo_profile.json", help="Output JSON file")
     parser.add_argument("--brief", action="store_true", help="Also generate a human-readable .brief.txt file")
+    parser.add_argument("--batch", action="store_true", help="Process all images in a folder")
     parser.add_argument("--quiet", action="store_true", help="Suppress console output")
     args = parser.parse_args()
 
     generator = LYGOProfileGenerator(verbose=not args.quiet)
+
+    if args.batch:
+        folder = Path(args.image)
+        if not folder.is_dir():
+            print("Error: --batch requires a folder path")
+            return
+        images = sorted(folder.glob("*.jpg")) + sorted(folder.glob("*.png")) + sorted(folder.glob("*.jpeg"))
+        if not images:
+            print("No images found in folder")
+            return
+        for img in images:
+            print(f"\nProcessing: {img.name}")
+            out_json = f"lygo_profile_{img.stem}.json"
+            generator.generate(str(img), out_json, create_brief=args.brief)
+        return
+
     generator.generate(args.image, args.output, create_brief=args.brief)
+
+
+if __name__ == "__main__":
+    main()</code></pre>
+                    </div>
+                </div>
+                
+                <!-- Gradio GUI Panel -->
+                <div id="gui" class="code-panel">
+                    <div class="code-wrapper">
+                        <button class="copy-btn" data-target="gui">Copy Code</button>
+                        <pre><code>#!/usr/bin/env python3
+"""
+LYGO RESONANCE - Gradio GUI
+Web interface for the Resonance Engine and Profile Generator.
+"""
+
+import gradio as gr
+import os
+from pathlib import Path
+import tempfile
+from resonance_engine import ResonanceEngine, PRESETS
+from lygo_profile import LYGOProfileGenerator
+
+def process_image(image_path, engine_type, style, seed, duration, noise_filter, 
+                  export_stems, export_midi, export_brief, use_batch, batch_folder):
+    
+    if not image_path and not use_batch:
+        return "Please upload an image or enable batch processing."
+    
+    if use_batch and batch_folder:
+        folder = Path(batch_folder)
+        if not folder.is_dir():
+            return "Error: Invalid batch folder path."
+        images = sorted(folder.glob("*.jpg")) + sorted(folder.glob("*.png")) + sorted(folder.glob("*.jpeg"))
+        if not images:
+            return "No images found in folder."
+        results = []
+        for img in images:
+            try:
+                if engine_type == "Resonance Engine (Audio)":
+                    out_path = f"resonance_{img.stem}.wav"
+                    config = {
+                        "duration": duration,
+                        "random_seed": seed if seed != 0 else None,
+                        "verbose": False,
+                        "export_stems": export_stems,
+                        "export_midi": export_midi,
+                    }
+                    if noise_filter > 0:
+                        config["noise_lowpass_hz"] = noise_filter
+                    preset = PRESETS.get(style, {})
+                    config.update(preset)
+                    engine = ResonanceEngine(config)
+                    engine.process(str(img), out_path)
+                    results.append(f"✓ {img.name} → {out_path}")
+                else:
+                    out_json = f"lygo_profile_{img.stem}.json"
+                    generator = LYGOProfileGenerator(verbose=False)
+                    generator.generate(str(img), out_json, create_brief=export_brief)
+                    results.append(f"✓ {img.name} → {out_json}")
+            except Exception as e:
+                results.append(f"✗ {img.name} → Error: {str(e)}")
+        return "\n".join(results)
+    
+    # Single image mode
+    if engine_type == "Resonance Engine (Audio)":
+        config = {
+            "duration": duration,
+            "random_seed": seed if seed != 0 else None,
+            "verbose": False,
+            "export_stems": export_stems,
+            "export_midi": export_midi,
+        }
+        if noise_filter > 0:
+            config["noise_lowpass_hz"] = noise_filter
+        preset = PRESETS.get(style, {})
+        config.update(preset)
+        
+        engine = ResonanceEngine(config)
+        out_path = f"resonance_{Path(image_path).stem}.wav"
+        engine.process(image_path, out_path)
+        return f"✅ Audio saved: {out_path}"
+    
+    else:
+        generator = LYGOProfileGenerator(verbose=False)
+        out_json = f"lygo_profile_{Path(image_path).stem}.json"
+        generator.generate(image_path, out_json, create_brief=export_brief)
+        return f"✅ Profile saved: {out_json}"
+
+# Create the Gradio interface
+iface = gr.Interface(
+    fn=process_image,
+    inputs=[
+        gr.Image(type="filepath", label="Upload Image (single mode)"),
+        gr.Radio(["Resonance Engine (Audio)", "LYGO Profile Generator"], 
+                 value="Resonance Engine (Audio)", label="Engine"),
+        gr.Dropdown(["cinematic", "ambient", "glitch", "ethereal", "raw"], 
+                    value="cinematic", label="Preset (Audio only)"),
+        gr.Number(value=0, label="Seed (0 = random)"),
+        gr.Slider(5, 60, value=15, label="Duration (seconds)"),
+        gr.Number(value=0, label="Noise Filter Hz (0 = off)"),
+        gr.Checkbox(label="Export Stems (WAV + MIDI)"),
+        gr.Checkbox(label="Export MIDI File"),
+        gr.Checkbox(label="Export Creative Brief (.brief.txt)"),
+        gr.Checkbox(label="Batch Mode (process all images in folder)"),
+        gr.Textbox(label="Batch Folder Path (e.g. C:/images or ./images)", 
+                   placeholder="Path to folder containing images"),
+    ],
+    outputs="text",
+    title="LYGO RESONANCE - Web Interface",
+    description="Turn images into soundscapes or creative profiles. Use batch mode to process entire folders.",
+)
+
+if __name__ == "__main__":
+    iface.launch(share=True)</code></pre>
+                    </div>
+                </div>
+                
+                <!-- Video Engine Panel -->
+                <div id="video" class="code-panel">
+                    <div class="code-wrapper">
+                        <button class="copy-btn" data-target="video">Copy Code</button>
+                        <pre><code>#!/usr/bin/env python3
+"""
+LYGO Video Resonance Engine
+Extracts audio from video by analyzing motion and frame geometry over time.
+"""
+
+import cv2
+import numpy as np
+import soundfile as sf
+import math
+import argparse
+from pathlib import Path
+from resonance_engine import ResonanceEngine, PRESETS
+
+class VideoResonanceEngine:
+    def __init__(self, config=None):
+        self.engine = ResonanceEngine(config)
+    
+    def process_video(self, video_path, output_path="video_soundscape.wav", 
+                      fps=10, style="cinematic", duration_factor=1.0):
+        
+        cap = cv2.VideoCapture(video_path)
+        if not cap.isOpened():
+            raise ValueError(f"Cannot open video: {video_path}")
+        
+        frames = []
+        while True:
+            ret, frame = cap.read()
+            if not ret:
+                break
+            frames.append(frame)
+        cap.release()
+        
+        if not frames:
+            raise ValueError("No frames extracted from video.")
+        
+        src_fps = cap.get(cv2.CAP_PROP_FPS)
+        if src_fps <= 0:
+            src_fps = 30
+        step = max(1, int(src_fps / fps))
+        frames = frames[::step]
+        actual_fps = src_fps / step
+        
+        print(f"Extracted {len(frames)} frames at ~{actual_fps:.1f} FPS")
+        
+        # Use last frame for feature extraction
+        temp_img_path = "_temp_video_frame.jpg"
+        cv2.imwrite(temp_img_path, frames[-1])
+        
+        # Get baseline config from preset
+        config = dict(PRESETS.get(style, {}))
+        config["duration"] = len(frames) / actual_fps * duration_factor
+        config["verbose"] = True
+        
+        engine = ResonanceEngine(config)
+        features = engine.analyze_image(temp_img_path)
+        
+        # Generate audio segment for each frame with interpolation
+        sr = engine.config["sr"]
+        duration = config["duration"]
+        audio = np.zeros((int(sr * duration), 2), dtype=np.float32)
+        
+        # Motion detection (optical flow between frames)
+        prev_gray = cv2.cvtColor(frames[0], cv2.COLOR_BGR2GRAY)
+        motion_scores = []
+        
+        for i, frame in enumerate(frames):
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            flow = cv2.calcOpticalFlowFarneback(prev_gray, gray, None, 0.5, 3, 15, 3, 5, 1.2, 0)
+            mag, _ = cv2.cartToPolar(flow[..., 0], flow[..., 1])
+            motion_score = np.mean(mag)
+            motion_scores.append(motion_score)
+            prev_gray = gray
+        
+        # Normalize motion scores
+        max_motion = max(motion_scores) if motion_scores else 1
+        motion_scores = [m / max_motion for m in motion_scores]
+        
+        # Generate audio
+        for i, frame in enumerate(frames):
+            cv2.imwrite(temp_img_path, frame)
+            seg_features = engine.analyze_image(temp_img_path)
+            
+            # Adjust parameters based on motion
+            motion = motion_scores[i] if i < len(motion_scores) else 0
+            config["glitch_vol"] = 0.032 + (motion * 0.08)
+            config["noise_vol"] = 0.095 + (motion * 0.06)
+            config["drone_vol"] = 0.075 - (motion * 0.03)
+            
+            engine.config.update(config)
+            
+            # Generate short segment
+            seg_duration = 1.0 / actual_fps
+            engine.config["duration"] = seg_duration
+            seg_audio = np.zeros((int(sr * seg_duration), 2), dtype=np.float32)
+            
+            # Simplified segment synthesis (reuse analyze/synthesize)
+            # For efficiency, we use the full synthesis but only for a short duration
+            engine.synthesize(seg_features, "_temp_seg.wav")
+            seg, _ = sf.read("_temp_seg.wav")
+            
+            # Place in main audio
+            start_idx = int(i * sr / actual_fps)
+            end_idx = min(start_idx + len(seg), len(audio))
+            seg_len = end_idx - start_idx
+            audio[start_idx:end_idx] += seg[:seg_len]
+        
+        # Cleanup
+        if Path("_temp_video_frame.jpg").exists():
+            Path("_temp_video_frame.jpg").unlink()
+        if Path("_temp_seg.wav").exists():
+            Path("_temp_seg.wav").unlink()
+        
+        # Normalize and save
+        peak = np.max(np.abs(audio))
+        if peak > 0:
+            audio = audio / peak * 0.97
+        sf.write(output_path, audio, sr)
+        print(f"✓ Video soundscape saved: {output_path}")
+        return output_path
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="LYGO Video Resonance — Turn a video into a motion-driven soundscape"
+    )
+    parser.add_argument("video", help="Input video path")
+    parser.add_argument("-o", "--output", default="video_soundscape.wav", help="Output .wav path")
+    parser.add_argument("--fps", type=float, default=10, help="Frames per second to extract")
+    parser.add_argument("--style", choices=list(PRESETS.keys()), default="cinematic",
+                        help="Artistic preset")
+    parser.add_argument("--duration-factor", type=float, default=1.0,
+                        help="Multiply final duration (e.g., 0.5 for half speed, 2.0 for double)")
+    args = parser.parse_args()
+    
+    engine = VideoResonanceEngine()
+    engine.process_video(
+        args.video,
+        output_path=args.output,
+        fps=args.fps,
+        style=args.style,
+        duration_factor=args.duration_factor
+    )
+
+
+if __name__ == "__main__":
+    main()</code></pre>
+                    </div>
+                </div>
+                
+                <!-- LLM Integration Panel -->
+                <div id="llm" class="code-panel">
+                    <div class="code-wrapper">
+                        <button class="copy-btn" data-target="llm">Copy Code</button>
+                        <pre><code>#!/usr/bin/env python3
+"""
+LYGO LLM Integration
+Expands LYGO creative briefs into full song lyrics using local LLMs (Ollama, llama.cpp, etc.)
+"""
+
+import json
+import requests
+from pathlib import Path
+from typing import Optional, Dict, Any
+
+class LYGOLLMExpander:
+    def __init__(self, llm_url: str = "http://localhost:11434/api/generate", 
+                 model: str = "llama3.2", verbose: bool = True):
+        self.llm_url = llm_url
+        self.model = model
+        self.verbose = verbose
+    
+    def _log(self, msg: str):
+        if self.verbose:
+            print(msg)
+    
+    def expand_brief_to_lyrics(self, brief_path: Path, output_path: Optional[Path] = None) -> str:
+        """Read a LYGO creative brief and generate full song lyrics using a local LLM."""
+        with open(brief_path, 'r', encoding='utf-8') as f:
+            brief = f.read()
+        
+        self._log(f"Reading brief: {brief_path}")
+        
+        prompt = f"""You are a professional songwriter. Based on the following creative brief, write a complete song with a title, verses, a chorus, a bridge, and an outro. Use vivid imagery and emotional depth.
+
+Creative Brief:
+{brief}
+
+Now write the song. Include a title at the top."""
+        
+        self._log(f"Contacting LLM at {self.llm_url} with model {self.model}...")
+        
+        try:
+            response = requests.post(
+                self.llm_url,
+                json={
+                    "model": self.model,
+                    "prompt": prompt,
+                    "stream": False,
+                    "temperature": 0.8,
+                },
+                timeout=60
+            )
+            response.raise_for_status()
+            result = response.json()
+            lyrics = result.get("response", "No response from LLM.")
+            
+            if output_path is None:
+                output_path = brief_path.with_suffix(".lyrics.txt")
+            
+            with open(output_path, 'w', encoding='utf-8') as f:
+                f.write(lyrics)
+            
+            self._log(f"✓ Lyrics saved: {output_path}")
+            return lyrics
+        
+        except requests.exceptions.ConnectionError:
+            error_msg = "Error: Could not connect to LLM. Make sure Ollama or llama.cpp is running."
+            self._log(error_msg)
+            return error_msg
+        except Exception as e:
+            self._log(f"Error: {str(e)}")
+            return str(e)
+    
+    def batch_process_folder(self, folder_path: Path, output_folder: Optional[Path] = None):
+        """Process all .brief.txt files in a folder."""
+        briefs = list(folder_path.glob("*.brief.txt"))
+        if not briefs:
+            self._log("No .brief.txt files found in folder.")
+            return
+        
+        if output_folder is None:
+            output_folder = folder_path
+        
+        output_folder.mkdir(parents=True, exist_ok=True)
+        
+        for brief in briefs:
+            out_path = output_folder / brief.with_suffix(".lyrics.txt").name
+            self._log(f"Processing: {brief.name}")
+            self.expand_brief_to_lyrics(brief, out_path)
+
+
+def main():
+    import argparse
+    parser = argparse.ArgumentParser(
+        description="LYGO LLM Expander — Turn creative briefs into full lyrics using local LLMs"
+    )
+    parser.add_argument("input", help="Path to .brief.txt file or folder (with --batch)")
+    parser.add_argument("-o", "--output", default=None, help="Output path or folder")
+    parser.add_argument("--llm-url", default="http://localhost:11434/api/generate",
+                        help="Ollama/llama.cpp API URL")
+    parser.add_argument("--model", default="llama3.2", help="LLM model name")
+    parser.add_argument("--batch", action="store_true", help="Process all .brief.txt files in folder")
+    args = parser.parse_args()
+    
+    expander = LYGOLLMExpander(llm_url=args.llm_url, model=args.model)
+    
+    if args.batch:
+        folder = Path(args.input)
+        if not folder.is_dir():
+            print("Error: --batch requires a folder path")
+            return
+        expander.batch_process_folder(folder, Path(args.output) if args.output else None)
+    else:
+        brief_path = Path(args.input)
+        if not brief_path.exists():
+            print("Error: File not found")
+            return
+        output_path = Path(args.output) if args.output else None
+        expander.expand_brief_to_lyrics(brief_path, output_path)
 
 
 if __name__ == "__main__":
@@ -1332,7 +1819,10 @@ if __name__ == "__main__":
         const tabs = document.querySelectorAll('.code-tab');
         const panels = {
             resonance: document.getElementById('resonance'),
-            profile: document.getElementById('profile')
+            profile: document.getElementById('profile'),
+            gui: document.getElementById('gui'),
+            video: document.getElementById('video'),
+            llm: document.getElementById('llm')
         };
         
         tabs.forEach(tab => {

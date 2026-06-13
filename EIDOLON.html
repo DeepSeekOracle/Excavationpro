@@ -3,39 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EIDOLON | Visual-to-Audio Translation</title>
+    <title>EIDOLON | Visual-to-Audio Translation Core</title>
     <style>
         :root {
-            --bg-color: #0f172a;
+            --bg-color: #0b1120;
             --surface-color: #1e293b;
-            --text-main: #f8fafc;
+            --text-main: #f1f5f9;
             --text-muted: #94a3b8;
             --accent: #fbbf24;
             --accent-hover: #f59e0b;
+            --accent-glow: rgba(251, 191, 36, 0.15);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
             line-height: 1.6;
+            background-image: radial-gradient(circle at 10% 20%, rgba(251, 191, 36, 0.03) 0%, transparent 50%);
         }
 
-        a { color: var(--accent); text-decoration: none; transition: color 0.2s ease; }
+        a { color: var(--accent); text-decoration: none; transition: all 0.2s ease; }
         a:hover { color: var(--accent-hover); text-decoration: underline; }
 
-        .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
 
         /* Header & Hero */
-        header { padding: 80px 0 40px; text-align: center; border-bottom: 1px solid var(--surface-color); }
-        h1 { font-size: 3rem; letter-spacing: 4px; margin-bottom: 10px; color: var(--accent); }
-        .subtitle { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 30px; }
+        header { padding: 80px 0 40px; text-align: center; position: relative; }
+        h1 { font-size: 3.5rem; letter-spacing: 4px; margin-bottom: 10px; color: var(--accent); text-shadow: 0 0 40px var(--accent-glow); }
+        .subtitle { font-size: 1.3rem; color: var(--text-muted); margin-bottom: 20px; font-weight: 300; }
 
         /* Sections */
         section { padding: 60px 0; border-bottom: 1px solid var(--surface-color); }
@@ -43,25 +40,53 @@
         h3 { font-size: 1.3rem; margin: 20px 0 10px; color: var(--accent); }
         p { margin-bottom: 15px; color: var(--text-muted); }
 
-        /* Step Layout for Average Users */
-        .steps-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 40px 0; }
-        .step-card { background: linear-gradient(145deg, #1e293b, #0f172a); padding: 25px; border-radius: 12px; border: 1px solid #334155; position: relative; }
-        .step-number { font-size: 2.5rem; font-weight: 900; color: rgba(251, 191, 36, 0.15); position: absolute; top: 10px; right: 15px; }
+        /* Step Cards */
+        .steps-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin: 40px 0; }
+        .step-card { 
+            background: linear-gradient(145deg, #1e293b, #0f172a); 
+            padding: 25px; border-radius: 12px; 
+            border: 1px solid #334155; 
+            position: relative; 
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .step-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
+        .step-number { font-size: 2.5rem; font-weight: 900; color: rgba(251, 191, 36, 0.08); position: absolute; top: 10px; right: 15px; }
         .step-card h4 { color: var(--accent); margin-bottom: 10px; font-size: 1.1rem; }
 
-        /* --- THE DONATION GATE STYLES --- */
+        /* Visual Demo Area */
+        .demo-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 20px 30px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        .wave-visual { display: flex; align-items: center; gap: 3px; height: 40px; width: 100%; max-width: 300px; }
+        .wave-bar { width: 4px; height: 100%; background: var(--accent); opacity: 0.6; border-radius: 2px; animation: wave 1.5s infinite ease-in-out; }
+        .wave-bar:nth-child(odd) { animation-delay: 0.2s; background: #94a3b8; opacity: 0.4; }
+        @keyframes wave {
+            0%, 100% { height: 20%; }
+            50% { height: 100%; }
+        }
+        .btn-demo { background: #334155; border: none; color: #f1f5f9; padding: 10px 20px; border-radius: 6px; cursor: pointer; transition: 0.2s; }
+        .btn-demo:hover { background: var(--accent); color: #0f172a; }
+
+        /* Donation Gate */
         #donation-gate {
             background: linear-gradient(145deg, #1e293b, #0f172a);
             border: 2px dashed var(--accent);
-            border-radius: 12px;
+            border-radius: 16px;
             padding: 40px 20px;
             text-align: center;
             margin: 40px 0;
-            transition: all 0.5s ease;
+            transition: all 0.4s ease;
         }
-
-        #donation-gate h3 { font-size: 1.8rem; margin-bottom: 10px; }
-        #donation-gate p { max-width: 600px; margin: 0 auto 20px; }
+        #donation-gate h3 { font-size: 1.8rem; margin-bottom: 10px; color: var(--text-main); }
         
         .btn-large {
             display: inline-block;
@@ -74,40 +99,63 @@
             margin-top: 10px;
             box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
             transition: transform 0.2s, background-color 0.2s;
+            cursor: pointer;
         }
-        
         .btn-large:hover {
             background-color: var(--accent-hover);
-            color: var(--bg-color);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(251, 191, 36, 0.5);
             text-decoration: none;
-            transform: translateY(-2px);
+            color: var(--bg-color);
         }
 
-        .unlock-hint { font-size: 0.85rem; color: var(--text-muted); margin-top: 15px; font-style: italic; }
+        /* Locked Content Wrapper */
+        .locked-wrapper { display: none; opacity: 0; transition: opacity 0.8s ease; }
+        .locked-wrapper.visible { display: block; opacity: 1; animation: slideUp 0.6s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Hidden Content Container */
-        #locked-content {
-            display: none; /* Hidden by default! */
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-        }
-
-        /* Install Box */
+        /* Code Box */
         .install-box { background-color: #111827; border-left: 4px solid var(--accent); padding: 25px; border-radius: 8px; margin: 30px 0; }
         .install-box h3 { margin-top: 0; color: var(--text-main); }
         .install-box ol { margin-left: 20px; color: var(--text-muted); }
         .install-box li { margin-bottom: 10px; }
-        code.inline { background-color: #000; padding: 2px 6px; border-radius: 4px; color: #4ade80; font-family: 'Courier New', Courier, monospace; font-size: 0.9em; }
+        code.inline { background-color: #000; padding: 2px 6px; border-radius: 4px; color: #4ade80; font-family: 'Courier New', monospace; font-size: 0.9em; }
 
-        /* Code Block */
-        pre { background-color: #000; padding: 20px; border-radius: 8px; overflow-x: auto; border: 1px solid var(--surface-color); margin: 20px 0; }
-        pre code { font-family: 'Courier New', Courier, monospace; color: #4ade80; font-size: 0.9rem; }
+        /* Code Block Container */
+        .code-wrapper { position: relative; margin: 20px 0; }
+        pre { 
+            background-color: #000; 
+            padding: 20px; 
+            border-radius: 8px; 
+            overflow-x: auto; 
+            border: 1px solid var(--surface-color); 
+            margin: 0; 
+        }
+        pre code { font-family: 'Courier New', monospace; color: #4ade80; font-size: 0.9rem; line-height: 1.5; }
+        
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: #94a3b8;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+        .copy-btn:hover { background: var(--accent); color: #0f172a; border-color: var(--accent); }
+        .copy-btn.copied { background: #4ade80; color: #0f172a; border-color: #4ade80; }
 
-        /* Link Grids */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px; }
-        .card { background-color: var(--surface-color); padding: 20px; border-radius: 8px; text-align: center; }
+        /* Link Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 20px; }
+        .card { background-color: var(--surface-color); padding: 20px; border-radius: 8px; text-align: center; transition: transform 0.2s; }
+        .card:hover { transform: scale(1.02); }
         .card h4 { margin-bottom: 15px; color: var(--text-main); }
-        .card a { display: block; margin-bottom: 8px; }
+        .card a { display: block; margin-bottom: 6px; font-size: 0.9rem; }
 
         footer { text-align: center; padding: 40px 0; color: var(--text-muted); font-size: 0.9rem; }
         .highlight { color: var(--text-main); font-weight: bold; }
@@ -119,7 +167,7 @@
         <div class="container">
             <h1>EIDOLON</h1>
             <p class="subtitle">Image-to-Sound Translation Core</p>
-            <p>Ever wondered what a drawing sounds like? EIDOLON transforms visual art, historical manuscripts, and sketches into rich, organic audio landscapes.</p>
+            <p>Turn historical manuscripts, botanical sketches, and abstract doodles into living audio landscapes.</p>
         </div>
     </header>
 
@@ -127,49 +175,60 @@
         
         <section id="how-it-works">
             <h2>How It Works</h2>
-            <p style="text-align: center; max-width: 700px; margin: 0 auto 30px;">EIDOLON uses advanced computer vision to analyze an image like sheet music. It breaks down what you drew into geometric data and translates it directly into sound waves.</p>
+            <p style="text-align: center; max-width: 700px; margin: 0 auto 30px;">EIDOLON uses computer vision to analyze an image like sheet music, breaking down visual geometry into sound waves.</p>
             
             <div class="steps-container">
                 <div class="step-card">
                     <div class="step-number">01</div>
                     <h4>Upload Image</h4>
-                    <p>Drop in a picture of a manuscript page, a botanical sketch, or a random doodle from your notebook.</p>
+                    <p>Drop in a manuscript page, a botanical sketch, or a random doodle. The AI reads the ink and the shapes.</p>
                 </div>
                 <div class="step-card">
                     <div class="step-number">02</div>
                     <h4>Visual Scan</h4>
-                    <p>The AI isolates lines and shapes. Stems and long straight borders become deep bass drones. Petals and complex curves become melodies.</p>
+                    <p>Stems become bass drones. Petals become melodies. Complex curves become rhythmic arpeggios.</p>
                 </div>
                 <div class="step-card">
                     <div class="step-number">03</div>
                     <h4>Theta Harmonics</h4>
-                    <p>Using custom parameters inspired by the Voynich manuscript, sounds are automatically locked to a gorgeous 6.55 Hz harmonic relationship.</p>
+                    <p>Custom Voynich-inspired parameters lock the output to a beautiful 6.55 Hz harmonic relationship.</p>
                 </div>
                 <div class="step-card">
                     <div class="step-number">04</div>
                     <h4>Listen & Export</h4>
-                    <p>Tweak the tempo and atmosphere sliders in real-time, then export your creation as a high-quality WAV file.</p>
+                    <p>Tweak tempo and atmosphere in real-time, then export your creation as a high-quality WAV file.</p>
                 </div>
             </div>
             
-            <p style="text-align: center; margin-top: 30px;">
-                <a href="https://deepseekoracle.github.io/Excavationpro/eternalhaven.html" target="_blank">Explore Eternal Haven</a> | 
+            <div class="demo-area">
+                <div class="wave-visual">
+                    <span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span>
+                    <span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span>
+                    <span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span>
+                    <span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span>
+                </div>
+                <button class="btn-demo" onclick="alert('🎵 Demo Preview: Playing a 60-second generative loop from Folio 2r.')">▶ Listen to Demo</button>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">Generated from Folio 2r (The Sovereign Stalk)</p>
+            </div>
+
+            <p style="text-align: center;">
+                <a href="https://deepseekoracle.github.io/Excavationpro/eternalhaven.html" target="_blank">Eternal Haven</a> | 
                 <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/legacy-guardian-music.html" target="_blank">The LYGO Network</a>
             </p>
         </section>
 
         <section id="code">
             <h2>Developer Open Source Access</h2>
-            <p style="text-align: center; margin-bottom: 20px;">Want to run the visual-to-audio engine on your own machine? Access the foundational Python prototype below.</p>
+            <p style="text-align: center; margin-bottom: 20px;">Run the visual-to-audio engine on your own machine. Access the foundational Python prototype below.</p>
 
             <div id="donation-gate">
                 <h3>🔒 Unlock Developer Resources</h3>
-                <p>I provide this source code openly to push the boundaries of audio-visual art. A friendly donation is <strong>not required, but deeply appreciated</strong> to help keep the servers running and the coffee flowing!</p>
+                <p>A friendly donation is <strong>not required, but deeply appreciated</strong> to help keep the servers running and the coffee flowing!</p>
                 <a href="https://paypal.com/paypalme/ExcavationPro" target="_blank" class="btn-large" id="unlock-btn">💖 Donate via PayPal</a>
-                <p class="unlock-hint">(Clicking the button will instantly unlock the code and installation guide below)</p>
+                <p class="unlock-hint" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 15px; font-style: italic;">Clicking the button will instantly unlock the code and installation guide.</p>
             </div>
 
-            <div id="locked-content">
+            <div id="locked-content" class="locked-wrapper">
                 <div class="install-box">
                     <h3>How to Run the Audio Engine Locally</h3>
                     <ol>
@@ -181,15 +240,19 @@
                     </ol>
                 </div>
 
-                <pre><code>import cv2
+                <div class="code-wrapper">
+                    <button class="copy-btn" id="copy-code-btn">Copy Code</button>
+                    <pre><code>import cv2
 import numpy as np
 import soundfile as sf
 import math
 
 def generate_tone(freq, duration, sr=44100, wave_type='sine'):
     t = np.linspace(0, duration, int(sr * duration), False)
-    if wave_type == 'sine': return np.sin(freq * t * 2 * np.pi)
-    elif wave_type == 'sawtooth': return 2 * (t * freq - np.floor(0.5 + t * freq))
+    if wave_type == 'sine':
+        return np.sin(freq * t * 2 * np.pi)
+    elif wave_type == 'sawtooth':
+        return 2 * (t * freq - np.floor(0.5 + t * freq))
     return np.zeros_like(t)
 
 def apply_envelope(audio, sr, attack=0.1, decay=0.1):
@@ -237,23 +300,27 @@ def generate_eidolon_audio(image_path, output_path='voynich_output.wav'):
             audio_mix[start_idx:start_idx + len(tone)] += tone * 0.25 
 
     max_amp = np.max(np.abs(audio_mix))
-    if max_amp > 0: audio_mix = audio_mix / max_amp
+    if max_amp > 0:
+        audio_mix = audio_mix / max_amp
     sf.write(output_path, audio_mix, sr)
 
 if __name__ == "__main__":
     generate_eidolon_audio('manuscript.jpg', 'eidolon_voynich_01.wav')</code></pre>
+                </div>
             </div>
         </section>
 
         <section id="links">
             <h2>The ExcavationPro Network</h2>
             <p style="text-align: center;">Connect, listen, and support the audio-visual paradigm shift.</p>
-            <p style="text-align: center;"><a href="http://linktr.ee/excavationpro" target="_blank" style="display: inline-block; background-color: var(--accent); color: var(--bg-color); padding: 10px 20px; border-radius: 5px; font-weight: bold; margin-top: 15px;">View All Links on Linktree</a></p>
+            <p style="text-align: center;">
+                <a href="http://linktr.ee/excavationpro" target="_blank" style="display: inline-block; background-color: var(--accent); color: var(--bg-color); padding: 10px 20px; border-radius: 5px; font-weight: bold; margin-top: 15px;">View All Links on Linktree</a>
+            </p>
 
             <div class="grid">
                 <div class="card">
                     <h4>🎶 Listen & Follow</h4>
-                    <a href="https://open.spotify.com/artist/6CkZ4bN2xu3WRKbjEL3u2S?si=2O1EHE3qT7aI8lFC3JwLvA" target="_blank">Spotify</a>
+                    <a href="https://open.spotify.com/artist/6CkZ4bN2xu3WRKbjEL3u2S" target="_blank">Spotify</a>
                     <a href="https://music.apple.com/us/artist/excavationpro/1586588545" target="_blank">Apple Music</a>
                     <a href="https://youtube.com/channel/UCnCf9gjhMEfUFPvGkdlUabQ" target="_blank">YouTube Music</a>
                     <a href="https://audius.co/excavationpro" target="_blank">Audius</a>
@@ -292,20 +359,40 @@ if __name__ == "__main__":
     </footer>
 
     <script>
-        document.getElementById('unlock-btn').addEventListener('click', function() {
-            // 1. Change the gate text to a Thank You message
+        document.getElementById('unlock-btn').addEventListener('click', function(e) {
+            e.preventDefault(); // Prevent direct navigation away
+
             const gate = document.getElementById('donation-gate');
-            gate.style.border = "2px solid #4ade80"; // Turn border green
-            gate.innerHTML = "<h3>💎 Thank you for your support!</h3><p>The code and instructions have been successfully unlocked below.</p>";
-            
-            // 2. Reveal the hidden content smoothly
             const lockedContent = document.getElementById('locked-content');
-            lockedContent.style.display = 'block';
-            
-            // Small timeout to allow display:block to register before changing opacity for the fade-in effect
-            setTimeout(() => {
-                lockedContent.style.opacity = '1';
-            }, 50);
+
+            // 1. Mark the gate as "donated" with a nice visual change
+            gate.style.border = "2px solid #4ade80";
+            gate.innerHTML = `
+                <h3 style="color: #4ade80;">💎 Access Granted!</h3>
+                <p>Thank you for your support. The developer resources are now unlocked below.</p>
+                <p style="font-size: 0.9rem; color: var(--text-muted);">(You can also donate any time via the links in the footer.)</p>
+            `;
+
+            // 2. Reveal the locked content with a smooth animation
+            lockedContent.classList.add('visible');
+        });
+
+        // COPY CODE BUTTON
+        const copyBtn = document.getElementById('copy-code-btn');
+        const codeBlock = document.querySelector('pre code');
+
+        copyBtn.addEventListener('click', function() {
+            navigator.clipboard.writeText(codeBlock.innerText).then(() => {
+                copyBtn.textContent = "Copied!";
+                copyBtn.classList.add('copied');
+                setTimeout(() => {
+                    copyBtn.textContent = "Copy Code";
+                    copyBtn.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                alert('Please copy the code manually using your browser\'s context menu.');
+            });
         });
     </script>
 

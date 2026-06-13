@@ -595,7 +595,7 @@
                             <strong>Example for Windows:</strong> <code class="inline">cd Desktop\eidolon</code><br><br>
                             <em>💡 Tip: In Windows Explorer, you can type <code>cmd</code> in the address bar and hit Enter to instantly open a command prompt inside your folder. On macOS, right-click the folder and select "Open in Terminal".</em>
                         </li>
-                        <li><strong>Install dependencies:</strong> Type the following and hit Enter: <code class="inline">pip install opencv-python numpy soundfile mido gradio</code></li>
+                        <li><strong>Install dependencies:</strong> Type the following and hit Enter: <code class="inline">pip install opencv-python numpy soundfile mido gradio requests</code></li>
                         <li><strong>Generate Output:</strong> Run the script by typing:<br><br>
                             <code class="inline">python resonance_engine.py image.jpg --style cinematic</code><br>
                             or<br>
@@ -1803,16 +1803,18 @@ if __name__ == "__main__":
             localStorage.setItem('lygo_donation_clicks', count);
             document.getElementById('donation-clicks').textContent = count;
 
-            // 2. Visually Unlock the Code Gate
-            const gate = document.getElementById('donation-gate');
-            const lockedContent = document.getElementById('locked-content');
-            gate.style.border = "2px solid #4ade80";
-            gate.innerHTML = `
-                <h3 style="color: #4ade80;">💎 Access Granted!</h3>
-                <p>Thank you for your support. Both code modules are now unlocked below.</p>
-                <p style="font-size: 0.9rem; color: var(--text-muted);">(You can also donate any time via the links in the footer.)</p>
-            `;
-            lockedContent.classList.add('visible');
+            // 2. Visually Unlock the Code Gate (Delayed slightly to ensure link opens)
+            setTimeout(() => {
+                const gate = document.getElementById('donation-gate');
+                const lockedContent = document.getElementById('locked-content');
+                gate.style.border = "2px solid #4ade80";
+                gate.innerHTML = `
+                    <h3 style="color: #4ade80;">💎 Access Granted!</h3>
+                    <p>Thank you for your support. All code modules are now unlocked below.</p>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">(You can also donate any time via the links in the footer.)</p>
+                `;
+                lockedContent.classList.add('visible');
+            }, 100);
         });
         
         // Code Tabs

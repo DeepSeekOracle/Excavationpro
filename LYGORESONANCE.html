@@ -386,7 +386,7 @@
         .card h4 { margin-bottom: 15px; color: var(--text-main); }
         .card a { display: block; margin-bottom: 6px; font-size: 0.9rem; }
         
-        /* New Help/Explanation Section with Scrollable Box */
+        /* Help/Explanation Section with Scrollable Box */
         .help-box {
             background: #0f172a;
             border: 1px solid #334155;
@@ -476,7 +476,7 @@
     <header>
         <div class="container">
             <h1 class="neon-title">LYGO RESONANCE</h1>
-            <p class="subtitle">Image to Sound Frequency Engine</p>
+            <p class="subtitle">Image-to-Sound &amp; Creative Intelligence</p>
             <p>Upload any image. LYGO RESONANCE analyzes its geometry, color, and texture to generate rich stereo soundscapes or structured creative profiles for music and storytelling.</p>
         </div>
     </header>
@@ -591,8 +591,8 @@
                         <li><strong>Save your script:</strong> Inside that folder, save the desired code block below as <code class="inline">resonance_engine.py</code> (for audio) or <code class="inline">lygo_profile.py</code> (for JSON).</li>
                         <li><strong>Add your image:</strong> Place the image you want to translate into the same folder and name it <code class="inline">image.jpg</code>.</li>
                         <li><strong>Navigate to your folder (CRITICAL STEP):</strong> Open your terminal/command prompt and change to the directory where you saved your script. <br><br>
-                            <strong>Example for macOS/Linux:</strong> <code class="inline">cd Desktop/LYGO</code><br>
-                            <strong>Example for Windows:</strong> <code class="inline">cd Desktop\LYGO</code><br><br>
+                            <strong>Example for macOS/Linux:</strong> <code class="inline">cd Desktop/eidolon</code><br>
+                            <strong>Example for Windows:</strong> <code class="inline">cd Desktop\eidolon</code><br><br>
                             <em>💡 Tip: In Windows Explorer, you can type <code>cmd</code> in the address bar and hit Enter to instantly open a command prompt inside your folder. On macOS, right-click the folder and select "Open in Terminal".</em>
                         </li>
                         <li><strong>Install dependencies:</strong> Type the following and hit Enter: <code class="inline">pip install opencv-python numpy soundfile</code></li>
@@ -1170,7 +1170,7 @@ FULL AI MUSIC PROMPT (Copy-Paste Ready)
 Production Notes:
 {data['production_notes']}
 """
-        path.write_text(brief)
+        path.write_text(brief, encoding='utf-8')
 
 
 def main():

@@ -386,6 +386,69 @@
         .card h4 { margin-bottom: 15px; color: var(--text-main); }
         .card a { display: block; margin-bottom: 6px; font-size: 0.9rem; }
         
+        /* New Help/Explanation Section with Scrollable Box */
+        .help-box {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 30px 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent) #1e293b;
+        }
+        .help-box::-webkit-scrollbar {
+            width: 8px;
+        }
+        .help-box::-webkit-scrollbar-track {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        .help-box::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
+        }
+        .help-box h3 {
+            color: var(--accent);
+            margin-top: 0;
+        }
+        .help-box h4 {
+            color: var(--text-main);
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+        .help-box p, .help-box li {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .help-box ul {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+        .help-box code {
+            background: #000;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #4ade80;
+            font-size: 0.85rem;
+        }
+        .help-box strong {
+            color: var(--text-main);
+        }
+        .help-box .highlight {
+            color: var(--accent);
+            font-weight: bold;
+        }
+        .help-box .block {
+            background: #000;
+            padding: 10px;
+            border-radius: 6px;
+            border-left: 3px solid var(--accent);
+            margin: 10px 0;
+        }
+        
         footer {
             text-align: center;
             padding: 40px 0;
@@ -456,6 +519,52 @@
                 </div>
                 <button class="btn btn-secondary" onclick="alert('🎵 Demo Preview: Generating a 60-second stereo loop from the uploaded image\'s geometry.')">▶ Listen to Demo</button>
                 <p style="font-size:0.8rem; color:var(--text-muted); margin:0;">Each image generates a unique sound or JSON profile</p>
+            </div>
+        </section>
+        
+        <!-- Help & Explanation Section -->
+        <section id="help">
+            <h2>Help &amp; Explanation</h2>
+            <div class="help-box">
+                <h3>What is LYGO RESONANCE?</h3>
+                <p>LYGO RESONANCE is a two-part creative tool that uses computer vision to turn any image into musical or creative data. It's designed for artists, musicians, and creators who want to find hidden sonic meaning in visual art.</p>
+                
+                <h4>🔊 The Resonance Engine (Audio)</h4>
+                <p>This script generates a rich, stereo WAV soundscape based on an image's geometry, color, and texture. It creates four sonic layers:</p>
+                <ul>
+                    <li><strong>Texture Floor</strong> — Filtered noise from edge density</li>
+                    <li><strong>Drones</strong> — Sustained tones from structural lines</li>
+                    <li><strong>Melodies</strong> — Musical notes from contour shapes</li>
+                    <li><strong>Glitch Micro-Events</strong> — Short percussive blips from corner detection</li>
+                </ul>
+                <p><strong>Reproducibility:</strong> Without <code>--seed</code>, each run produces a slightly different result (like a fresh improvisation). With <code>--seed</code>, the output is <em>exactly the same</em> every time.</p>
+                <div class="block">
+                    <code>python resonance_engine.py image.jpg --style cinematic --seed 42</code>
+                </div>
+                <p>Use <code>--seed</code> when you want to lock in a specific output (e.g., for an album track or collaboration). Skip the seed for endless fresh variations.</p>
+                <p>Presets: <code>cinematic</code>, <code>ambient</code>, <code>glitch</code>, <code>ethereal</code>, <code>raw</code></p>
+
+                <h4>🧠 LYGO Profile Generator (JSON + Brief)</h4>
+                <p>This script extracts fixed, deterministic mathematical data from an image and translates it into a structured creative profile. It includes:</p>
+                <ul>
+                    <li>Color analysis (hue, saturation, brightness, colorfulness)</li>
+                    <li>Structural metrics (edge density, contrast, chaos keypoints)</li>
+                    <li>Musical parameters (key, BPM, genre, texture, energy level)</li>
+                    <li>Lyrical framework (core theme, AI lyric prompt, vocal style)</li>
+                    <li>A full AI music prompt ready to copy into Suno, Udio, or ChatGPT</li>
+                </ul>
+                <p><strong>Deterministic:</strong> The same image always produces the exact same JSON and Creative Brief. This is ideal for batch processing, study, or building a consistent library of creative assets.</p>
+                <div class="block">
+                    <code>python lygo_profile.py image.jpg --brief</code>
+                </div>
+                <p>The <code>--brief</code> flag generates a human-readable <code>.brief.txt</code> file in addition to the JSON.</p>
+
+                <h4>📌 When to use which?</h4>
+                <ul>
+                    <li><strong>Resonance Engine</strong> → You want to <em>hear</em> the image. Use for ambient music, sound design, generative art projects, or simply exploring the hidden "song" of a drawing.</li>
+                    <li><strong>Profile Generator</strong> → You want <em>data and direction</em>. Use for writing lyrics, producing a track with AI, building a creative brief for a collaborator, or analyzing visual art through a musical lens.</li>
+                </ul>
+                <p><strong>Pro Tip:</strong> Run both engines on the same image. Listen to the audio, then read the creative brief. Let the two outputs inform each other — the audio will feel like the "soul" and the JSON will feel like the "blueprint."</p>
             </div>
         </section>
         

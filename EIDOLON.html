@@ -4,34 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- ===== SEO & SOCIAL MEDIA META TAGS ===== -->
-    <title>EIDOLON | Universal Image-to-Sound Core</title>
-    <meta name="description" content="EIDOLON transforms any image into a unique sonic landscape. Upload a drawing, manuscript, or sketch—EIDOLON analyzes geometry, color, and density to generate a custom audio file or LYGO JSON profile.">
-    <meta name="keywords" content="image to sound, visual to audio, generative music, AI music, manuscript translation, computer vision, LYGO protocol, ExcavationPro, stereo audio, JSON profile">
-    <meta name="robots" content="index, follow">
+    <!-- SEO & Social -->
+    <title>EIDOLON | Universal Image-to-Sound Translation</title>
+    <meta name="description" content="EIDOLON transforms any image into a rich stereo soundscape or LYGO JSON profile. Analyze geometry, color, and density to generate cinematic audio or AI-ready music prompts.">
+    <meta name="keywords" content="image to sound, visual to audio, generative music, AI music, computer vision, LYGO protocol, ExcavationPro, stereo audio, JSON profile">
     <meta name="author" content="ExcavationPro">
     
-    <!-- Open Graph / Facebook / LinkedIn -->
+    <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://deepseekoracle.github.io/Excavationpro/EIDOLON/">
     <meta property="og:title" content="EIDOLON | Universal Image-to-Sound Translation">
-    <meta property="og:description" content="EIDOLON transforms any image into a unique sonic landscape. Upload a drawing, manuscript, or sketch—EIDOLON analyzes geometry, color, and density to generate a custom audio file or LYGO JSON profile.">
+    <meta property="og:description" content="EIDOLON transforms any image into a rich stereo soundscape or LYGO JSON profile.">
     <meta property="og:image" content="https://pbs.twimg.com/media/HBZBX40bcAIcU2h?format=png&name=small">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:site_name" content="EIDOLON">
     
-    <!-- Twitter Card -->
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@ExcavationPro">
     <meta name="twitter:title" content="EIDOLON | Universal Image-to-Sound Translation">
-    <meta name="twitter:description" content="EIDOLON transforms any image into a unique sonic landscape. Upload a drawing, manuscript, or sketch—EIDOLON analyzes geometry, color, and density to generate a custom audio file or LYGO JSON profile.">
+    <meta name="twitter:description" content="EIDOLON transforms any image into a rich stereo soundscape or LYGO JSON profile.">
     <meta name="twitter:image" content="https://pbs.twimg.com/media/HBZBX40bcAIcU2h?format=png&name=small">
     
-    <!-- Additional SEO -->
     <link rel="canonical" href="https://deepseekoracle.github.io/Excavationpro/EIDOLON/">
     <meta name="theme-color" content="#0b1120">
-
+    
     <style>
         :root {
             --bg-color: #0b1120;
@@ -40,9 +37,7 @@
             --text-muted: #94a3b8;
             --accent: #fbbf24;
             --accent-hover: #f59e0b;
-            --accent-glow: rgba(251, 191, 36, 0.15);
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -51,37 +46,35 @@
             line-height: 1.6;
             background-image: radial-gradient(circle at 10% 20%, rgba(251, 191, 36, 0.03) 0%, transparent 50%);
         }
-
         a { color: var(--accent); text-decoration: none; transition: all 0.2s ease; }
         a:hover { color: var(--accent-hover); text-decoration: underline; }
-
         .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
-
-        /* Header & Hero */
-        header { padding: 80px 0 40px; text-align: center; position: relative; }
-        h1 { font-size: 3.5rem; letter-spacing: 4px; margin-bottom: 10px; color: var(--accent); text-shadow: 0 0 40px var(--accent-glow); }
+        
+        header { padding: 80px 0 40px; text-align: center; }
+        h1 { font-size: 3.5rem; letter-spacing: 4px; margin-bottom: 10px; color: var(--accent); }
         .subtitle { font-size: 1.3rem; color: var(--text-muted); margin-bottom: 20px; font-weight: 300; }
-
-        /* Sections */
+        
         section { padding: 60px 0; border-bottom: 1px solid var(--surface-color); }
         h2 { font-size: 2rem; margin-bottom: 20px; color: var(--text-main); text-align: center; }
         h3 { font-size: 1.3rem; margin: 20px 0 10px; color: var(--accent); }
         p { margin-bottom: 15px; color: var(--text-muted); }
-
-        /* Step Cards */
-        .steps-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin: 40px 0; }
-        .step-card { 
-            background: linear-gradient(145deg, #1e293b, #0f172a); 
-            padding: 25px; border-radius: 12px; 
-            border: 1px solid #334155; 
-            position: relative; 
+        
+        .steps-container { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+            gap: 20px; 
+            margin: 40px 0; 
+        }
+        .step-card {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            padding: 25px; 
+            border-radius: 12px;
+            border: 1px solid #334155;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         .step-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
         .step-number { font-size: 2.5rem; font-weight: 900; color: rgba(251, 191, 36, 0.08); position: absolute; top: 10px; right: 15px; }
-        .step-card h4 { color: var(--accent); margin-bottom: 10px; font-size: 1.1rem; }
-
-        /* Visual Demo Area */
+        
         .demo-area {
             display: flex;
             align-items: center;
@@ -94,577 +87,178 @@
             margin: 30px 0;
             flex-wrap: wrap;
         }
-        .wave-visual { display: flex; align-items: center; gap: 3px; height: 40px; width: 100%; max-width: 300px; }
-        .wave-bar { width: 4px; height: 100%; background: var(--accent); opacity: 0.6; border-radius: 2px; animation: wave 1.5s infinite ease-in-out; }
+        .wave-visual { display: flex; align-items: center; gap: 3px; height: 40px; }
+        .wave-bar { 
+            width: 4px; height: 100%; background: var(--accent); opacity: 0.6; 
+            border-radius: 2px; animation: wave 1.5s infinite ease-in-out; 
+        }
         .wave-bar:nth-child(odd) { animation-delay: 0.2s; background: #94a3b8; opacity: 0.4; }
         @keyframes wave {
-            0%, 100% { height: 20%; }
-            50% { height: 100%; }
+            0%, 100% { height: 20%; } 50% { height: 100%; }
         }
-        .btn-demo { background: #334155; border: none; color: #f1f5f9; padding: 10px 20px; border-radius: 6px; cursor: pointer; transition: 0.2s; }
-        .btn-demo:hover { background: var(--accent); color: #0f172a; }
-
-        /* Donation Gate */
-        #donation-gate {
-            background: linear-gradient(145deg, #1e293b, #0f172a);
-            border: 2px dashed var(--accent);
-            border-radius: 16px;
-            padding: 40px 20px;
-            text-align: center;
-            margin: 40px 0;
-            transition: all 0.4s ease;
-        }
-        #donation-gate h3 { font-size: 1.8rem; margin-bottom: 10px; color: var(--text-main); }
         
-        .btn-large {
+        .btn {
             display: inline-block;
-            background-color: var(--accent);
-            color: var(--bg-color);
-            padding: 15px 30px;
+            background: var(--accent);
+            color: #0b1120;
+            padding: 12px 24px;
             border-radius: 8px;
             font-weight: bold;
-            font-size: 1.2rem;
-            margin-top: 10px;
-            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
-            transition: transform 0.2s, background-color 0.2s;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: none;
             cursor: pointer;
         }
-        .btn-large:hover {
-            background-color: var(--accent-hover);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(251, 191, 36, 0.5);
+        .btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
             text-decoration: none;
-            color: var(--bg-color);
+            color: #0b1120;
         }
-
-        /* Locked Content Wrapper */
-        .locked-wrapper { display: none; opacity: 0; transition: opacity 0.8s ease; }
-        .locked-wrapper.visible { display: block; opacity: 1; animation: slideUp 0.6s ease-out; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Code Box */
-        .install-box { background-color: #111827; border-left: 4px solid var(--accent); padding: 25px; border-radius: 8px; margin: 30px 0; }
-        .install-box h3 { margin-top: 0; color: var(--text-main); }
-        .install-box ol { margin-left: 20px; color: var(--text-muted); }
-        .install-box li { margin-bottom: 10px; }
-        code.inline { background-color: #000; padding: 2px 6px; border-radius: 4px; color: #4ade80; font-family: 'Courier New', monospace; font-size: 0.9em; }
-
-        /* Code Block Container */
-        .code-wrapper { position: relative; margin: 20px 0; }
-        pre { 
-            background-color: #000; 
-            padding: 20px; 
-            border-radius: 8px; 
-            overflow-x: auto; 
-            border: 1px solid var(--surface-color); 
-            margin: 0; 
+        .btn-secondary {
+            background: #334155;
+            color: #f1f5f9;
         }
-        pre code { font-family: 'Courier New', monospace; color: #4ade80; font-size: 0.9rem; line-height: 1.5; }
+        .btn-secondary:hover {
+            background: #475569;
+            color: #f1f5f9;
+        }
         
-        .copy-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
+        .github-card {
             background: #1e293b;
             border: 1px solid #334155;
-            color: #94a3b8;
-            padding: 5px 12px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: 0.2s;
-            font-family: inherit;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.2s;
         }
-        .copy-btn:hover { background: var(--accent); color: #0f172a; border-color: var(--accent); }
-        .copy-btn.copied { background: #4ade80; color: #0f172a; border-color: #4ade80; }
-
-        /* Rumble Stream Section */
+        .github-card:hover { transform: translateY(-4px); }
+        
         .stream-area {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
             background: #0f172a;
             border: 1px solid #334155;
             border-radius: 16px;
             padding: 30px;
-            margin: 30px 0;
+            text-align: center;
         }
-        .stream-area h3 { color: var(--text-main); margin-top: 0; }
-        .stream-wrapper {
-            width: 100%;
-            max-width: 600px;
-            background: #000;
-            border-radius: 8px;
-            overflow: hidden;
+        
+        footer { 
+            text-align: center; 
+            padding: 40px 0; 
+            color: var(--text-muted); 
+            font-size: 0.9rem; 
         }
-        .stream-wrapper iframe {
-            width: 100%;
-            height: 340px;
-            border: none;
-            display: block;
-        }
-        .btn-monetized {
-            background: var(--accent);
-            color: var(--bg-color);
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-weight: bold;
-            display: inline-block;
-            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
-            transition: transform 0.2s, background-color 0.2s;
-        }
-        .btn-monetized:hover {
-            background-color: var(--accent-hover);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(251, 191, 36, 0.5);
-            text-decoration: none;
-            color: var(--bg-color);
-        }
-
-        /* Code Tabs */
-        .code-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        .code-tab {
-            background: var(--surface-color);
-            color: var(--text-muted);
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            border: 1px solid transparent;
-            transition: 0.2s;
-            font-weight: bold;
-        }
-        .code-tab.active {
-            background: var(--accent);
-            color: var(--bg-color);
-            border-color: var(--accent);
-        }
-        .code-tab:hover {
-            border-color: var(--accent);
-            color: var(--text-main);
-        }
-        .code-panel { display: none; }
-        .code-panel.active { display: block; }
-
-        /* Link Grid */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 20px; }
-        .card { background-color: var(--surface-color); padding: 20px; border-radius: 8px; text-align: center; transition: transform 0.2s; }
-        .card:hover { transform: scale(1.02); }
-        .card h4 { margin-bottom: 15px; color: var(--text-main); }
-        .card a { display: block; margin-bottom: 6px; font-size: 0.9rem; }
-
-        footer { text-align: center; padding: 40px 0; color: var(--text-muted); font-size: 0.9rem; }
         .highlight { color: var(--text-main); font-weight: bold; }
     </style>
-
-    <!-- Rumble Embed Script -->
-    <script>!function(r,u,m,b,l,e){r._Rumble=b,r[b]||(r[b]=function(){(r[b]._=r[b]._||[]).push(arguments);if(r[b]._.length==1){l=u.createElement(m),e=u.getElementsByTagName(m)[0],l.async=1,l.src="https://rumble.com/embedJS/u1th29y"+(arguments[1].video?'.'+arguments[1].video:'')+"/?url="+encodeURIComponent(location.href)+"&args="+encodeURIComponent(JSON.stringify([].slice.apply(arguments))),e.parentNode.insertBefore(l,e)}})}(window, document, "script", "Rumble");</script>
 </head>
 <body>
-
     <header>
         <div class="container">
             <h1>EIDOLON</h1>
-            <p class="subtitle">Universal Image-to-Sound & LYGO Profile Engine</p>
-            <p>Upload any drawing, manuscript, or sketch. EIDOLON analyzes geometry, color, and density to generate a unique sonic landscape or a structured JSON profile for AI music generation.</p>
+            <p class="subtitle">Universal Image-to-Sound &amp; LYGO Profile Engine</p>
+            <p>Upload any image. EIDOLON analyzes its geometry, color, and texture to generate either a rich stereo soundscape or a structured JSON profile for AI music generation.</p>
         </div>
     </header>
 
     <div class="container">
-        
+        <!-- How It Works -->
         <section id="how-it-works">
             <h2>How It Works</h2>
-            <p style="text-align: center; max-width: 700px; margin: 0 auto 30px;">EIDOLON uses computer vision to read an image like a musical score. The AI measures lines, shapes, brightness, and pattern density, then builds a custom sound engine or data profile from that data.</p>
-            
             <div class="steps-container">
-                <div class="step-card">
+                <div class="step-card" style="position: relative;">
                     <div class="step-number">01</div>
                     <h4>Upload Image</h4>
-                    <p>Drop in any picture: a historical manuscript page, a botanical illustration, a street map, or a random doodle from your notebook.</p>
+                    <p>Any image works — manuscripts, drawings, photos, abstract art, or quick sketches.</p>
                 </div>
-                <div class="step-card">
+                <div class="step-card" style="position: relative;">
                     <div class="step-number">02</div>
-                    <h4>Geometry Scan</h4>
-                    <p>Long straight lines become bass drones. Curves become arpeggios. Brightness and color density determine the root frequency and harmonic structure.</p>
+                    <h4>Deep Analysis</h4>
+                    <p>Computer vision reads edges, contours, brightness, color, and structural density like a musical score.</p>
                 </div>
-                <div class="step-card">
+                <div class="step-card" style="position: relative;">
                     <div class="step-number">03</div>
-                    <h4>Dual Output</h4>
-                    <p>Choose between <strong>Phase 2</strong> (Stereo WAV audio) or <strong>Phase 3</strong> (LYGO JSON profile). The JSON profile provides AI-ready musical parameters and lyrical prompts.</p>
+                    <h4>Choose Output</h4>
+                    <p><strong>EIDOLON V2</strong> → High-quality stereo WAV audio<br>
+                       <strong>LYGO Profile</strong> → Structured JSON + Creative Brief for AI music tools</p>
                 </div>
-                <div class="step-card">
+                <div class="step-card" style="position: relative;">
                     <div class="step-number">04</div>
-                    <h4>Listen & Export</h4>
-                    <p>Export your image's song as a high-quality stereo WAV file or copy the LYGO JSON profile directly into any AI music generator.</p>
+                    <h4>Create &amp; Export</h4>
+                    <p>Generate unique cinematic audio or ready-to-use prompts for Suno, Udio, or your DAW.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- GitHub Access -->
+        <section id="code">
+            <h2>Open Source • Run It Locally</h2>
+            <p style="text-align:center; max-width:700px; margin:0 auto 30px;">
+                Both tools are fully open source. Download the latest versions directly from GitHub.
+            </p>
+            
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:20px; margin:40px 0;">
+                <!-- EIDOLON V2 Card -->
+                <div class="github-card">
+                    <h3 style="color:#fbbf24; margin-bottom:10px;">EIDOLON V2</h3>
+                    <p style="font-size:0.95rem;">Image → Rich Stereo Soundscape</p>
+                    <p style="font-size:0.85rem; color:#94a3b8; margin:15px 0;">5 artistic presets • FFT noise filtering • Reproducible seeds • Beautiful spatial audio</p>
+                    <a href="https://github.com/deepseekoracle/Excavationpro" class="btn" style="margin-bottom:10px; display:block;">View on GitHub</a>
+                    <a href="https://raw.githubusercontent.com/deepseekoracle/Excavationpro/main/eidolon_v2.py" class="btn btn-secondary" style="font-size:0.9rem; padding:8px 18px;">Download eidolon_v2.py</a>
+                </div>
+                
+                <!-- LYGO Profile Card -->
+                <div class="github-card">
+                    <h3 style="color:#fbbf24; margin-bottom:10px;">LYGO Profile Generator</h3>
+                    <p style="font-size:0.95rem;">Image → Musical DNA + Lyrical Framework</p>
+                    <p style="font-size:0.85rem; color:#94a3b8; margin:15px 0;">Key, BPM, Genre, Energy, AI lyric prompts &amp; full creative brief</p>
+                    <a href="https://github.com/deepseekoracle/Excavationpro" class="btn" style="margin-bottom:10px; display:block;">View on GitHub</a>
+                    <a href="https://raw.githubusercontent.com/deepseekoracle/Excavationpro/main/lygo_profile.py" class="btn btn-secondary" style="font-size:0.9rem; padding:8px 18px;">Download lygo_profile.py</a>
                 </div>
             </div>
             
-            <div class="demo-area">
-                <div class="wave-visual">
-                    <span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span>
-                    <span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span>
-                    <span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span>
-                    <span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span>
-                </div>
-                <button class="btn-demo" onclick="alert('🎵 Demo Preview: Generating a 60-second stereo loop from the uploaded image\'s geometry.')">▶ Listen to Demo</button>
-                <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">Each image generates a unique sound or JSON profile</p>
+            <div style="text-align:center; margin-top:30px;">
+                <a href="https://github.com/deepseekoracle/Excavationpro" class="btn btn-secondary">Visit Full Repository →</a>
             </div>
-
-            <p style="text-align: center;">
-                <a href="https://deepseekoracle.github.io/Excavationpro/eternalhaven.html" target="_blank">Eternal Haven</a> | 
-                <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/legacy-guardian-music.html" target="_blank">The LYGO Network</a>
-            </p>
         </section>
 
-        <!-- Live EIDOLON Stream -->
+        <!-- Live Stream -->
         <section id="live-stream">
             <h2>Live EIDOLON Stream</h2>
             <div class="stream-area">
-                <h3>🎧 Tune In 24/7</h3>
-                <p style="text-align: center;">Listen to the EIDOLON core running live. A continuous generative soundscape evolving in real-time.</p>
+                <h3>🎧 24/7 Generative Soundscape</h3>
+                <p>Listen to the EIDOLON core running live — a continuous evolving audio environment.</p>
                 
-                <div class="stream-wrapper">
+                <div style="max-width:620px; margin:25px auto; background:#000; border-radius:8px; overflow:hidden;">
                     <div id="rumble_v7900mo"></div>
                 </div>
-
-                <a href="https://rumble.com/v7b6omw-content-you-can-digoriginal-music-radiocoffee-room-chat-lurk-friendly247-st.html?mref=1th29y&mc=2p3fp" target="_blank" class="btn-monetized">
-                    💰 Support via Monetized Link
-                </a>
-                <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">Click to watch on Rumble and support the creator directly.</p>
-            </div>
-        </section>
-
-        <section id="code">
-            <h2>Developer Open Source Access</h2>
-            <p style="text-align: center; margin-bottom: 20px;">Run the visual-to-audio or LYGO profile engine on your own machine. Choose between Phase 2 (Stereo Audio) or Phase 3 (JSON Profile).</p>
-
-            <div id="donation-gate">
-                <h3>🔒 Unlock Developer Resources</h3>
-                <p>A friendly donation is <strong>not required, but deeply appreciated</strong> to help keep the servers running and the coffee flowing!</p>
-                <a href="https://paypal.com/paypalme/ExcavationPro" target="_blank" class="btn-large" id="unlock-btn">💖 Donate via PayPal</a>
-                <p class="unlock-hint" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 15px; font-style: italic;">Clicking the button will instantly unlock both code modules below.</p>
-            </div>
-
-            <div id="locked-content" class="locked-wrapper">
-                <div class="install-box">
-                    <h3>How to Run the Engines Locally</h3>
-                    <ol>
-                        <li><strong>Install Python:</strong> Make sure you have Python installed on your computer.</li>
-                        <li><strong>Set up your folder:</strong> Create a new folder on your desktop. Save the desired code block below into that folder as a file named <code class="inline">eidolon_phase2.py</code> (for audio) or <code class="inline">lygo_profile.py</code> (for JSON).</li>
-                        <li><strong>Add your image:</strong> Place the image you want to translate into the same folder and name it <code class="inline">image.jpg</code>.</li>
-                        <li><strong>Install dependencies:</strong> Open your terminal/command prompt, navigate to your folder, and run: <code class="inline">pip install opencv-python numpy soundfile scipy</code></li>
-                        <li><strong>Generate Output:</strong> Run the script by typing: <code class="inline">python eidolon_phase2.py</code> or <code class="inline">python lygo_profile.py</code>. A new WAV file or JSON file will appear in your folder!</li>
-                    </ol>
-                </div>
-
-                <!-- Code Tabs -->
-                <div class="code-tabs">
-                    <div class="code-tab active" data-target="phase2">Phase 2: Stereo Audio</div>
-                    <div class="code-tab" data-target="phase3">Phase 3: LYGO JSON Profile</div>
-                </div>
-
-                <!-- Phase 2 Panel -->
-                <div id="phase2" class="code-panel active">
-                    <div class="code-wrapper">
-                        <button class="copy-btn" data-target="phase2">Copy Code</button>
-                        <pre><code>import cv2
-import numpy as np
-import soundfile as sf
-import math
-
-# --- SYNTHESIS & EFFECTS ---
-def generate_tone(freq, duration, sr=44100, wave_type='sine'):
-    t = np.linspace(0, duration, int(sr * duration), False)
-    if wave_type == 'sine':
-        return np.sin(freq * t * 2 * np.pi)
-    elif wave_type == 'sawtooth':
-        return 2 * (t * freq - np.floor(0.5 + t * freq))
-    elif wave_type == 'noise':
-        return np.random.uniform(-1, 1, len(t))
-    return np.zeros_like(t)
-
-def apply_envelope(audio, sr, attack=0.1, decay=0.1):
-    attack_samples = int(attack * sr)
-    decay_samples = int(decay * sr)
-    env = np.ones_like(audio)
-    if len(audio) > attack_samples + decay_samples:
-        env[:attack_samples] = np.linspace(0, 1, attack_samples)
-        env[-decay_samples:] = np.linspace(1, 0, decay_samples)
-    return audio * env
-
-def stereo_pan(mono_audio, pan_position):
-    """ Pans audio between -1.0 (Left) and 1.0 (Right) """
-    pan_position = max(-1.0, min(1.0, pan_position))
-    left_gain = math.cos((pan_position + 1) * math.pi / 4)
-    right_gain = math.sin((pan_position + 1) * math.pi / 4)
-    return np.column_stack((mono_audio * left_gain, mono_audio * right_gain))
-
-# --- EIDOLON V2 CORE ---
-def generate_eidolon_v2(image_path, output_path='eidolon_stereo.wav'):
-    print(f"Initializing EIDOLON V2 Scanner...\nAnalyzing {image_path}...")
-    
-    # 1. Image Processing (Color & Grayscale)
-    img_color = cv2.imread(image_path)
-    if img_color is None:
-        print("Error: Image not found.")
-        return
-    
-    img_gray = cv2.cvtColor(img_color, cv2.COLOR_BGR2GRAY)
-    height, width = img_gray.shape
-
-    # 2. Advanced Feature Extraction
-    # A. Color Channels (BGR format in OpenCV)
-    avg_blue, avg_green, avg_red, _ = cv2.mean(img_color)
-    
-    # B. Texture / Edge Density
-    edges = cv2.Canny(img_gray, 50, 150)
-    edge_density = np.sum(edges > 0) / (height * width) # % of image that is an edge
-    
-    # C. Geometry
-    contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    lines = cv2.HoughLinesP(edges, 1, np.pi/180, threshold=50, minLineLength=30, maxLineGap=10)
-    
-    # D. Micro-Features (FAST Corner Detection for Glitch elements)
-    fast = cv2.FastFeatureDetector_create(threshold=40)
-    keypoints = fast.detect(img_gray, None)
-
-    # 3. Dynamic Base Parameters
-    sr = 44100
-    duration = 15.0
-    audio_mix = np.zeros((int(sr * duration), 2)) # Stereo output
-    
-    # Dynamic Root: Influenced by overall darkness and Red channel
-    root_freq = 30 + (avg_red / 255) * 40 
-    # Theta Lock: Influenced by Green channel and aspect ratio
-    theta_lock = 5 + (avg_green / 255) * 3 
-
-    print(f"Data Read: {len(contours)} Shapes, {len(lines) if lines is not None else 0} Lines, {len(keypoints)} Micro-points.")
-    print(f"Texture Density: {edge_density:.4f}")
-
-    # 4. AUDIO MAPPING
-
-    # LAYER 1: The Texture Floor (Noise mapped to edge density & Blue channel)
-    if edge_density > 0.01:
-        noise = generate_tone(0, duration, sr, 'noise')
-        noise = apply_envelope(noise, sr, 3.0, 3.0) 
-        noise_vol = min(edge_density * 2.0, 0.15)
-        audio_mix += stereo_pan(noise, 0) * noise_vol
-
-    # LAYER 2: Drones (Lines)
-    if lines is not None:
-        for i in range(min(len(lines), 6)):
-            x1, y1, x2, y2 = lines[i][0]
-            length = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
-            
-            drone_freq = root_freq + (max(1, int(length / 50)) * theta_lock)
-            tone = apply_envelope(generate_tone(drone_freq, duration, sr, 'sawtooth'), sr, 4.0, 4.0)
-            pan_val = (x1 / width) * 2 - 1 
-            audio_mix += stereo_pan(tone, pan_val) * 0.1 
-
-    # LAYER 3: Melodies (Shapes/Contours)
-    if contours:
-        valid_contours = [c for c in contours if cv2.contourArea(c) > 100]
-        for i in range(min(len(valid_contours), 12)):
-            area = cv2.contourArea(valid_contours[i])
-            vertices = len(cv2.approxPolyDP(valid_contours[i], 0.04 * cv2.arcLength(valid_contours[i], True), True))
-            
-            note_freq = (root_freq * 4) + (vertices * theta_lock * 2) 
-            note_duration = 0.3 + (area / 15000.0) 
-            tone = apply_envelope(generate_tone(note_freq, note_duration, sr, 'sine'), sr, 0.05, 0.2)
-            
-            M = cv2.moments(valid_contours[i])
-            if M['m00'] != 0:
-                cx = int(M['m10']/M['m00'])
-            else:
-                cx = cv2.boundingRect(valid_contours[i])[0]
                 
-            time_start = (cx / width) * (duration - note_duration)
-            start_idx = int(time_start * sr)
-            end_idx = start_idx + len(tone)
-            
-            pan_val = (cx / width) * 2 - 1
-            audio_mix[start_idx:end_idx] += stereo_pan(tone, pan_val) * 0.2 
-
-    # LAYER 4: Glitch / Micro-Percussion (Keypoints)
-    if keypoints:
-        for i in range(min(len(keypoints), 30)):
-            x, y = keypoints[i].pt
-            blip_freq = root_freq * 16 + (y % 100)
-            tone = apply_envelope(generate_tone(blip_freq, 0.05, sr, 'sine'), sr, 0.01, 0.02)
-            time_start = (y / height) * (duration - 0.05)
-            start_idx = int(time_start * sr)
-            end_idx = start_idx + len(tone)
-            pan_val = (x / width) * 2 - 1
-            audio_mix[start_idx:end_idx] += stereo_pan(tone, pan_val) * 0.05
-
-    # 5. Final Output Generation
-    max_amp = np.max(np.abs(audio_mix))
-    if max_amp > 0:
-        audio_mix = audio_mix / max_amp
-        
-    sf.write(output_path, audio_mix, sr)
-    print(f"Success! V2 Stereo translation complete. Saved to {output_path}")
-
-if __name__ == "__main__":
-    generate_eidolon_v2('image.jpg', 'eidolon_v2_stereo.wav')</code></pre>
-                    </div>
-                </div>
-
-                <!-- Phase 3 Panel -->
-                <div id="phase3" class="code-panel">
-                    <div class="code-wrapper">
-                        <button class="copy-btn" data-target="phase3">Copy Code</button>
-                        <pre><code>import cv2
-import numpy as np
-import json
-import math
-
-def generate_lygo_profile(image_path):
-    print(f"Scanning {image_path} for LYGO Data Matrix...\n")
-    img = cv2.imread(image_path)
-    if img is None:
-        return "Error: Image not found."
-
-    # 1. MATHEMATICAL EXTRACTION
-    height, width, _ = img.shape
-    total_pixels = height * width
-
-    # Color Math (HSV)
-    hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-    avg_hue = np.mean(hsv_img[:,:,0]) * 2 # OpenCV hue is 0-179, multiply by 2 for 0-360
-    avg_sat = np.mean(hsv_img[:,:,1]) / 255.0
-    avg_val = np.mean(hsv_img[:,:,2]) / 255.0
-
-    # Geometry & Density Math
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    edges = cv2.Canny(gray, 50, 150)
-    edge_count = np.count_nonzero(edges)
-    edge_density = edge_count / total_pixels
-
-    # Micro-features (Sharp corners/Chaos)
-    fast = cv2.FastFeatureDetector_create(threshold=40)
-    keypoints = fast.detect(gray, None)
-    chaos_index = len(keypoints)
-
-    # 2. TRANSLATION TO MUSICAL DATA
-    keys = ["C", "G", "D", "A", "E", "B", "F#", "Db", "Ab", "Eb", "Bb", "F"]
-    key_index = int(avg_hue / 30) % 12
-    scale = "Minor" if avg_val < 0.5 else "Major"
-    musical_key = f"{keys[key_index]} {scale}"
-
-    # BPM Calculation (Scaled between 80 and 175)
-    bpm = int(80 + (edge_density * 1000))
-    bpm = max(80, min(175, bpm))
-
-    # Genre & Texture Logic
-    if chaos_index > 500 and avg_val < 0.4:
-        genre = "Industrial Dubstep / Dark Phonk"
-        texture = "Heavy distortion, aggressive stutters, deep sub-bass."
-    elif edge_density > 0.05:
-        genre = "Emo Rap / Trap"
-        texture = "Crisp hi-hats, melancholic melodies, heavy 808s."
-    else:
-        genre = "West Coast G-Funk / Instrumental"
-        texture = "Smooth leads, laid-back groove, deep analog bass."
-
-    # Lyrical Theme Engine
-    if avg_val < 0.4 and edge_density > 0.04:
-        lyric_theme = "Survival, fighting from the shadows, the 'lone wolf' mentality, outlasting the betrayal."
-        lyric_prompt = "Write lyrics about being the last one standing, surviving betrayal, and trusting a very short list of ride-or-die loyalists."
-    elif chaos_index > 300:
-        lyric_theme = "Resilience, cutting through the static, unchained energy."
-        lyric_prompt = "Write aggressive lyrics about breaking the system, staying breathing when they counted you out, and moving in silence."
-    else:
-        lyric_theme = "Observation, loyalty, navigating the modern world with an edge."
-        lyric_prompt = "Write clever, slightly edgy observational lyrics with a dark comedic undertone about modern life and staying true to the code."
-
-    # 3. BUILD THE JSON PAYLOAD
-    lygo_data = {
-        "EIDOLON_SCAN_DATA": {
-            "mathematics": {
-                "average_hue_degrees": round(avg_hue, 2),
-                "luminance_ratio": round(avg_val, 4),
-                "edge_density_ratio": round(edge_density, 4),
-                "chaos_keypoints": chaos_index
-            },
-            "musical_parameters": {
-                "root_key": musical_key,
-                "bpm": bpm,
-                "suggested_genre": genre,
-                "texture": texture
-            },
-            "lyrical_framework": {
-                "core_theme": lyric_theme,
-                "ai_generation_prompt": lyric_prompt
-            },
-            "ai_music_prompt": f"Create a {genre} track at {bpm} BPM in the key of {musical_key}. The vibe should be {texture}. Lyrical themes should focus on {lyric_theme}."
-        }
-    }
-
-    # Output beautifully formatted JSON
-    json_output = json.dumps(lygo_data, indent=4)
-    
-    with open('lygo_profile.json', 'w') as f:
-        f.write(json_output)
-        
-    print(json_output)
-    print("\n[+] LYGO Profile saved to lygo_profile.json")
-
-if __name__ == "__main__":
-    generate_lygo_profile('image.jpg')</code></pre>
-                    </div>
-                </div>
+                <a href="https://rumble.com/v7b6omw-content-you-can-digoriginal-music-radiocoffee-room-chat-lurk-friendly247-st.html?mref=1th29y&mc=2p3fp" 
+                   target="_blank" class="btn" style="margin-top:10px;">
+                    Watch &amp; Support on Rumble
+                </a>
             </div>
         </section>
 
+        <!-- Links -->
         <section id="links">
             <h2>The ExcavationPro Network</h2>
-            <p style="text-align: center;">Connect, listen, and support the audio-visual paradigm shift.</p>
-            <p style="text-align: center;">
-                <a href="http://linktr.ee/excavationpro" target="_blank" style="display: inline-block; background-color: var(--accent); color: var(--bg-color); padding: 10px 20px; border-radius: 5px; font-weight: bold; margin-top: 15px;">View All Links on Linktree</a>
-            </p>
-
-            <div class="grid">
-                <div class="card">
-                    <h4>🎶 Listen & Follow</h4>
-                    <a href="https://open.spotify.com/artist/6CkZ4bN2xu3WRKbjEL3u2S" target="_blank">Spotify</a>
-                    <a href="https://music.apple.com/us/artist/excavationpro/1586588545" target="_blank">Apple Music</a>
-                    <a href="https://youtube.com/channel/UCnCf9gjhMEfUFPvGkdlUabQ" target="_blank">YouTube Music</a>
-                    <a href="https://audius.co/excavationpro" target="_blank">Audius</a>
-                    <a href="https://sonarmuse.org/artist/Yony5lHuFBb2goX6c7vS" target="_blank">SonarMuse</a>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:20px; margin-top:30px;">
+                <div class="github-card">
+                    <h4>🎶 Music</h4>
+                    <a href="https://open.spotify.com/artist/6CkZ4bN2xu3WRKbjEL3u2S">Spotify</a><br>
+                    <a href="https://music.apple.com/us/artist/excavationpro/1586588545">Apple Music</a><br>
+                    <a href="https://ffm.to/eovnvo9">Listen Live (All Platforms)</a>
                 </div>
-
-                <div class="card">
-                    <h4>🎹 Buy My Beats</h4>
-                    <a href="https://beatstars.com/excavationpro" target="_blank">Beatstars Profile</a>
-                    <a href="https://excavationpro.beatstars.com" target="_blank">Beatstars Store</a>
+                <div class="github-card">
+                    <h4>🎧 Live Streams</h4>
+                    <a href="https://rumble.com/user/Excavationpro/live">Rumble Live</a><br>
+                    <a href="https://kick.com/excavationpro">KICK Live</a><br>
+                    <a href="https://twitch.tv/excavationpro">Twitch Live</a>
                 </div>
-
-                <div class="card">
-                    <h4>🎧 Live 24/7 Streams</h4>
-                    <p style="font-size: 0.8rem; margin-bottom: 10px; color: var(--text-muted);">Nonstop vibes 💃🪩🕺 tune in anytime!</p>
-                    <a href="https://ffm.to/eovnvo9" target="_blank">Listen Live (All Platforms)</a>
-                    <a href="https://rumble.com/user/Excavationpro/live" target="_blank">🔴 Rumble Live</a>
-                    <a href="https://kick.com/excavationpro" target="_blank">🟢 KICK Live</a>
-                    <a href="https://twitch.tv/excavationpro" target="_blank">🟣 Twitch Live</a>
-                </div>
-
-                <div class="card">
-                    <h4>📜 Protocol & Docs</h4>
-                    <a href="https://grokipedia.com/page/lygo-protocol-stack" target="_blank">LYGO Protocol Stack</a>
-                    <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/legacy-guardian-music.html" target="_blank">Legacy Guardian Music</a>
-                    <a href="https://deepseekoracle.github.io/Excavationpro/eternalhaven.html" target="_blank">Eternal Haven</a>
-                </div>
-
-                <div class="card">
-                    <h4>💎 Support & Donate</h4>
-                    <a href="https://paypal.com/paypalme/ExcavationPro" target="_blank">💸 Donate via PayPal</a>
-                    <a href="https://gravatar.com/xcavationpro" target="_blank">💸 Donate Crypto</a>
+                <div class="github-card">
+                    <h4>💎 Support</h4>
+                    <a href="https://paypal.com/paypalme/ExcavationPro">Donate via PayPal</a><br>
+                    <a href="http://linktr.ee/excavationpro">All Links (Linktree)</a>
                 </div>
             </div>
         </section>
@@ -672,70 +266,24 @@ if __name__ == "__main__":
 
     <footer>
         <div class="container">
-            <p>Please credit <span class="highlight">@ExcavationPro</span> when using my content. Thank you!</p>
+            <p>Please credit <span class="highlight">@ExcavationPro</span> when using this work.</p>
             <p>© 2026 ExcavationPro. All rights reserved.</p>
         </div>
     </footer>
 
+    <!-- Rumble Embed -->
     <script>
-        // ===== RUMBLE EMBED =====
+        !function(r,u,m,b,l,e){
+            r._Rumble=b,r[b]||(r[b]=function(){
+                (r[b]._=r[b]._||[]).push(arguments);
+                if(r[b]._.length==1){
+                    l=u.createElement(m),e=u.getElementsByTagName(m)[0],
+                    l.async=1,l.src="https://rumble.com/embedJS/u1th29y"+(arguments[1].video?'.'+arguments[1].video:'')+"/?url="+encodeURIComponent(location.href)+"&args="+encodeURIComponent(JSON.stringify([].slice.apply(arguments))),
+                    e.parentNode.insertBefore(l,e)
+                }
+            })
+        }(window, document, "script", "Rumble");
         Rumble("play", {"video":"v7900mo","div":"rumble_v7900mo"});
-
-        // ===== UNLOCK BUTTON =====
-        document.getElementById('unlock-btn').addEventListener('click', function() {
-            const gate = document.getElementById('donation-gate');
-            const lockedContent = document.getElementById('locked-content');
-            gate.style.border = "2px solid #4ade80";
-            gate.innerHTML = `
-                <h3 style="color: #4ade80;">💎 Access Granted!</h3>
-                <p>Thank you for your support. Both code modules are now unlocked below.</p>
-                <p style="font-size: 0.9rem; color: var(--text-muted);">(You can also donate any time via the links in the footer.)</p>
-            `;
-            lockedContent.classList.add('visible');
-        });
-
-        // ===== CODE TABS =====
-        const tabs = document.querySelectorAll('.code-tab');
-        const panels = {
-            phase2: document.getElementById('phase2'),
-            phase3: document.getElementById('phase3')
-        };
-
-        tabs.forEach(tab => {
-            tab.addEventListener('click', function() {
-                tabs.forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                Object.values(panels).forEach(p => p.classList.remove('active'));
-                const target = this.getAttribute('data-target');
-                if (panels[target]) {
-                    panels[target].classList.add('active');
-                }
-            });
-        });
-
-        // ===== COPY CODE BUTTONS =====
-        const copyBtns = document.querySelectorAll('.copy-btn');
-        copyBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                const wrapper = this.closest('.code-wrapper');
-                const codeBlock = wrapper.querySelector('pre code');
-                
-                if (codeBlock) {
-                    navigator.clipboard.writeText(codeBlock.innerText).then(() => {
-                        this.textContent = "Copied!";
-                        this.classList.add('copied');
-                        setTimeout(() => {
-                            this.textContent = "Copy Code";
-                            this.classList.remove('copied');
-                        }, 2000);
-                    }).catch(err => {
-                        console.error('Failed to copy: ', err);
-                        alert('Please copy the code manually using your browser\'s context menu.');
-                    });
-                }
-            });
-        });
     </script>
-
 </body>
 </html>

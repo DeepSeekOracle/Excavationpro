@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- SEO & Social -->
-    <title>LYGO RESONANCE | Image to Sound Frequency Profile Generator </title>
+    <title>LYGO RESONANCE | Image-to-Sound &amp; Creative Profiles</title>
     <meta name="description" content="LYGO RESONANCE transforms any image into rich stereo soundscapes or structured creative profiles. Analyze geometry, color, and texture to generate cinematic audio or AI-ready music prompts.">
     <meta name="keywords" content="image to sound, visual to audio, generative music, AI music, LYGO protocol, ExcavationPro, stereo audio, JSON profile, creative brief">
     <meta name="author" content="ExcavationPro">
@@ -13,7 +13,7 @@
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://deepseekoracle.github.io/Excavationpro/LYGO-Resonance/">
-    <meta property="og:title" content="LYGO RESONANCE |  Image to Sound Frequency Profile Generator">
+    <meta property="og:title" content="LYGO RESONANCE | Image-to-Sound &amp; Creative Profiles">
     <meta property="og:description" content="LYGO RESONANCE transforms any image into rich stereo soundscapes or structured creative profiles.">
     <meta property="og:image" content="https://pbs.twimg.com/media/HBZBX40bcAIcU2h?format=png&name=small">
     <meta property="og:image:width" content="1200">
@@ -22,7 +22,7 @@
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@ExcavationPro">
-    <meta name="twitter:title" content="LYGO RESONANCE |  Image to Sound Frequency Profile Generator">
+    <meta name="twitter:title" content="LYGO RESONANCE | Image-to-Sound &amp; Creative Profiles">
     <meta name="twitter:description" content="LYGO RESONANCE transforms any image into rich stereo soundscapes or structured creative profiles.">
     <meta name="twitter:image" content="https://pbs.twimg.com/media/HBZBX40bcAIcU2h?format=png&name=small">
     
@@ -413,7 +413,7 @@
     <header>
         <div class="container">
             <h1 class="neon-title">LYGO RESONANCE</h1>
-            <p class="subtitle">Image to Sound Frequency Profile Generator </p>
+            <p class="subtitle">Image-to-Sound &amp; Creative Intelligence</p>
             <p>Upload any image. LYGO RESONANCE analyzes its geometry, color, and texture to generate rich stereo soundscapes or structured creative profiles for music and storytelling.</p>
         </div>
     </header>
@@ -1165,30 +1165,19 @@ if __name__ == "__main__":
         
         // Stats Management
         document.addEventListener('DOMContentLoaded', function() {
-            // Page Views
+            // Page Views (Increments on every page load)
             let views = parseInt(localStorage.getItem('lygo_page_views')) || 0;
-            if (!localStorage.getItem('lygo_page_views_counted')) {
-                views++;
-                localStorage.setItem('lygo_page_views', views);
-                localStorage.setItem('lygo_page_views_counted', 'true');
-            }
+            views++;
+            localStorage.setItem('lygo_page_views', views);
             document.getElementById('page-views').textContent = views;
             
-            // Donation Clicks (from the unlock button)
+            // Donation Clicks
             let clicks = parseInt(localStorage.getItem('lygo_donation_clicks')) || 0;
             document.getElementById('donation-clicks').textContent = clicks;
             
-            // Donations Confirmed (manual button)
+            // Donations Confirmed
             let confirmed = parseInt(localStorage.getItem('lygo_donations_confirmed')) || 0;
             document.getElementById('donations-confirmed').textContent = confirmed;
-            
-            // Track Donation Clicks
-            document.getElementById('unlock-btn').addEventListener('click', function() {
-                let count = parseInt(localStorage.getItem('lygo_donation_clicks')) || 0;
-                count++;
-                localStorage.setItem('lygo_donation_clicks', count);
-                document.getElementById('donation-clicks').textContent = count;
-            });
             
             // Manual Donation Confirmation
             document.getElementById('confirm-donation-btn').addEventListener('click', function() {
@@ -1197,6 +1186,26 @@ if __name__ == "__main__":
                 localStorage.setItem('lygo_donations_confirmed', count);
                 document.getElementById('donations-confirmed').textContent = count;
             });
+        });
+
+        // Track Donation Clicks AND Unlock Gate (MERGED BLOCK)
+        document.getElementById('unlock-btn').addEventListener('click', function() {
+            // 1. Update the Stats Counter
+            let count = parseInt(localStorage.getItem('lygo_donation_clicks')) || 0;
+            count++;
+            localStorage.setItem('lygo_donation_clicks', count);
+            document.getElementById('donation-clicks').textContent = count;
+
+            // 2. Visually Unlock the Code Gate
+            const gate = document.getElementById('donation-gate');
+            const lockedContent = document.getElementById('locked-content');
+            gate.style.border = "2px solid #4ade80";
+            gate.innerHTML = `
+                <h3 style="color: #4ade80;">💎 Access Granted!</h3>
+                <p>Thank you for your support. Both code modules are now unlocked below.</p>
+                <p style="font-size: 0.9rem; color: var(--text-muted);">(You can also donate any time via the links in the footer.)</p>
+            `;
+            lockedContent.classList.add('visible');
         });
         
         // Code Tabs

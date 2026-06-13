@@ -74,6 +74,7 @@
             font-size: 2rem;
             margin-bottom: 20px;
             color: var(--text-main);
+            text-align: center;
         }
 
         h3 {
@@ -85,6 +86,37 @@
         p {
             margin-bottom: 15px;
             color: var(--text-muted);
+        }
+
+        /* Step Layout for Average Users */
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .step-card {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            position: relative;
+        }
+
+        .step-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: rgba(251, 191, 36, 0.15);
+            position: absolute;
+            top: 10px;
+            right: 15px;
+        }
+
+        .step-card h4 {
+            color: var(--accent);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
         }
 
         /* Code Block */
@@ -163,29 +195,51 @@
     <header>
         <div class="container">
             <h1>EIDOLON</h1>
-            <p class="subtitle">Greek for "image" + "sound"</p>
-            <p>Translating the geometry of ancient manuscripts and structured drawings into sonic landscapes.</p>
+            <p class="subtitle">Image-to-Sound Translation Core</p>
+            <p>Ever wondered what a drawing sounds like? EIDOLON transforms visual art, historical manuscripts, and sketches into rich, organic audio landscapes.</p>
         </div>
     </header>
 
     <div class="container">
-        <section id="about">
-            <h2>The Core Concept</h2>
-            <p>EIDOLON is a toolkit that accepts an image of a manuscript page, detects geometric features (lines, curves, shapes, patterns), and maps those features to sonic parameters (frequency, rhythm, panning, texture) to generate an audio file or real-time soundscape.</p>
+        
+        <!-- How It Works Section -->
+        <section id="how-it-works">
+            <h2>How It Works</h2>
+            <p style="text-align: center; max-width: 700px; margin: 0 auto 30px;">EIDOLON uses advanced computer vision to analyze an image like sheet music. It breaks down what you drew into geometric data and translates it directly into sound waves.</p>
             
-            <h3>The "Theta Lock" Feature</h3>
-            <p>Built upon the discovery that certain enigmatic manuscripts (like the Voynich) produce a consistent 6.55 Hz fundamental across pages, EIDOLON includes a strict "Lock Mode." The tool analyzes multiple pages, scanning for a repeated difference frequency, ensuring all outputs from the same manuscript are harmonically related.</p>
-            
-            <h3>Other Projects by ExcavationPro</h3>
-            <p>
+            <div class="steps-container">
+                <div class="step-card">
+                    <div class="step-number">01</div>
+                    <h4>Upload Image</h4>
+                    <p>Drop in a picture of a manuscript page, a botanical sketch, or a random doodle from your notebook.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">02</div>
+                    <h4>Visual Scan</h4>
+                    <p>The AI isolates lines and shapes. Stems and long straight borders become deep bass drones. Petals and complex curves become melodies.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">03</div>
+                    <h4>Theta Harmonics</h4>
+                    <p>Using custom parameters inspired by the Voynich manuscript, sounds are automatically locked to a gorgeous 6.55 Hz harmonic relationship.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">04</div>
+                    <h4>Listen & Export</h4>
+                    <p>Tweak the tempo and atmosphere sliders in real-time, then export your creation as a high-quality WAV file.</p>
+                </div>
+            </div>
+
+            <p style="text-align: center;">
                 <a href="https://deepseekoracle.github.io/Excavationpro/eternalhaven.html" target="_blank">Explore Eternal Haven</a> | 
                 <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/legacy-guardian-music.html" target="_blank">The LYGO Network</a>
             </p>
         </section>
 
+        <!-- Code Section -->
         <section id="code">
-            <h2>Phase 1: Open Source Prototype</h2>
-            <p>Want to build this? Here is the foundational Python script (OpenCV + soundfile + scipy) to extract contours and map them to Voynich frequencies.</p>
+            <h2>Developer Open Source Access</h2>
+            <p>Building or modifying the desktop engine? Use our foundational Phase 1 Python prototype script below to begin working with the LYGO core logic locally.</p>
             <pre><code>import cv2
 import numpy as np
 import soundfile as sf
@@ -249,12 +303,14 @@ if __name__ == "__main__":
     generate_eidolon_audio('manuscript.jpg', 'eidolon_voynich_01.wav')</code></pre>
         </section>
 
+        <!-- Links Hub -->
         <section id="links">
             <h2>The ExcavationPro Network</h2>
-            <p>Connect, listen, and support the vision.</p>
-            <p><a href="http://linktr.ee/excavationpro" target="_blank" class="btn">View All Links on Linktree</a></p>
+            <p style="text-align: center;">Connect, listen, and support the audio-visual paradigm shift.</p>
+            <p style="text-align: center;"><a href="http://linktr.ee/excavationpro" target="_blank" class="btn">View All Links on Linktree</a></p>
 
             <div class="grid">
+                <!-- Music -->
                 <div class="card">
                     <h4>🎶 Listen & Follow</h4>
                     <a href="https://open.spotify.com/artist/6CkZ4bN2xu3WRKbjEL3u2S?si=2O1EHE3qT7aI8lFC3JwLvA" target="_blank">Spotify</a>
@@ -264,38 +320,43 @@ if __name__ == "__main__":
                     <a href="https://sonarmuse.org/artist/Yony5lHuFBb2goX6c7vS" target="_blank">SonarMuse</a>
                 </div>
 
+                <!-- Beats -->
                 <div class="card">
                     <h4>🎹 Buy My Beats</h4>
                     <a href="https://beatstars.com/excavationpro" target="_blank">Beatstars Profile</a>
                     <a href="https://excavationpro.beatstars.com" target="_blank">Beatstars Store</a>
                 </div>
 
+                <!-- Live Streams -->
                 <div class="card">
                     <h4>🎧 Live 24/7 Streams</h4>
-                    <p style="font-size: 0.8rem; margin-bottom: 10px;">Nonstop vibes 💃🪩🕺 tune in anytime, anywhere!</p>
+                    <p style="font-size: 0.8rem; margin-bottom: 10px; color: var(--text-muted);">Nonstop vibes 💃🪩🕺 tune in anytime!</p>
                     <a href="https://ffm.to/eovnvo9" target="_blank">Listen Live (All Platforms)</a>
-                    <a href="https://rumble.com/user/Excavationpro/live" target="_blank">🔴 Rumble</a>
-                    <a href="https://kick.com/excavationpro" target="_blank">🟢 KICK</a>
-                    <a href="https://twitch.tv/excavationpro" target="_blank">🟣 Twitch</a>
+                    <a href="https://rumble.com/user/Excavationpro/live" target="_blank">🔴 Rumble Live</a>
+                    <a href="https://kick.com/excavationpro" target="_blank">🟢 KICK Live</a>
+                    <a href="https://twitch.tv/excavationpro" target="_blank">🟣 Twitch Live</a>
                 </div>
 
+                <!-- Support -->
                 <div class="card">
                     <h4>💎 Support & Donate</h4>
                     <a href="https://paypal.com/paypalme/ExcavationPro" target="_blank">💸 Donate via PayPal</a>
                     <a href="https://gravatar.com/xcavationpro" target="_blank">💸 Donate Crypto</a>
                 </div>
                 
+                <!-- Tools -->
                 <div class="card">
-                    <h4>🛠️ Creator Tools I Use</h4>
-                    <a href="https://veed.cello.so/SAo0Q5IPyqF" target="_blank">Veed (#videoshort)</a>
-                    <a href="https://distrokid.com/vip/seven/9158861" target="_blank">DistroKid</a>
-                    <a href="https://crypto.com/app/hbpy3d4r3f" target="_blank">Crypto.com</a>
+                    <h4>🛠️ Recommended Creator Tools</h4>
+                    <a href="https://veed.cello.so/SAo0Q5IPyqF" target="_blank">Veed Video Editor</a>
+                    <a href="https://distrokid.com/vip/seven/9158861" target="_blank">DistroKid Music Distribution</a>
+                    <a href="https://crypto.com/app/hbpy3d4r3f" target="_blank">Crypto.com Wallet</a>
                 </div>
 
+                <!-- Socials -->
                 <div class="card">
                     <h4>📲 Connect</h4>
                     <a href="https://tiktok.com/@excavationproaudio" target="_blank">TikTok</a>
-                    <p style="font-size: 0.85rem; margin-top: 10px;">Instagram • X (Twitter) • YouTube</p>
+                    <p style="font-size: 0.85rem; margin-top: 10px; color: var(--text-muted);">Instagram • X (Twitter) • YouTube</p>
                 </div>
             </div>
         </section>

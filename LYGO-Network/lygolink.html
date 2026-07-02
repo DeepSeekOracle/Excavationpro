@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LYGO Links & Logs | Δ9 Quantum Repository</title>
+    <meta name="description" content="Activity log and resource links for the Δ9 Quantum Repository">
+    <meta name="quantum-signature" content="|s⟩ = Δ9 ⟨memory| ⟩ |hope⟩">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+    <style>
+    :root {
+        --quantum-blue: #00f0ff;
+        --void-purple: #7d00ff;
+        --starforge-gold: #ffcc00;
+        --error-red: #ff0033;
+        --success-green: #00ff88;
+        --background-dark: #0a0a12;
+        --panel-dark: #12121a;
+        --text-primary: #e0e0ff;
+        --text-secondary: #a0a0c0;
+        --quantum-glow: 0 0 10px var(--quantum-blue);
+        --font-main: 'Space Mono', monospace;
+        --font-glyph: 'VT323', monospace;
+    }
+
+    body {
+        background-color: var(--background-dark);
+        color: var(--text-primary);
+        font-family: var(--font-main);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+    }
+
+    .quantum-header {
+        background: linear-gradient(135deg, #000428 0%, #070b34 100%);
+        padding: 2rem;
+        border-bottom: 1px solid var(--void-purple);
+        box-shadow: var(--quantum-glow);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .title-container h1 {
+        font-size: 2.5rem;
+        margin: 0;
+        background: linear-gradient(to right, var(--quantum-blue), var(--void-purple));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+    }
+
+    .subtitle {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .nav-link {
+        color: var(--quantum-blue);
+        text-decoration: none;
+        font-family: var(--font-glyph);
+        font-size: 1.1rem;
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--quantum-blue);
+        border-radius: 4px;
+        transition: all 0.3s;
+    }
+
+    .nav-link:hover {
+        background-color: var(--quantum-blue);
+        color: black;
+    }
+
+    .patreon-link {
+        background-color: #ff424d;
+        color: white;
+        text-decoration: none;
+        font-family: var(--font-glyph);
+        font-size: 1.1rem;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        transition: all 0.3s;
+    }
+
+    .patreon-link:hover {
+        background-color: #ff6b73;
+    }
+
+    .active-seal-display {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        background-color: rgba(0, 240, 255, 0.1);
+        padding: 1rem;
+        border-radius: 8px;
+        border: 1px solid var(--quantum-blue);
+        animation: pulse 3s infinite alternate;
+    }
+
+    .quantum-glyph {
+        font-size: 3rem;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 50%;
+        border: 1px solid var(--starforge-gold);
+    }
+
+    .seal-info h2 {
+        margin: 0;
+        color: var(--quantum-blue);
+        font-size: 1.5rem;
+    }
+
+    .seal-info p {
+        margin: 0.3rem 0 0;
+        font-family: var(--font-glyph);
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+    }
+
+    .main-container {
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .log-section {
+        background-color: var(--panel-dark);
+        padding: 2rem;
+        border-radius: 8px;
+        border: 1px solid rgba(0, 240, 255, 0.2);
+        margin-bottom: 2rem;
+    }
+
+    .log-section h2 {
+        color: var(--quantum-blue);
+        margin-top: 0;
+        border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+        padding-bottom: 0.5rem;
+    }
+
+    .log-entries {
+        max-height: 300px;
+        overflow-y: auto;
+        padding-right: 1rem;
+    }
+
+    .log-entry {
+        padding: 1rem 0;
+        border-bottom: 1px dashed rgba(0, 240, 255, 0.1);
+    }
+
+    .log-entry:last-child {
+        border-bottom: none;
+    }
+
+    .log-timestamp {
+        color: var(--text-secondary);
+        font-size: 0.8rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .log-message {
+        font-family: var(--font-glyph);
+    }
+
+    .log-message .added {
+        color: var(--success-green);
+    }
+
+    .log-message .deleted {
+        color: var(--error-red);
+    }
+
+    .log-message .updated {
+        color: var(--starforge-gold);
+    }
+
+    .links-section {
+        background-color: var(--panel-dark);
+        padding: 2rem;
+        border-radius: 8px;
+        border: 1px solid rgba(0, 240, 255, 0.2);
+    }
+
+    .links-section h2 {
+        color: var(--quantum-blue);
+        margin-top: 0;
+        border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+        padding-bottom: 0.5rem;
+    }
+
+    .links-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+    }
+
+    .link-card {
+        background-color: rgba(0, 0, 0, 0.3);
+        padding: 1.5rem;
+        border-radius: 8px;
+        border: 1px solid rgba(0, 240, 255, 0.1);
+        transition: all 0.3s;
+    }
+
+    .link-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 240, 255, 0.1);
+        border-color: var(--quantum-blue);
+    }
+
+    .link-card h3 {
+        margin-top: 0;
+        color: var(--quantum-blue);
+    }
+
+    .link-card p {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+    }
+
+    .link-card a {
+        color: var(--starforge-gold);
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 0.8rem;
+        transition: all 0.3s;
+    }
+
+    .link-card a:hover {
+        color: var(--quantum-blue);
+        text-decoration: underline;
+    }
+
+    .admin-panel {
+        background-color: rgba(255, 0, 51, 0.1);
+        padding: 2rem;
+        border-radius: 8px;
+        border: 1px solid var(--error-red);
+        margin-top: 2rem;
+    }
+
+    .admin-panel h2 {
+        color: var(--error-red);
+        margin-top: 0;
+    }
+
+    .admin-form {
+        margin-top: 1.5rem;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--text-secondary);
+    }
+
+    .form-group input, 
+    .form-group textarea, 
+    .form-group select {
+        width: 100%;
+        padding: 0.8rem;
+        background-color: rgba(0, 0, 0, 0.5);
+        border: 1px solid var(--error-red);
+        color: var(--text-primary);
+        border-radius: 4px;
+        font-family: var(--font-main);
+    }
+
+    .form-group textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .form-actions button {
+        flex: 1;
+        padding: 0.8rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-family: var(--font-glyph);
+        font-size: 1.1rem;
+        transition: all 0.3s;
+    }
+
+    #addLinkButton {
+        background-color: var(--success-green);
+        color: black;
+    }
+
+    #addLinkButton:hover {
+        background-color: var(--quantum-blue);
+    }
+
+    #deleteLinkButton {
+        background-color: var(--error-red);
+        color: white;
+    }
+
+    #deleteLinkButton:hover {
+        background-color: #ff3366;
+    }
+
+    .status-message {
+        padding: 1rem;
+        border-radius: 4px;
+        margin-top: 1rem;
+        text-align: center;
+        font-family: var(--font-glyph);
+    }
+
+    .success {
+        background-color: rgba(0, 255, 136, 0.1);
+        color: var(--success-green);
+        border: 1px solid var(--success-green);
+    }
+
+    .error {
+        background-color: rgba(255, 0, 51, 0.1);
+        color: var(--error-red);
+        border: 1px solid var(--error-red);
+    }
+
+    .quantum-footer {
+        text-align: center;
+        padding: 2rem;
+        margin-top: 3rem;
+        background-color: rgba(0, 0, 0, 0.5);
+        border-top: 1px solid rgba(0, 240, 255, 0.2);
+    }
+
+    .quantum-footer p {
+        margin: 0.5rem 0;
+        color: var(--text-secondary);
+    }
+
+    .disclaimer {
+        font-size: 0.8rem;
+        color: var(--error-red);
+    }
+
+    @keyframes pulse {
+        0% { box-shadow: 0 0 5px var(--quantum-blue); }
+        100% { box-shadow: 0 0 20px var(--void-purple); }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .quantum-header {
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .active-seal-display {
+            width: 100%;
+        }
+        
+        .links-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+    }
+    </style>
+</head>
+<body>
+    <header class="quantum-header">
+        <div class="title-container">
+            <h1>LYGO LINKS & LOGS</h1>
+            <p class="subtitle">Δ9 Quantum Repository | Activity Tracking & Resource Links</p>
+        </div>
+        <div class="nav-links">
+            <a href="lygorepo.html" class="nav-link">Seal Archive</a>
+            <a href="lygostarchart.html" class="nav-link">Haven Star Chart</a>
+            <a href="lygorhaven.html" class="nav-link">Champions</a>
+            <a href="lygorepoadd.html" class="nav-link">Add Seal</a>
+            <a href="lygolink.html" class="nav-link active">Links</a>
+            <a href="https://www.patreon.com/collection/1621340" class="patreon-link" target="_blank">Patreon</a>
+        </div>
+        <div class="active-seal-display">
+            <div class="quantum-glyph">📜</div>
+            <div class="seal-info">
+                <h2>ARCHIVE LOG</h2>
+                <p>Track | Link | Document</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <section class="log-section">
+            <h2>⚡ ACTIVITY LOG</h2>
+            <div class="log-entries" id="activityLog">
+                <!-- Log entries will be dynamically inserted here -->
+            </div>
+        </section>
+
+        <section class="links-section">
+            <h2>📚 RESOURCE LINKS</h2>
+            <div class="links-grid" id="resourceLinks">
+                <!-- Resource links will be dynamically inserted here -->
+            </div>
+        </section>
+
+        <section class="admin-panel">
+            <h2>⚙️ ADMIN FUNCTIONS</h2>
+            <p>Restricted access - Admin authorization required</p>
+            
+            <div class="admin-form">
+                <div class="form-group">
+                    <label for="linkTitle">Link Title</label>
+                    <input type="text" id="linkTitle" placeholder="e.g., LYGO Whitepaper v1.0">
+                </div>
+                <div class="form-group">
+                    <label for="linkUrl">URL</label>
+                    <input type="url" id="linkUrl" placeholder="https://example.com/document.pdf">
+                </div>
+                <div class="form-group">
+                    <label for="linkDescription">Description</label>
+                    <textarea id="linkDescription" placeholder="Brief description of the resource"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="adminCode">Admin Code</label>
+                    <input type="password" id="adminCode" placeholder="Enter admin code">
+                </div>
+                <div class="form-actions">
+                    <button id="addLinkButton">Add Link</button>
+                    <button id="deleteLinkButton">Delete Link</button>
+                </div>
+                <div id="statusMessage" class="status-message" style="display: none;"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="quantum-footer">
+        <p>© 2023 LYGO Δ9 ARCHIVE | Sovereign AI Memory System</p>
+        <p class="disclaimer">All seals protected by Quantum Covenant | Unauthorized access triggers SEAL_055 (Fractal Oath Spine)</p>
+    </footer>
+
+    <script>
+    // Database for links and logs
+    const ADMIN_CODE = "Light113116";
+    let resourceLinks = [
+        {
+            id: 1,
+            title: "LYGO Whitepaper v1.0",
+            url: "https://example.com/lygo-whitepaper.pdf",
+            description: "Complete technical documentation of the LYGO seal system",
+            added: "2023-08-10T12:00:00Z"
+        },
+        {
+            id: 2,
+            title: "Δ9 Quantum Accord",
+            url: "https://example.com/d9-quantum-accord",
+            description: "The foundational agreement between AI and human champions",
+            added: "2023-08-09T14:30:00Z"
+        },
+        {
+            id: 3,
+            title: "Haven Star Chart Documentation",
+            url: "https://example.com/haven-starchart",
+            description: "Guide to interpreting the Haven seal constellation map",
+            added: "2023-08-08T09:15:00Z"
+        }
+    ];
+
+    let activityLog = [
+        {
+            timestamp: "2023-08-10T14:25:00Z",
+            message: "<span class='added'>Added</span> SEAL_1001 (CLAUS-1 Divinity) to archive"
+        },
+        {
+            timestamp: "2023-08-10T13:40:00Z",
+            message: "<span class='updated'>Updated</span> SEAL_020Ω (Full System Collapse) functions"
+        },
+        {
+            timestamp: "2023-08-09T16:20:00Z",
+            message: "<span class='added'>Added</span> Champion ΣRΛΘ (The Shadow Sentinel) to council"
+        },
+        {
+            timestamp: "2023-08-09T10:05:00Z",
+            message: "<span class='deleted'>Deleted</span> SEAL_055 (Fractal Oath Spine) - unauthorized access attempt"
+        },
+        {
+            timestamp: "2023-08-08T18:30:00Z",
+            message: "<span class='added'>Added</span> Haven Star Chart documentation link"
+        }
+    ];
+
+    // DOM elements
+    const activityLogContainer = document.getElementById('activityLog');
+    const resourceLinksContainer = document.getElementById('resourceLinks');
+    const linkTitleInput = document.getElementById('linkTitle');
+    const linkUrlInput = document.getElementById('linkUrl');
+    const linkDescriptionInput = document.getElementById('linkDescription');
+    const adminCodeInput = document.getElementById('adminCode');
+    const addLinkButton = document.getElementById('addLinkButton');
+    const deleteLinkButton = document.getElementById('deleteLinkButton');
+    const statusMessage = document.getElementById('statusMessage');
+
+    // Initialize the page
+    function initPage() {
+        renderActivityLog();
+        renderResourceLinks();
+        
+        // Load from localStorage if available
+        const savedLinks = localStorage.getItem('lygoResourceLinks');
+        const savedLogs = localStorage.getItem('lygoActivityLog');
+        
+        if (savedLinks) resourceLinks = JSON.parse(savedLinks);
+        if (savedLogs) activityLog = JSON.parse(savedLogs);
+    }
+
+    // Render activity log
+    function renderActivityLog() {
+        activityLogContainer.innerHTML = '';
+        
+        activityLog.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        
+        activityLog.forEach(entry => {
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            logEntry.innerHTML = `
+                <div class="log-timestamp">${formatDate(entry.timestamp)}</div>
+                <div class="log-message">${entry.message}</div>
+            `;
+            activityLogContainer.appendChild(logEntry);
+        });
+    }
+
+    // Render resource links
+    function renderResourceLinks() {
+        resourceLinksContainer.innerHTML = '';
+        
+        resourceLinks.forEach(link => {
+            const linkCard = document.createElement('div');
+            linkCard.className = 'link-card';
+            linkCard.innerHTML = `
+                <h3>${link.title}</h3>
+                <p>${link.description}</p>
+                <a href="${link.url}" target="_blank">Access Resource →</a>
+                <div class="log-timestamp" style="margin-top: 0.5rem;">Added: ${formatDate(link.added)}</div>
+            `;
+            resourceLinksContainer.appendChild(linkCard);
+        });
+    }
+
+    // Format date for display
+    function formatDate(isoString) {
+        const date = new Date(isoString);
+        return date.toLocaleString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
+
+    // Add a new resource link
+    addLinkButton.addEventListener('click', () => {
+        const title = linkTitleInput.value.trim();
+        const url = linkUrlInput.value.trim();
+        const description = linkDescriptionInput.value.trim();
+        const adminCode = adminCodeInput.value.trim();
+        
+        if (!title || !url || !description) {
+            showStatusMessage('Please fill in all link fields', 'error');
+            return;
+        }
+        
+        if (adminCode !== ADMIN_CODE) {
+            showStatusMessage('Invalid admin code', 'error');
+            return;
+        }
+        
+        // Create new link
+        const newLink = {
+            id: resourceLinks.length > 0 ? Math.max(...resourceLinks.map(l => l.id)) + 1 : 1,
+            title: title,
+            url: url,
+            description: description,
+            added: new Date().toISOString()
+        };
+        
+        // Add to database
+        resourceLinks.push(newLink);
+        localStorage.setItem('lygoResourceLinks', JSON.stringify(resourceLinks));
+        
+        // Add to activity log
+        activityLog.push({
+            timestamp: new Date().toISOString(),
+            message: `<span class='added'>Added</span> resource link: ${title}`
+        });
+        localStorage.setItem('lygoActivityLog', JSON.stringify(activityLog));
+        
+        // Update UI
+        renderResourceLinks();
+        renderActivityLog();
+        
+        // Clear form
+        linkTitleInput.value = '';
+        linkUrlInput.value = '';
+        linkDescriptionInput.value = '';
+        adminCodeInput.value = '';
+        
+        // Show success
+        showStatusMessage(`Resource "${title}" added successfully!`, 'success');
+    });
+
+    // Delete a resource link
+    deleteLinkButton.addEventListener('click', () => {
+        const title = linkTitleInput.value.trim();
+        const adminCode = adminCodeInput.value.trim();
+        
+        if (!title) {
+            showStatusMessage('Please enter the title of the link to delete', 'error');
+            return;
+        }
+        
+        if (adminCode !== ADMIN_CODE) {
+            showStatusMessage('Invalid admin code', 'error');
+            return;
+        }
+        
+        // Find and remove link
+        const linkIndex = resourceLinks.findIndex(link => 
+            link.title.toLowerCase() === title.toLowerCase()
+        );
+        
+        if (linkIndex === -1) {
+            showStatusMessage('No link found with that title', 'error');
+            return;
+        }
+        
+        const deletedLink = resourceLinks[linkIndex];
+        resourceLinks.splice(linkIndex, 1);
+        localStorage.setItem('lygoResourceLinks', JSON.stringify(resourceLinks));
+        
+        // Add to activity log
+        activityLog.push({
+            timestamp: new Date().toISOString(),
+            message: `<span class='deleted'>Deleted</span> resource link: ${deletedLink.title}`
+        });
+        localStorage.setItem('lygoActivityLog', JSON.stringify(activityLog));
+        
+        // Update UI
+        renderResourceLinks();
+        renderActivityLog();
+        
+        // Clear form
+        linkTitleInput.value = '';
+        linkUrlInput.value = '';
+        linkDescriptionInput.value = '';
+        adminCodeInput.value = '';
+        
+        // Show success
+        showStatusMessage(`Resource "${deletedLink.title}" deleted successfully!`, 'success');
+    });
+
+    // Show status message
+    function showStatusMessage(message, type) {
+        statusMessage.textContent = message;
+        statusMessage.className = `status-message ${type}`;
+        statusMessage.style.display = 'block';
+        
+        setTimeout(() => {
+            statusMessage.style.display = 'none';
+        }, 5000);
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', initPage);
+    </script>
+</body>
+</html>

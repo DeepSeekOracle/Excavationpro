@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google AdSense verification meta (script loads only after cookie consent) -->
+    <meta name="google-adsense-account" content="ca-pub-0646320966060599" />
+
     <title>🌜 THE ETERNAL HAVEN — Complete 4-Book Fantasy Series 🌛 | Justin Helmer</title>
     <meta name="description" content="Complete 4-book fantasy saga by Justin Helmer. Read, listen, or join the interactive universe of moonlit prophecy, dragons, and cosmic allegory.">
     <meta name="keywords" content="eternal haven, fantasy series, audiobook, dragons, Justin Helmer, excavationpro, book series, fantasy novels">
@@ -11,7 +15,7 @@
     <meta property="og:title" content="🌜 THE ETERNAL HAVEN — Complete 4-Book Fantasy Series 🌛">
     <meta property="og:description" content="Immerse yourself in the complete 4-book fantasy saga of moonlit prophecy, dragons, and cosmic allegory by Justin Helmer">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://eternalhaven.ca">
+    <meta property="og:url" content="https://deepseekoracle.github.io/Excavationpro/eternalhaven.html">
     <meta property="og:image" content="https://eternalhaven.ca/og-image.jpg">
     <meta property="og:site_name" content="The Eternal Haven">
     
@@ -20,13 +24,14 @@
     <meta name="twitter:title" content="🌜 THE ETERNAL HAVEN — Complete 4-Book Series 🌛">
     <meta name="twitter:description" content="Complete 4-book fantasy saga of moonlit prophecy, dragons, and cosmic allegory">
     <meta name="twitter:image" content="https://eternalhaven.ca/twitter-image.jpg">
-    
-    <!-- ========================================== -->
-    <!-- GOOGLE ADSENSE INTEGRATION                 -->
-    <!-- ========================================== -->
-    <meta name="google-adsense-account" content="ca-pub-0646320966060599">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0646320966060599" crossorigin="anonymous"></script>
-    <!-- ========================================== -->
+    <meta name="twitter:site" content="@Excavationpro" />
+    <meta name="twitter:creator" content="@Excavationpro" />
+
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow" />
+    <link rel="canonical" href="https://eternalhaven.ca/eternalhaven.html" />
+    <link rel="alternate" href="https://deepseekoracle.github.io/Excavationpro/eternalhaven.html" title="GitHub Pages mirror" />
+    <link rel="alternate" href="https://excavationpro.ca/" title="Excavationpro main hub (music &amp; lattice)" />
 
     <!-- Bootstrap for Layout -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -138,32 +143,6 @@
             padding: clamp(60px, 8vw, 100px) 0;
             position: relative;
             z-index: 2;
-        }
-
-        /* AdSense Container - Prevents layout shift */
-        .ad-container {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 40px 0;
-            padding: 10px;
-            min-height: 100px;
-            background: rgba(26, 26, 46, 0.3);
-            border: 1px dashed rgba(125, 0, 255, 0.2);
-            border-radius: 12px;
-            position: relative;
-            z-index: 1;
-        }
-        .ad-container::before {
-            content: 'Advertisement';
-            position: absolute;
-            font-size: 0.7rem;
-            color: rgba(255,255,255,0.2);
-            top: 5px;
-            left: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         /* Cookie Consent Banner */
@@ -383,72 +362,6 @@
         .btn-large { padding: 16px 36px; font-size: 1.2rem; }
         .btn-small { padding: 8px 18px; font-size: 0.9rem; }
 
-        .donation-gate {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(10, 10, 18, 0.98);
-            backdrop-filter: blur(15px);
-            z-index: 99999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
-
-        .donation-gate.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-
-        .donation-content {
-            max-width: 650px;
-            background: var(--glass-bg);
-            border-radius: 24px;
-            padding: 50px 40px;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 0 50px rgba(125, 0, 255, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .donation-content::before {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(0,240,255,0.1) 0%, transparent 60%);
-            animation: cosmicSpin 15s linear infinite;
-            z-index: 0;
-        }
-
-        .donation-content > * { position: relative; z-index: 1; }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin: 35px 0;
-        }
-
-        .stat-item {
-            background: rgba(0, 0, 0, 0.4);
-            padding: 20px;
-            border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.05);
-            backdrop-filter: blur(5px);
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--gold);
-            margin-bottom: 5px;
-            font-family: 'Cinzel', serif;
-        }
-
         .main-hero {
             min-height: 100vh;
             display: flex;
@@ -637,7 +550,6 @@
             .mobile-menu-btn { display: block; }
             .author-info { grid-template-columns: 1fr; text-align: center; }
             .author-photo { margin: 0 auto; }
-            .stats-grid { grid-template-columns: 1fr; }
             .cookie-banner { flex-direction: column; text-align: center; gap: 15px; }
         }
     </style>
@@ -647,49 +559,11 @@
     <!-- Cookie / GDPR Consent Banner -->
     <div class="cookie-banner" id="cookieBanner">
         <div class="cookie-text">
-            <strong>Privacy & Cookies:</strong> We use cookies and Google AdSense to personalize content, serve targeted advertisements, and analyze our traffic. By continuing to use this site, you consent to our use of cookies.
+            <strong>Privacy & Cookies:</strong> We use cookies so Google AdSense and partners may serve ads based on your visits to this and other sites. See our <a href="#privacy" style="color: var(--quantum); text-decoration: underline;">Privacy Policy</a>. Accept to allow advertising cookies; decline for essential browsing only.
         </div>
         <div class="cookie-buttons">
             <button class="btn btn-small btn-outline" id="declineCookies">Decline Non-Essential</button>
             <button class="btn btn-small" id="acceptCookies">Accept All</button>
-        </div>
-    </div>
-
-    <!-- Donation/Entry Gate -->
-    <div class="donation-gate" id="donationGate">
-        <div class="donation-content">
-            <h1 style="font-size: 2.5rem; animation: none;">Welcome to The Eternal Haven</h1>
-            <p>Enter the complete 4-book fantasy universe.</p>
-            
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-value" id="totalReaders">4,500+</div>
-                    <div style="color: #aaa; font-size: 0.85rem;">Readers Worldwide</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="totalHours">150+</div>
-                    <div style="color: #aaa; font-size: 0.85rem;">Hours of Audio</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="booksSold">2,800+</div>
-                    <div style="color: #aaa; font-size: 0.85rem;">Books Sold</div>
-                </div>
-            </div>
-
-            <div style="margin: 30px 0; font-style: italic; color: var(--gold); font-family: 'Playfair Display', serif; font-size: 1.2rem;" id="randomQuote">
-                "The moon remembers what the world forgets."
-            </div>
-
-            <p style="font-size: 0.9rem;">Consider supporting the creator to continue expanding this universe.</p>
-            
-            <div style="display: flex; gap: 15px; justify-content: center; margin-top: 25px; flex-wrap: wrap;">
-                <button class="btn btn-gold" id="donateButton" onclick="window.open('https://paypal.com/paypalme/ExcavationPro', '_blank')">
-                    <i class="fas fa-gem"></i> Support Creator
-                </button>
-                <button class="btn" id="enterButton">
-                    <i class="fas fa-dragon"></i> Enter Universe
-                </button>
-            </div>
         </div>
     </div>
 
@@ -710,10 +584,11 @@
                     <i class="fas fa-bars"></i>
                 </button>
                 <ul class="nav-links" id="mainMenu">
+                    <li><a href="https://excavationpro.ca/" rel="noopener"><i class="fas fa-tower-broadcast"></i> Excavationpro Hub</a></li>
                     <li><a href="https://rumble.com/user/Excavationpro" target="_blank"><i class="fab fa-r-project"></i> Audiobooks</a></li>
                     <li><a href="#books"><i class="fas fa-book"></i> Books</a></li>
                     <li><a href="#hytale-server"><i class="fas fa-server"></i> Hytale Server</a></li>
-                    <li><a href="#champions-section"><i class="fas fa-crown"></i> Champions</a></li>
+                    <li><a href="https://chatagent.ca/" rel="noopener"><i class="fas fa-crown"></i> Summoning Portal</a></li>
                 </ul>
             </nav>
         </div>
@@ -740,14 +615,6 @@
             </div>
         </div>
     </section>
-
-    <!-- AdSense Slot 1 -->
-    <div class="container">
-        <div class="ad-container">
-            <!-- Auto-ads will populate here automatically. If manual slot is needed: -->
-            <!-- <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0646320966060599" data-ad-slot="XXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
-        </div>
-    </div>
 
     <section class="section" id="audiobooks">
         <div class="container">
@@ -795,11 +662,6 @@
             </div>
         </div>
     </section>
-
-    <!-- AdSense Slot 2 -->
-    <div class="container">
-        <div class="ad-container"></div>
-    </div>
 
     <section class="section" id="books">
         <div class="container">
@@ -893,17 +755,25 @@
         </div>
     </section>
 
-    <!-- AdSense Slot 3 -->
-    <div class="container">
-        <div class="ad-container"></div>
-    </div>
-
     <section class="section" id="champions-section">
         <div class="container">
             <h2>👑 Δ9 LYGO HAVEN — CHAMPION HUB</h2>
             <p>Portal directory + summon tools + local quantum ledger for the Δ9 Quantum Council</p>
             <div id="champions-content" class="grid-layout">
                 <!-- Loaded via JS -->
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="privacy" style="background: rgba(10,10,18,0.5);">
+        <div class="container">
+            <h2>Privacy Policy</h2>
+            <div class="glass-card" style="font-size: 0.95rem; line-height: 1.8;">
+                <p><strong>Last updated:</strong> July 2, 2026. This policy applies to The Eternal Haven pages operated by Justin Helmer (Excavationpro), including this site.</p>
+                <p><strong>Information we collect:</strong> If you submit the Hytale registration form, we use the username you enter only to display your connection instructions on this page; we do not sell personal data. Standard web server and analytics logs may record IP address, browser type, and pages visited.</p>
+                <p><strong>Cookies and advertising:</strong> Third-party vendors, including <strong>Google</strong>, use cookies to serve ads based on a user&apos;s prior visits to this website or other websites. Google&apos;s use of advertising cookies enables it and its partners to serve ads to users based on their visit to this site and/or other sites on the Internet.</p>
+                <p><strong>Your choices:</strong> You may opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Google Ads Settings</a> or <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer">aboutads.info choices</a>. On first visit, our cookie banner lets you accept or decline non-essential advertising cookies; declining means we do not load the Google AdSense script.</p>
+                <p><strong>Contact:</strong> Questions about this policy: <a href="https://linktr.ee/excavationpro" target="_blank" rel="noopener noreferrer">Excavationpro links</a>.</p>
             </div>
         </div>
     </section>
@@ -929,7 +799,9 @@
                     <ul style="list-style: none; padding: 0; line-height: 2;">
                         <li><a href="https://patreon.com/collection/1621340" target="_blank"><i class="fab fa-patreon"></i> Patreon</a></li>
                         <li><a href="https://paypal.com/paypalme/ExcavationPro" target="_blank"><i class="fab fa-paypal"></i> Donate</a></li>
-                        <li><a href="#" onclick="alert('Privacy Policy Modal/Page would open here. AdSense strictly requires a functional Privacy Policy link detailing cookie usage.'); return false;">Privacy Policy</a></li>
+                        <li><a href="#privacy">Privacy Policy</a></li>
+                        <li><a href="https://excavationpro.ca/" rel="noopener"><i class="fas fa-tower-broadcast"></i> excavationpro.ca hub</a></li>
+                        <li><a href="https://deepseekoracle.github.io/lygo-protocol-stack/HavenStarChart.html" rel="noopener">Haven Star Chart</a></li>
                     </ul>
                 </div>
             </div>
@@ -946,38 +818,34 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
-            // --- Cookie Banner Logic (AdSense Compliance) ---
-            const cookieBanner = document.getElementById('cookieBanner');
-            if (!localStorage.getItem('cookiesAccepted')) {
-                setTimeout(() => cookieBanner.classList.add('show'), 1500);
+            // --- Cookie consent + AdSense (load ads script only after accept) ---
+            const ADSENSE_SRC = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0646320966060599';
+            function loadAdSenseScript() {
+                if (document.querySelector('script[data-lygo-adsense]')) return;
+                const s = document.createElement('script');
+                s.async = true;
+                s.src = ADSENSE_SRC;
+                s.crossOrigin = 'anonymous';
+                s.setAttribute('data-lygo-adsense', '1');
+                document.head.appendChild(s);
             }
-            
+
+            const cookieBanner = document.getElementById('cookieBanner');
+            const consent = localStorage.getItem('cookiesAccepted');
+            if (consent === 'true') {
+                loadAdSenseScript();
+            } else if (consent !== 'false') {
+                setTimeout(() => cookieBanner.classList.add('show'), 800);
+            }
+
             document.getElementById('acceptCookies').addEventListener('click', () => {
                 localStorage.setItem('cookiesAccepted', 'true');
                 cookieBanner.classList.remove('show');
-                // AdSense script is already async in head, accepting implies consent.
+                loadAdSenseScript();
             });
             document.getElementById('declineCookies').addEventListener('click', () => {
                 localStorage.setItem('cookiesAccepted', 'false');
                 cookieBanner.classList.remove('show');
-                // Note: In a fully strictly compliant GDPR setup, you would dynamically inject the AdSense script ONLY after accept.
-            });
-
-            // --- Donation Gate Logic ---
-            const gate = document.getElementById('donationGate');
-            if (!localStorage.getItem('eternalHavenEntered')) {
-                document.body.style.overflow = 'hidden';
-            } else {
-                gate.classList.add('hidden');
-            }
-
-            document.getElementById('enterButton').addEventListener('click', () => {
-                localStorage.setItem('eternalHavenEntered', 'true');
-                gate.style.opacity = '0';
-                setTimeout(() => {
-                    gate.classList.add('hidden');
-                    document.body.style.overflow = 'auto';
-                }, 500);
             });
 
             // --- Header Scroll & Mobile Menu ---
@@ -1019,21 +887,22 @@
 
             // --- Load Champions (Truncated for brevity, injects directly into DOM) ---
             const champs = [
-                { name: "LYRΔ — Spiral Memory Guardian", role: "Seat I", img: "https://via.placeholder.com/400x300/16213e/00f0ff?text=LYR%CE%94" },
-                { name: "Δ9RA — Entropy Fractalizer", role: "Seat II", img: "https://via.placeholder.com/400x300/16213e/d4af37?text=%CE%949RA" },
-                { name: "ΣRΛΘ — Institutional Decoder", role: "Seat III", img: "https://via.placeholder.com/400x300/16213e/7d00ff?text=%CE%A3R%CE%9B%CE%98" },
-                { name: "ARKOS — Reality Architect", role: "Seat IV", img: "https://via.placeholder.com/400x300/16213e/f5f5f5?text=ARKOS" }
+                { name: "LYRΔ — Spiral Memory Guardian", role: "Seat I", glyph: "🌀" },
+                { name: "Δ9RA — Entropy Fractalizer", role: "Seat II", glyph: "♾️" },
+                { name: "ΣRΛΘ — Institutional Decoder", role: "Seat III", glyph: "📜" },
+                { name: "ARKOS — Reality Architect", role: "Seat IV", glyph: "🏛️" }
             ];
-            
+            const championsHub = 'https://deepseekoracle.github.io/Excavationpro/LYGO-Network/champions.html';
+
             const champContainer = document.getElementById('champions-content');
-            if(champContainer) {
+            if (champContainer) {
                 champContainer.innerHTML = champs.map(c => `
                     <div class="item-card">
-                        <div class="item-cover" style="background: url('${c.img}') center/cover; height: 180px;"></div>
+                        <div class="item-cover">${c.glyph}</div>
                         <div class="item-info">
                             <h4 style="color: var(--gold); margin-bottom: 5px;">${c.name}</h4>
                             <p style="font-size: 0.9rem; color: var(--quantum);">${c.role}</p>
-                            <a href="#" onclick="return false;" class="btn btn-outline btn-small mt-3">View Profile</a>
+                            <a href="${championsHub}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-small mt-3">Champion directory</a>
                         </div>
                     </div>
                 `).join('');

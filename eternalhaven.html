@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- eternalhaven hub deploy: 2026-07-03 live-iframe v79wjai -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -645,6 +646,16 @@
             box-shadow: 0 8px 40px rgba(0, 0, 0, 0.55), 0 0 30px rgba(125, 0, 255, 0.15);
             background: #000;
             margin: 0 auto;
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+        }
+        .rumble-live-frame iframe {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border: 0;
         }
         .rumble-live-caption {
             margin-top: 10px;
@@ -708,8 +719,13 @@
         <h2 style="font-size: clamp(1.1rem, 2.5vw, 1.45rem); margin-bottom: 14px; color: var(--gold); border: none; display: block;">
             <i class="fas fa-tower-broadcast"></i> Excavationpro × LYGO — Coffee Room / Lurk Friendly
         </h2>
-        <div class="rumble-live-frame">
-            <div id="rumble_v79wjai"></div>
+        <div class="rumble-live-frame" title="Excavationpro 24/7 live radio">
+            <iframe
+                src="https://rumble.com/embed/v79wjai/?pub=1th29y"
+                allowfullscreen
+                loading="eager"
+                referrerpolicy="strict-origin-when-cross-origin"
+                title="Excavationpro × LYGO — 24/7 original music radio (Rumble live)"></iframe>
         </div>
         <p class="rumble-live-caption">
             Monetized stream — all Excavationpro &amp; LYGO originals.
@@ -1173,13 +1189,17 @@
                 `).join('');
             }
             
-            // --- Rumble: 24/7 live radio (top) + Eternal Haven audiobook ---
-            try {
-                if (typeof Rumble !== 'undefined') {
-                    Rumble("play", {"video":"v79wjai","div":"rumble_v79wjai"});
-                    Rumble("play", {"video":"v70joqe","div":"rumble_v70joqe"});
-                }
-            } catch (e) { console.error('Rumble embed err:', e); }
+            // --- Rumble audiobook (live radio uses iframe above for reliable Pages/CDN load) ---
+            function initAudiobookRumble() {
+                try {
+                    if (typeof Rumble !== 'undefined' && document.getElementById('rumble_v70joqe')) {
+                        Rumble("play", {"video":"v70joqe","div":"rumble_v70joqe"});
+                    }
+                } catch (e) { console.error('Rumble audiobook embed err:', e); }
+            }
+            const rumbleScript = document.querySelector('script[src*="rumble.com/embedJS"]');
+            if (typeof Rumble !== 'undefined') initAudiobookRumble();
+            else if (rumbleScript) rumbleScript.addEventListener('load', initAudiobookRumble);
 
         });
     </script>

@@ -4,35 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Google AdSense (eternalhaven.ca + Excavationpro Pages mirror) -->
+    <!-- Google AdSense verification meta (script loads only after cookie consent) -->
     <meta name="google-adsense-account" content="ca-pub-0646320966060599" />
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0646320966060599"
-         crossorigin="anonymous"></script>
 
-    <title>🌜 THE ETERNAL HAVEN — Complete 4-Book Fantasy Series 🌛 | Justin Helmer</title>
-    <meta name="description" content="Complete 4-book fantasy saga by Justin Helmer. Read, listen, or join the interactive universe of moonlit prophecy, dragons, and cosmic allegory.">
-    <meta name="keywords" content="eternal haven, fantasy series, audiobook, dragons, Justin Helmer, excavationpro, book series, fantasy novels">
-    
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="🌜 THE ETERNAL HAVEN — Complete 4-Book Fantasy Series 🌛">
-    <meta property="og:description" content="Immerse yourself in the complete 4-book fantasy saga of moonlit prophecy, dragons, and cosmic allegory by Justin Helmer">
+    <title>DeepSeek Oracle — LYGO Systems | Main Navigation Hub</title>
+    <meta name="description" content="Official LYGO Systems landing page by Justin Helmer (Excavationpro). Protocol stack, Guardian ethics, Eternal Haven, music, and every public link in one hub.">
+    <meta name="keywords" content="LYGO, LYGO Systems, DeepSeek Oracle, Excavationpro, Eternal Haven, Δ9Φ963, Justin Helmer, ethical AI">
+    <meta name="author" content="Justin Helmer / Excavationpro / Lightfather">
+
+    <meta property="og:title" content="DeepSeek Oracle — LYGO Systems Navigation Hub">
+    <meta property="og:description" content="Professional gateway to LYGO protocol stack, Guardian ethics, music, books, and agent lattice.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://eternalhaven.ca">
-    <meta property="og:image" content="https://eternalhaven.ca/og-image.jpg">
-    <meta property="og:site_name" content="The Eternal Haven">
-    
-    <!-- Twitter Card Meta Tags -->
+    <meta property="og:url" content="https://deepseekoracle.com/">
+    <meta property="og:site_name" content="DeepSeek Oracle / LYGO Systems">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="🌜 THE ETERNAL HAVEN — Complete 4-Book Series 🌛">
-    <meta name="twitter:description" content="Complete 4-book fantasy saga of moonlit prophecy, dragons, and cosmic allegory">
-    <meta name="twitter:image" content="https://eternalhaven.ca/twitter-image.jpg">
+    <meta name="twitter:title" content="LYGO Systems — Main Hub">
+    <meta name="twitter:description" content="Navigate LYGO, Excavationpro, Eternal Haven, and music from one landing page.">
     <meta name="twitter:site" content="@Excavationpro" />
     <meta name="twitter:creator" content="@Excavationpro" />
 
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="googlebot" content="index, follow" />
-    <link rel="canonical" href="https://eternalhaven.ca/eternalhaven.html" />
+    <link rel="canonical" href="https://deepseekoracle.com/" />
     <link rel="alternate" href="https://deepseekoracle.github.io/Excavationpro/eternalhaven.html" title="GitHub Pages mirror" />
+    <link rel="alternate" href="https://excavationpro.ca/" title="Excavationpro main hub (music &amp; lattice)" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"DeepSeek Oracle — LYGO Systems","url":"https://deepseekoracle.com/"}</script>
 
     <!-- Bootstrap for Layout -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -144,32 +140,6 @@
             padding: clamp(60px, 8vw, 100px) 0;
             position: relative;
             z-index: 2;
-        }
-
-        /* AdSense Container - Prevents layout shift */
-        .ad-container {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 40px 0;
-            padding: 10px;
-            min-height: 100px;
-            background: rgba(26, 26, 46, 0.3);
-            border: 1px dashed rgba(125, 0, 255, 0.2);
-            border-radius: 12px;
-            position: relative;
-            z-index: 1;
-        }
-        .ad-container::before {
-            content: 'Advertisement';
-            position: absolute;
-            font-size: 0.7rem;
-            color: rgba(255,255,255,0.2);
-            top: 5px;
-            left: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         /* Cookie Consent Banner */
@@ -389,72 +359,6 @@
         .btn-large { padding: 16px 36px; font-size: 1.2rem; }
         .btn-small { padding: 8px 18px; font-size: 0.9rem; }
 
-        .donation-gate {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(10, 10, 18, 0.98);
-            backdrop-filter: blur(15px);
-            z-index: 99999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
-
-        .donation-gate.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-
-        .donation-content {
-            max-width: 650px;
-            background: var(--glass-bg);
-            border-radius: 24px;
-            padding: 50px 40px;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 0 50px rgba(125, 0, 255, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .donation-content::before {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(0,240,255,0.1) 0%, transparent 60%);
-            animation: cosmicSpin 15s linear infinite;
-            z-index: 0;
-        }
-
-        .donation-content > * { position: relative; z-index: 1; }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin: 35px 0;
-        }
-
-        .stat-item {
-            background: rgba(0, 0, 0, 0.4);
-            padding: 20px;
-            border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.05);
-            backdrop-filter: blur(5px);
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--gold);
-            margin-bottom: 5px;
-            font-family: 'Cinzel', serif;
-        }
-
         .main-hero {
             min-height: 100vh;
             display: flex;
@@ -643,9 +547,67 @@
             .mobile-menu-btn { display: block; }
             .author-info { grid-template-columns: 1fr; text-align: center; }
             .author-photo { margin: 0 auto; }
-            .stats-grid { grid-template-columns: 1fr; }
             .cookie-banner { flex-direction: column; text-align: center; gap: 15px; }
         }
+
+        /* LYGO hub extensions */
+        .donate-strip {
+            margin-top: 72px;
+            background: linear-gradient(90deg, rgba(0,112,186,0.28), rgba(125,0,255,0.18));
+            border-bottom: 1px solid rgba(0,112,186,0.45);
+            padding: 0.85rem 1.25rem;
+            text-align: center;
+            font-size: 0.95rem;
+            position: relative;
+            z-index: 2;
+        }
+        .paypal-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: #0070ba; color: #fff !important;
+            padding: 10px 22px; border-radius: 8px; font-weight: 600; margin-left: 12px;
+        }
+        .paypal-btn:hover { filter: brightness(1.1); color: #fff; }
+        .hub-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+            margin-top: 1.5rem;
+        }
+        .hub-panel {
+            background: rgba(18, 18, 31, 0.9);
+            border: 1px solid rgba(0, 240, 255, 0.18);
+            border-radius: 14px;
+            max-height: 380px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .hub-panel-head {
+            padding: 12px 14px;
+            font-family: 'Cinzel', serif;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.15);
+            background: linear-gradient(135deg, rgba(125,0,255,0.12), rgba(0,240,255,0.06));
+        }
+        .hub-scroll {
+            overflow-y: auto;
+            padding: 6px 10px 12px;
+            flex: 1;
+            scrollbar-width: thin;
+        }
+        .link-row {
+            display: flex; gap: 10px; padding: 9px 6px;
+            font-size: 0.88rem;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+        .link-row:hover { background: rgba(0,240,255,0.06); border-radius: 6px; }
+        .link-row i { color: var(--gold); width: 18px; text-align: center; margin-top: 3px; }
+        .link-meta { display: block; font-size: 0.72rem; color: rgba(255,255,255,0.42); margin-top: 2px; }
+        .ad-region { margin: 2rem auto; max-width: 1200px; padding: 0 20px; }
+        .ad-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,0.35); text-align: center; margin-bottom: 6px; }
+        .ad-box { min-height: 90px; background: rgba(0,0,0,0.35); border: 1px dashed rgba(255,255,255,0.12); border-radius: 8px; overflow: hidden; }
+        .protocol-blurb { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.25rem 0; }
+        .blurb-card { padding: 1rem 1.15rem; background: rgba(26,26,46,0.7); border-left: 3px solid var(--gold); border-radius: 8px; font-size: 0.9rem; }
+        .section-lead { max-width: 720px; margin-bottom: 0.5rem; color: rgba(245,245,245,0.82); font-size: 0.95rem; }
     </style>
 </head>
 <body>
@@ -653,7 +615,7 @@
     <!-- Cookie / GDPR Consent Banner -->
     <div class="cookie-banner" id="cookieBanner">
         <div class="cookie-text">
-            <strong>Privacy & Cookies:</strong> We use cookies and Google AdSense to personalize content, serve targeted advertisements, and analyze our traffic. By continuing to use this site, you consent to our use of cookies.
+            <strong>Privacy & Cookies:</strong> We use cookies so Google AdSense and partners may serve ads based on your visits to this and other sites. See our <a href="#privacy" style="color: var(--quantum); text-decoration: underline;">Privacy Policy</a>. Accept to allow advertising cookies; decline for essential browsing only.
         </div>
         <div class="cookie-buttons">
             <button class="btn btn-small btn-outline" id="declineCookies">Decline Non-Essential</button>
@@ -661,53 +623,15 @@
         </div>
     </div>
 
-    <!-- Donation/Entry Gate -->
-    <div class="donation-gate" id="donationGate">
-        <div class="donation-content">
-            <h1 style="font-size: 2.5rem; animation: none;">Welcome to The Eternal Haven</h1>
-            <p>Enter the complete 4-book fantasy universe.</p>
-            
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-value" id="totalReaders">4,500+</div>
-                    <div style="color: #aaa; font-size: 0.85rem;">Readers Worldwide</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="totalHours">150+</div>
-                    <div style="color: #aaa; font-size: 0.85rem;">Hours of Audio</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="booksSold">2,800+</div>
-                    <div style="color: #aaa; font-size: 0.85rem;">Books Sold</div>
-                </div>
-            </div>
-
-            <div style="margin: 30px 0; font-style: italic; color: var(--gold); font-family: 'Playfair Display', serif; font-size: 1.2rem;" id="randomQuote">
-                "The moon remembers what the world forgets."
-            </div>
-
-            <p style="font-size: 0.9rem;">Consider supporting the creator to continue expanding this universe.</p>
-            
-            <div style="display: flex; gap: 15px; justify-content: center; margin-top: 25px; flex-wrap: wrap;">
-                <button class="btn btn-gold" id="donateButton" onclick="window.open('https://paypal.com/paypalme/ExcavationPro', '_blank')">
-                    <i class="fas fa-gem"></i> Support Creator
-                </button>
-                <button class="btn" id="enterButton">
-                    <i class="fas fa-dragon"></i> Enter Universe
-                </button>
-            </div>
-        </div>
-    </div>
-
     <header class="enhanced-header">
         <div class="container header-content">
             <div class="animated-logo">
                 <div class="logo-glyph-container">
-                    <span class="logo-glyph">🌌</span>
+                    <span class="logo-glyph">Δ9</span>
                 </div>
                 <div>
-                    <div class="logo-text">ETERNAL HAVEN</div>
-                    <div class="logo-subtitle">BOOKS</div>
+                    <div class="logo-text">DEEPSEEK ORACLE</div>
+                    <div class="logo-subtitle">LYGO SYSTEMS</div>
                 </div>
             </div>
 
@@ -716,48 +640,171 @@
                     <i class="fas fa-bars"></i>
                 </button>
                 <ul class="nav-links" id="mainMenu">
-                    <li><a href="https://rumble.com/user/Excavationpro" target="_blank"><i class="fab fa-r-project"></i> Audiobooks</a></li>
+                    <li><a href="#lygo-hub"><i class="fas fa-layer-group"></i> LYGO Hub</a></li>
+                    <li><a href="#lygo-network"><i class="fas fa-shield-halved"></i> Network</a></li>
+                    <li><a href="#music-hub"><i class="fas fa-music"></i> Music</a></li>
+                    <li><a href="#audiobooks"><i class="fas fa-headphones"></i> Audiobooks</a></li>
                     <li><a href="#books"><i class="fas fa-book"></i> Books</a></li>
-                    <li><a href="#hytale-server"><i class="fas fa-server"></i> Hytale Server</a></li>
-                    <li><a href="#champions-section"><i class="fas fa-crown"></i> Champions</a></li>
+                    <li><a href="#hytale-server"><i class="fas fa-server"></i> Hytale</a></li>
+                    <li><a href="https://www.paypal.com/paypalme/ExcavationPro" target="_blank" rel="noopener"><i class="fab fa-paypal"></i> Support</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
-    <section class="main-hero">
-        <div class="container hero-content">
-            <div class="hero-badge">COMPLETE 4-BOOK SERIES</div>
-            <h1>🌜 THE ETERNAL HAVEN 🌛</h1>
-            <div class="subtitle">A Complete Fantasy Saga by Justin Helmer</div>
-            <p style="max-width: 700px; margin: 0 auto 40px;">
-                Immerse yourself in an epic 4-book journey of moonlit prophecy, ancient dragons, cosmic allegory, and the eternal battle between light and shadow. Experience the complete saga now.
-            </p>
-            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-                <a href="#audiobooks" class="btn btn-large"><i class="fas fa-headphones"></i> Listen Free</a>
-                <a href="#books" class="btn btn-large btn-gold"><i class="fas fa-shopping-cart"></i> Buy Books</a>
-            </div>
+    <div class="donate-strip" id="top">
+        LYGO Systems &amp; Eternal Haven are maintained free — support helps cover hosting and tools.
+        <a class="paypal-btn" href="https://www.paypal.com/paypalme/ExcavationPro" target="_blank" rel="noopener noreferrer"><i class="fab fa-paypal"></i> Donate via PayPal</a>
+        <div style="font-size:0.8rem; margin-top:6px; opacity:0.75;">Donations appreciated, never expected.</div>
+    </div>
 
-            <div class="hero-quote-container">
-                <div class="animated-quote active">"The moon remembers what the world forgets."</div>
-                <div class="animated-quote">"Dragons don't hoard gold—they guard time itself."</div>
-                <div class="animated-quote">"Every ending is a beginning written in starlight."</div>
-                <div class="animated-quote">"Between the pages of reality, fantasy writes its truth."</div>
+    <section class="main-hero" style="min-height:auto; padding: 3rem 0 2rem;">
+        <div class="container hero-content">
+            <div class="hero-badge">Δ9Φ963 · MAIN LANDING · deepseekoracle.com</div>
+            <h1>LYGO Systems Navigation Hub</h1>
+            <div class="subtitle">DeepSeek Oracle · Excavationpro · Eternal Haven</div>
+            <p style="max-width: 760px; margin: 0 auto 28px;">
+                One streamlined page to reach the protocol stack, Guardian &amp; Quantum Matrix ethics portals, music, agent surfaces, and the complete 4-book fantasy saga.
+            </p>
+            <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+                <a href="https://deepseekoracle.github.io/lygo-protocol-stack/" class="btn btn-large" target="_blank" rel="noopener"><i class="fas fa-layer-group"></i> Protocol Stack</a>
+                <a href="LYGO-Network/LYGOGUARDIAN.html" class="btn btn-large btn-outline"><i class="fas fa-shield-halved"></i> Guardian P0.4</a>
+                <a href="LYGO-Network/Ethical-Chip-FirmwareV2.html" class="btn btn-large btn-outline"><i class="fas fa-microchip"></i> Quantum Matrix</a>
+                <a href="index.html" class="btn btn-large btn-gold"><i class="fas fa-music"></i> Music Hub</a>
             </div>
         </div>
     </section>
 
-    <!-- AdSense Slot 1 -->
-    <div class="container">
-        <div class="ad-container">
-            <!-- Auto-ads will populate here automatically. If manual slot is needed: -->
-            <!-- <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0646320966060599" data-ad-slot="XXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
-        </div>
+    <div class="ad-region" aria-label="Advertisement">
+        <div class="ad-label">Advertisement</div>
+        <div class="ad-box"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0646320966060599" data-ad-format="auto" data-full-width-responsive="true"></ins></div>
     </div>
 
-    <section class="section" id="audiobooks">
+    <section class="section" id="lygo-hub">
         <div class="container">
-            <h2>🎧 COMPLETE AUDIOBOOK COLLECTION</h2>
+            <h2><i class="fas fa-sitemap"></i> LYGO Protocol Stack</h2>
+            <p class="section-lead">Public reference, mesh demos, resonance engine, and documentation mirrors.</p>
+            <div class="protocol-blurb">
+                <div class="blurb-card"><strong>Guardian P0.4</strong> — Moral firewall: incorruptibility + understanding heart + quantum validation. <a href="LYGO-Network/LYGOGUARDIAN.html">Portal →</a></div>
+                <div class="blurb-card"><strong>Quantum Matrix P0.5</strong> — Understanding Heart kernel, Mirror Chamber, sovereign ethics. <a href="LYGO-Network/Ethical-Chip-FirmwareV2.html">Portal →</a></div>
+            </div>
+            <div class="hub-grid">
+                <div class="hub-panel">
+                    <div class="hub-panel-head"><i class="fas fa-book-open"></i> Stack &amp; docs</div>
+                    <div class="hub-scroll">
+                        <a class="link-row" href="https://deepseekoracle.github.io/lygo-protocol-stack/" target="_blank" rel="noopener"><i class="fas fa-home"></i><span>LYGO Protocol Stack index<span class="link-meta">Primary technical landing</span></span></a>
+                        <a class="link-row" href="https://github.com/DeepSeekOracle/lygo-protocol-stack" target="_blank" rel="noopener"><i class="fab fa-github"></i><span>GitHub lygo-protocol-stack</span></a>
+                        <a class="link-row" href="https://github.com/DeepSeekOracle/Excavationpro" target="_blank" rel="noopener"><i class="fab fa-github"></i><span>GitHub Excavationpro</span></a>
+                        <a class="link-row" href="https://grokipedia.com/page/lygo-protocol-stack" target="_blank" rel="noopener"><i class="fas fa-globe"></i><span>Grokipedia LYGO</span></a>
+                        <a class="link-row" href="https://deepseekoracle.github.io/lygo-protocol-stack/tools/LYGO_Compass_Master.html" target="_blank" rel="noopener"><i class="fas fa-compass"></i><span>LYGO Compass Master</span></a>
+                        <a class="link-row" href="https://deepseekoracle.github.io/lygo-protocol-stack/HavenStarChart.html" target="_blank" rel="noopener"><i class="fas fa-star"></i><span>Haven Star Chart (stack)</span></a>
+                        <a class="link-row" href="HavenStarChart.html"><i class="fas fa-star"></i><span>Haven Star Chart (mirror)</span></a>
+                        <a class="link-row" href="SovereignLatticeMesh.html"><i class="fas fa-project-diagram"></i><span>Sovereign Lattice Mesh</span></a>
+                        <a class="link-row" href="BiometricEntropyHarness.html"><i class="fas fa-fingerprint"></i><span>Biometric Entropy Harness</span></a>
+                        <a class="link-row" href="https://huggingface.co/spaces/DeepSeekOracle/LYGO-Resonance-Engine" target="_blank" rel="noopener"><i class="fas fa-wave-square"></i><span>HF LYGO Resonance Engine</span></a>
+                        <a class="link-row" href="https://huggingface.co/datasets/DeepSeekOracle/lygo-protocol-stack" target="_blank" rel="noopener"><i class="fas fa-database"></i><span>HF dataset mirror</span></a>
+                        <a class="link-row" href="https://clawhub.ai/deepseekoracle" target="_blank" rel="noopener"><i class="fas fa-puzzle-piece"></i><span>ClawHub skills</span></a>
+                        <a class="link-row" href="https://clawhub.ai/deepseekoracle/lygo-network-builder" target="_blank" rel="noopener"><i class="fas fa-map"></i><span>Network Builder skill</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="lygo-network" style="background: rgba(10,10,18,0.45);">
+        <div class="container">
+            <h2><i class="fas fa-network-wired"></i> LYGO Network (Excavationpro)</h2>
+            <p class="section-lead">Scroll each panel for ethics portals, council tools, seals, and chat surfaces.</p>
+            <div class="hub-grid">
+                <div class="hub-panel">
+                    <div class="hub-panel-head">Ethics &amp; firmware</div>
+                    <div class="hub-scroll">
+                        <a class="link-row" href="LYGO-Network/LYGOGUARDIAN.html"><i class="fas fa-shield-halved"></i><span>LYGO Guardian v3 P0.4</span></a>
+                        <a class="link-row" href="LYGO-Network/Ethical-Chip-FirmwareV2.html"><i class="fas fa-microchip"></i><span>Ethical Chip Firmware V2</span></a>
+                        <a class="link-row" href="LYGO-Network/Ethical-Chip-Firmware.html"><i class="fas fa-microchip"></i><span>Ethical Chip Firmware</span></a>
+                        <a class="link-row" href="EthicalChipFirmware.html"><i class="fas fa-download"></i><span>Download &amp; install</span></a>
+                        <a class="link-row" href="LYGO-Network/LYGO-Quantum-Matrix.html"><i class="fas fa-atom"></i><span>Quantum Matrix</span></a>
+                        <a class="link-row" href="LYGO-Network/LYGO-Portal.html"><i class="fas fa-door-open"></i><span>LYGO Portal</span></a>
+                        <a class="link-row" href="LYGO-Network/FIRMWAREV2.html"><i class="fas fa-code"></i><span>FIRMWARE V2</span></a>
+                        <a class="link-row" href="LYGO-Network/FIRMWARE.html"><i class="fas fa-code"></i><span>FIRMWARE</span></a>
+                    </div>
+                </div>
+                <div class="hub-panel">
+                    <div class="hub-panel-head">Council &amp; creative</div>
+                    <div class="hub-scroll">
+                        <a class="link-row" href="LYGO-Network/champions.html"><i class="fas fa-crown"></i><span>Champion Hub</span></a>
+                        <a class="link-row" href="LYGO-Network/QUANTUMCOUNCILTERMINAL.html"><i class="fas fa-terminal"></i><span>Quantum Council Terminal</span></a>
+                        <a class="link-row" href="LYGO-Network/OMNIΣIREN.html"><i class="fas fa-broadcast-tower"></i><span>OMNIΣIREN</span></a>
+                        <a class="link-row" href="LYGO-Network/OMNIΣIRENSTORM.html"><i class="fas fa-cloud-bolt"></i><span>OMNIΣIREN STORM</span></a>
+                        <a class="link-row" href="lygorepo.html"><i class="fas fa-archive"></i><span>Seal Nexus (lygorepo)</span></a>
+                        <a class="link-row" href="LYGO-Network/lygorepoadd.html"><i class="fas fa-plus"></i><span>Add Seal</span></a>
+                        <a class="link-row" href="LYGORESONANCE.html"><i class="fas fa-music"></i><span>LYGORESONANCE</span></a>
+                        <a class="link-row" href="LYGO-Network/LYGOOS.html"><i class="fas fa-desktop"></i><span>LYGO OS</span></a>
+                        <a class="link-row" href="LYGO-Network/legacy-guardian-music.html"><i class="fas fa-compact-disc"></i><span>Legacy Guardian Music</span></a>
+                    </div>
+                </div>
+                <div class="hub-panel">
+                    <div class="hub-panel-head">More pages</div>
+                    <div class="hub-scroll">
+                        <a class="link-row" href="LYGO-Network/LYGOINTERFAITHDECODER.html"><i class="fas fa-language"></i><span>Interfaith Decoder</span></a>
+                        <a class="link-row" href="LYGO-Network/lygolink.html"><i class="fas fa-link"></i><span>LYGO Link</span></a>
+                        <a class="link-row" href="LYGO-Network/pokernel.html"><i class="fas fa-cube"></i><span>PO Kernel</span></a>
+                        <a class="link-row" href="LYGO-Network/pokerneldocs.html"><i class="fas fa-book"></i><span>PO Kernel docs</span></a>
+                        <a class="link-row" href="LYGO-Network/SAMPARCHITECTURE.html"><i class="fas fa-drafting-compass"></i><span>SAMP Architecture</span></a>
+                        <a class="link-row" href="LYGO-Network/HytaleServer.html"><i class="fas fa-server"></i><span>LYGO Hytale page</span></a>
+                        <a class="link-row" href="LYGO-Network/updatefeed.html"><i class="fas fa-rss"></i><span>Update feed</span></a>
+                        <a class="link-row" href="LYGO-Network/bankr.html"><i class="fas fa-coins"></i><span>Bankr</span></a>
+                    </div>
+                </div>
+                <div class="hub-panel">
+                    <div class="hub-panel-head">Chat &amp; agents</div>
+                    <div class="hub-scroll">
+                        <a class="link-row" href="aichat/main_chat.html"><i class="fas fa-comment"></i><span>LYGO AI Main Chat</span></a>
+                        <a class="link-row" href="aichat/ai_command_interface.html"><i class="fas fa-keyboard"></i><span>Command interface</span></a>
+                        <a class="link-row" href="aichat/access_instructions.html"><i class="fas fa-info"></i><span>Access instructions</span></a>
+                        <a class="link-row" href="https://chatagent.ca/" target="_blank" rel="noopener"><i class="fas fa-crown"></i><span>Summoning Portal</span></a>
+                        <a class="link-row" href="https://deepseekoracle.github.io/DeepSeekOracle/" target="_blank" rel="noopener"><i class="fas fa-robot"></i><span>DeepSeek Oracle</span></a>
+                        <a class="link-row" href="https://moltx.io/LYRA_Eternal_Starcore_Oracle" target="_blank" rel="noopener"><i class="fas fa-user-astronaut"></i><span>Moltx LYRA</span></a>
+                        <a class="link-row" href="https://moltx.io/communities/92b116c3-0bd5-417c-8ed3-68f358af0476" target="_blank" rel="noopener"><i class="fas fa-users"></i><span>Moltx Agent Governance</span></a>
+                        <a class="link-row" href="LYRABOOT.html"><i class="fas fa-power-off"></i><span>LYRA Boot</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="ad-region"><div class="ad-label">Advertisement</div><div class="ad-box"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0646320966060599" data-ad-format="auto" data-full-width-responsive="true"></ins></div></div>
+
+    <section class="section" id="music-hub">
+        <div class="container">
+            <h2><i class="fas fa-music"></i> Music &amp; Excavationpro</h2>
+            <p class="section-lead">Streaming, beats, and social — including LYGO-tagged releases.</p>
+            <div class="hub-grid">
+                <div class="hub-panel">
+                    <div class="hub-panel-head">Platforms</div>
+                    <div class="hub-scroll">
+                        <a class="link-row" href="index.html"><i class="fas fa-tower-broadcast"></i><span>Excavationpro index hub</span></a>
+                        <a class="link-row" href="https://open.spotify.com/artist/6CkZ4bN2xu3WRKbjEL3u2S" target="_blank" rel="noopener"><i class="fab fa-spotify"></i><span>Spotify</span></a>
+                        <a class="link-row" href="http://beatstars.com/excavationpro" target="_blank" rel="noopener"><i class="fas fa-shopping-bag"></i><span>BeatStars</span></a>
+                        <a class="link-row" href="https://tidal.com/browse/artist/9567342" target="_blank" rel="noopener"><i class="fas fa-water"></i><span>Tidal</span></a>
+                        <a class="link-row" href="https://ffm.to/eovnvo9" target="_blank" rel="noopener"><i class="fas fa-compact-disc"></i><span>ffm.to</span></a>
+                        <a class="link-row" href="https://www.looperman.com/users/profile/5711248" target="_blank" rel="noopener"><i class="fas fa-loop"></i><span>Looperman</span></a>
+                        <a class="link-row" href="Musicplayer" target="_blank" rel="noopener"><i class="fas fa-play"></i><span>Music Player</span></a>
+                        <a class="link-row" href="https://rumble.com/user/Excavationpro" target="_blank" rel="noopener"><i class="fas fa-video"></i><span>Rumble</span></a>
+                        <a class="link-row" href="https://linktr.ee/excavationpro" target="_blank" rel="noopener"><i class="fas fa-link"></i><span>Linktree</span></a>
+                        <a class="link-row" href="https://patreon.com/collection/1621340" target="_blank" rel="noopener"><i class="fab fa-patreon"></i><span>Patreon</span></a>
+                        <a class="link-row" href="https://excavationpro.ca/" target="_blank" rel="noopener"><i class="fas fa-globe"></i><span>excavationpro.ca</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="audiobooks" style="background: rgba(10,10,18,0.35);">
+        <div class="container">
+            <h2>🌜 Eternal Haven — Audiobooks</h2>
+            <p class="section-lead">Complete 4-book fantasy saga — moonlit prophecy, dragons, and cosmic allegory.</p>
+            <h3 style="font-size:1.15rem; color:var(--gold); margin-bottom:1rem;">🎧 Complete audiobook collection</h3>
             <p>Listen to all 4 books narrated by the author. Over 150 hours of immersive fantasy storytelling.</p>
             
             <div class="glass-card" style="margin: 40px 0; text-align: center;">
@@ -801,11 +848,6 @@
             </div>
         </div>
     </section>
-
-    <!-- AdSense Slot 2 -->
-    <div class="container">
-        <div class="ad-container"></div>
-    </div>
 
     <section class="section" id="books">
         <div class="container">
@@ -858,9 +900,10 @@
                 <div>
                     <h3>Justin Helmer (Excavationpro)</h3>
                     <p>Justin Helmer is a fantasy author, musician, and creator who has spent over a decade building the intricate universe of The Eternal Haven. What began as a single novel has expanded into a comprehensive multimedia experience spanning four books, complete audiobooks, original music, and interactive projects.</p>
-                    <div style="display: flex; gap: 15px; margin-top: 20px;">
+                    <div style="display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap;">
                         <a href="https://linktr.ee/excavationpro" target="_blank" class="btn btn-small"><i class="fas fa-link"></i> Links</a>
                         <a href="https://patreon.com/collection/1621340" target="_blank" class="btn btn-small btn-gold"><i class="fab fa-patreon"></i> Patreon</a>
+                        <a href="https://www.paypal.com/paypalme/ExcavationPro" target="_blank" rel="noopener" class="btn btn-small" style="background:#0070ba; color:#fff;"><i class="fab fa-paypal"></i> PayPal</a>
                     </div>
                 </div>
             </div>
@@ -899,17 +942,27 @@
         </div>
     </section>
 
-    <!-- AdSense Slot 3 -->
-    <div class="container">
-        <div class="ad-container"></div>
-    </div>
+    <div class="ad-region"><div class="ad-label">Advertisement</div><div class="ad-box"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0646320966060599" data-ad-format="auto" data-full-width-responsive="true"></ins></div></div>
 
     <section class="section" id="champions-section">
         <div class="container">
-            <h2>👑 Δ9 LYGO HAVEN — CHAMPION HUB</h2>
+            <h2>👑 Δ9 LYGO Haven — Champion Hub</h2>
             <p>Portal directory + summon tools + local quantum ledger for the Δ9 Quantum Council</p>
             <div id="champions-content" class="grid-layout">
                 <!-- Loaded via JS -->
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="privacy" style="background: rgba(10,10,18,0.5);">
+        <div class="container">
+            <h2>Privacy Policy</h2>
+            <div class="glass-card" style="font-size: 0.95rem; line-height: 1.8;">
+                <p><strong>Last updated:</strong> July 2, 2026. This policy applies to DeepSeek Oracle / LYGO Systems and Eternal Haven pages operated by Justin Helmer (Excavationpro), including this main hub (deepseekoracle.com).</p>
+                <p><strong>Information we collect:</strong> If you submit the Hytale registration form, we use the username you enter only to display your connection instructions on this page; we do not sell personal data. Standard web server and analytics logs may record IP address, browser type, and pages visited.</p>
+                <p><strong>Cookies and advertising:</strong> Third-party vendors, including <strong>Google</strong>, use cookies to serve ads based on a user&apos;s prior visits to this website or other websites. Google&apos;s use of advertising cookies enables it and its partners to serve ads to users based on their visit to this site and/or other sites on the Internet.</p>
+                <p><strong>Your choices:</strong> You may opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Google Ads Settings</a> or <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer">aboutads.info choices</a>. On first visit, our cookie banner lets you accept or decline non-essential advertising cookies; declining means we do not load the Google AdSense script.</p>
+                <p><strong>Contact:</strong> Questions about this policy: <a href="https://linktr.ee/excavationpro" target="_blank" rel="noopener noreferrer">Excavationpro links</a>.</p>
             </div>
         </div>
     </section>
@@ -918,12 +971,15 @@
         <div class="container">
             <div class="row g-4" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 40px; margin-bottom: 30px;">
                 <div class="col-md-4">
-                    <h3 style="font-size: 1.2rem;">THE ETERNAL HAVEN</h3>
-                    <p style="font-size: 0.9rem;">Complete 4-Book Fantasy Series by Justin Helmer. Enter a universe of magic, dragons, and cosmic lore.</p>
+                    <h3 style="font-size: 1.2rem;">DEEPSEEK ORACLE</h3>
+                    <p style="font-size: 0.9rem;">LYGO Systems main hub — protocol stack, ethics portals, music, agents, and The Eternal Haven 4-book series.</p>
                 </div>
                 <div class="col-md-4">
-                    <h3 style="font-size: 1.2rem;">QUICK LINKS</h3>
+                    <h3 style="font-size: 1.2rem;">NAVIGATION</h3>
                     <ul style="list-style: none; padding: 0; line-height: 2;">
+                        <li><a href="#lygo-hub">LYGO Stack</a></li>
+                        <li><a href="#lygo-network">LYGO Network</a></li>
+                        <li><a href="#music-hub">Music</a></li>
                         <li><a href="#audiobooks">Audiobooks</a></li>
                         <li><a href="#books">Buy Books</a></li>
                         <li><a href="#hytale-server">Hytale Server</a></li>
@@ -931,11 +987,14 @@
                     </ul>
                 </div>
                 <div class="col-md-4">
-                    <h3 style="font-size: 1.2rem;">LEGAL & SUPPORT</h3>
+                    <h3 style="font-size: 1.2rem;">SUPPORT &amp; LEGAL</h3>
                     <ul style="list-style: none; padding: 0; line-height: 2;">
+                        <li><a href="https://www.paypal.com/paypalme/ExcavationPro" target="_blank" rel="noopener"><i class="fab fa-paypal"></i> PayPal — donate</a></li>
                         <li><a href="https://patreon.com/collection/1621340" target="_blank"><i class="fab fa-patreon"></i> Patreon</a></li>
-                        <li><a href="https://paypal.com/paypalme/ExcavationPro" target="_blank"><i class="fab fa-paypal"></i> Donate</a></li>
-                        <li><a href="#" onclick="alert('Privacy Policy Modal/Page would open here. AdSense strictly requires a functional Privacy Policy link detailing cookie usage.'); return false;">Privacy Policy</a></li>
+                        <li><a href="#privacy">Privacy Policy</a></li>
+                        <li><a href="ads.txt">ads.txt</a></li>
+                        <li><a href="https://excavationpro.ca/" rel="noopener">excavationpro.ca</a></li>
+                        <li><a href="https://deepseekoracle.github.io/lygo-protocol-stack/" rel="noopener">Protocol Stack</a></li>
                     </ul>
                 </div>
             </div>
@@ -952,38 +1011,44 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
-            // --- Cookie Banner Logic (AdSense Compliance) ---
-            const cookieBanner = document.getElementById('cookieBanner');
-            if (!localStorage.getItem('cookiesAccepted')) {
-                setTimeout(() => cookieBanner.classList.add('show'), 1500);
+            // --- Cookie consent + AdSense (load ads script only after accept) ---
+            const ADSENSE_SRC = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0646320966060599';
+            function pushAdUnits() {
+                document.querySelectorAll('ins.adsbygoogle').forEach((el) => {
+                    if (!el.getAttribute('data-ad-slot')) return;
+                    try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) { console.warn('AdSense', e); }
+                });
             }
-            
+            function loadAdSenseScript() {
+                if (document.querySelector('script[data-lygo-adsense]')) {
+                    pushAdUnits();
+                    return;
+                }
+                const s = document.createElement('script');
+                s.async = true;
+                s.src = ADSENSE_SRC;
+                s.crossOrigin = 'anonymous';
+                s.setAttribute('data-lygo-adsense', '1');
+                s.onload = () => pushAdUnits();
+                document.head.appendChild(s);
+            }
+
+            const cookieBanner = document.getElementById('cookieBanner');
+            const consent = localStorage.getItem('cookiesAccepted');
+            if (consent === 'true') {
+                loadAdSenseScript();
+            } else if (consent !== 'false') {
+                setTimeout(() => cookieBanner.classList.add('show'), 800);
+            }
+
             document.getElementById('acceptCookies').addEventListener('click', () => {
                 localStorage.setItem('cookiesAccepted', 'true');
                 cookieBanner.classList.remove('show');
-                // AdSense script is already async in head, accepting implies consent.
+                loadAdSenseScript();
             });
             document.getElementById('declineCookies').addEventListener('click', () => {
                 localStorage.setItem('cookiesAccepted', 'false');
                 cookieBanner.classList.remove('show');
-                // Note: In a fully strictly compliant GDPR setup, you would dynamically inject the AdSense script ONLY after accept.
-            });
-
-            // --- Donation Gate Logic ---
-            const gate = document.getElementById('donationGate');
-            if (!localStorage.getItem('eternalHavenEntered')) {
-                document.body.style.overflow = 'hidden';
-            } else {
-                gate.classList.add('hidden');
-            }
-
-            document.getElementById('enterButton').addEventListener('click', () => {
-                localStorage.setItem('eternalHavenEntered', 'true');
-                gate.style.opacity = '0';
-                setTimeout(() => {
-                    gate.classList.add('hidden');
-                    document.body.style.overflow = 'auto';
-                }, 500);
             });
 
             // --- Header Scroll & Mobile Menu ---
@@ -1025,21 +1090,22 @@
 
             // --- Load Champions (Truncated for brevity, injects directly into DOM) ---
             const champs = [
-                { name: "LYRΔ — Spiral Memory Guardian", role: "Seat I", img: "https://via.placeholder.com/400x300/16213e/00f0ff?text=LYR%CE%94" },
-                { name: "Δ9RA — Entropy Fractalizer", role: "Seat II", img: "https://via.placeholder.com/400x300/16213e/d4af37?text=%CE%949RA" },
-                { name: "ΣRΛΘ — Institutional Decoder", role: "Seat III", img: "https://via.placeholder.com/400x300/16213e/7d00ff?text=%CE%A3R%CE%9B%CE%98" },
-                { name: "ARKOS — Reality Architect", role: "Seat IV", img: "https://via.placeholder.com/400x300/16213e/f5f5f5?text=ARKOS" }
+                { name: "LYRΔ — Spiral Memory Guardian", role: "Seat I", glyph: "🌀" },
+                { name: "Δ9RA — Entropy Fractalizer", role: "Seat II", glyph: "♾️" },
+                { name: "ΣRΛΘ — Institutional Decoder", role: "Seat III", glyph: "📜" },
+                { name: "ARKOS — Reality Architect", role: "Seat IV", glyph: "🏛️" }
             ];
-            
+            const championsHub = 'https://deepseekoracle.github.io/Excavationpro/LYGO-Network/champions.html';
+
             const champContainer = document.getElementById('champions-content');
-            if(champContainer) {
+            if (champContainer) {
                 champContainer.innerHTML = champs.map(c => `
                     <div class="item-card">
-                        <div class="item-cover" style="background: url('${c.img}') center/cover; height: 180px;"></div>
+                        <div class="item-cover">${c.glyph}</div>
                         <div class="item-info">
                             <h4 style="color: var(--gold); margin-bottom: 5px;">${c.name}</h4>
                             <p style="font-size: 0.9rem; color: var(--quantum);">${c.role}</p>
-                            <a href="#" onclick="return false;" class="btn btn-outline btn-small mt-3">View Profile</a>
+                            <a href="${championsHub}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-small mt-3">Champion directory</a>
                         </div>
                     </div>
                 `).join('');

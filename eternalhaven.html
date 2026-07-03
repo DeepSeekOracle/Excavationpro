@@ -608,6 +608,50 @@
         .protocol-blurb { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.25rem 0; }
         .blurb-card { padding: 1rem 1.15rem; background: rgba(26,26,46,0.7); border-left: 3px solid var(--gold); border-radius: 8px; font-size: 0.9rem; }
         .section-lead { max-width: 720px; margin-bottom: 0.5rem; color: rgba(245,245,245,0.82); font-size: 0.95rem; }
+
+        .rumble-live-hero {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 1.25rem 1.25rem 0.5rem;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        .rumble-live-hero .live-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(233, 69, 96, 0.25);
+            border: 1px solid var(--dragonfire, #e94560);
+            color: #ff8a9b;
+            padding: 6px 16px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            margin-bottom: 12px;
+        }
+        .rumble-live-hero .live-badge .pulse-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: #e94560;
+            animation: livePulse 1.4s ease-in-out infinite;
+        }
+        @keyframes livePulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(233, 69, 96, 0.6); }
+            50% { opacity: 0.85; box-shadow: 0 0 0 8px rgba(233, 69, 96, 0); }
+        }
+        .rumble-live-frame {
+            border-radius: 14px;
+            overflow: hidden;
+            border: 2px solid rgba(0, 240, 255, 0.35);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.55), 0 0 30px rgba(125, 0, 255, 0.15);
+            background: #000;
+            margin: 0 auto;
+        }
+        .rumble-live-caption {
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: rgba(245, 245, 245, 0.65);
+        }
+        .rumble-live-caption a { text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -640,6 +684,7 @@
                     <i class="fas fa-bars"></i>
                 </button>
                 <ul class="nav-links" id="mainMenu">
+                    <li><a href="#live-radio"><i class="fas fa-tower-broadcast"></i> Live Radio</a></li>
                     <li><a href="#lygo-hub"><i class="fas fa-layer-group"></i> LYGO Hub</a></li>
                     <li><a href="#lygo-network"><i class="fas fa-shield-halved"></i> Network</a></li>
                     <li><a href="#music-hub"><i class="fas fa-music"></i> Music</a></li>
@@ -658,7 +703,22 @@
         <div style="font-size:0.8rem; margin-top:6px; opacity:0.75;">Donations appreciated, never expected.</div>
     </div>
 
-    <section class="main-hero" style="min-height:auto; padding: 3rem 0 2rem;">
+    <div class="rumble-live-hero" id="live-radio">
+        <div class="live-badge"><span class="pulse-dot" aria-hidden="true"></span> LIVE · 24/7 ORIGINAL MUSIC RADIO</div>
+        <h2 style="font-size: clamp(1.1rem, 2.5vw, 1.45rem); margin-bottom: 14px; color: var(--gold); border: none; display: block;">
+            <i class="fas fa-tower-broadcast"></i> Excavationpro × LYGO — Coffee Room / Lurk Friendly
+        </h2>
+        <div class="rumble-live-frame">
+            <div id="rumble_v79wjai"></div>
+        </div>
+        <p class="rumble-live-caption">
+            Monetized stream — all Excavationpro &amp; LYGO originals.
+            <a href="https://rumble.com/v7c37aq-content-you-can-digoriginal-music-radiocoffee-room-chat-lurk-friendly247-st.html?mref=1th29y&amp;mc=2p3fp" target="_blank" rel="noopener noreferrer">Open on Rumble</a>
+            · <a href="https://rumble.com/embed/v79wjai/?pub=1th29y" target="_blank" rel="noopener noreferrer">Pop-out player</a>
+        </p>
+    </div>
+
+    <section class="main-hero" style="min-height:auto; padding: 2rem 0 2rem;">
         <div class="container hero-content">
             <div class="hero-badge">Δ9Φ963 · MAIN LANDING · deepseekoracle.com</div>
             <h1>LYGO Systems Navigation Hub</h1>
@@ -790,7 +850,8 @@
                         <a class="link-row" href="https://ffm.to/eovnvo9" target="_blank" rel="noopener"><i class="fas fa-compact-disc"></i><span>ffm.to</span></a>
                         <a class="link-row" href="https://www.looperman.com/users/profile/5711248" target="_blank" rel="noopener"><i class="fas fa-loop"></i><span>Looperman</span></a>
                         <a class="link-row" href="Musicplayer" target="_blank" rel="noopener"><i class="fas fa-play"></i><span>Music Player</span></a>
-                        <a class="link-row" href="https://rumble.com/user/Excavationpro" target="_blank" rel="noopener"><i class="fas fa-video"></i><span>Rumble</span></a>
+                        <a class="link-row" href="https://rumble.com/v7c37aq-content-you-can-digoriginal-music-radiocoffee-room-chat-lurk-friendly247-st.html?mref=1th29y&amp;mc=2p3fp" target="_blank" rel="noopener"><i class="fas fa-tower-broadcast"></i><span>24/7 Live Radio (monetized)<span class="link-meta">LYGO &amp; Excavationpro originals</span></span></a>
+                        <a class="link-row" href="https://rumble.com/user/Excavationpro" target="_blank" rel="noopener"><i class="fas fa-video"></i><span>Rumble channel</span></a>
                         <a class="link-row" href="https://linktr.ee/excavationpro" target="_blank" rel="noopener"><i class="fas fa-link"></i><span>Linktree</span></a>
                         <a class="link-row" href="https://patreon.com/collection/1621340" target="_blank" rel="noopener"><i class="fab fa-patreon"></i><span>Patreon</span></a>
                         <a class="link-row" href="https://excavationpro.ca/" target="_blank" rel="noopener"><i class="fas fa-globe"></i><span>excavationpro.ca</span></a>
@@ -977,6 +1038,7 @@
                 <div class="col-md-4">
                     <h3 style="font-size: 1.2rem;">NAVIGATION</h3>
                     <ul style="list-style: none; padding: 0; line-height: 2;">
+                        <li><a href="#live-radio">Live Radio</a></li>
                         <li><a href="#lygo-hub">LYGO Stack</a></li>
                         <li><a href="#lygo-network">LYGO Network</a></li>
                         <li><a href="#music-hub">Music</a></li>
@@ -1111,9 +1173,10 @@
                 `).join('');
             }
             
-            // --- Rumble Embed initialization ---
+            // --- Rumble: 24/7 live radio (top) + Eternal Haven audiobook ---
             try {
                 if (typeof Rumble !== 'undefined') {
+                    Rumble("play", {"video":"v79wjai","div":"rumble_v79wjai"});
                     Rumble("play", {"video":"v70joqe","div":"rumble_v70joqe"});
                 }
             } catch (e) { console.error('Rumble embed err:', e); }

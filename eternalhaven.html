@@ -701,7 +701,6 @@
                     <li><a href="#music-hub"><i class="fas fa-music"></i> Music</a></li>
                     <li><a href="#audiobooks"><i class="fas fa-headphones"></i> Audiobooks</a></li>
                     <li><a href="#books"><i class="fas fa-book"></i> Books</a></li>
-                    <li><a href="#hytale-server"><i class="fas fa-server"></i> Hytale</a></li>
                     <li><a href="https://www.paypal.com/paypalme/ExcavationPro" target="_blank" rel="noopener"><i class="fab fa-paypal"></i> Support</a></li>
                 </ul>
             </nav>
@@ -987,38 +986,6 @@
         </div>
     </section>
 
-    <section class="section" id="hytale-server">
-        <div class="container">
-            <h2>🎮 ETERNAL HAVEN HYTALE SERVER</h2>
-            <p>A building-focused server inspired by the Eternal Haven universe.</p>
-            
-            <div class="hytale-container mt-4">
-                <div class="hytale-hero">
-                    <h3 style="font-size: 2.5rem; text-shadow: 0 5px 15px rgba(0,0,0,0.8);"><i class="fas fa-crown me-3"></i>Join The Community</h3>
-                    <p class="lead" style="text-shadow: 0 2px 4px rgba(0,0,0,0.8); max-width: 800px; margin: 0 auto;">Register your username to receive the server connection address. Build in a stable, protected environment dedicated to serious creators.</p>
-                </div>
-                
-                <div class="p-4 p-md-5">
-                    <form id="playerForm" class="row g-3 align-items-end">
-                        <div class="col-md-8">
-                            <label for="playerName" style="color: var(--gold); font-weight: bold; margin-bottom: 8px; display:block;">Your Exact Hytale Username</label>
-                            <input type="text" class="form-control hytale-form-control w-100" id="playerName" placeholder="Enter exactly as it appears in Hytale" required pattern="[A-Za-z0-9_]{3,16}">
-                        </div>
-                        <div class="col-md-4">
-                            <button type="submit" class="btn btn-gold w-100"><i class="fas fa-key me-2"></i> Register & Connect</button>
-                        </div>
-                    </form>
-
-                    <div id="server-code-display" style="display:none; margin-top: 30px; text-align: center; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 30px;">
-                        <h4 style="color: #27ae60;"><i class="fas fa-check-circle"></i> Registration Complete, <span id="display-name"></span>!</h4>
-                        <p>Your direct connection address is below:</p>
-                        <div class="server-ip">174.0.140.159:5520</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <div class="ad-region"><div class="ad-label">Advertisement</div><div class="ad-box"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0646320966060599" data-ad-format="auto" data-full-width-responsive="true"></ins></div></div>
 
     <section class="section" id="champions-section">
@@ -1036,7 +1003,7 @@
             <h2>Privacy Policy</h2>
             <div class="glass-card" style="font-size: 0.95rem; line-height: 1.8;">
                 <p><strong>Last updated:</strong> July 2, 2026. This policy applies to DeepSeek Oracle / LYGO Systems and Eternal Haven pages operated by Justin Helmer (Excavationpro), including this main hub (deepseekoracle.com).</p>
-                <p><strong>Information we collect:</strong> If you submit the Hytale registration form, we use the username you enter only to display your connection instructions on this page; we do not sell personal data. Standard web server and analytics logs may record IP address, browser type, and pages visited.</p>
+                <p><strong>Information we collect:</strong> We do not sell personal data. Standard web server and analytics logs may record IP address, browser type, and pages visited.</p>
                 <p><strong>Cookies and advertising:</strong> Third-party vendors, including <strong>Google</strong>, use cookies to serve ads based on a user&apos;s prior visits to this website or other websites. Google&apos;s use of advertising cookies enables it and its partners to serve ads to users based on their visit to this site and/or other sites on the Internet.</p>
                 <p><strong>Your choices:</strong> You may opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Google Ads Settings</a> or <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer">aboutads.info choices</a>. On first visit, our cookie banner lets you accept or decline non-essential advertising cookies; declining means we do not load the Google AdSense script.</p>
                 <p><strong>Contact:</strong> Questions about this policy: <a href="https://linktr.ee/excavationpro" target="_blank" rel="noopener noreferrer">Excavationpro links</a>.</p>
@@ -1060,7 +1027,6 @@
                         <li><a href="#music-hub">Music</a></li>
                         <li><a href="#audiobooks">Audiobooks</a></li>
                         <li><a href="#books">Buy Books</a></li>
-                        <li><a href="#hytale-server">Hytale Server</a></li>
                         <li><a href="#champions-section">Champion Hub</a></li>
                     </ul>
                 </div>
@@ -1070,7 +1036,6 @@
                         <li><a href="https://www.paypal.com/paypalme/ExcavationPro" target="_blank" rel="noopener"><i class="fab fa-paypal"></i> PayPal — donate</a></li>
                         <li><a href="https://patreon.com/collection/1621340" target="_blank"><i class="fab fa-patreon"></i> Patreon</a></li>
                         <li><a href="#privacy">Privacy Policy</a></li>
-                        <li><a href="ads.txt">ads.txt</a></li>
                         <li><a href="https://excavationpro.ca/" rel="noopener">excavationpro.ca</a></li>
                         <li><a href="https://deepseekoracle.github.io/lygo-protocol-stack/" rel="noopener">Protocol Stack</a></li>
                     </ul>
@@ -1154,17 +1119,6 @@
                     quotes[currentQuote].classList.add('active');
                 }
             }, 5000);
-
-            // --- Hytale Form Logic ---
-            const form = document.getElementById('playerForm');
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const name = document.getElementById('playerName').value;
-                document.getElementById('display-name').textContent = name;
-                const display = document.getElementById('server-code-display');
-                display.style.display = 'block';
-                display.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            });
 
             // --- Load Champions (Truncated for brevity, injects directly into DOM) ---
             const champs = [

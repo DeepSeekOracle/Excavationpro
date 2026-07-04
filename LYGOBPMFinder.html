@@ -3,8 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <meta name="google-adsense-account" content="ca-pub-0646320966060599">
 <title>LYGO BPM Finder — Free Online Tempo Detector | MP3, WAV, FLAC</title>
 <meta name="title" content="LYGO BPM Finder — Free Online Tempo Detector | MP3, WAV, FLAC">
 <meta name="description" content="Free online BPM finder and tempo detector. Upload MP3, WAV, or FLAC — detect beats in your browser with confidence score, tap tempo, ÷2/×2 fix, and waveform beat grid. Private: audio never leaves your device. By Excavationpro / LYGO.">
@@ -40,6 +38,7 @@
   "browserRequirements": "Requires JavaScript and Web Audio API",
   "author": { "@type": "Organization", "name": "Excavationpro / LYGO Systems" }
 }</script>
+<meta name="google-adsense-account" content="ca-pub-0646320966060599">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -64,13 +63,21 @@
     min-height: 100vh;
     background: var(--bg);
     color: var(--text);
-    font-family: 'Work Sans', sans-serif;
+    font-family: 'Work Sans', system-ui, sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 24px;
-    gap: 16px;
+  }
+
+  .page-shell {
+    width: 100%;
+    max-width: 560px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
   }
 
   .rack {
@@ -94,9 +101,16 @@
   h1 {
     font-family: 'Work Sans', sans-serif;
     font-weight: 600;
-    font-size: 20px;
-    margin: 0 0 20px;
+    font-size: 22px;
+    margin: 0 0 8px;
     color: var(--text);
+  }
+
+  .lede {
+    margin: 0 0 18px;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--muted);
   }
 
   .dropzone {
@@ -119,21 +133,23 @@
   .readout {
     margin-top: 26px;
     display: flex;
-    align-items: baseline;
-    gap: 14px;
+    align-items: center;
+    gap: 12px;
     justify-content: center;
+    min-height: 88px;
   }
 
   .bpm-value {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
     font-weight: 700;
-    font-size: 76px;
+    font-size: 72px;
     line-height: 1;
     color: var(--muted);
     font-variant-numeric: tabular-nums;
-    transition: color 0.2s ease;
+    transition: color 0.2s ease, font-size 0.2s ease;
   }
-  .bpm-value.live { color: var(--amber); }
+  .bpm-value.live { color: var(--amber); font-size: 76px; }
+  .bpm-value.empty { font-size: 28px; letter-spacing: 0.02em; font-weight: 500; }
 
   .bpm-unit {
     font-family: 'JetBrains Mono', monospace;
@@ -254,10 +270,16 @@
 </style>
 </head>
 <body>
-
+<noscript>
+  <p style="max-width:32rem;margin:2rem auto;padding:1rem;background:#2b2521;color:#f2ece3;border-radius:8px;text-align:center;">
+    LYGO BPM Finder needs JavaScript (Web Audio). Please enable JS and reload.
+  </p>
+</noscript>
+<div class="page-shell">
 <main class="rack" id="bpm-finder-app">
-  <p class="eyebrow">LYGO · Biophase7 · Creative</p>
+  <p class="eyebrow">LYGO / Biophase7 / Creative</p>
   <h1>LYGO BPM Finder</h1>
+  <p class="lede">Free online tempo detector. Drop MP3, WAV, or FLAC — beats are analyzed locally in your browser.</p>
 
   <div class="dropzone" id="dropzone">
     <input type="file" id="fileInput" accept="audio/*" aria-label="Choose an audio file">
@@ -266,10 +288,10 @@
 
   <div class="readout">
     <span class="pulse-dot" id="pulseDot"></span>
-    <span class="bpm-value" id="bpmValue">—</span>
+    <span class="bpm-value empty" id="bpmValue">--</span>
     <span class="bpm-unit">BPM</span>
   </div>
-  <p class="status" id="status">Nothing loaded yet. Audio stays on your device.</p>
+  <p class="status" id="status">Ready — choose or drop an audio file.</p>
 
   <div class="confidence-row" id="confidenceRow" style="display:none;">
     <span class="confidence-label">Confidence</span>
@@ -279,13 +301,12 @@
   <canvas id="wave" width="900" height="84"></canvas>
 
   <div class="controls">
-    <button id="halfBtn" disabled>÷2</button>
-    <button id="doubleBtn" disabled>×2</button>
+    <button id="halfBtn" disabled title="Half tempo">Half</button>
+    <button id="doubleBtn" disabled title="Double tempo">Double</button>
     <span class="spacer"></span>
     <button class="tap-btn" id="tapBtn">Tap tempo</button>
   </div>
 </main>
-
 
 <p class="site-footer">
   <strong>Privacy:</strong> <a href="https://www.npmjs.com/package/bpm-detective" rel="noopener noreferrer" target="_blank">bpm-detective</a> runs locally — no server upload.
@@ -293,8 +314,14 @@
   · <a href="LYGORESONANCE.html">LYGO Resonance</a>
   · <a href="https://github.com/DeepSeekOracle/lygo-protocol-stack/blob/main/docs/BIOPHASE7_BPM_FINDER.md">Spec</a>
 </p>
+</div>
 <script type="module">
-  import detect from 'https://cdn.jsdelivr.net/npm/bpm-detective/+esm';
+  let detect;
+  try {
+    detect = (await import('https://cdn.jsdelivr.net/npm/bpm-detective/+esm')).default;
+  } catch (e) {
+    detect = null;
+  }
 
   const dropzone   = document.getElementById('dropzone');
   const fileInput  = document.getElementById('fileInput');
@@ -314,8 +341,9 @@
 
   function setBpm(bpm) {
     currentBpm = bpm;
-    bpmValue.textContent = bpm ? bpm.toFixed(1) : '—';
+    bpmValue.textContent = bpm ? bpm.toFixed(1) : '--';
     bpmValue.classList.toggle('live', !!bpm);
+    bpmValue.classList.toggle('empty', !bpm);
     if (bpm) {
       document.documentElement.style.setProperty('--beat-ms', `${60000 / bpm}ms`);
       pulseDot.classList.add('on');
@@ -331,6 +359,12 @@
   function setStatus(msg, warn = false) {
     statusEl.textContent = msg;
     statusEl.classList.toggle('warn', warn);
+  }
+
+  if (!detect) {
+    setStatus('BPM engine failed to load. Check your connection and refresh.', true);
+    fileInput.disabled = true;
+    tapBtn.disabled = true;
   }
 
   // Rough confidence heuristic: how tightly detected beat intervals cluster.
@@ -407,6 +441,7 @@
 
   async function handleFile(file) {
     if (!file) return;
+    if (!detect) return;
     setStatus('Decoding audio…');
     setBpm(null);
     confRow.style.display = 'none';

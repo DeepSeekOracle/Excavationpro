@@ -5,8 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Google AdSense verification meta (script loads only after cookie consent) -->
+    <!-- Google AdSense (site verification + ads; units fill after cookie consent) -->
     <meta name="google-adsense-account" content="ca-pub-0646320966060599" />
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0646320966060599"
+         crossorigin="anonymous"></script>
 
     <title>DeepSeek Oracle — LYGO Systems | Main Navigation Hub</title>
     <meta name="description" content="Official LYGO Systems landing page by Justin Helmer (Excavationpro). Protocol stack, Guardian ethics, Eternal Haven, music, and every public link in one hub.">
@@ -1058,11 +1060,18 @@
             const ADSENSE_SRC = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0646320966060599';
             function pushAdUnits() {
                 document.querySelectorAll('ins.adsbygoogle').forEach((el) => {
-                    if (!el.getAttribute('data-ad-slot')) return;
-                    try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) { console.warn('AdSense', e); }
+                    if (el.getAttribute('data-adsbygoogle-status')) return;
+                    try {
+                        (window.adsbygoogle = window.adsbygoogle || []).push({});
+                        el.setAttribute('data-adsbygoogle-status', 'done');
+                    } catch (e) { console.warn('AdSense', e); }
                 });
             }
             function loadAdSenseScript() {
+                if (window.adsbygoogle) {
+                    pushAdUnits();
+                    return;
+                }
                 if (document.querySelector('script[data-lygo-adsense]')) {
                     pushAdUnits();
                     return;

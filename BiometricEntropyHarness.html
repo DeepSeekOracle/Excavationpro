@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- Primary SEO Optimization -->
+    
+  <meta name="google-adsense-account" content="ca-pub-0646320966060599" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0646320966060599"
+       crossorigin="anonymous"></script>
+<!-- Primary SEO Optimization -->
     <title>LYGO Protocol Stack — Phase 7 Biometric Entropy Harness</title>
     <meta name="title" content="LYGO Protocol Stack — Phase 7 Biometric Entropy Harness">
     <meta name="description" content="Harnessing non-deterministic biological fluctuations for cryptographic purity. Live interactive simulation of the P0-P7 multi-modal sovereign identity architecture.">
@@ -63,6 +67,7 @@
                 <span class="font-bold tracking-wider text-sm sm:text-base">LYGO_STACK // P7_HARNESS</span>
             </div>
             <nav class="flex items-center space-x-4 text-xs font-medium text-zinc-400">
+                <a href="index.html" class="hover:text-lygo-500 transition-colors">STACK_REF</a>
                 <a href="https://github.com/DeepSeekOracle/lygo-protocol-stack" target="_blank" class="hover:text-lygo-500 transition-colors">GITHUB</a>
                 <a href="https://huggingface.co/spaces/DeepSeekOracle/LYGO-Resonance-Engine" target="_blank" class="hover:text-lygo-500 transition-colors">HF_SPACE</a>
                 <a href="https://clawhub.ai/deepseekoracle" target="_blank" class="hover:text-lygo-500 transition-colors">CLAWHUB</a>
@@ -79,6 +84,7 @@
             <div>
                 <h2 class="text-base font-bold text-zinc-100 uppercase tracking-wider mb-1">Telemetry Inputs</h2>
                 <p class="text-xs text-zinc-500">Tune the unmanaged biological parameters to modify the entropy extraction array.</p>
+                <p class="text-[10px] text-zinc-600 mt-2">Browser sim uses WebCrypto at 256-bit gate. Stack parity: <code class="text-lygo-500">protocol7_human_ai_interface/entropy_extraction.py</code> · HF Space Phase 7 accordion.</p>
             </div>
             
             <hr class="border-zinc-800">
@@ -184,7 +190,7 @@
     <footer class="border-t border-zinc-900 bg-zinc-950 py-6 px-4">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between text-[10px] text-zinc-600 space-y-3 sm:space-y-0">
             <div>&copy; 2026 LYGO PROTOCOL STACK // ZERO TRUST IMMUTABLE ARCHITECTURE</div>
-            <div class="tracking-widest uppercase">Signature Verification Anchor: Δ9Φ963-STACK-PUBLIC-REFERENCE</div>
+            <div class="tracking-widest uppercase">Δ9Φ963-PHASE7-v1.0 · Canonical: lygo-protocol-stack/docs</div>
         </div>
     </footer>
 
@@ -415,6 +421,29 @@
                 ctxDist.fillStyle = '#22c55e';
             });
         }
+
+        // Optional live feed (BLE ingest + websocket_server.py on :8790)
+        let liveWs = null;
+        function connectLiveFeed() {
+            try {
+                liveWs = new WebSocket('ws://127.0.0.1:8790');
+                liveWs.onmessage = (ev) => {
+                    const msg = JSON.parse(ev.data);
+                    if (msg.seed_preview) {
+                        metricHmin.innerText = msg.h_min != null ? String(msg.h_min) : metricHmin.innerText;
+                        outputKey.innerText = msg.seed || msg.seed_preview;
+                        outputKey.className = "bg-zinc-950 p-4 rounded-lg border border-lygo-500/20 break-all font-mono text-[11px] leading-relaxed text-lygo-500 select-all min-h-[56px] flex items-center tracking-wider font-bold";
+                        badgeLock.innerText = "LIVE_BLE";
+                        badgeLock.className = "text-[10px] bg-lygo-950 px-2 py-0.5 rounded text-lygo-500 border border-lygo-500/30 font-bold uppercase tracking-widest";
+                        accumulatedEntropy = 256;
+                        metricBits.innerText = "256 / 256 bits";
+                        metricProgress.style.width = "100%";
+                    }
+                };
+                liveWs.onclose = () => { setTimeout(connectLiveFeed, 3000); };
+            } catch (e) { /* simulation-only mode */ }
+        }
+        connectLiveFeed();
 
         // Initialize App Workspace
         updateUIValues();

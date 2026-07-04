@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta name="google-adsense-account" content="ca-pub-0646320966060599">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0646320966060599"
-         crossorigin="anonymous"></script>
-    <meta name="lygo:signature" content="Δ9Φ963-EXCAVATIONPRO-HUB-v2">
+<meta name="lygo:signature" content="Δ9Φ963-EXCAVATIONPRO-HUB-v2">
 
     <title>EXCAVATIONPRO — Legacy Guardian Hub | Music Preservation &amp; LYGO Network</title>
     <meta name="title" content="EXCAVATIONPRO — Legacy Guardian Hub">
@@ -471,7 +469,7 @@
 
     <div class="cookie-banner" id="cookieBanner" role="dialog" aria-label="Cookie consent">
         <div class="cookie-text">
-            <strong>Privacy &amp; cookies:</strong> We may use Google AdSense after you accept. See our <a href="#privacy">Privacy Policy</a>. Accept loads advertising scripts; decline keeps essential browsing only.
+            <strong>Privacy &amp; cookies:</strong> We use essential cookies for this site. See our <a href="#privacy">Privacy Policy</a>. Accept acknowledges analytics preferences; decline keeps essential browsing only.
         </div>
         <div class="cookie-buttons">
             <button type="button" class="cookie-btn" id="declineCookies">Decline</button>
@@ -481,33 +479,19 @@
 
     <script>
         const CANONICAL_URL = 'https://excavationpro.ca/';
-        const ADSENSE_SRC = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0646320966060599';
         const ANCHORS_RAW = 'https://raw.githubusercontent.com/DeepSeekOracle/lygo-protocol-stack/main/docs/network_builder/IMMUTABLE_ANCHORS.json';
 
         document.getElementById('year').textContent = new Date().getFullYear();
 
-        function loadAdSenseScript() {
-            if (document.querySelector('script[data-lygo-adsense]')) return;
-            const s = document.createElement('script');
-            s.async = true;
-            s.src = ADSENSE_SRC;
-            s.crossOrigin = 'anonymous';
-            s.setAttribute('data-lygo-adsense', '1');
-            document.head.appendChild(s);
-        }
-
         (function initCookies() {
             const banner = document.getElementById('cookieBanner');
             const consent = localStorage.getItem('ep_cookies');
-            if (consent === 'accepted') {
-                loadAdSenseScript();
-            } else if (consent !== 'declined') {
+            if (consent !== 'accepted' && consent !== 'declined') {
                 setTimeout(() => banner.classList.add('show'), 700);
             }
             document.getElementById('acceptCookies').addEventListener('click', () => {
                 localStorage.setItem('ep_cookies', 'accepted');
                 banner.classList.remove('show');
-                loadAdSenseScript();
             });
             document.getElementById('declineCookies').addEventListener('click', () => {
                 localStorage.setItem('ep_cookies', 'declined');

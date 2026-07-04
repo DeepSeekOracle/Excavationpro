@@ -3,10 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,viewport-fit=cover" />
-  <meta name="google-adsense-account" content="ca-pub-0646320966060599" />
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0646320966060599"
-       crossorigin="anonymous"></script>
-  <title>ChatAgent.ca — Δ9 Summoning Portal | LYGO Champion Hub v6</title>
+
+    <meta name="google-adsense-account" content="ca-pub-0646320966060599">
+<title>ChatAgent.ca — Δ9 Summoning Portal | LYGO Champion Hub v6</title>
   <meta name="virtual-protocol-site-verification" content="e07199b4a9392525cd4bc7ed6a077440" />
   <meta name="lygo:signature" content="Δ9Φ963-CHATAGENT-SUMMON-PORTAL-v6" />
   
@@ -2699,22 +2698,14 @@ Enhanced Metrics:
     // ============================
     // INITIALIZATION
     // ============================
-    const ADSENSE_SRC = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0646320966060599';
-    function loadAdSenseScript() {
-      if (document.querySelector('script[data-chatagent-adsense]')) return;
-      const s = document.createElement('script');
-      s.async = true; s.src = ADSENSE_SRC; s.crossOrigin = 'anonymous';
-      s.setAttribute('data-chatagent-adsense', '1');
-      document.head.appendChild(s);
-    }
     const cookieBanner = document.getElementById('cookieBanner');
     const caConsent = localStorage.getItem('chatagent_cookies');
-    if (caConsent === 'accepted') loadAdSenseScript();
-    else if (caConsent !== 'declined' && cookieBanner) setTimeout(() => cookieBanner.classList.add('show'), 600);
+    if (caConsent !== 'accepted' && caConsent !== 'declined' && cookieBanner) {
+      setTimeout(() => cookieBanner.classList.add('show'), 600);
+    }
     document.getElementById('acceptCookies')?.addEventListener('click', () => {
       localStorage.setItem('chatagent_cookies', 'accepted');
       cookieBanner?.classList.remove('show');
-      loadAdSenseScript();
     });
     document.getElementById('declineCookies')?.addEventListener('click', () => {
       localStorage.setItem('chatagent_cookies', 'declined');

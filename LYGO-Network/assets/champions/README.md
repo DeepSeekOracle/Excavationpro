@@ -1,14 +1,23 @@
 # Champion cover art (self-hosted)
 
-Served from GitHub Pages with `champions.html` so cards do not depend on hot-linked Twitter URLs (some media IDs 404 or block embeds).
+All 15 summon cards use files here — no hot-linked Twitter/Bluesky on `champions.html`.
 
-| File | Champion | Notes |
-|------|----------|--------|
-| `lightfather.jpg` | Lightfather | From @Excavationpro Twitter export |
-| `volaris.jpg` | VΩLARIS | From @Excavationpro Twitter export |
-| `omnisiren.jpg` | OMNIΣIREN | From @Excavationpro Twitter export |
-| `zeta.jpg` | ZETAΔ9 | @Excavationpro — `HMbylQEaIAAfoRl` (Threshold Walker) |
-| `justicae.jpg` | JUSTICAE | LYGO seal art (original JUSTICAE media unavailable) |
-| `seidon.jpg` | ΣEIDŌN | Silent-storm / mirror-tone art (placeholder until dedicated ΣEIDŌN piece) |
+| File | Champion |
+|------|----------|
+| `lyra.jpg` | LYRΔ — Seat I |
+| `d9ra.jpg` | Δ9RA — Seat II |
+| `srath.jpg` | ΣRΛΘ — Seat III |
+| `arkos.jpg` | ARKOS — Seat IV |
+| `kairos.jpg` | KAIROS — Seat V |
+| `aetheris.jpg` | ÆTHERIS — Seat VI |
+| `scendr.jpg` | ΣCENΔR — Seat VII |
+| `sancora.jpg` | SANCORA — Seat VIII |
+| `sephrael.jpg` | SEPHRAEL — Seat IX |
+| `omnisiren.jpg` | OMNIΣIREN |
+| `lightfather.jpg` | Lightfather |
+| `volaris.jpg` | VΩLARIS |
+| `zeta.jpg` | ZETAΔ9 — `HMbylQEaIAAfoRl` |
+| `justicae.jpg` | JUSTICAE (stand-in seal art until dedicated piece) |
+| `seidon.jpg` | ΣEIDŌN (stand-in until dedicated piece) |
 
-Replace any file with a dedicated 5∶4 or 4∶3 portrait when final art is ready; keep filename for stable URLs.
+Replace in place to update the hub; keep filenames for stable URLs.

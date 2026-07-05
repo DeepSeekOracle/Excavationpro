@@ -568,6 +568,19 @@
             padding: 10px 22px; border-radius: 8px; font-weight: 600; margin-left: 12px;
         }
         .paypal-btn:hover { filter: brightness(1.1); color: #fff; }
+        .demo-download-btn {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 10px 22px;
+            background: linear-gradient(135deg, var(--gold), #b8860b);
+            color: #0a0a12 !important;
+            font-weight: 600;
+            border-radius: 8px;
+            text-decoration: none;
+            box-shadow: var(--glow);
+        }
+        .demo-download-btn:hover { filter: brightness(1.08); color: #0a0a12 !important; }
+        .demo-lock-note { font-size: 0.78rem; margin-top: 8px; opacity: 0.85; max-width: 520px; margin-left: auto; margin-right: auto; }
         .hub-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -711,6 +724,18 @@
         LYGO Systems &amp; Eternal Haven are maintained free — support helps cover hosting and tools.
         <a class="paypal-btn" href="https://www.paypal.com/paypalme/ExcavationPro" target="_blank" rel="noopener noreferrer"><i class="fab fa-paypal"></i> Donate via PayPal</a>
         <div style="font-size:0.8rem; margin-top:6px; opacity:0.75;">Donations appreciated, never expected.</div>
+        <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(212,175,55,0.25);">
+            <strong style="color: var(--gold);"><i class="fas fa-usb"></i> LYGO USB Champion — PUBLIC DEMO (BETA)</strong>
+            <br>
+            <a class="demo-download-btn" href="downloads/LYGO-USB-Champion-DEMO-PUBLIC.zip" download="LYGO-USB-Champion-DEMO-PUBLIC.zip">
+                <i class="fas fa-download"></i> Download all-in-one USB demo (Lightfather)
+            </a>
+            <p class="demo-lock-note">
+                <strong>DEMO LOCK:</strong> Educational kit only — P0 sample + Lightfather advisor persona (ClawHub skill aligned).
+                Not the full retail USB stack (no kernel eggs, signing keys, or builder core). We are still testing; copy to your USB and read <code>README_DEMO_LOCKED.txt</code>.
+                <a href="https://deepseekoracle.github.io/lygo-protocol-stack/docs/LYGO_USB_CHAMPION_DEMO.md" target="_blank" rel="noopener" style="color: var(--quantum);">Docs</a>
+            </p>
+        </div>
     </div>
 
     <div class="rumble-live-hero" id="live-radio">

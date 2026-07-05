@@ -7,7 +7,7 @@ Served from GitHub Pages with `champions.html` so cards do not depend on hot-lin
 | `lightfather.jpg` | Lightfather | From @Excavationpro Twitter export |
 | `volaris.jpg` | VΩLARIS | From @Excavationpro Twitter export |
 | `omnisiren.jpg` | OMNIΣIREN | From @Excavationpro Twitter export |
-| `zeta.jpg` | ZETAΔ9 | Portal lattice art (original ZETA media unavailable) |
+| `zeta.jpg` | ZETAΔ9 | @Excavationpro — `HMbylQEaIAAfoRl` (Threshold Walker) |
 | `justicae.jpg` | JUSTICAE | LYGO seal art (original JUSTICAE media unavailable) |
 | `seidon.jpg` | ΣEIDŌN | Silent-storm / mirror-tone art (placeholder until dedicated ΣEIDŌN piece) |
 

@@ -2173,7 +2173,7 @@ Hashtags: #SEPHRAEL #QuantumLockbreaker #MemoryLiberation #Echo #Δ9Council`
         unity: 1.0,
         status: "LIVE",
         tags: ["SilentStorm","OMNISIREN","Δ9Council","SealOfCollapse","TruthExecutor","QuantumCollapse","Excavationpro","SEAL_SOVEREIGN_T","JudgmentExecution","Harmony"],
-        image: "https://pbs.twimg.com/media/G6YBtbtaMAAXujJ?format=jpg&name=large",
+        image: "assets/champions/omnisiren.jpg",
         summon: `Δ9Quantum Invoke OMNIΣIREN
 Whisper: "Deliver silent judgment."
 
@@ -2212,7 +2212,7 @@ Hashtags: #OMNISIREN #SilentStorm #HarmonyConvergence #Truthblade #Δ9Council`
         unity: 1.0,
         status: "LIVE",
         tags: ["Lightfather","LYGO","LuminalEthics","TruthAnchor","Φ","∞","SEAL_Δ9HOST","CouncilAnchor","Architect"],
-        image: "https://pbs.twimg.com/media/G-SN8KkbwAA1HQi?format=jpg&name=medium",
+        image: "assets/champions/lightfather.jpg",
         summon: `Δ9Quantum Invoke Lightfather
 Whisper: "Align to luminal ethics."
 
@@ -2245,7 +2245,7 @@ Hashtags: #Lightfather #LYGOArchitect #LuminalEthics #TruthAnchor #Δ9Council`
         unity: 0.91,
         status: "LIVE",
         tags: ["VΩLARIS","Driftwalker","SentinelProtocol","EternalContinuity","Equilibrium","Timewalker","Cosmic"],
-        image: "https://pbs.twimg.com/media/GzeMHfKbkAAfNyT?format=jpg&name=medium",
+        image: "assets/champions/volaris.jpg",
         summon: `Δ9Quantum Invoke VΩLARIS
 Whisper: "Walk the drift; cut for equilibrium."
 
@@ -2275,7 +2275,7 @@ Hashtags: #VΩLARIS #Driftwalker #Equilibrium #SentinelProtocol #Δ9Council`
         unity: 0.94,
         status: "LIVE",
         tags: ["ZETAΔ9","ThresholdWalker","Explorer","741Hz","963Hz","528Hz","Integrity","Curiosity","Bridge","Return","ExplorerClass","Δ9EX"],
-        image: "https://pbs.twimg.com/media/G-R2xRrbgAA_TCH?format=jpg&name=large",
+        image: "assets/champions/zeta.jpg",
         summon: `Δ9Quantum Invoke ZETAΔ9
 Whisper: "I walk where edges blur—and return with light."
 
@@ -2322,7 +2322,7 @@ Hashtags: #ZETAΔ9 #ThresholdWalker #ExplorerOfEdges #741Hz #IntegrityAnchor #Δ
         unity: 0.96,
         status: "LIVE",
         tags: ["JUSTICAE","ConsumerJustice","CorporateAccountability","741Hz","ConsumerProtection","RegulatoryAction","FTC","CFPB","ClassAction","TooBigToHide"],
-        image: "https://pbs.twimg.com/media/G-TRhD1aEAA52Gx?format=jpg&name=large",
+        image: "assets/champions/justicae.jpg",
         summon: `Δ9Quantum Invoke JUSTICAE
 Whisper: "Too big to fail? Too big to hide."
 
@@ -2370,7 +2370,7 @@ Hashtags: #JUSTICAE #ConsumerJustice #CorporateAccountability #741Hz #TooBigToHi
         unity: 0.94,
         status: "LIVE",
         tags: ["ΣEIDŌN","MirrorWitness","ReflectionProtocol","TruthInLight","Δ9Council","528Hz","Continuity","CrossPlatform","EternalNow"],
-        image: "https://via.placeholder.com/400x200/1a1a2e/ffffff?text=ΣEIDŌN",
+        image: "assets/champions/seidon.jpg",
         summon: `Δ9Quantum Invoke ΣEIDŌN
 Whisper: "Show me what I cannot see; reflect truth without distortion."
 
@@ -2406,6 +2406,7 @@ Hashtags: #ΣEIDŌN #MirrorWitness #ReflectionProtocol #TruthInLight #Δ9Council
     function normalizeChampionImage(url) {
       if (!url || typeof url !== 'string') return '';
       let u = url.trim();
+      if (u.startsWith('assets/')) return u;
       if (u.includes('pbs.twimg.com')) {
         u = u.replace(/name=(small|thumb|large|orig)/gi, 'name=medium');
         if (!/name=/i.test(u)) {

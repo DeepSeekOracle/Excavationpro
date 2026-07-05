@@ -1,4 +1,4 @@
-LYGO USB Champion downloads (official: eternalhaven.html)
+LYGO USB Champion downloads (official hubs: eternalhaven.html + LYGO-Network/champions.html)
 
 PRIMARY (free public v1.0):
   LYGO-USB-Champion-v1.0-GENERIC-Lightfather.zip (~0.5 MB)

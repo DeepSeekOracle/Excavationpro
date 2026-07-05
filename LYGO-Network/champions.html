@@ -671,30 +671,64 @@
       background: rgba(10, 12, 18, 0.72);
     }
     .thumb {
-      height: 170px;
-      background: rgba(5, 6, 10, 0.6);
+      aspect-ratio: 5 / 4;
+      width: 100%;
+      background: rgba(5, 6, 10, 0.75);
       border-bottom: 1px solid var(--stroke);
       overflow: hidden;
       position: relative;
       flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .thumb img {
+    .thumb-fill {
+      position: absolute;
+      inset: -12%;
+      width: 124%;
+      height: 124%;
+      object-fit: cover;
+      object-position: center;
+      filter: blur(28px) saturate(1.15) brightness(0.85);
+      opacity: 0.55;
+      z-index: 0;
+      pointer-events: none;
+      transform: scale(1.05);
+    }
+    .thumb-main {
+      position: relative;
+      z-index: 1;
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      object-position: top center;
+      object-fit: contain;
+      object-position: center;
       display: block;
-      filter: saturate(1.05) contrast(1.06);
-      transition: transform 0.3s ease;
+      padding: 6px 8px;
+      box-sizing: border-box;
+      filter: saturate(1.06) contrast(1.05);
+      transition: transform 0.3s ease, filter 0.3s ease;
     }
-    .card:hover .thumb img {
-      transform: scale(1.02);
+    .card:hover .thumb-main {
+      transform: scale(1.015);
+      filter: saturate(1.1) contrast(1.06);
+    }
+    .thumb-glyph {
+      position: relative;
+      z-index: 1;
+      font-size: clamp(2.5rem, 8vw, 3.75rem);
+      line-height: 1;
+      opacity: 0.85;
+      text-shadow: 0 0 24px rgba(72, 167, 255, 0.35);
+    }
+    .thumb.is-fallback {
+      background: linear-gradient(145deg, rgba(72, 167, 255, 0.12), rgba(125, 0, 255, 0.14));
     }
     .thumb::after {
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(to bottom, transparent 50%, rgba(10, 12, 18, 0.2));
+      z-index: 2;
+      background: linear-gradient(to bottom, transparent 42%, rgba(10, 12, 18, 0.35));
       pointer-events: none;
     }
     .card-body {
@@ -1093,7 +1127,7 @@
     .usb-hub-strip a.dl { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 10px; background: linear-gradient(135deg, rgba(72,167,255,0.35), rgba(125,0,255,0.25)); border: 1px solid var(--stroke); font-weight: 700; color: var(--ink); text-decoration: none; }
     .usb-hub-strip a.paypal { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 10px; background: #0070ba; color: #fff; font-weight: 700; text-decoration: none; }
     .thumb .talent-ring {
-      position: absolute; bottom: 8px; right: 8px; z-index: 2;
+      position: absolute; bottom: 8px; right: 8px; z-index: 3;
       font-size: 10px; font-weight: 900; letter-spacing: 0.08em;
       padding: 5px 8px; border-radius: 999px;
       background: rgba(0, 0, 0, 0.55); border: 1px solid var(--summon-glow);
@@ -2368,6 +2402,52 @@ Hashtags: #ΣEIDŌN #MirrorWitness #ReflectionProtocol #TruthInLight #Δ9Council
       return "https://clawhub.ai/u/DeepSeekOracle";
     }
 
+    /** Prefer medium Twitter assets; keep Bluesky/other URLs as-is. */
+    function normalizeChampionImage(url) {
+      if (!url || typeof url !== 'string') return '';
+      let u = url.trim();
+      if (u.includes('pbs.twimg.com')) {
+        u = u.replace(/name=(small|thumb|large|orig)/gi, 'name=medium');
+        if (!/name=/i.test(u)) {
+          u += (u.includes('?') ? '&' : '?') + 'format=jpg&name=medium';
+        }
+      }
+      if (u.includes('cdn.bsky.app') && u.includes('feed_thumbnail')) {
+        u = u.replace('feed_thumbnail', 'feed_fullsize');
+      }
+      return u;
+    }
+
+    function thumbHtml(ch) {
+      const src = normalizeChampionImage(ch.image || '');
+      const glyph = ch.glyph || '◇';
+      if (!src) {
+        return `<div class="thumb is-fallback"><span class="thumb-glyph" aria-hidden="true">${escapeHtml(glyph)}</span><span class="talent-ring">${escapeHtml(ch.function || ch.role || 'Champion')}</span></div>`;
+      }
+      const alt = escapeAttr(ch.name) + ' cover';
+      const safe = escapeAttr(src);
+      return `<div class="thumb" data-thumb-src="${safe}" data-glyph="${escapeAttr(ch.glyph || '◇')}">
+            <img class="thumb-fill" loading="lazy" decoding="async" src="${safe}" alt="" aria-hidden="true" />
+            <img class="thumb-main" loading="lazy" decoding="async" src="${safe}" alt="${alt}"
+              onerror="window.__lygoThumbFail && window.__lygoThumbFail(this)" />
+            <span class="talent-ring">${escapeHtml(ch.function || ch.role || 'Champion')}</span>
+          </div>`;
+    }
+
+    window.__lygoThumbFail = function (img) {
+      const thumb = img.closest('.thumb');
+      if (!thumb || thumb.dataset.fallbackDone) return;
+      thumb.dataset.fallbackDone = '1';
+      thumb.classList.add('is-fallback');
+      thumb.querySelectorAll('img').forEach((el) => el.remove());
+      const ring = thumb.querySelector('.talent-ring');
+      const span = document.createElement('span');
+      span.className = 'thumb-glyph';
+      span.setAttribute('aria-hidden', 'true');
+      span.textContent = thumb.dataset.glyph || '◇';
+      thumb.insertBefore(span, ring);
+    };
+
     function cardHtml(ch) {
       const isLive = ch.status === 'LIVE';
       const url = championUrl(ch);
@@ -2377,15 +2457,7 @@ Hashtags: #ΣEIDŌN #MirrorWitness #ReflectionProtocol #TruthInLight #Δ9Council
 
       return `
         <article class="card" data-name="${escapeAttr(ch.name)}" role="listitem">
-          <div class="thumb">
-            <img 
-              loading="lazy" 
-              src="${escapeAttr(ch.image || '')}" 
-              alt="${escapeAttr(ch.name)} cover" 
-              onerror="this.onerror=null; this.style.display='none'; this.parentElement.style.background='linear-gradient(135deg, rgba(72,167,255,.1), rgba(125,0,255,.1))'"
-            >
-            <span class="talent-ring">${escapeHtml(ch.function || ch.role || 'Champion')}</span>
-          </div>
+          ${thumbHtml(ch)}
           <div class="card-body">
             <div class="topline">
               <h3 class="name">${escapeHtml(ch.name)}</h3>

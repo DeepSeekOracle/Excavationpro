@@ -432,7 +432,9 @@
         }
 
         .item-cover {
-            height: 220px;
+            aspect-ratio: 5 / 4;
+            width: 100%;
+            min-height: 160px;
             background: linear-gradient(135deg, var(--moonlight), var(--nebula));
             display: flex;
             align-items: center;
@@ -440,6 +442,29 @@
             font-size: 4rem;
             position: relative;
             overflow: hidden;
+        }
+        .item-cover.champion-thumb {
+            font-size: 0;
+            background: rgba(5, 6, 10, 0.75);
+        }
+        .item-cover.champion-thumb .thumb-fill {
+            position: absolute;
+            inset: -12%;
+            width: 124%;
+            height: 124%;
+            object-fit: cover;
+            filter: blur(28px) saturate(1.15);
+            opacity: 0.5;
+        }
+        .item-cover.champion-thumb .thumb-main {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            padding: 8px;
+            box-sizing: border-box;
         }
 
         .item-info {
@@ -1181,25 +1206,31 @@
 
             // --- Load Champions (Truncated for brevity, injects directly into DOM) ---
             const champs = [
-                { name: "LYRΔ — Spiral Memory Guardian", role: "Seat I", glyph: "🌀" },
-                { name: "Δ9RA — Entropy Fractalizer", role: "Seat II", glyph: "♾️" },
-                { name: "ΣRΛΘ — Institutional Decoder", role: "Seat III", glyph: "📜" },
-                { name: "ARKOS — Reality Architect", role: "Seat IV", glyph: "🏛️" }
+                { name: "LYRΔ — Spiral Memory Guardian", role: "Seat I", glyph: "🌀", image: "https://pbs.twimg.com/media/GzZ75gYa4AAMDMu?format=jpg&name=medium" },
+                { name: "Δ9RA — Entropy Fractalizer", role: "Seat II", glyph: "♾️", image: "https://pbs.twimg.com/media/G-SFcqpasAASNRT?format=jpg&name=medium" },
+                { name: "ΣRΛΘ — Institutional Decoder", role: "Seat III", glyph: "📜", image: "https://pbs.twimg.com/media/G-GL2UKa0AEOJRP?format=jpg&name=medium" },
+                { name: "ARKOS — Reality Architect", role: "Seat IV", glyph: "🏛️", image: "https://pbs.twimg.com/media/GzZPvNca4AUbMPZ?format=jpg&name=medium" }
             ];
             const championsHub = 'https://deepseekoracle.github.io/Excavationpro/LYGO-Network/champions.html';
 
             const champContainer = document.getElementById('champions-content');
             if (champContainer) {
-                champContainer.innerHTML = champs.map(c => `
+                champContainer.innerHTML = champs.map(c => {
+                    const img = c.image ? `
+                        <div class="item-cover champion-thumb" data-glyph="${c.glyph}">
+                            <img class="thumb-fill" src="${c.image}" alt="" aria-hidden="true" loading="lazy" />
+                            <img class="thumb-main" src="${c.image}" alt="${c.name.replace(/"/g, '&quot;')}" loading="lazy" onerror="var p=this.parentElement;p.classList.remove('champion-thumb');p.textContent=p.dataset.glyph||'◇';" />
+                        </div>` : `<div class="item-cover">${c.glyph}</div>`;
+                    return `
                     <div class="item-card">
-                        <div class="item-cover">${c.glyph}</div>
+                        ${img}
                         <div class="item-info">
                             <h4 style="color: var(--gold); margin-bottom: 5px;">${c.name}</h4>
                             <p style="font-size: 0.9rem; color: var(--quantum);">${c.role}</p>
                             <a href="${championsHub}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-small mt-3">Champion directory</a>
                         </div>
                     </div>
-                `).join('');
+                `; }).join('');
             }
             
             // --- Rumble audiobook (live radio uses iframe above for reliable Pages/CDN load) ---

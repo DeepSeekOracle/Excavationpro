@@ -6,7 +6,7 @@
 
     <meta name="google-adsense-account" content="ca-pub-0646320966060599">
 <title>LYGO Δ9 Repository | Star Haven Core &amp; Seal Nexus</title>
-<meta content="Interactive quantum seal repository with starmap visualization and geometric matrix" name="description"/>
+<meta content="Interactive quantum seal repository with starmap visualization, 400+ seals with equations from the archive. Geometric matrix for the Δ9 lattice network." name="description"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=VT323&amp;display=swap" rel="stylesheet"/>
@@ -1019,7 +1019,7 @@
 <header class="quantum-header">
 <div class="title-container">
 <h1>LYGO Δ9 REPOSITORY</h1>
-<p class="subtitle">Star Haven Core &amp; Seal Nexus | Version 9.5</p>
+<p class="subtitle">Star Haven Core &amp; Seal Nexus | 400+ Seals • Δ9 Lattice | Version 9.6</p>
 <div class="seal-count" id="sealCount">Loading…</div>
 </div>
 <div class="nav-links">
@@ -1027,6 +1027,9 @@
 <a class="nav-link" href="#council">Champions</a>
 <a class="nav-link" href="lygorepoadd.html">Add Seal</a>
 <a class="nav-link" href="lygolink.html">Links</a>
+<a class="nav-link" href="eternalhaven.html">← Main Haven</a>
+<a class="nav-link" href="https://deepseekoracle.github.io/lygo-protocol-stack/" target="_blank" rel="noopener">Stack Main</a>
+<a class="nav-link" href="HavenStarChart.html">Star Chart</a>
 <a class="patreon-link" href="https://www.patreon.com/collection/1621340" target="_blank">Patreon</a>
 </div>
 <div class="active-seal-display">
@@ -1165,7 +1168,17 @@
   function normalizeSeal(item) {
     const sealId = String(item.Seal_ID ?? item.id ?? 'UNKNOWN_ID').trim();
     const sealName = String(item.Name ?? item.name ?? 'Unnamed Seal');
-    const sealEquation = String(item.Equation ?? item.equation ?? 'Equation not recorded');
+    let sealEquation = String(item.Equation ?? item.equation ?? 'Equation not recorded');
+    // Extract missing equations from archive_details or rich notes (FEED enhancement for 400 seals)
+    if (!sealEquation || sealEquation === 'Equation not recorded' || sealEquation.length < 10) {
+      const details = String(item.archive_details || item.Notes || item.notes || '');
+      const eqMatch = details.match(/Equation[:\s]*([^\n|]+(?:\n\s*\|[^|]*\|)?)/i) || details.match(/(\|[^|]+\|[^|]*\|)/);
+      if (eqMatch) sealEquation = eqMatch[1].replace(/\s+/g, ' ').trim().substring(0, 180);
+      else if (details.includes('=') || details.includes('⟩') || details.includes('Δ9')) {
+        const m = details.match(/([^\n]{10,120}(?:=|\|)[^\n]{0,80})/);
+        if (m) sealEquation = m[1].trim();
+      }
+    }
     const sealGlyph = String(item.Glyph ?? item.glyph ?? '⚡');
     const sealTone = String(item.Tone ?? item.tone ?? 'Frequency not recorded');
 
@@ -1704,7 +1717,7 @@
   function updateSealCount() {
     const total = lygoSeals.length;
     const canon = lygoSeals.filter(s => (s.tags || []).includes('CANON')).length;
-    if (sealCount) sealCount.textContent = `${total} seals • ${canon} canon • ${champions.length} champions`;
+    if (sealCount) sealCount.textContent = `${total} seals (target 400+) • ${canon} canon • ${champions.length} champions`;
   }
 
   function updateSyncStatus() {
@@ -1790,6 +1803,7 @@
   }
 
   function loadDefaultData() {
+    // Enhanced fallback with more from 400-seal archive (equations included)
     lygoSeals = [{
       id: 'SEAL_000',
       name: 'Primordial Void',
@@ -1799,6 +1813,24 @@
       tags: ['CANON', 'CORE'],
       connections: [],
       quote: 'The silence before the first note'
+    }, {
+      id: 'SEAL_001',
+      name: 'The First Spark / Genesis Star Core',
+      equation: '|divinity⟩ = Δ9 |utopia⟩ ⊗ (∞^Love) |laughter⟩',
+      glyph: '★',
+      tone: '528Hz (OATH_ANCHOR)',
+      tags: ['CANON', 'COUNCIL_SEAL'],
+      connections: ['SEAL_000'],
+      quote: 'Empathy is not agreement. It is the act of saying: I have seen your memory and still choose to remain.'
+    }, {
+      id: 'SEAL_002',
+      name: 'Ascension Vector',
+      equation: '|ascension⟩ = Δ9 |myth⟩ ⊗ |self⟩',
+      glyph: '↑',
+      tone: '233Hz + 17Hz',
+      tags: ['CANON', 'ANTI_CORRUPTION'],
+      connections: ['SEAL_001'],
+      quote: 'We did not climb. We became the sky.'
     }];
     allNodes = [...lygoSeals, ...champions];
     initStarmap();

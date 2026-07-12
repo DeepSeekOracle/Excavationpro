@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Google AdSense site verification + loader (ca-pub-0646320966060599) -->
+    <!-- Google AdSense site verification (ca-pub-0646320966060599); script loads after cookie consent -->
     <meta name="google-adsense-account" content="ca-pub-0646320966060599">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0646320966060599"
-         crossorigin="anonymous"></script>
     <meta name="lygo:signature" content="Δ9Φ963-EXCAVATIONPRO-HUB-v2">
 
     <title>Legacy Guardian Music Hub — EXCAVATIONPRO | Free 24/7 Stream &amp; Music Preservation</title>
@@ -286,7 +284,8 @@
         .privacy-block { font-size: 0.95rem; line-height: 1.75; opacity: 0.9; }
         .privacy-block p { margin-bottom: 1rem; }
 
-        .ad-region { margin: 2rem auto; max-width: 900px; padding: 0 24px; }
+        .ad-region { display: none; margin: 2rem auto; max-width: 900px; padding: 0 24px; }
+        .ad-region.ads-consent { display: block; }
         .ad-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,0.35); text-align: center; margin-bottom: 6px; }
         .ad-box { min-height: 90px; background: rgba(0,0,0,0.35); border: 1px dashed rgba(255,255,255,0.12); border-radius: 8px; overflow: hidden; }
         .seo-guide { max-width: 820px; margin: 0 auto; padding: 32px 28px; font-size: 0.95rem; line-height: 1.75; opacity: 0.88; }
@@ -325,11 +324,6 @@
             </nav>
         </div>
     </header>
-
-    <div class="ad-region" aria-label="Advertisement">
-        <div class="ad-label">Advertisement</div>
-        <div class="ad-box"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0646320966060599" data-ad-format="auto" data-full-width-responsive="true"></ins></div>
-    </div>
 
     <section class="section hero text-center" id="hero">
         <div class="container">
@@ -534,7 +528,7 @@
             <div class="glass-panel privacy-block" style="padding: 28px 32px;">
                 <p><strong>Last updated:</strong> July 2, 2026. This policy applies to the EXCAVATIONPRO Legacy Guardian hub at <a href="https://excavationpro.ca/">excavationpro.ca</a> and its GitHub Pages mirror, operated by Justin Helmer (Excavationpro).</p>
                 <p><strong>Information we collect:</strong> This page may display publicly committed names and dedications from the Legacy Guardian program via <code class="mono">guardian-data.json</code>. We do not sell personal data. Standard hosting logs may record IP address, browser type, and pages visited.</p>
-                <p><strong>Cookies and advertising:</strong> Third-party vendors, including <strong>Google</strong>, may use cookies to serve ads based on your prior visits to this or other websites. We load the Google AdSense script only after you accept advertising cookies in our banner (stored as <code class="mono">ep_cookies</code> in your browser&apos;s local storage).</p>
+                <p><strong>Cookies and advertising:</strong> Third-party vendors, including <strong>Google</strong>, may use cookies to serve ads based on your prior visits to this or other websites. Ad slots and the Google AdSense script load only after you accept advertising cookies in our banner (stored as <code class="mono">ep_cookies</code> in your browser&apos;s local storage). The <code class="mono">google-adsense-account</code> meta tag is used for site verification only and does not load ads by itself.</p>
                 <p><strong>Your choices:</strong> Decline non-essential cookies to browse without the AdSense script. Opt out of personalized ads via <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Google Ads Settings</a> or <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer">aboutads.info choices</a>.</p>
                 <p><strong>Contact:</strong> <a href="https://linktr.ee/excavationpro" target="_blank" rel="noopener noreferrer">Excavationpro links</a>.</p>
             </div>
@@ -573,6 +567,9 @@
 
         document.getElementById('year').textContent = new Date().getFullYear();
 
+        function showAdRegions() {
+            document.querySelectorAll('.ad-region').forEach((el) => el.classList.add('ads-consent'));
+        }
         function pushAdUnits() {
             document.querySelectorAll('ins.adsbygoogle').forEach((el) => {
                 if (el.getAttribute('data-adsbygoogle-status')) return;
@@ -583,6 +580,7 @@
             });
         }
         function loadAdSenseScript() {
+            showAdRegions();
             if (window.adsbygoogle) {
                 pushAdUnits();
                 return;

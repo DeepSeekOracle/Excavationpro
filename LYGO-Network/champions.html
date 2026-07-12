@@ -4,8 +4,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,viewport-fit=cover" />
 
+    <!-- Google AdSense site verification (ca-pub-0646320966060599); ad units load after cookie consent -->
     <meta name="google-adsense-account" content="ca-pub-0646320966060599">
-<title>Δ9 LYGO Champion Hub — USB v1.0 + LYGO-Claw | Summoning Portal v6</title>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0646320966060599"
+         crossorigin="anonymous"></script>
+    <title>Δ9 LYGO Champion Hub — USB v1.0 + LYGO-Claw | Summoning Portal v6</title>
   <meta name="virtual-protocol-site-verification" content="e07199b4a9392525cd4bc7ed6a077440" />
   <meta name="lygo:signature" content="Δ9Φ963-CHATAGENT-SUMMON-PORTAL-v6" />
   
@@ -1135,7 +1138,8 @@
       transition: bottom 0.35s ease;
     }
     .cookie-banner.show { bottom: 0; }
-    .ad-region { max-width: 1100px; margin: 18px auto; padding: 0 18px; }
+    .ad-region { display: none; max-width: 1100px; margin: 18px auto; padding: 0 18px; }
+    .ad-region.ads-consent { display: block; }
     .ad-label { font-size: 10px; opacity: 0.5; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 6px; }
     .ad-box { min-height: 90px; background: rgba(0,0,0,0.35); border: 1px dashed var(--stroke); border-radius: 8px; overflow: hidden; }
     .usb-hub-strip { margin-top: 8px; margin-bottom: 8px; }
@@ -1319,6 +1323,11 @@
       </div>
     </section>
 
+    <div class="ad-region" aria-label="Advertisement">
+      <div class="ad-label">Advertisement</div>
+      <div class="ad-box"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0646320966060599" data-ad-format="auto" data-full-width-responsive="true"></ins></div>
+    </div>
+
     <section class="container" id="lattice-anchors" aria-labelledby="anchors-heading" style="padding-bottom: 8px;">
       <div class="panel" style="padding: 18px 20px;">
         <div class="section-kicker">Canon seals · not summon personas</div>
@@ -1382,10 +1391,15 @@
       </div>
     </section>
 
+    <div class="ad-region" aria-label="Advertisement">
+      <div class="ad-label">Advertisement</div>
+      <div class="ad-box"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0646320966060599" data-ad-format="auto" data-full-width-responsive="true"></ins></div>
+    </div>
+
     <section class="container" id="privacy" style="padding-bottom:40px;">
       <div class="panel" style="padding:22px;">
         <h2 class="lattice-title" style="font-size:1.25rem;margin-bottom:10px;">Privacy Policy</h2>
-        <p class="sub" style="margin:0;">Last updated July 2, 2026. Operator: Justin Helmer / Excavationpro. This summoning portal may use Google AdSense after cookie consent. Third-party vendors including Google may use cookies to serve ads. Opt out at <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener">Google Ads Settings</a> or <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener">aboutads.info</a>. Local ledger stats (visits, copies) stay in your browser only.</p>
+        <p class="sub" style="margin:0;">Last updated July 2, 2026. Operator: Justin Helmer / Excavationpro. Ad slots and personalized ads load only after you accept cookies in our banner (<code>chatagent_cookies</code> in local storage). The <code>google-adsense-account</code> meta tag and site <code>ads.txt</code> entry are for publisher verification. Third-party vendors including Google may use cookies to serve ads. Opt out at <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener">Google Ads Settings</a> or <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener">aboutads.info</a>. Local ledger stats (visits, copies) stay in your browser only.</p>
       </div>
     </section>
   </main>
@@ -2872,6 +2886,9 @@ Enhanced Metrics:
     // INITIALIZATION
     // ============================
     const ADSENSE_SRC = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0646320966060599';
+    function showAdRegions() {
+      document.querySelectorAll('.ad-region').forEach((el) => el.classList.add('ads-consent'));
+    }
     function pushAdUnits() {
       document.querySelectorAll('ins.adsbygoogle').forEach((el) => {
         if (el.getAttribute('data-adsbygoogle-status')) return;
@@ -2882,7 +2899,13 @@ Enhanced Metrics:
       });
     }
     function loadAdSenseScript() {
+      showAdRegions();
       if (window.adsbygoogle) { pushAdUnits(); return; }
+      if (document.querySelector('script[src*="pagead/js/adsbygoogle"]:not([data-lygo-adsense])')) {
+        pushAdUnits();
+        setTimeout(pushAdUnits, 1500);
+        return;
+      }
       if (document.querySelector('script[data-lygo-adsense]')) { pushAdUnits(); return; }
       const s = document.createElement('script');
       s.async = true;

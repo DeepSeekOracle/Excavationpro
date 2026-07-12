@@ -1141,7 +1141,7 @@
       transition: bottom 0.35s ease;
     }
     .cookie-banner.show { bottom: 0; }
-    .ad-region { display: none; max-width: 1100px; margin: 18px auto; padding: 0 18px; }
+    .ad-region { display: none; width: min(1120px, calc(100% - 36px)); margin: 18px auto; padding: 0 8px; box-sizing: border-box; }
     .ad-region.ads-consent { display: block; }
     .ad-label { font-size: 10px; opacity: 0.5; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 6px; }
     .ad-box { min-height: 90px; background: rgba(0,0,0,0.35); border: 1px dashed var(--stroke); border-radius: 8px; overflow: hidden; }
@@ -1168,26 +1168,46 @@
       font-weight: 900;
     }
     .chip.star-chart:hover { border-color: rgba(255, 204, 0, 0.85); box-shadow: 0 0 18px rgba(255, 204, 0, 0.2); }
-    .star-chart-hub { margin: 10px 0 14px; }
+    .star-chart-hub {
+      margin: 10px auto 14px;
+      display: block;
+      box-sizing: border-box;
+    }
     .star-chart-hub .panel {
-      padding: 22px 24px;
+      padding: 28px 28px 24px;
       border: 1px solid rgba(255, 204, 0, 0.28);
       background:
-        radial-gradient(900px 400px at 10% 0%, rgba(125, 0, 255, 0.14), transparent 55%),
-        radial-gradient(700px 320px at 90% 20%, rgba(0, 240, 255, 0.08), transparent 50%),
+        radial-gradient(900px 400px at 50% 0%, rgba(125, 0, 255, 0.14), transparent 55%),
+        radial-gradient(700px 320px at 50% 30%, rgba(0, 240, 255, 0.08), transparent 50%),
         rgba(8, 10, 18, 0.72);
+      text-align: center;
+    }
+    .star-chart-hub .section-kicker {
+      display: block;
+      text-align: center;
     }
     .star-chart-hub h2 {
       font-family: Cinzel, serif;
-      font-size: 1.35rem;
-      margin: 0 0 8px;
+      font-size: clamp(1.15rem, 3.5vw, 1.45rem);
+      margin: 0 auto 10px;
+      max-width: 42rem;
+      line-height: 1.35;
+      text-align: center;
       background: linear-gradient(90deg, rgba(255, 204, 0, 0.95), rgba(72, 167, 255, 0.9));
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
     }
+    .star-chart-hub .sub {
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 52rem;
+      text-align: center;
+    }
     .cosmos-tiers {
-      display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 16px;
+      display: flex; flex-wrap: wrap; gap: 8px; margin: 14px auto 16px;
+      justify-content: center;
+      max-width: 52rem;
       font-size: 11px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase;
     }
     .cosmos-tiers span {
@@ -1196,24 +1216,38 @@
     }
     .cosmos-tiers span strong { color: var(--gold); }
     .chart-stats {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 14px 0;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+      margin: 14px auto; max-width: 52rem; width: 100%;
     }
     @media (max-width: 820px) { .chart-stats { grid-template-columns: repeat(2, 1fr); } }
     .chart-stat {
       border: 1px solid rgba(0, 240, 255, 0.22); border-radius: 16px;
       padding: 12px 14px; background: rgba(5, 6, 10, 0.45);
+      text-align: center;
     }
     .chart-stat .label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); }
     .chart-stat .value { margin-top: 4px; font-size: 1.35rem; font-weight: 950; color: rgba(0, 240, 255, 0.95); line-height: 1; }
     .chart-stat .hint { margin-top: 4px; font-size: 10px; color: var(--dim); }
-    .galaxy-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .galaxy-pills {
+      display: flex; flex-wrap: wrap; gap: 8px; margin: 10px auto 0;
+      justify-content: center; max-width: 52rem;
+    }
+    .star-chart-hub .council-label {
+      margin: 0 auto 6px;
+      max-width: 52rem;
+      text-align: center;
+      font-size: 12px;
+    }
     .galaxy-pills a {
       font-size: 11px; font-weight: 800; padding: 7px 12px; border-radius: 999px;
       border: 1px solid rgba(125, 0, 255, 0.35); background: rgba(125, 0, 255, 0.1);
       color: rgba(220, 200, 255, 0.95); text-decoration: none;
     }
     .galaxy-pills a:hover { border-color: rgba(125, 0, 255, 0.65); background: rgba(125, 0, 255, 0.2); }
-    .chart-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; align-items: center; }
+    .chart-actions {
+      display: flex; flex-wrap: wrap; gap: 10px; margin: 14px auto 0;
+      align-items: center; justify-content: center; max-width: 52rem;
+    }
 
     /* Immutable ledger (hero + footer) */
     .immutable-ledger-box {
@@ -1245,7 +1279,9 @@
     }
     .immutable-feed-section h2 {
       font-family: Cinzel, serif; font-size: 1.15rem; color: var(--gold); margin: 0 0 6px;
+      text-align: center;
     }
+    .immutable-feed-section .feed-meta { text-align: center; }
     .feed-meta { color: var(--dim); font-size: 11px; margin: 0 0 12px; font-family: ui-monospace, monospace; }
     .feed-wrap { overflow-x: auto; border-radius: 16px; border: 1px solid var(--stroke); }
     .feed-table { width: 100%; border-collapse: collapse; font-size: 11px; }
@@ -1485,7 +1521,7 @@
             <div class="hint" id="chartStatBuilt">—</div>
           </div>
         </div>
-        <p class="sub" style="font-size:12px;margin:0 0 6px;"><strong>Council galaxies</strong> — filter the chart sidebar to a champion realm:</p>
+        <p class="sub council-label"><strong>Council galaxies</strong> — filter the chart sidebar to a champion realm:</p>
         <div class="galaxy-pills" id="championGalaxyPills" aria-label="Champion galaxy links">
           <span class="mono" style="font-size:11px;color:var(--dim);">Loading galaxies…</span>
         </div>
@@ -3158,18 +3194,19 @@ Enhanced Metrics:
       toast(ok ? 'Summon copied' : 'Copy failed', ok ? 'Full champion prompt ready to paste.' : 'Clipboard blocked.');
     });
 
+    const STAR_CHART_PAGES = 'https://deepseekoracle.github.io/Excavationpro/haven_star_chart/';
     const STAR_CHART_DATA_URLS = [
+      STAR_CHART_PAGES + 'haven_star_chart_data.json',
       '../haven_star_chart/haven_star_chart_data.json',
-      'https://deepseekoracle.github.io/Excavationpro/haven_star_chart/haven_star_chart_data.json',
       'https://raw.githubusercontent.com/DeepSeekOracle/lygo-protocol-stack/main/docs/haven_star_chart/haven_star_chart_data.json',
     ];
     const STAR_CHART_QUEUE_URLS = [
+      STAR_CHART_PAGES + 'haven_star_chart_queue.json',
       '../haven_star_chart/haven_star_chart_queue.json',
-      'https://deepseekoracle.github.io/Excavationpro/haven_star_chart/haven_star_chart_queue.json',
     ];
     const STAR_CHART_FEED_URLS = [
+      STAR_CHART_PAGES + 'haven_star_chart_feed.json',
       '../haven_star_chart/haven_star_chart_feed.json',
-      'https://deepseekoracle.github.io/Excavationpro/haven_star_chart/haven_star_chart_feed.json',
       'https://raw.githubusercontent.com/DeepSeekOracle/lygo-protocol-stack/main/docs/haven_star_chart/haven_star_chart_feed.json',
     ];
 
@@ -3230,6 +3267,9 @@ Enhanced Metrics:
               ).join('')
             : '<a href="../HavenStarChart.html">Open full galaxy map</a>';
         }
+      } else {
+        const pills = document.getElementById('championGalaxyPills');
+        if (pills) pills.innerHTML = '<span class="mono" style="font-size:11px;color:var(--dim);">Registry offline — <a href="../HavenStarChart.html">open chart</a></span>';
       }
       const queue = await fetchFirst(STAR_CHART_QUEUE_URLS);
       if (queue) {

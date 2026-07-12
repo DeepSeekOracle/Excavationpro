@@ -1,9 +1,21 @@
 /** Immutable lattice feed renderer — Haven Star Chart v2 */
 (function () {
-  const FEED_URLS = [
-    'haven_star_chart/haven_star_chart_feed.json',
-    'https://raw.githubusercontent.com/DeepSeekOracle/lygo-protocol-stack/main/docs/haven_star_chart/haven_star_chart_feed.json',
-  ];
+  function feedUrls() {
+    const urls = [
+      'https://deepseekoracle.github.io/Excavationpro/haven_star_chart/haven_star_chart_feed.json',
+    ];
+    const path = (typeof location !== 'undefined' && location.pathname) || '';
+    if (path.indexOf('/LYGO-Network/') !== -1) {
+      urls.push('../haven_star_chart/haven_star_chart_feed.json');
+    } else {
+      urls.push('haven_star_chart/haven_star_chart_feed.json');
+    }
+    urls.push(
+      'https://raw.githubusercontent.com/DeepSeekOracle/lygo-protocol-stack/main/docs/haven_star_chart/haven_star_chart_feed.json'
+    );
+    return urls;
+  }
+  const FEED_URLS = feedUrls();
 
   function badge(status) {
     const s = (status || '').toUpperCase();

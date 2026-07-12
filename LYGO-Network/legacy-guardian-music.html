@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- Google AdSense site verification + loader (ca-pub-0646320966060599) -->
     <meta name="google-adsense-account" content="ca-pub-0646320966060599">
-<meta name="lygo:signature" content="Δ9Φ963-EXCAVATIONPRO-HUB-v2">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0646320966060599"
+         crossorigin="anonymous"></script>
+    <meta name="lygo:signature" content="Δ9Φ963-EXCAVATIONPRO-HUB-v2">
 
     <title>Legacy Guardian Music Hub — EXCAVATIONPRO | Free 24/7 Stream &amp; Music Preservation</title>
     <meta name="title" content="Legacy Guardian Music Hub — EXCAVATIONPRO">
@@ -581,6 +584,10 @@
         }
         function loadAdSenseScript() {
             if (window.adsbygoogle) {
+                pushAdUnits();
+                return;
+            }
+            if (document.querySelector('script[src*="pagead/js/adsbygoogle"]')) {
                 pushAdUnits();
                 return;
             }

@@ -3,26 +3,24 @@ LYGO CLAW USB PUBLIC v1.0.0
 
 Standalone offline AI terminal for Windows (USB or any folder).
 
-DOWNLOAD
-  LYGO-CLAW-USB-PUBLIC-v1.0.0.zip (~8 GB)
-  https://deepseekoracle.github.io/Excavationpro/downloads/LYGO-CLAW-USB-PUBLIC-v1.0.0.zip
+DOWNLOAD (3 parts — join after download)
+  https://deepseekoracle.github.io/Excavationpro/downloads/LYGO-CLAW-USB-PUBLIC-v1.0.0.part01
+  https://deepseekoracle.github.io/Excavationpro/downloads/LYGO-CLAW-USB-PUBLIC-v1.0.0.part02
+  https://deepseekoracle.github.io/Excavationpro/downloads/LYGO-CLAW-USB-PUBLIC-v1.0.0.part03
 
-  If the zip is still building locally, check the lygo-claw repo:
-  https://github.com/DeepSeekOracle/lygo-claw/blob/main/docs/USB_PUBLIC_RELEASE.md
+JOIN (PowerShell, same folder as parts):
+  git clone https://github.com/DeepSeekOracle/lygo-claw.git
+  cd lygo-claw
+  powershell -File scripts\join_usb_release.ps1 -Dir "path\to\downloads"
+
+Or copy all .part* files to one folder and run join_usb_release.ps1 there.
 
 BOOT
-  1. Extract zip to USB or folder
+  1. Extract/join to get LYGO-CLAW-USB-PUBLIC-v1.0.0.zip, then extract zip
   2. Double-click LYGO_CLAW_Launch.bat
-  3. Dashboard opens — Connect (token prefilled) — chat
+  3. Dashboard — Connect — chat (offline, qwen2.5:3b)
 
-INCLUDES
-  - Portable Ollama + qwen2.5:3b (offline)
-  - LYGO CLAW Gateway (ws://127.0.0.1:18789)
-  - Dashboard + control UI
-
-PAIR WITH PC (optional)
-  git clone https://github.com/DeepSeekOracle/lygo-claw.git
-  launchers\INSTALL_AND_CHECK.bat
-  lygo-claw usb-health
+DOCS
+  https://github.com/DeepSeekOracle/lygo-claw/blob/main/docs/USB_PUBLIC_RELEASE.md
 
 Δ9Φ963 — verify first.

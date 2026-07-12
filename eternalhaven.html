@@ -11,12 +11,12 @@
          crossorigin="anonymous"></script>
 
     <title>DeepSeek Oracle — LYGO Systems | Main Navigation Hub</title>
-    <meta name="description" content="Official LYGO Systems hub — free LYGO USB Champion v1.0 GENERIC (Lightfather) download, pair with LYGO-Claw 1.0, Guardian P0.4 ethics, Δ9 Champion Hub, BPM finder, protocol stack, Eternal Haven books and music.">
-    <meta name="keywords" content="LYGO USB Champion, LYGO-Claw, Lightfather, free download, LYGO Systems, BPM finder, bpmfinder.ca, DeepSeek Oracle, Excavationpro, Eternal Haven, Δ9 Champion Hub, Justin Helmer">
+    <meta name="description" content="Official LYGO Systems hub — choose Demo USB Champion (~0.5 MB build reference) or Full LYGO CLAW USB PUBLIC v1.0 (~5.3 GB offline AI). Pair with LYGO-Claw, Guardian P0.4, Δ9 Champion Hub, immutable lattice, Eternal Haven books and music.">
+    <meta name="keywords" content="LYGO CLAW USB, LYGO USB Champion, LYGO-Claw, Lightfather, free download, offline AI, LYGO Systems, BPM finder, DeepSeek Oracle, Excavationpro, Eternal Haven, Δ9 Champion Hub, immutable lattice, Justin Helmer">
     <meta name="author" content="Justin Helmer / Excavationpro / Lightfather">
 
     <meta property="og:title" content="DeepSeek Oracle — LYGO Systems Navigation Hub">
-    <meta property="og:description" content="Free LYGO USB Champion v1.0 download, LYGO-Claw pairing, Δ9 Champion Hub, BPM finder, Guardian ethics, music, and Eternal Haven books.">
+    <meta property="og:description" content="Demo USB Champion build reference or Full LYGO CLAW USB offline AI — plus LYGO-Claw pairing, Δ9 Champion Hub, immutable lattice, music, and Eternal Haven books.">
     <meta property="og:type" content="website">
 
     <meta property="og:site_name" content="DeepSeek Oracle / LYGO Systems">
@@ -36,6 +36,7 @@
     <script type="application/ld+json">[
       {"@context":"https://schema.org","@type":"WebSite","name":"DeepSeek Oracle — LYGO Systems","url":"https://deepseekoracle.github.io/Excavationpro/eternalhaven.html","description":"Main navigation hub for LYGO protocol stack, USB Champion downloads, and Eternal Haven."},
       {"@context":"https://schema.org","@type":"SoftwareApplication","name":"LYGO USB Champion v1.0 GENERIC — Lightfather","applicationCategory":"DeveloperApplication","operatingSystem":"Windows, macOS, Linux","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"downloadUrl":"https://deepseekoracle.github.io/Excavationpro/downloads/LYGO-USB-Champion-v1.0-GENERIC-Lightfather.zip","softwareVersion":"1.0.0","author":{"@type":"Person","name":"Justin Helmer"},"isRelatedTo":{"@type":"SoftwareApplication","name":"LYGO-Claw","url":"https://github.com/DeepSeekOracle/lygo-claw"}},
+      {"@context":"https://schema.org","@type":"SoftwareApplication","name":"LYGO CLAW USB PUBLIC v1.0.0","applicationCategory":"DeveloperApplication","operatingSystem":"Windows","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"downloadUrl":"https://deepseekoracle.github.io/Excavationpro/downloads/LYGO-CLAW-USB-README.txt","softwareVersion":"1.0.0","author":{"@type":"Person","name":"Justin Helmer"},"url":"https://github.com/DeepSeekOracle/lygo-claw"},
       {"@context":"https://schema.org","@type":"WebPage","name":"Δ9 LYGO Champion Hub","url":"https://deepseekoracle.github.io/Excavationpro/LYGO-Network/champions.html"}
     ]</script>
 
@@ -710,6 +711,57 @@
             color: rgba(245, 245, 245, 0.65);
         }
         .rumble-live-caption a { text-decoration: underline; }
+
+        .usb-path-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+            margin-top: 14px;
+            text-align: left;
+        }
+        .usb-path-card {
+            padding: 16px 18px;
+            border-radius: 12px;
+            border: 1px solid rgba(212, 175, 55, 0.28);
+            background: rgba(10, 10, 18, 0.55);
+        }
+        .usb-path-card.full-system {
+            border-color: rgba(0, 240, 255, 0.35);
+            background: rgba(0, 240, 255, 0.04);
+        }
+        .usb-path-card h3 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            font-family: 'Cinzel', serif;
+        }
+        .usb-path-badge {
+            display: inline-block;
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            opacity: 0.85;
+        }
+        .usb-path-badge.demo { background: rgba(212, 175, 55, 0.2); color: var(--gold); }
+        .usb-path-badge.full { background: rgba(0, 240, 255, 0.15); color: var(--quantum); }
+        .full-download-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 10px 18px; margin: 4px 6px 4px 0;
+            background: linear-gradient(135deg, var(--quantum), #0088aa);
+            color: #0a0a12 !important; font-weight: 600; border-radius: 8px;
+        }
+        .full-download-btn:hover { filter: brightness(1.1); color: #0a0a12 !important; }
+        .mono { font-family: 'Special Elite', monospace; }
+
+        .lattice-list { margin-top: 24px; display: grid; gap: 10px; }
+        .lattice-item {
+            display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;
+            padding: 14px 18px; border: 1px solid rgba(0, 240, 255, 0.18); border-radius: 12px;
+            background: rgba(18, 18, 31, 0.6);
+        }
+        .lattice-item a { color: var(--quantum); font-size: 0.85rem; word-break: break-all; }
     </style>
 </head>
 <body>
@@ -748,6 +800,8 @@
                     <li><a href="#music-hub"><i class="fas fa-music"></i> Music</a></li>
                     <li><a href="#audiobooks"><i class="fas fa-headphones"></i> Audiobooks</a></li>
                     <li><a href="#books"><i class="fas fa-book"></i> Books</a></li>
+                    <li><a href="#usb-downloads"><i class="fas fa-usb"></i> USB / CLAW</a></li>
+                    <li><a href="#lattice"><i class="fas fa-link"></i> Lattice</a></li>
                     <li><a href="https://www.paypal.com/paypalme/ExcavationPro" target="_blank" rel="noopener"><i class="fab fa-paypal"></i> Support</a></li>
                 </ul>
             </nav>
@@ -758,30 +812,50 @@
         LYGO Systems &amp; Eternal Haven are maintained free — support helps cover hosting and tools.
         <a class="paypal-btn" href="https://www.paypal.com/paypalme/ExcavationPro" target="_blank" rel="noopener noreferrer"><i class="fab fa-paypal"></i> Donate via PayPal</a>
         <div style="font-size:0.8rem; margin-top:6px; opacity:0.75;">Donations appreciated, never expected.</div>
-        <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(212,175,55,0.25); text-align: left; max-width: 920px; margin-left: auto; margin-right: auto;">
-            <strong style="color: var(--gold);"><i class="fas fa-usb"></i> LYGO USB Champion v1.0 GENERIC — Lightfather (free)</strong>
-            <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin: 12px 0;">
-                <a class="demo-download-btn" href="https://deepseekoracle.github.io/Excavationpro/downloads/LYGO-USB-Champion-v1.0-GENERIC-Lightfather.zip" download="LYGO-USB-Champion-v1.0-GENERIC-Lightfather.zip">
-                    <i class="fas fa-download"></i> Download v1.0 USB champion (~0.5 MB)
-                </a>
-                <a class="paypal-btn" href="https://www.paypal.com/paypalme/ExcavationPro" target="_blank" rel="noopener noreferrer"><i class="fab fa-paypal"></i> Donate (optional)</a>
-                <a class="btn btn-small btn-outline" href="LYGO-Network/champions.html" style="padding: 10px 16px;"><i class="fas fa-crown"></i> Δ9 Champion Hub</a>
+        <div id="usb-downloads" style="margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(212,175,55,0.25); text-align: left; max-width: 960px; margin-left: auto; margin-right: auto;">
+            <p style="font-size: 0.95rem; margin-bottom: 12px; opacity: 0.9;"><strong style="color: var(--gold);">Choose your path</strong> — keep the light build as reference, or grab the full offline system.</p>
+            <div class="usb-path-grid">
+                <div class="usb-path-card">
+                    <span class="usb-path-badge demo">Build reference · ~0.5 MB</span>
+                    <h3 style="color: var(--gold);"><i class="fas fa-usb"></i> USB Champion v1.0 GENERIC — Lightfather</h3>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 10px;">
+                        <a class="demo-download-btn" href="https://deepseekoracle.github.io/Excavationpro/downloads/LYGO-USB-Champion-v1.0-GENERIC-Lightfather.zip" download="LYGO-USB-Champion-v1.0-GENERIC-Lightfather.zip" style="margin-top:0;">
+                            <i class="fas fa-download"></i> Download light champion
+                        </a>
+                        <a class="btn btn-small btn-outline" href="LYGO-Network/champions.html" style="padding: 10px 16px;"><i class="fas fa-crown"></i> Champion Hub</a>
+                    </div>
+                    <p class="demo-lock-note" style="margin: 0 0 10px; max-width: none;">
+                        P0 gate, Hermes, BUILDR daemon, council verify, Lightfather persona. No Ollama or model weights —
+                        <a href="https://deepseekoracle.github.io/lygo-protocol-stack/docs/LYGO_USB_CHAMPION_V1_GENERIC.md" target="_blank" rel="noopener" style="color: var(--quantum);">docs</a>
+                        · <code>BUILD_SELF_FIRST_USE.txt</code> inside zip
+                        · <a href="downloads/LYGO-USB-Champion-DEMO-PUBLIC.zip" style="color: rgba(245,245,245,0.65); font-size:0.75rem;">legacy teaser</a>
+                    </p>
+                    <p style="font-size: 0.82rem; opacity: 0.8; margin: 0;">Pair with <a href="https://github.com/DeepSeekOracle/lygo-claw" target="_blank" rel="noopener" style="color: var(--quantum);">LYGO-Claw</a> — run <code>LYGO_BUILDR_Daemon.bat</code> on USB (:9630), then <code>lygo-claw usb-health</code>.</p>
+                </div>
+                <div class="usb-path-card full-system">
+                    <span class="usb-path-badge full">Full system · ~5.3 GB · offline AI</span>
+                    <h3 style="color: var(--quantum);"><i class="fas fa-terminal"></i> LYGO CLAW USB PUBLIC v1.0.0</h3>
+                    <p style="font-size: 0.85rem; margin-bottom: 10px; opacity: 0.9;">Standalone Windows offline terminal — Ollama, gateway, models (<code>qwen2.5:3b</code>), launchers. No pairing required.</p>
+                    <div style="margin-bottom: 10px;">
+                        <a class="full-download-btn" href="https://deepseekoracle.github.io/Excavationpro/downloads/LYGO-CLAW-USB-PUBLIC-v1.0.0.part01"><i class="fas fa-download"></i> Part 1</a>
+                        <a class="full-download-btn" href="https://deepseekoracle.github.io/Excavationpro/downloads/LYGO-CLAW-USB-PUBLIC-v1.0.0.part02"><i class="fas fa-download"></i> Part 2</a>
+                        <a class="full-download-btn" href="https://deepseekoracle.github.io/Excavationpro/downloads/LYGO-CLAW-USB-PUBLIC-v1.0.0.part03"><i class="fas fa-download"></i> Part 3</a>
+                    </div>
+                    <p style="font-size: 0.82rem; margin-bottom: 8px; opacity: 0.88;">
+                        <strong>Join:</strong> download all 3 parts to one folder, then from <a href="https://github.com/DeepSeekOracle/lygo-claw" target="_blank" rel="noopener" style="color: var(--quantum);">lygo-claw</a> run
+                        <code>powershell -File scripts\join_usb_release.ps1 -Dir "path\to\downloads"</code> → extract zip → <code>LYGO_CLAW_Launch.bat</code>.
+                    </p>
+                    <p style="font-size: 0.8rem; margin: 0; opacity: 0.78;">
+                        <a href="downloads/LYGO-CLAW-USB-README.txt" style="color: var(--quantum);">Download readme</a>
+                        · <a href="https://github.com/DeepSeekOracle/lygo-claw/blob/main/docs/USB_PUBLIC_RELEASE.md" target="_blank" rel="noopener" style="color: var(--quantum);">Full release docs (GitHub)</a>
+                        · <a href="https://github.com/DeepSeekOracle/lygo-claw" target="_blank" rel="noopener" style="color: var(--quantum);">lygo-claw repo</a>
+                    </p>
+                </div>
             </div>
-            <p class="demo-lock-note" style="margin-bottom: 10px;">
-                Full kit: P0 gate, Hermes, BUILDR daemon, council verify, circulating Lightfather persona. No portable Ollama or model weights in the zip —
-                <a href="https://deepseekoracle.github.io/lygo-protocol-stack/docs/LYGO_USB_CHAMPION_V1_GENERIC.md" target="_blank" rel="noopener" style="color: var(--quantum);">full docs</a>
-                · <code>BUILD_SELF_FIRST_USE.txt</code> inside the zip for you or your AI assistant.
-                · <a href="downloads/LYGO-USB-Champion-DEMO-PUBLIC.zip" style="color: rgba(245,245,245,0.65); font-size:0.75rem;">legacy teaser demo</a>
+            <p style="font-size: 0.8rem; margin-top: 12px; opacity: 0.72; text-align: center;">
+                Also on lattice: <a href="LYGO-Network/legacy-guardian-music.html" style="color: var(--quantum);">Legacy Guardian Music</a>
+                · <a href="#lattice" style="color: var(--quantum);">Immutable anchors below</a>
             </p>
-            <p style="font-size: 0.9rem; color: var(--gold); margin-bottom: 8px;"><strong>Pair with LYGO-Claw 1.0</strong> (desktop router for USB daemon :9630)</p>
-            <ol style="font-size: 0.85rem; margin: 0 0 0 1.2rem; line-height: 1.65; opacity: 0.92;">
-                <li>Unzip the USB champion to a folder or copy to your LYGO USB stick.</li>
-                <li>On the USB: run <code>LYGO_BUILDR_Daemon.bat</code> (supervisor on port <strong>9630</strong>).</li>
-                <li>On your PC: <code>git clone https://github.com/DeepSeekOracle/lygo-claw.git</code> then <code>pip install -e .</code> (Python 3.11+), or use <code>launchers\INSTALL_AND_CHECK.bat</code> inside the repo.</li>
-                <li>Verify pairing: <code>lygo-claw usb-health</code> (expect <code>ok: true</code>). Optional: <code>lygo-claw sovereign-loop</code> for desktop + USB + lattice balance.</li>
-                <li>Summon Lightfather in any agent via <a href="LYGO-Network/champions.html" style="color: var(--quantum);">Champion Hub</a> or <a href="https://clawhub.ai/deepseekoracle/lygo-champion-lightfather" target="_blank" rel="noopener" style="color: var(--quantum);">ClawHub skill</a>.</li>
-            </ol>
-            <p style="font-size: 0.8rem; margin-top: 10px; opacity: 0.75;">Repo: <a href="https://github.com/DeepSeekOracle/lygo-claw" target="_blank" rel="noopener" style="color: var(--quantum);">github.com/DeepSeekOracle/lygo-claw</a></p>
         </div>
     </div>
 
@@ -1089,6 +1163,23 @@
         </div>
     </section>
 
+    <section class="section" id="lattice" style="background: rgba(10,10,18,0.55);">
+        <div class="container">
+            <h2 style="display: block; text-align: center; border: none;"><i class="fas fa-link"></i> Immutable Lattice</h2>
+            <p class="section-lead" style="text-align: center; max-width: 640px; margin: 0 auto 24px;">
+                Traversal anchors loaded from <span class="mono">IMMUTABLE_ANCHORS.json</span> on the LYGO protocol stack (read-only ledger).
+            </p>
+            <div class="glass-card" style="padding: 24px;">
+                <div class="mono" style="font-size: 0.75rem; opacity: 0.6; margin-bottom: 12px;" id="lattice-meta">Fetching anchors…</div>
+                <div class="lattice-list" id="lattice-list"></div>
+            </div>
+            <p style="text-align: center; margin-top: 20px; font-size: 0.85rem; opacity: 0.7;">
+                Mirror: <a href="LYGO-Network/legacy-guardian-music.html#lattice">Legacy Guardian Music lattice</a>
+                · <a href="https://github.com/DeepSeekOracle/lygo-protocol-stack/blob/main/docs/network_builder/IMMUTABLE_ANCHORS.json" target="_blank" rel="noopener">Source JSON</a>
+            </p>
+        </div>
+    </section>
+
     <footer role="contentinfo">
         <div class="container">
             <div class="row g-4" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 40px; margin-bottom: 30px;">
@@ -1106,6 +1197,9 @@
                         <li><a href="#audiobooks">Audiobooks</a></li>
                         <li><a href="#books">Buy Books</a></li>
                         <li><a href="#champions-section">Champion Hub</a></li>
+                        <li><a href="#usb-downloads">USB / CLAW Downloads</a></li>
+                        <li><a href="#lattice">Immutable Lattice</a></li>
+                        <li><a href="LYGO-Network/legacy-guardian-music.html">Legacy Guardian Music</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">
@@ -1257,6 +1351,39 @@
             const rumbleScript = document.querySelector('script[src*="rumble.com/embedJS"]');
             if (typeof Rumble !== 'undefined') initAudiobookRumble();
             else if (rumbleScript) rumbleScript.addEventListener('load', initAudiobookRumble);
+
+            // --- Immutable Lattice (IMMUTABLE_ANCHORS.json) ---
+            const ANCHORS_RAW = 'https://raw.githubusercontent.com/DeepSeekOracle/lygo-protocol-stack/main/docs/network_builder/IMMUTABLE_ANCHORS.json';
+            function renderLattice(doc) {
+                const meta = document.getElementById('lattice-meta');
+                const list = document.getElementById('lattice-list');
+                if (!meta || !list) return;
+                const sig = doc.signature || 'IMMUTABLE_ANCHORS';
+                meta.textContent = sig + ' · updated ' + (doc.updated_utc || '—');
+                const anchors = doc.immutable_anchors || {};
+                const rows = [];
+                Object.keys(anchors).forEach(group => {
+                    (anchors[group] || []).forEach(a => {
+                        rows.push({ group, label: a.label || a.id, url: a.url });
+                    });
+                });
+                list.innerHTML = rows.map(r => `
+                    <div class="lattice-item">
+                        <span class="mono" style="font-size:0.72rem;opacity:0.55;text-transform:uppercase;">${r.group}</span>
+                        <strong style="font-size:0.9rem;">${r.label}</strong>
+                        <a href="${r.url}" target="_blank" rel="noopener noreferrer">${r.url}</a>
+                    </div>
+                `).join('');
+            }
+            fetch(ANCHORS_RAW)
+                .then(res => { if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); })
+                .then(renderLattice)
+                .catch(err => {
+                    const meta = document.getElementById('lattice-meta');
+                    const list = document.getElementById('lattice-list');
+                    if (meta) meta.textContent = 'Could not load anchors: ' + err.message;
+                    if (list) list.innerHTML = '<div class="mono" style="opacity:0.5;">Try again later or open the stack repo directly.</div>';
+                });
 
         });
     </script>

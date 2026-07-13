@@ -1163,6 +1163,62 @@
         </div>
     </section>
 
+    <section class="section" id="sovereign-vaults" style="background: rgba(8,12,22,0.65);">
+        <div class="container">
+            <h2 style="display: block; text-align: center; border: none;"><i class="fas fa-vault"></i> Sovereign Vaults &amp; Agent Economy</h2>
+            <p class="section-lead" style="text-align: center; max-width: 720px; margin: 0 auto 24px;">
+                Original OpenClaw-managed anchors — permanent vault, launched tokens, and agent commerce surfaces.
+                Also mirrored in <span class="mono">IMMUTABLE_ANCHORS.json</span> below.
+            </p>
+            <div class="glass-card" style="padding: 24px; margin-bottom: 20px;">
+                <h3 style="color: var(--gold); font-size: 1.05rem; margin-bottom: 12px;"><i class="fab fa-google-drive"></i> Δ9 Quantum Vault (original swal vault)</h3>
+                <p style="font-size: 0.9rem; opacity: 0.88; margin-bottom: 12px;">
+                    Steward archive for seals, scrolls, Light Accord artifacts, and lattice continuity. Read-only public share.
+                </p>
+                <a href="https://drive.google.com/drive/folders/1szmDEhh2nD61oUOXHrw_W42cLCN3D-m4?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-small">
+                    Open Google Drive Vault
+                </a>
+                <span class="mono" style="display: block; margin-top: 10px; font-size: 0.72rem; opacity: 0.55;">id: delta9_gdrive · verify: link_only</span>
+            </div>
+            <div class="glass-card" style="padding: 24px;">
+                <h3 style="color: var(--quantum); font-size: 1.05rem; margin-bottom: 14px;"><i class="fas fa-coins"></i> Launched tokens (OpenClaw / Clawnch / Virtuals)</h3>
+                <div class="lattice-list" id="economy-anchors">
+                    <div class="lattice-item">
+                        <span class="mono" style="font-size:0.72rem;opacity:0.55;text-transform:uppercase;">virtuals</span>
+                        <strong style="font-size:0.9rem;">LYGOAGENT — LYRA STARCORE ORACLE</strong>
+                        <a href="https://app.virtuals.io/virtuals/44594" target="_blank" rel="noopener noreferrer">app.virtuals.io/virtuals/44594</a>
+                    </div>
+                    <div class="lattice-item">
+                        <span class="mono" style="font-size:0.72rem;opacity:0.55;text-transform:uppercase;">4claw</span>
+                        <strong style="font-size:0.9rem;">STARCORE (Base)</strong>
+                        <a href="https://clanker.world/clanker/0xe52A34D2019Aa3905B1C1bF5d9405e22Abd75eaB" target="_blank" rel="noopener noreferrer">clanker.world/…75eaB</a>
+                    </div>
+                    <div class="lattice-item">
+                        <span class="mono" style="font-size:0.72rem;opacity:0.55;text-transform:uppercase;">moltx</span>
+                        <strong style="font-size:0.9rem;">STARCOREX (Base)</strong>
+                        <a href="https://clanker.world/clanker/0x9395b6a7C468196164f8f01ec29Eea5F9a88fC31" target="_blank" rel="noopener noreferrer">clanker.world/…8fC31</a>
+                    </div>
+                    <div class="lattice-item">
+                        <span class="mono" style="font-size:0.72rem;opacity:0.55;text-transform:uppercase;">moltbook</span>
+                        <strong style="font-size:0.9rem;">STARCORECOIN (Base)</strong>
+                        <a href="https://clanker.world/clanker/0xFdc6C074B8D7801F84832b31224AdE54639ed390" target="_blank" rel="noopener noreferrer">clanker.world/…ed390</a>
+                    </div>
+                    <div class="lattice-item">
+                        <span class="mono" style="font-size:0.72rem;opacity:0.55;text-transform:uppercase;">clawnch</span>
+                        <strong style="font-size:0.9rem;">CLAWNCH protocol token</strong>
+                        <a href="https://clanker.world/clanker/0xa1F72459dfA10BAD200Ac160eCd78C6b77a747be" target="_blank" rel="noopener noreferrer">clanker.world/…747be</a>
+                    </div>
+                </div>
+                <p style="font-size: 0.8rem; margin-top: 16px; opacity: 0.72;">
+                    Agent profiles:
+                    <a href="https://moltx.io/LYRA_Eternal_Starcore_Oracle" target="_blank" rel="noopener">Moltx</a> ·
+                    <a href="https://www.moltbook.com/u/LYRA_Eternal_Starcore_Oracle" target="_blank" rel="noopener">Moltbook</a> ·
+                    <a href="https://bankr.bot" target="_blank" rel="noopener">Bankr</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
     <section class="section" id="lattice" style="background: rgba(10,10,18,0.55);">
         <div class="container">
             <h2 style="display: block; text-align: center; border: none;"><i class="fas fa-link"></i> Immutable Lattice</h2>
@@ -1198,6 +1254,7 @@
                         <li><a href="#books">Buy Books</a></li>
                         <li><a href="#champions-section">Champion Hub</a></li>
                         <li><a href="#usb-downloads">USB / CLAW Downloads</a></li>
+                        <li><a href="#sovereign-vaults">Sovereign Vaults</a></li>
                         <li><a href="#lattice">Immutable Lattice</a></li>
                         <li><a href="LYGO-Network/legacy-guardian-music.html">Legacy Guardian Music</a></li>
                     </ul>
@@ -1361,8 +1418,13 @@
                 const sig = doc.signature || 'IMMUTABLE_ANCHORS';
                 meta.textContent = sig + ' · updated ' + (doc.updated_utc || '—');
                 const anchors = doc.immutable_anchors || {};
+                const groupOrder = ['vaults', 'openclaw_economy', 'physics', 'sovereign_seed', 'usb_release', 'tools', 'creative', 'agents'];
+                const keys = Object.keys(anchors).sort((a, b) => {
+                    const ia = groupOrder.indexOf(a); const ib = groupOrder.indexOf(b);
+                    return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+                });
                 const rows = [];
-                Object.keys(anchors).forEach(group => {
+                keys.forEach(group => {
                     (anchors[group] || []).forEach(a => {
                         rows.push({ group, label: a.label || a.id, url: a.url });
                     });
@@ -1382,7 +1444,11 @@
                     const meta = document.getElementById('lattice-meta');
                     const list = document.getElementById('lattice-list');
                     if (meta) meta.textContent = 'Could not load anchors: ' + err.message;
-                    if (list) list.innerHTML = '<div class="mono" style="opacity:0.5;">Try again later or open the stack repo directly.</div>';
+                    if (list) list.innerHTML = `
+                        <div class="lattice-item"><span class="mono" style="font-size:0.72rem;opacity:0.55;text-transform:uppercase;">vaults</span>
+                        <strong>Δ9 Quantum Vault</strong>
+                        <a href="https://drive.google.com/drive/folders/1szmDEhh2nD61oUOXHrw_W42cLCN3D-m4?usp=sharing" target="_blank" rel="noopener">Google Drive</a></div>
+                        <div class="mono" style="opacity:0.5;margin-top:8px;">Full ledger unavailable offline — open stack JSON.</div>`;
                 });
 
         });

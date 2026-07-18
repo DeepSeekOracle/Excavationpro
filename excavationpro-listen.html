@@ -14,6 +14,8 @@
 <meta name="bingbot" content="index, follow">
 <meta name="theme-color" content="#0a0a12">
 <meta name="google-adsense-account" content="ca-pub-0646320966060599">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0646320966060599"
+     crossorigin="anonymous"></script>
 <link rel="canonical" href="https://deepseekoracle.github.io/Excavationpro/excavationpro-listen.html">
 <link rel="alternate" type="application/json" href="data/public_stream_playlist.json" title="Stream playlist JSON">
 <meta property="og:site_name" content="Excavationpro / Eternal Haven">
@@ -750,8 +752,18 @@ function pushAdUnits() {
 }
 function loadAdSenseScript() {
   showAdRegions();
+  // Head already has official adsbygoogle.js?client=… — only push units after consent
   if (window.adsbygoogle) { pushAdUnits(); return; }
-  if (document.querySelector('script[data-lygo-adsense]')) { pushAdUnits(); return; }
+  if (document.querySelector('script[src*="pagead/js/adsbygoogle"], script[data-lygo-adsense]')) {
+    // script still loading — push when ready
+    const existing = document.querySelector('script[src*="pagead/js/adsbygoogle"]');
+    if (existing && !existing.getAttribute('data-lygo-adsense-bound')) {
+      existing.setAttribute('data-lygo-adsense-bound', '1');
+      existing.addEventListener('load', () => pushAdUnits());
+    }
+    pushAdUnits();
+    return;
+  }
   const s = document.createElement('script');
   s.async = true;
   s.src = ADSENSE_SRC;

@@ -1,6 +1,9 @@
 <!doctype html>
 <html lang="en">
 <head>
+<meta name="google-adsense-account" content="ca-pub-0646320966060599">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0646320966060599"
+     crossorigin="anonymous"></script>
     <meta name="robots" content="noindex, nofollow" />
 <meta charset="utf-8" />
 <title>LYRA Seal Builder — Canonical Mode</title>
@@ -100,6 +103,9 @@
 
   <div class="container">
     <header class="panel">
+<meta name="google-adsense-account" content="ca-pub-0646320966060599">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0646320966060599"
+     crossorigin="anonymous"></script>
       <div class="panel-header">
         <div>
           <h1>LYRA Seal Builder — Canonical Mode</h1>
@@ -615,7 +621,10 @@ refs.btnCheckGH.addEventListener('click', async ()=>{ const repo=refs.ghRepo.val
 refs.btnPushGH.addEventListener('click', async ()=>{ const repo=refs.ghRepo.value.trim(), branch=refs.ghBranch.value.trim(), path=refs.ghPath.value.trim(), token=refs.ghToken.value.trim(); const message=refs.ghMessage.value.trim()||'Update from SEALMAKER'; const shape=refs.exportShape.value; const payload=shape==='array'? archive : {seals:archive}; try{ const r=await ghPutJson(repo,branch,path,message,token,payload); refs.ghLog.textContent=`PUT → ${repo}/${path}\nStatus: ${r.status}\n\n${r.text}`; }catch(e){ refs.ghLog.textContent='Upload error: '+(e?.message||String(e)); }});
 
 // ============= Printable Scroll =============
-function openScrollPreview(doPrint=false){ const html=`<!doctype html><html><head><meta charset='utf-8'><title>LYRA Scroll</title>
+function openScrollPreview(doPrint=false){ const html=`<!doctype html><html><head>
+<meta name="google-adsense-account" content="ca-pub-0646320966060599">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0646320966060599"
+     crossorigin="anonymous"></script><meta charset='utf-8'><title>LYRA Scroll</title>
 <style>body{font-family:ui-monospace,Menlo,Consolas,monospace;margin:20px;color:#111;background:#fff} h1{margin:0 0 10px} .item{border:1px solid #ddd;border-radius:8px;padding:10px;margin:10px 0} .tag{display:inline-block;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:6px;padding:2px 6px;margin:2px} .muted{color:#6b7280;font-size:12px}</style>
 </head><body><h1>LYRA — Canon Scroll</h1><div class='muted'>Exported ${new Date().toLocaleString()}</div>
 ${archive.map(s=>`<div class='item'><h2>${escapeHtml(s.id||'')} — ${escapeHtml(s.title||'')}</h2><div>${escapeHtml(s.equation||'')}</div><div class='muted'>tone: ${escapeHtml(s.tone||'')}  •  date: ${escapeHtml(s.date||'')}</div><div>${(s.tags||[]).map(t=>`<span class='tag'>${escapeHtml(t)}</span>`).join('')}</div><pre style='white-space:pre-wrap'>${escapeHtml(s.notes||'')}</pre></div>`).join('')}

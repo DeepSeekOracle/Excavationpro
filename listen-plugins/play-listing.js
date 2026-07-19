@@ -2,14 +2,13 @@
  * LYGO Play Listing — ADDITIVE plugin (never touches playIndex / audio.src).
  * Signature: Δ9Φ963-PLAY-LISTING-ADDITIVE-v1
  *
- * Load: <script src="listen-plugins/play-listing.js?v=4" defer></script>
+ * Load: <script src="listen-plugins/play-listing.js?v=5" defer></script>
  * Mount: #play-listing-mount
  *
  * If this file fails to load or throws, core player keeps working.
- * v2: most/least recompute from by_track; least excludes most when possible.
- * v3: harden board refresh (no thrash); lastAgg badge-only; skip refresh while writing.
- * v4: fix stuck totals — write queue (never drop counts), mark session only after board OK,
- *     better track resolve via LYGO_LISTEN.getCurrent, MIN_SEC 12.
+ * v4: write queue; getCurrent resolve; MIN_SEC 12
+ * v5: new jsonblob after 404; dual-write localStorage cache so totals never die offline;
+ *     merge remote+local by max per track; keep board warm with PUT on poll success.
  */
 (function () {
   "use strict";
@@ -21,8 +20,9 @@
   }
 
   function initPlayListing() {
+    // Recreated 2026-07-19 after prior blob expired (jsonblob free TTL) → total frozen at 27
     var BLOB =
-      "https://jsonblob.com/api/jsonBlob/019f7611-e28e-7de6-87df-5f5e4e8c4690";
+      "https://jsonblob.com/api/jsonBlob/019f7b41-4e4a-7856-8ad1-9248e1abf0a2";
     var DWYL = "https://hits.dwyl.com/excavationpro/";
     var TOTAL_KEY = "listen-total-plays-v2";
     var HF_COUNTS =
@@ -30,6 +30,7 @@
     var LS_CLIENT = "lygo_play_listing_client_v1";
     var LS_SESSION = "lygo_play_listing_session_v1";
     var LS_CHAIN = "lygo_play_listing_chain_v1";
+    var LS_BOARD = "lygo_play_listing_board_cache_v1";
     var MIN_SEC = 12;
     var MIN_RATIO = 0.3;
     var POLL_MS = 20000;
@@ -315,18 +316,119 @@
       });
     }
 
+    function emptyAgg() {
+      return {
+        signature: "LYGO-PLAY-AGGREGATE-v1",
+        by_track: {},
+        recent: [],
+        most_played: [],
+        least_played: [],
+        total_plays: 0,
+        unique_tracks_played: 0,
+        updated_at: new Date().toISOString(),
+      };
+    }
+
+    function loadLocalBoard() {
+      try {
+        var c = JSON.parse(localStorage.getItem(LS_BOARD) || "null");
+        if (c && typeof c === "object") {
+          if (!c.by_track) c.by_track = {};
+          return c;
+        }
+      } catch (e) {}
+      return null;
+    }
+
+    function saveLocalBoard(agg) {
+      try {
+        localStorage.setItem(LS_BOARD, JSON.stringify(agg));
+      } catch (e) {}
+    }
+
+    /** Merge two boards taking max plays per track (never lose local progress). */
+    function mergeAggs(a, b) {
+      var out = emptyAgg();
+      var maps = [a && a.by_track, b && b.by_track];
+      maps.forEach(function (m) {
+        if (!m) return;
+        Object.keys(m).forEach(function (k) {
+          var n = Number(m[k]) || 0;
+          out.by_track[k] = Math.max(Number(out.by_track[k]) || 0, n);
+        });
+      });
+      var recent = []
+        .concat((a && a.recent) || [], (b && b.recent) || [])
+        .filter(Boolean);
+      // dedupe recent by sha keep newest first
+      var seen = {};
+      out.recent = [];
+      recent.forEach(function (it) {
+        var s = it && it.sha256;
+        if (!s || seen[s]) return;
+        seen[s] = true;
+        out.recent.push({
+          sha256: s,
+          title: it.title || titleOf(s),
+          plays: out.by_track[s] || it.plays || 0,
+          ts: it.ts || out.updated_at,
+        });
+      });
+      out.recent = out.recent.slice(0, 40);
+      var sum = 0;
+      Object.keys(out.by_track).forEach(function (k) {
+        sum += Number(out.by_track[k]) || 0;
+      });
+      out.total_plays = sum;
+      out.unique_tracks_played = Object.keys(out.by_track).length;
+      var r = rank(out.by_track);
+      out.most_played = r.most;
+      out.least_played = r.least;
+      out.updated_at = new Date().toISOString();
+      return out;
+    }
+
     function getBlob() {
+      var local = loadLocalBoard();
       return fetch(BLOB, {
         cache: "no-store",
         mode: "cors",
         headers: { Accept: "application/json" },
-      }).then(function (r) {
-        if (!r.ok) throw new Error("blob " + r.status);
-        return r.json();
-      });
+      })
+        .then(function (r) {
+          if (!r.ok) throw new Error("blob " + r.status);
+          return r.json();
+        })
+        .then(function (remote) {
+          if (!remote || typeof remote !== "object") remote = emptyAgg();
+          if (!remote.by_track) remote.by_track = {};
+          var merged = mergeAggs(remote, local);
+          saveLocalBoard(merged);
+          return merged;
+        })
+        .catch(function (err) {
+          // Remote dead (jsonblob expiry) — use local so UI keeps working
+          if (local) {
+            console.warn("[play-listing] remote board unavailable, using local cache", err && err.message);
+            return local;
+          }
+          return fetch(HF_COUNTS, { cache: "no-store", mode: "cors" })
+            .then(function (r) {
+              if (!r.ok) throw new Error("hf");
+              return r.json();
+            })
+            .then(function (hf) {
+              var m = mergeAggs(hf, null);
+              saveLocalBoard(m);
+              return m;
+            })
+            .catch(function () {
+              return emptyAgg();
+            });
+        });
     }
 
-    function putBlob(agg) {
+    function putBlobRemote(agg) {
       return fetch(BLOB, {
         method: "PUT",
         mode: "cors",
@@ -339,6 +441,12 @@
         if (!r.ok) throw new Error("blob put " + r.status);
         return true;
       });
+    }
+
+    function putBlob(agg) {
+      // Always persist locally first (durable for this browser / device)
+      saveLocalBoard(agg);
+      return putBlobRemote(agg);
     }
 
     function rank(by) {
@@ -711,23 +819,31 @@
             agg.unique_tracks_played = Object.keys(agg.by_track).length;
             agg.updated_at = new Date().toISOString();
             agg.signature = "LYGO-PLAY-AGGREGATE-v1";
-            var r = rank(agg.by_track);
-            agg.most_played = r.most;
-            agg.least_played = r.least;
+            // Apply locally first so totals never freeze if remote is dead
+            var rnk = rank(agg.by_track);
+            agg.most_played = rnk.most;
+            agg.least_played = rnk.least;
             lastAgg = agg;
-            return putBlob(agg).then(function () {
-              // success: drop drained items
-              writeQueue = writeQueue.slice(batch.length);
-              savePending();
-              renderBoard(agg);
-              console.info(
-                "[play-listing] board updated total=",
-                agg.total_plays,
-                "flushed=",
-                batch.length,
-                "pending=",
-                writeQueue.length
+            saveLocalBoard(agg);
+            renderBoard(agg);
+            // Drop queue only after local apply (avoid double-count on retry)
+            writeQueue = writeQueue.slice(batch.length);
+            savePending();
+            console.info(
+              "[play-listing] board local total=",
+              agg.total_plays,
+              "flushed=",
+              batch.length,
+              "pending=",
+              writeQueue.length
+            );
+            // Best-effort remote warm (jsonblob free TTL can expire)
+            return putBlobRemote(agg).catch(function (e) {
+              console.warn(
+                "[play-listing] remote board put failed (local OK)",
+                e && e.message ? e.message : e
               );
+              return false;
             });
           })
           .catch(function (e) {
@@ -738,7 +854,6 @@
                 setTimeout(res, 400 * attempt + Math.floor(Math.random() * 300));
               }).then(once);
             }
-            // keep queue for later retry
             throw e;
           });
       }
@@ -750,7 +865,6 @@
         },
         function () {
           writing = false;
-          // retry later
           setTimeout(drainQueue, 8000);
         }
       );

@@ -2,11 +2,12 @@
  * LYGO Play Listing — ADDITIVE plugin (never touches playIndex / audio.src).
  * Signature: Δ9Φ963-PLAY-LISTING-ADDITIVE-v1
  *
- * Load: <script src="listen-plugins/play-listing.js?v=2" defer></script>
+ * Load: <script src="listen-plugins/play-listing.js?v=3" defer></script>
  * Mount: #play-listing-mount
  *
  * If this file fails to load or throws, core player keeps working.
  * v2: most/least recompute from by_track; least excludes most when possible.
+ * v3: harden board refresh (no thrash); lastAgg badge-only; skip refresh while writing.
  */
 (function () {
   "use strict";
@@ -54,13 +55,15 @@
     var activeSha = null;
     var pending = false;
     var writing = false;
+    var lastAgg = null; // last good board snapshot for badge-only updates
+    var refreshInFlight = false;
 
     injectStyles();
     injectUI(mount);
     bindAudio();
     refreshBoard();
     setInterval(function () {
-      if (document.visibilityState === "visible") refreshBoard();
+      if (document.visibilityState === "visible" && !writing) refreshBoard();
     }, POLL_MS);
 
     console.info(
@@ -491,10 +494,14 @@
     }
 
     function refreshBoard() {
+      if (writing || refreshInFlight) return;
+      refreshInFlight = true;
       // Prefer public board; fallback HF
       getBlob()
         .then(function (agg) {
+          if (!agg || typeof agg !== "object") agg = {};
           if (!agg.by_track) agg.by_track = {};
+          lastAgg = agg;
           renderBoard(agg);
         })
         .catch(function () {
@@ -504,26 +511,36 @@
               return r.json();
             })
             .then(function (agg) {
+              if (!agg || typeof agg !== "object") agg = {};
               if (!agg.by_track) agg.by_track = {};
+              lastAgg = agg;
               renderBoard(agg);
             })
             .catch(function () {
+              if (lastAgg) {
+                renderBoard(lastAgg);
+                return;
+              }
               var el = document.getElementById("pl-total");
               if (el) el.textContent = "▶ plays";
             });
+        })
+        .then(function () {
+          refreshInFlight = false;
+        }, function () {
+          refreshInFlight = false;
         });
     }
 
-    // Observe list re-renders to re-badge
+    // Observe list re-renders — badge only (do NOT re-fetch board every paint)
     var list = document.getElementById("list");
     if (list && window.MutationObserver) {
       var moTimer = null;
       new MutationObserver(function () {
         if (moTimer) clearTimeout(moTimer);
         moTimer = setTimeout(function () {
-          // re-apply badges from last board if we have blob cached in DOM total
-          refreshBoard();
-        }, 400);
+          if (lastAgg && lastAgg.by_track) badgeRows(lastAgg.by_track);
+        }, 350);
       }).observe(list, { childList: true });
     }
 
@@ -659,6 +676,7 @@
             var r = rank(agg.by_track);
             agg.most_played = r.most;
             agg.least_played = r.least;
+            lastAgg = agg;
             return putBlob(agg).then(function () {
               renderBoard(agg);
             });
@@ -667,7 +685,7 @@
             attempt++;
             if (attempt < 3) {
               return new Promise(function (res) {
-                setTimeout(res, 200 * attempt);
+                setTimeout(res, 250 * attempt + Math.floor(Math.random() * 150));
               }).then(once);
             }
             throw e;

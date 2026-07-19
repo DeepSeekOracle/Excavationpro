@@ -456,7 +456,7 @@
       if (!items || !items.length) {
         el.innerHTML =
           '<li class="empty">' +
-          (mode === "never" ? "All listed tracks have plays" : "No public plays yet — listen ≥20s") +
+          (mode === "never" ? "All listed tracks have plays" : "No public plays yet — listen ≥12s") +
           "</li>";
         return;
       }

@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LYGO ASCII Art Studio — Photo to Text Art | Eternal Haven</title>
+  <meta name="description" content="LYGO ASCII Art Studio: convert photos into letters, numbers, and symbols (ASCII / text / type art). Client-side, private, free. Part of LYGO Systems · Excavationpro · DeepSeekOracle." />
+  <meta name="author" content="Justin Helmer / Lightfather · Excavationpro · DeepSeekOracle" />
+  <meta name="lygo:signature" content="Δ9Φ963-LYGO-ASCII-ART-STUDIO-v1.0" />
+  <link rel="canonical" href="https://eternalhaven.ca/lygo-ascii-art.html" />
+  <meta property="og:title" content="LYGO ASCII Art Studio — Photo → Text Art" />
+  <meta property="og:description" content="Turn any photo into ASCII / text art in the browser. Character sets, color modes, export TXT/PNG. Sovereign local tool." />
+  <meta property="og:url" content="https://eternalhaven.ca/lygo-ascii-art.html" />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#03040a" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --void: #03040a;
+      --panel: rgba(12, 16, 32, 0.92);
+      --ink: rgba(236, 240, 255, 0.94);
+      --muted: rgba(200, 210, 240, 0.72);
+      --gold: #d7b46a;
+      --blue: #48a7ff;
+      --cyan: #00f0ff;
+      --moon: #7d00ff;
+      --line: rgba(100, 130, 255, 0.22);
+      --ok: #5dde9a;
+      --danger: #e94560;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, "Segoe UI", system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(900px 500px at 15% 0%, rgba(72,167,255,0.12), transparent 55%),
+        radial-gradient(700px 400px at 90% 8%, rgba(215,180,106,0.1), transparent 50%),
+        radial-gradient(600px 400px at 50% 100%, rgba(125,0,255,0.08), transparent 50%),
+        linear-gradient(180deg, #0a0b18, var(--void));
+      min-height: 100vh;
+      line-height: 1.55;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { color: var(--gold); text-shadow: 0 0 10px rgba(215,180,106,0.35); }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 20px 16px 72px; }
+    .topnav {
+      display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center;
+      justify-content: space-between; margin-bottom: 18px;
+      padding: 10px 14px; border: 1px solid var(--line); border-radius: 14px;
+      background: rgba(8,10,20,0.75); backdrop-filter: blur(10px);
+    }
+    .topnav .brand { font-family: Cinzel, serif; color: var(--gold); font-weight: 700; letter-spacing: 0.04em; }
+    .topnav .links { display: flex; flex-wrap: wrap; gap: 10px 14px; font-size: 0.88rem; }
+    header.hero {
+      border: 1px solid var(--line); border-radius: 18px; padding: 26px 22px;
+      background: var(--panel); margin-bottom: 18px; position: relative; overflow: hidden;
+    }
+    header.hero::before {
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(120deg, transparent 40%, rgba(0,240,255,0.04), transparent 70%);
+    }
+    .sig {
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: 0.72rem; color: var(--gold); letter-spacing: 0.05em;
+    }
+    h1 {
+      font-family: Cinzel, serif; margin: 10px 0 8px;
+      font-size: clamp(1.55rem, 3.4vw, 2.25rem); line-height: 1.2;
+      background: linear-gradient(90deg, var(--cyan), var(--moon), var(--gold));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .sub { color: var(--muted); margin: 0 0 12px; max-width: 70ch; }
+    .badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .badge {
+      font-size: 0.75rem; padding: 4px 10px; border-radius: 999px;
+      border: 1px solid var(--line); color: var(--muted); background: rgba(0,0,0,0.25);
+    }
+    .badge.hot { border-color: rgba(0,240,255,0.35); color: var(--cyan); }
+    .layout {
+      display: grid; grid-template-columns: 320px 1fr; gap: 16px;
+    }
+    @media (max-width: 920px) { .layout { grid-template-columns: 1fr; } }
+    .panel {
+      border: 1px solid var(--line); border-radius: 16px; padding: 16px;
+      background: var(--panel);
+    }
+    .panel h2 {
+      font-family: Cinzel, serif; font-size: 1rem; color: var(--gold);
+      margin: 0 0 12px; border-bottom: 1px solid var(--line); padding-bottom: 8px;
+    }
+    .panel h3 {
+      font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--blue); margin: 14px 0 8px;
+    }
+    label.ctl {
+      display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px;
+      font-size: 0.82rem; color: var(--muted);
+    }
+    label.ctl.row {
+      flex-direction: row; align-items: center; justify-content: space-between; gap: 10px;
+    }
+    label.ctl input[type="range"] { width: 100%; accent-color: var(--cyan); }
+    label.ctl select, label.ctl input[type="text"] {
+      background: #070a14; border: 1px solid var(--line); color: var(--ink);
+      border-radius: 8px; padding: 8px 10px; font-size: 0.9rem;
+    }
+    .btnrow { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    button, .btn {
+      appearance: none; border: 1px solid var(--line); background: rgba(72,167,255,0.12);
+      color: var(--ink); border-radius: 10px; padding: 9px 12px; font-size: 0.88rem;
+      cursor: pointer; font-weight: 500; transition: 0.15s ease;
+    }
+    button:hover, .btn:hover {
+      border-color: rgba(0,240,255,0.45); color: var(--cyan);
+      box-shadow: 0 0 16px rgba(0,240,255,0.12);
+    }
+    button.primary {
+      background: linear-gradient(135deg, rgba(125,0,255,0.45), rgba(0,240,255,0.35));
+      border-color: rgba(0,240,255,0.4); color: #fff;
+    }
+    button.ghost { background: transparent; }
+    button:disabled { opacity: 0.45; cursor: not-allowed; }
+    .drop {
+      border: 1.5px dashed rgba(0,240,255,0.35); border-radius: 14px;
+      padding: 22px 14px; text-align: center; cursor: pointer;
+      background: rgba(0,240,255,0.03); transition: 0.15s ease; margin-bottom: 12px;
+    }
+    .drop.drag { border-color: var(--gold); background: rgba(215,180,106,0.08); }
+    .drop strong { display: block; color: var(--cyan); margin-bottom: 4px; }
+    .drop span { font-size: 0.82rem; color: var(--muted); }
+    .preview-meta {
+      display: flex; flex-wrap: wrap; gap: 8px 14px; justify-content: space-between;
+      align-items: center; margin-bottom: 10px; font-size: 0.82rem; color: var(--muted);
+    }
+    .status { color: var(--ok); font-family: "JetBrains Mono", monospace; font-size: 0.78rem; }
+    .status.warn { color: var(--gold); }
+    .status.err { color: var(--danger); }
+    .stage {
+      position: relative; border: 1px solid var(--line); border-radius: 12px;
+      background: #02040a; min-height: 280px; overflow: auto; max-height: min(70vh, 720px);
+    }
+    .stage.empty {
+      display: grid; place-items: center; color: var(--muted); font-size: 0.92rem; padding: 40px 16px;
+    }
+    pre#asciiOut {
+      margin: 0; padding: 12px; font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
+      font-size: 8px; line-height: 1.05; letter-spacing: 0; white-space: pre;
+      color: #cfe8ff; user-select: text;
+    }
+    pre#asciiOut.colored span { font-weight: 500; }
+    canvas#work, canvas#exportCanvas, img#sourceImg { display: none; }
+    .thumbs {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px;
+    }
+    .thumbs figure {
+      margin: 0; border: 1px solid var(--line); border-radius: 10px; overflow: hidden;
+      background: #05070f;
+    }
+    .thumbs figcaption {
+      font-size: 0.72rem; color: var(--muted); padding: 4px 8px; text-align: center;
+    }
+    .thumbs canvas, .thumbs img {
+      display: block; width: 100%; height: 90px; object-fit: contain; background: #000;
+    }
+    .about {
+      margin-top: 16px; border: 1px solid var(--line); border-radius: 16px;
+      padding: 18px 16px; background: var(--panel);
+    }
+    .about h2 { font-family: Cinzel, serif; color: var(--gold); font-size: 1.1rem; margin: 0 0 8px; }
+    .about p, .about li { color: var(--muted); font-size: 0.92rem; }
+    .hub-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 8px; margin-top: 10px;
+    }
+    .hub-grid a {
+      display: block; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px;
+      background: rgba(0,0,0,0.25); font-size: 0.85rem; color: var(--ink);
+    }
+    .hub-grid a:hover { border-color: rgba(0,240,255,0.4); color: var(--cyan); }
+    .hub-grid a small { display: block; color: var(--muted); font-size: 0.72rem; margin-top: 2px; }
+    /* Immutable lattice */
+    #lattice {
+      margin-top: 28px; border: 1px solid var(--line); border-radius: 16px;
+      padding: 20px 16px; background: var(--panel);
+    }
+    #lattice h2 {
+      font-family: Cinzel, serif; text-align: center; color: var(--cyan);
+      border: none; margin: 0 0 8px; font-size: 1.25rem;
+    }
+    #lattice .lead { text-align: center; color: var(--muted); font-size: 0.9rem; max-width: 640px; margin: 0 auto 16px; }
+    #lattice-meta {
+      font-family: "JetBrains Mono", monospace; font-size: 0.72rem;
+      opacity: 0.65; margin-bottom: 12px; text-align: center;
+    }
+    .lattice-list { display: grid; gap: 8px; }
+    .lattice-item {
+      display: grid; gap: 2px; padding: 10px 12px; border: 1px solid var(--line);
+      border-radius: 10px; background: rgba(0,0,0,0.28);
+    }
+    .lattice-item .g {
+      font-family: "JetBrains Mono", monospace; font-size: 0.68rem;
+      opacity: 0.55; text-transform: uppercase;
+    }
+    .lattice-item strong { font-size: 0.9rem; }
+    .lattice-item a { font-size: 0.78rem; word-break: break-all; }
+    .lattice-mirrors {
+      text-align: center; margin-top: 16px; font-size: 0.82rem; color: var(--muted);
+    }
+    footer.site {
+      margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--line);
+      color: var(--muted); font-size: 0.85rem; text-align: center;
+    }
+    footer.site .row { display: flex; flex-wrap: wrap; gap: 10px 16px; justify-content: center; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="topnav" aria-label="Main navigation">
+      <div class="brand">Δ9 · LYGO ASCII Art Studio</div>
+      <div class="links">
+        <a href="https://eternalhaven.ca/">Eternal Haven</a>
+        <a href="https://excavationpro.ca/">Excavationpro</a>
+        <a href="https://chatagent.ca/">ChatAgent</a>
+        <a href="https://asiancoastline.com/">Asian Coastline</a>
+        <a href="https://deepseekoracle.github.io/Excavationpro/">GitHub Hub</a>
+        <a href="https://github.com/DeepSeekOracle">GitHub</a>
+        <a href="https://huggingface.co/DeepSeekOracle">Hugging Face</a>
+        <a href="lygo-turbo-models-whitepaper.html">Turbo Models</a>
+        <a href="#lattice">Immutable Lattice</a>
+      </div>
+    </nav>
+
+    <header class="hero">
+      <div class="sig">Δ9Φ963-LYGO-ASCII-ART-STUDIO-v1.0 · client-side · no upload</div>
+      <h1>Photo → Letters, Numbers &amp; Symbols</h1>
+      <p class="sub">
+        Taking a photo and recreating it using letters, numbers, and symbols is called
+        <strong style="color:var(--gold)">ASCII art</strong>, <strong style="color:var(--cyan)">text art</strong>, or <strong style="color:var(--ink)">type art</strong>.
+        This LYGO studio converts any image entirely in your browser — private by design.
+      </p>
+      <div class="badges">
+        <span class="badge hot">Local · no server</span>
+        <span class="badge">Color &amp; mono</span>
+        <span class="badge">Export TXT / PNG</span>
+        <span class="badge">Character sets</span>
+        <span class="badge">Lightfather / Excavationpro</span>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="panel" aria-label="Controls">
+        <h2>Controls</h2>
+
+        <div class="drop" id="dropZone" tabindex="0" role="button" aria-label="Upload image">
+          <strong>Drop photo here</strong>
+          <span>or click · paste (Ctrl+V) · camera file</span>
+          <input type="file" id="fileInput" accept="image/*" hidden />
+        </div>
+
+        <h3>Character set</h3>
+        <label class="ctl">Preset
+          <select id="charset">
+            <option value="standard">Standard · dense gray</option>
+            <option value="simple" selected>Simple · readable</option>
+            <option value="blocks">Blocks · ░▒▓█</option>
+            <option value="binary">Binary · 01</option>
+            <option value="dots">Dots · ·•●</option>
+            <option value="lygo">LYGO · Δ9Φλ</option>
+            <option value="matrix">Matrix · アカサ</option>
+            <option value="custom">Custom…</option>
+          </select>
+        </label>
+        <label class="ctl">Custom chars (dark → light)
+          <input type="text" id="customChars" placeholder="@%#*+=-:. " value="@%#*+=-:. " />
+        </label>
+
+        <h3>Sampling</h3>
+        <label class="ctl">Columns <span id="colsVal">100</span>
+          <input type="range" id="cols" min="40" max="220" value="100" />
+        </label>
+        <label class="ctl">Brightness <span id="briVal">0</span>
+          <input type="range" id="brightness" min="-80" max="80" value="0" />
+        </label>
+        <label class="ctl">Contrast <span id="conVal">1.0</span>
+          <input type="range" id="contrast" min="50" max="200" value="100" />
+        </label>
+        <label class="ctl">Char scale (export font) <span id="fsVal">8</span>
+          <input type="range" id="fontSize" min="5" max="16" value="8" />
+        </label>
+
+        <h3>Style</h3>
+        <label class="ctl">Color mode
+          <select id="colorMode">
+            <option value="mono">Monochrome</option>
+            <option value="color" selected>Sampled color</option>
+            <option value="lygo">LYGO cyan / gold</option>
+            <option value="phosphor">Green phosphor</option>
+          </select>
+        </label>
+        <label class="ctl row">Invert light/dark <input type="checkbox" id="invert" /></label>
+        <label class="ctl row">Edge boost <input type="checkbox" id="edges" /></label>
+        <label class="ctl row">Dither (Floyd–Steinberg) <input type="checkbox" id="dither" /></label>
+        <label class="ctl row">Flip horizontal <input type="checkbox" id="mirror" /></label>
+
+        <div class="btnrow">
+          <button type="button" class="primary" id="btnRender">Render</button>
+          <button type="button" id="btnCopy">Copy text</button>
+          <button type="button" id="btnTxt">Download .txt</button>
+          <button type="button" id="btnPng">Download .png</button>
+          <button type="button" class="ghost" id="btnClear">Clear</button>
+        </div>
+
+        <div class="thumbs">
+          <figure>
+            <canvas id="thumbSrc" width="200" height="120"></canvas>
+            <figcaption>Source</figcaption>
+          </figure>
+          <figure>
+            <canvas id="thumbGray" width="200" height="120"></canvas>
+            <figcaption>Sample grid</figcaption>
+          </figure>
+        </div>
+
+        <p class="sub" style="font-size:0.78rem;margin-top:12px;">
+          Privacy: images never leave this device. No HF/GitHub API required for conversion.
+        </p>
+      </aside>
+
+      <main class="panel" aria-label="Preview">
+        <h2>Preview</h2>
+        <div class="preview-meta">
+          <span id="metaLine">Load an image to begin.</span>
+          <span class="status" id="statusLine">ready</span>
+        </div>
+        <div class="stage empty" id="stage">
+          <div id="emptyHint">ASCII / text art appears here · drop a photo to start</div>
+          <pre id="asciiOut" hidden aria-live="polite"></pre>
+        </div>
+        <img id="sourceImg" alt="" />
+        <canvas id="work"></canvas>
+        <canvas id="exportCanvas"></canvas>
+      </main>
+    </div>
+
+    <section class="about" id="about">
+      <h2>What is this?</h2>
+      <p>
+        <strong>ASCII art</strong> (also text art or type art) maps image brightness to a ramp of characters.
+        Darker cells get denser glyphs (<code>@#%█</code>); lighter cells get sparse ones (<code>.:· </code>).
+        Optional color samples the original pixels so the text still “looks like” the photo.
+      </p>
+      <ul>
+        <li><strong>Use cases:</strong> posters, terminal wallpapers, album art previews, lattice memes, README banners.</li>
+        <li><strong>Best sources:</strong> high-contrast portraits, logos, and simple scenes.</li>
+        <li><strong>Export:</strong> plain text for editors; PNG for sharing with color preserved.</li>
+      </ul>
+
+      <h2 style="margin-top:18px;">LYGO hub links</h2>
+      <div class="hub-grid">
+        <a href="https://eternalhaven.ca/">Eternal Haven <small>Main hub · eternalhaven.ca</small></a>
+        <a href="https://excavationpro.ca/">Excavationpro <small>Music &amp; books portal</small></a>
+        <a href="https://chatagent.ca/">ChatAgent <small>Agent chat surface</small></a>
+        <a href="https://asiancoastline.com/">Asian Coastline <small>Music / stream hub</small></a>
+        <a href="https://deepseekoracle.github.io/Excavationpro/">GitHub Pages hub <small>deepseekoracle.github.io</small></a>
+        <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/champions.html">Champion Council <small>Δ9 seats</small></a>
+        <a href="https://github.com/DeepSeekOracle/lygo-protocol-stack">Protocol Stack <small>GitHub repo</small></a>
+        <a href="https://github.com/DeepSeekOracle/eternalhaven">Eternalhaven repo <small>This site source</small></a>
+        <a href="https://huggingface.co/DeepSeekOracle">Hugging Face <small>Models &amp; datasets</small></a>
+        <a href="https://huggingface.co/datasets/DeepSeekOracle/excavationpro-music-stream">Music stream dataset <small>HF CAS streams</small></a>
+        <a href="lygo-turbo-models-whitepaper.html">LYGO Turbo Models <small>Local flagship lineup</small></a>
+        <a href="https://clawhub.ai/deepseekoracle">ClawHub <small>Skills &amp; ops</small></a>
+        <a href="privacy.html">Privacy <small>Site policy</small></a>
+        <a href="https://github.com/DeepSeekOracle/lygo-protocol-stack/blob/main/docs/network_builder/IMMUTABLE_ANCHORS.json">Source JSON <small>Immutable anchors</small></a>
+      </div>
+    </section>
+
+    <section id="lattice" aria-label="Immutable Lattice">
+      <h2>Immutable Lattice</h2>
+      <p class="lead">
+        Live traversal anchors from <span class="sig">IMMUTABLE_ANCHORS.json</span> on the LYGO protocol stack
+        (read-only ledger). Same source as the Eternal Haven hub footer.
+      </p>
+      <div id="lattice-meta">Fetching anchors…</div>
+      <div class="lattice-list" id="lattice-list"></div>
+      <p class="lattice-mirrors">
+        Mirror:
+        <a href="https://deepseekoracle.github.io/Excavationpro/LYGO-Network/legacy-guardian-music.html#lattice">Legacy Guardian Music lattice</a>
+        · <a href="https://github.com/DeepSeekOracle/lygo-protocol-stack/blob/main/docs/network_builder/IMMUTABLE_ANCHORS.json" target="_blank" rel="noopener">Source JSON</a>
+        · <a href="lygo-turbo-models-whitepaper.html">Turbo Models Whitepaper</a>
+        · <a href="https://eternalhaven.ca/">Back to hub</a>
+      </p>
+    </section>
+
+    <footer class="site">
+      <div class="row">
+        <a href="https://eternalhaven.ca/">eternalhaven.ca</a>
+        <a href="https://excavationpro.ca/">excavationpro.ca</a>
+        <a href="https://chatagent.ca/">chatagent.ca</a>
+        <a href="https://github.com/DeepSeekOracle">GitHub</a>
+        <a href="https://huggingface.co/DeepSeekOracle">Hugging Face</a>
+        <a href="https://patreon.com/collection/1621340">Patreon archives</a>
+      </div>
+      <div>© 2026 Justin Helmer (Excavationpro / Lightfather) · LYGO Systems · ASCII Art Studio v1.0</div>
+    </footer>
+  </div>
+
+  <script>
+(function () {
+  'use strict';
+
+  const CHARSETS = {
+    standard: '@%#*+=-:. ',
+    simple: '@#*+=-:. ',
+    blocks: '█▓▒░ ',
+    binary: '10 ',
+    dots: '●•· ',
+    lygo: '█ΞΔΦλ9#*+=-· ',
+    matrix: 'アカサタナハマヤラワ012345789.: ',
+  };
+
+  const els = {
+    drop: document.getElementById('dropZone'),
+    file: document.getElementById('fileInput'),
+    charset: document.getElementById('charset'),
+    custom: document.getElementById('customChars'),
+    cols: document.getElementById('cols'),
+    colsVal: document.getElementById('colsVal'),
+    bri: document.getElementById('brightness'),
+    briVal: document.getElementById('briVal'),
+    con: document.getElementById('contrast'),
+    conVal: document.getElementById('conVal'),
+    fs: document.getElementById('fontSize'),
+    fsVal: document.getElementById('fsVal'),
+    colorMode: document.getElementById('colorMode'),
+    invert: document.getElementById('invert'),
+    edges: document.getElementById('edges'),
+    dither: document.getElementById('dither'),
+    mirror: document.getElementById('mirror'),
+    btnRender: document.getElementById('btnRender'),
+    btnCopy: document.getElementById('btnCopy'),
+    btnTxt: document.getElementById('btnTxt'),
+    btnPng: document.getElementById('btnPng'),
+    btnClear: document.getElementById('btnClear'),
+    stage: document.getElementById('stage'),
+    empty: document.getElementById('emptyHint'),
+    out: document.getElementById('asciiOut'),
+    meta: document.getElementById('metaLine'),
+    status: document.getElementById('statusLine'),
+    img: document.getElementById('sourceImg'),
+    work: document.getElementById('work'),
+    exportCv: document.getElementById('exportCanvas'),
+    thumbSrc: document.getElementById('thumbSrc'),
+    thumbGray: document.getElementById('thumbGray'),
+  };
+
+  let lastPlain = '';
+  let lastRows = null; // {lines: string[], colors: [[{r,g,b}]] or null, cols, rows}
+  let renderTimer = null;
+
+  function setStatus(msg, kind) {
+    els.status.textContent = msg;
+    els.status.className = 'status' + (kind ? ' ' + kind : '');
+  }
+
+  function ramp() {
+    if (els.charset.value === 'custom') {
+      const s = els.custom.value || '@%#*+=-:. ';
+      return s;
+    }
+    return CHARSETS[els.charset.value] || CHARSETS.simple;
+  }
+
+  function syncLabels() {
+    els.colsVal.textContent = els.cols.value;
+    els.briVal.textContent = els.bri.value;
+    els.conVal.textContent = (Number(els.con.value) / 100).toFixed(2);
+    els.fsVal.textContent = els.fs.value;
+    els.out.style.fontSize = els.fs.value + 'px';
+  }
+
+  function loadImageFromFile(file) {
+    if (!file || !file.type.startsWith('image/')) {
+      setStatus('need an image file', 'err');
+      return;
+    }
+    const url = URL.createObjectURL(file);
+    els.img.onload = () => {
+      URL.revokeObjectURL(url);
+      drawThumb(els.thumbSrc, els.img);
+      setStatus('image loaded · rendering…');
+      render();
+    };
+    els.img.onerror = () => setStatus('failed to load image', 'err');
+    els.img.src = url;
+  }
+
+  function drawThumb(canvas, source) {
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const sw = source.naturalWidth || source.width;
+    const sh = source.naturalHeight || source.height;
+    if (!sw || !sh) return;
+    const scale = Math.min(canvas.width / sw, canvas.height / sh);
+    const w = sw * scale, h = sh * scale;
+    ctx.drawImage(source, (canvas.width - w) / 2, (canvas.height - h) / 2, w, h);
+  }
+
+  function scheduleRender() {
+    clearTimeout(renderTimer);
+    renderTimer = setTimeout(render, 80);
+  }
+
+  function render() {
+    const img = els.img;
+    if (!img.naturalWidth) {
+      setStatus('no image', 'warn');
+      return;
+    }
+
+    const cols = Math.max(20, Number(els.cols.value) || 100);
+    // Monospace cell aspect ~0.55 width/height
+    const aspect = 0.55;
+    const rows = Math.max(8, Math.round((img.naturalHeight / img.naturalWidth) * cols * aspect));
+    const chars = ramp();
+    const n = chars.length;
+    const bri = Number(els.bri.value) || 0;
+    const contrast = (Number(els.con.value) || 100) / 100;
+    const invert = els.invert.checked;
+    const useEdges = els.edges.checked;
+    const useDither = els.dither.checked;
+    const mirror = els.mirror.checked;
+    const colorMode = els.colorMode.value;
+
+    const w = cols;
+    const h = rows;
+    const cv = els.work;
+    cv.width = w;
+    cv.height = h;
+    const ctx = cv.getContext('2d', { willReadFrequently: true });
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, w, h);
+    if (mirror) {
+      ctx.translate(w, 0);
+      ctx.scale(-1, 1);
+    }
+    ctx.drawImage(img, 0, 0, w, h);
+    if (mirror) {
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+    }
+
+    let data = ctx.getImageData(0, 0, w, h);
+    let px = data.data;
+
+    // brightness / contrast
+    for (let i = 0; i < px.length; i += 4) {
+      let r = px[i], g = px[i + 1], b = px[i + 2];
+      r = (r - 128) * contrast + 128 + bri;
+      g = (g - 128) * contrast + 128 + bri;
+      b = (b - 128) * contrast + 128 + bri;
+      px[i] = clamp(r);
+      px[i + 1] = clamp(g);
+      px[i + 2] = clamp(b);
+    }
+
+    // simple edge boost: mix with sobel magnitude
+    if (useEdges) {
+      const gray = new Float32Array(w * h);
+      for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+          const i = (y * w + x) * 4;
+          gray[y * w + x] = 0.299 * px[i] + 0.587 * px[i + 1] + 0.114 * px[i + 2];
+        }
+      }
+      for (let y = 1; y < h - 1; y++) {
+        for (let x = 1; x < w - 1; x++) {
+          const gx =
+            -gray[(y - 1) * w + (x - 1)] + gray[(y - 1) * w + (x + 1)] +
+            -2 * gray[y * w + (x - 1)] + 2 * gray[y * w + (x + 1)] +
+            -gray[(y + 1) * w + (x - 1)] + gray[(y + 1) * w + (x + 1)];
+          const gy =
+            -gray[(y - 1) * w + (x - 1)] - 2 * gray[(y - 1) * w + x] - gray[(y - 1) * w + (x + 1)] +
+            gray[(y + 1) * w + (x - 1)] + 2 * gray[(y + 1) * w + x] + gray[(y + 1) * w + (x + 1)];
+          const mag = Math.min(255, Math.hypot(gx, gy));
+          const i = (y * w + x) * 4;
+          const mix = 0.55;
+          px[i] = clamp(px[i] * (1 - mix) + mag * mix);
+          px[i + 1] = clamp(px[i + 1] * (1 - mix) + mag * mix);
+          px[i + 2] = clamp(px[i + 2] * (1 - mix) + mag * mix);
+        }
+      }
+    }
+
+    // luminance map for dither
+    const lum = new Float32Array(w * h);
+    for (let i = 0, p = 0; i < px.length; i += 4, p++) {
+      let L = 0.299 * px[i] + 0.587 * px[i + 1] + 0.114 * px[i + 2];
+      if (invert) L = 255 - L;
+      lum[p] = L;
+    }
+
+    if (useDither) {
+      // Floyd–Steinberg on luminance → quantized levels
+      for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+          const idx = y * w + x;
+          const old = lum[idx];
+          const q = Math.round((old / 255) * (n - 1));
+          const neu = (q / (n - 1)) * 255;
+          const err = old - neu;
+          lum[idx] = neu;
+          if (x + 1 < w) lum[idx + 1] += err * 7 / 16;
+          if (y + 1 < h) {
+            if (x > 0) lum[idx + w - 1] += err * 3 / 16;
+            lum[idx + w] += err * 5 / 16;
+            if (x + 1 < w) lum[idx + w + 1] += err * 1 / 16;
+          }
+        }
+      }
+    }
+
+    const lines = [];
+    const colorGrid = [];
+    for (let y = 0; y < h; y++) {
+      let line = '';
+      const crow = [];
+      for (let x = 0; x < w; x++) {
+        const p = y * w + x;
+        const L = clamp(lum[p]);
+        // dark→light maps to start→end of ramp (standard ASCII ramps)
+        const t = L / 255;
+        const ci = Math.min(n - 1, Math.max(0, Math.floor(t * (n - 1) + 1e-6)));
+        // convention: first chars denser (dark). So invert index:
+        const ch = chars[n - 1 - ci];
+        line += ch;
+
+        const i = p * 4;
+        let r = px[i], g = px[i + 1], b = px[i + 2];
+        if (colorMode === 'mono') {
+          crow.push(null);
+        } else if (colorMode === 'phosphor') {
+          crow.push({ r: 40, g: Math.min(255, 80 + L * 0.7), b: 40 });
+        } else if (colorMode === 'lygo') {
+          // cyan→gold by luminance
+          crow.push({
+            r: Math.round(0 + t * 215),
+            g: Math.round(180 + t * 20),
+            b: Math.round(255 - t * 150),
+          });
+        } else {
+          crow.push({ r, g, b });
+        }
+      }
+      lines.push(line);
+      colorGrid.push(crow);
+    }
+
+    lastPlain = lines.join('\n');
+    lastRows = { lines, colors: colorMode === 'mono' ? null : colorGrid, cols: w, rows: h };
+
+    // paint sample thumb
+    const tg = els.thumbGray.getContext('2d');
+    const id = tg.createImageData(w, h);
+    for (let p = 0; p < w * h; p++) {
+      const v = clamp(lum[p]);
+      id.data[p * 4] = v;
+      id.data[p * 4 + 1] = v;
+      id.data[p * 4 + 2] = v;
+      id.data[p * 4 + 3] = 255;
+    }
+    // scale into thumb
+    const tmp = document.createElement('canvas');
+    tmp.width = w; tmp.height = h;
+    tmp.getContext('2d').putImageData(id, 0, 0);
+    tg.fillStyle = '#000';
+    tg.fillRect(0, 0, els.thumbGray.width, els.thumbGray.height);
+    const sc = Math.min(els.thumbGray.width / w, els.thumbGray.height / h);
+    tg.imageSmoothingEnabled = false;
+    tg.drawImage(tmp, (els.thumbGray.width - w * sc) / 2, (els.thumbGray.height - h * sc) / 2, w * sc, h * sc);
+
+    paintPreview();
+    els.meta.textContent = `${img.naturalWidth}×${img.naturalHeight} → ${w}×${h} chars · ${chars.length}-glyph ramp · ${colorMode}`;
+    setStatus('ART_OK · ready');
+  }
+
+  function paintPreview() {
+    if (!lastRows) return;
+    els.empty.hidden = true;
+    els.out.hidden = false;
+    els.stage.classList.remove('empty');
+    els.out.style.fontSize = els.fs.value + 'px';
+
+    if (!lastRows.colors) {
+      els.out.classList.remove('colored');
+      els.out.textContent = lastPlain;
+      return;
+    }
+    els.out.classList.add('colored');
+    const frag = document.createDocumentFragment();
+    // Build via HTML for speed on large grids
+    let html = '';
+    for (let y = 0; y < lastRows.rows; y++) {
+      const line = lastRows.lines[y];
+      const crow = lastRows.colors[y];
+      for (let x = 0; x < lastRows.cols; x++) {
+        const c = crow[x];
+        const ch = line[x];
+        if (!c) {
+          html += escapeHtml(ch);
+        } else {
+          html += `<span style="color:rgb(${c.r},${c.g},${c.b})">${escapeHtml(ch)}</span>`;
+        }
+      }
+      html += '\n';
+    }
+    els.out.innerHTML = html;
+  }
+
+  function escapeHtml(ch) {
+    if (ch === ' ') return ' ';
+    if (ch === '&') return '&amp;';
+    if (ch === '<') return '&lt;';
+    if (ch === '>') return '&gt;';
+    return ch;
+  }
+
+  function clamp(v) {
+    return v < 0 ? 0 : v > 255 ? 255 : v | 0;
+  }
+
+  function downloadText() {
+    if (!lastPlain) return;
+    const blob = new Blob([lastPlain], { type: 'text/plain;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'lygo-ascii-art.txt';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    setStatus('downloaded .txt');
+  }
+
+  function downloadPng() {
+    if (!lastRows) return;
+    const fs = Number(els.fs.value) || 8;
+    const lineH = fs * 1.05;
+    const charW = fs * 0.6;
+    const pad = 12;
+    const cv = els.exportCv;
+    cv.width = Math.ceil(lastRows.cols * charW + pad * 2);
+    cv.height = Math.ceil(lastRows.rows * lineH + pad * 2);
+    const ctx = cv.getContext('2d');
+    ctx.fillStyle = '#03040a';
+    ctx.fillRect(0, 0, cv.width, cv.height);
+    ctx.font = `${fs}px "JetBrains Mono", Consolas, monospace`;
+    ctx.textBaseline = 'top';
+    for (let y = 0; y < lastRows.rows; y++) {
+      const line = lastRows.lines[y];
+      for (let x = 0; x < lastRows.cols; x++) {
+        if (lastRows.colors) {
+          const c = lastRows.colors[y][x];
+          ctx.fillStyle = c ? `rgb(${c.r},${c.g},${c.b})` : '#cfe8ff';
+        } else {
+          ctx.fillStyle = '#cfe8ff';
+        }
+        ctx.fillText(line[x], pad + x * charW, pad + y * lineH);
+      }
+    }
+    cv.toBlob((blob) => {
+      if (!blob) return;
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'lygo-ascii-art.png';
+      a.click();
+      URL.revokeObjectURL(a.href);
+      setStatus('downloaded .png');
+    }, 'image/png');
+  }
+
+  async function copyText() {
+    if (!lastPlain) return;
+    try {
+      await navigator.clipboard.writeText(lastPlain);
+      setStatus('copied to clipboard');
+    } catch {
+      setStatus('copy failed — select & copy manually', 'warn');
+    }
+  }
+
+  function clearAll() {
+    lastPlain = '';
+    lastRows = null;
+    els.img.removeAttribute('src');
+    els.out.textContent = '';
+    els.out.innerHTML = '';
+    els.out.hidden = true;
+    els.empty.hidden = false;
+    els.stage.classList.add('empty');
+    els.meta.textContent = 'Load an image to begin.';
+    setStatus('cleared');
+    [els.thumbSrc, els.thumbGray].forEach((c) => {
+      const x = c.getContext('2d');
+      x.fillStyle = '#05070f';
+      x.fillRect(0, 0, c.width, c.height);
+    });
+  }
+
+  // events
+  els.drop.addEventListener('click', () => els.file.click());
+  els.drop.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); els.file.click(); }
+  });
+  els.file.addEventListener('change', () => {
+    if (els.file.files[0]) loadImageFromFile(els.file.files[0]);
+  });
+  ['dragenter', 'dragover'].forEach((ev) => {
+    els.drop.addEventListener(ev, (e) => {
+      e.preventDefault();
+      els.drop.classList.add('drag');
+    });
+  });
+  ['dragleave', 'drop'].forEach((ev) => {
+    els.drop.addEventListener(ev, (e) => {
+      e.preventDefault();
+      els.drop.classList.remove('drag');
+    });
+  });
+  els.drop.addEventListener('drop', (e) => {
+    const f = e.dataTransfer.files[0];
+    if (f) loadImageFromFile(f);
+  });
+  window.addEventListener('paste', (e) => {
+    const items = e.clipboardData && e.clipboardData.items;
+    if (!items) return;
+    for (const it of items) {
+      if (it.type.startsWith('image/')) {
+        loadImageFromFile(it.getAsFile());
+        break;
+      }
+    }
+  });
+
+  [
+    els.charset, els.custom, els.cols, els.bri, els.con, els.fs,
+    els.colorMode, els.invert, els.edges, els.dither, els.mirror,
+  ].forEach((el) => {
+    el.addEventListener('input', () => { syncLabels(); scheduleRender(); });
+    el.addEventListener('change', () => { syncLabels(); scheduleRender(); });
+  });
+
+  els.btnRender.addEventListener('click', render);
+  els.btnCopy.addEventListener('click', copyText);
+  els.btnTxt.addEventListener('click', downloadText);
+  els.btnPng.addEventListener('click', downloadPng);
+  els.btnClear.addEventListener('click', clearAll);
+
+  syncLabels();
+
+  // --- Immutable Lattice (same ledger as eternalhaven hub) ---
+  const ANCHORS_SOURCES = [
+    'https://cdn.jsdelivr.net/gh/DeepSeekOracle/lygo-protocol-stack@main/docs/network_builder/IMMUTABLE_ANCHORS.json',
+    'https://raw.githubusercontent.com/DeepSeekOracle/lygo-protocol-stack/main/docs/network_builder/IMMUTABLE_ANCHORS.json',
+  ];
+
+  function renderLattice(doc) {
+    const meta = document.getElementById('lattice-meta');
+    const list = document.getElementById('lattice-list');
+    if (!meta || !list) return;
+    const sig = doc.signature || 'IMMUTABLE_ANCHORS';
+    meta.textContent = sig + ' · updated ' + (doc.updated_utc || '—') + ' · v' + (doc.version || '?');
+    const anchors = doc.immutable_anchors || {};
+    const groupOrder = ['vaults', 'openclaw_economy', 'physics', 'sovereign_seed', 'usb_release', 'tools', 'creative', 'agents'];
+    const keys = Object.keys(anchors).sort((a, b) => {
+      const ia = groupOrder.indexOf(a); const ib = groupOrder.indexOf(b);
+      return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+    });
+    const rows = [];
+    keys.forEach((group) => {
+      (anchors[group] || []).forEach((a) => {
+        rows.push({ group, label: a.label || a.id, url: a.url });
+      });
+    });
+    list.innerHTML = rows.map((r) => `
+      <div class="lattice-item">
+        <span class="g">${escapeAttr(r.group)}</span>
+        <strong>${escapeAttr(r.label)}</strong>
+        <a href="${escapeAttr(r.url)}" target="_blank" rel="noopener noreferrer">${escapeAttr(r.url)}</a>
+      </div>
+    `).join('');
+  }
+
+  function escapeAttr(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  async function loadAnchors() {
+    let lastErr;
+    for (const url of ANCHORS_SOURCES) {
+      try {
+        const res = await fetch(url, { cache: 'no-store' });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return await res.json();
+      } catch (e) { lastErr = e; }
+    }
+    throw lastErr || new Error('anchors unavailable');
+  }
+
+  loadAnchors()
+    .then(renderLattice)
+    .catch((err) => {
+      const meta = document.getElementById('lattice-meta');
+      const list = document.getElementById('lattice-list');
+      if (meta) meta.textContent = 'Could not load anchors: ' + err.message;
+      if (list) {
+        list.innerHTML = `
+          <div class="lattice-item">
+            <span class="g">agents</span>
+            <strong>LYGO Turbo Models Whitepaper</strong>
+            <a href="lygo-turbo-models-whitepaper.html">https://eternalhaven.ca/lygo-turbo-models-whitepaper.html</a>
+          </div>
+          <div class="lattice-item">
+            <span class="g">tools</span>
+            <strong>LYGO ASCII Art Studio (this page)</strong>
+            <a href="https://eternalhaven.ca/lygo-ascii-art.html">https://eternalhaven.ca/lygo-ascii-art.html</a>
+          </div>
+          <div class="lattice-item">
+            <span class="g">vaults</span>
+            <strong>Δ9 Quantum Vault</strong>
+            <a href="https://drive.google.com/drive/folders/1szmDEhh2nD61oUOXHrw_W42cLCN3D-m4?usp=sharing" target="_blank" rel="noopener">Google Drive</a>
+          </div>`;
+      }
+    });
+})();
+  </script>
+</body>
+</html>

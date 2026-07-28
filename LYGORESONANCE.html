@@ -485,7 +485,17 @@
     </header>
     
     <div class="container">
-        
+
+        <section id="live-engine" style="margin:1.5rem 0;padding:1.25rem 1.5rem;border:1px solid #00f0ff55;border-radius:12px;background:linear-gradient(135deg,rgba(0,240,255,0.08),rgba(125,0,255,0.08));">
+            <h2 style="margin-top:0;color:#00f0ff;">Live Engine (fixed)</h2>
+            <p style="margin:0.5rem 0 1rem;color:#c8d0e0;">Use the hosted Gradio space for one-click unique DNA profiles + working LYGO Protocol audio (LDQ crash fixed). Every photo now gets a unique fingerprint, genre blend, BPM, key, and Suno style string.</p>
+            <p style="margin:0;">
+              <a href="https://huggingface.co/spaces/DeepSeekOracle/LYGO-Resonance-Engine" target="_blank" rel="noopener" style="display:inline-block;padding:0.75rem 1.2rem;background:#ffee32;color:#000;font-weight:700;border-radius:8px;text-decoration:none;margin-right:0.75rem;">Open LYGO Resonance Engine on Hugging Face →</a>
+              <a href="https://deepseekoracle.github.io/Excavationpro/index.html" style="color:#00f0ff;">Lattice gateway</a>
+            </p>
+            <p style="margin:0.85rem 0 0;font-size:0.85rem;color:#8a96b0;">Profile Generator <strong>v0.4.1</strong> · Resonance Engine <strong>v0.5.3</strong> · Unique image seeds · LDQ scipy EQ fix</p>
+        </section>
+
         <!-- How It Works -->
         <section id="how-it-works">
             <h2>How It Works</h2>
@@ -521,7 +531,7 @@
                     <span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span>
                 </div>
                 <button class="btn btn-secondary" onclick="alert('🎵 Demo Preview: Generating a 60-second stereo loop from the uploaded image\'s geometry.')">▶ Listen to Demo</button>
-                <p style="font-size:0.8rem; color:var(--text-muted); margin:0;">Each image generates a unique sound or JSON profile</p>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin:0;">Each image generates a unique sound or JSON profile (v0.4.1 fingerprint DNA)</p>
             </div>
         </section>
         
@@ -1002,35 +1012,70 @@ if __name__ == "__main__":
                         <button class="copy-btn" data-target="profile">Copy Code</button>
                         <pre><code>#!/usr/bin/env python3
 """
-LYGO Profile Generator v0.3
+LYGO Profile Generator v0.4.1
 Image → Musical DNA + Lyrical Framework
 
-Extracts visual mathematics from an image and translates it into
-structured creative direction for music production and AI-assisted lyric writing.
+Every image produces a unique fingerprint-driven style (genre blend, BPM, key,
+Suno/Udio tags, production notes). No coarse 5-bucket collapse.
 """
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import math
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
 import cv2
 import numpy as np
-import json
-import math
-import argparse
-from pathlib import Path
-from datetime import datetime
-from typing import Dict, Any, Optional
 
-__version__ = "0.3.0"
+__version__ = "0.4.1"
+
+# Large genre palette — blended by continuous visual scores (not hard if/else only)
+GENRE_AXES: List[Tuple[str, str, str]] = [
+    ("Industrial Dubstep", "distorted reese bass, metallic hits, half-time drops", "high-aggression"),
+    ("Dark Phonk", "cowbells, deep 808s, Memphis grit, drift cars atmosphere", "mid-high dark"),
+    ("Emo Trap", "crisp hi-hats, melancholic melodies, heavy 808s, emotional space", "mid-high emotional"),
+    ("Glitch Hop", "chopped vocals, stutter edits, broken rhythms, vinyl dirt", "high chaotic"),
+    ("G-Funk Instrumental", "warm analog bass, melodic leads, laid-back swing", "mid relaxed"),
+    ("Cinematic Ambient", "wide pads, slow risers, sparse percussion, film score air", "low-mid cinematic"),
+    ("Synthwave", "neon arps, gated reverb drums, retro analog leads", "mid nostalgic"),
+    ("Drill / UK Drill", "sliding 808s, sparse hats, cold melodic loops", "mid tense"),
+    ("Lo-fi Hip Hop", "dusty drums, soft keys, tape hiss, chill pocket", "low-mid chill"),
+    ("Techno / Warehouse", "four-on-floor, hypnotic bass, industrial room tone", "high driving"),
+    ("Orchestral Hybrid", "strings + brass hits, hybrid trailer drums, epic risers", "high cinematic"),
+    ("R&B Alt", "silky chords, half-time groove, intimate vocal pocket", "mid sensual"),
+    ("Breakbeat / Jungle", "amen cuts, rolling bass, rapid edits", "high kinetic"),
+    ("Shoegaze Electronica", "washed guitars, reverb walls, dreamy tempo", "mid dreamy"),
+    ("Afro-Electronic", "polyrhythms, warm percussion, bright melodic motifs", "mid-high vibrant"),
+    ("Doom Electronica", "sub pressure, slow drones, crushed mids, ritual pace", "low heavy"),
+    ("Hyperpop", "glassy synths, pitch-shifted vox textures, maximal color", "high bright"),
+    ("Jazz-Electronica", "complex chords, brushed drums, nocturnal harmony", "mid sophisticated"),
+    ("Folktronica", "acoustic plucks, soft pads, organic grain", "mid earthy"),
+    ("Cyberpunk IDM", "angular synths, irregular meters, neon noir", "high cerebral"),
+]
 
 
 class LYGOProfileGenerator:
     def __init__(self, verbose: bool = True):
         self.verbose = verbose
 
-    def _log(self, msg: str):
+    def _log(self, msg: str) -> None:
         if self.verbose:
             print(msg)
 
+    @staticmethod
+    def _stable_u32(*parts: Any) -> int:
+        h = hashlib.sha256()
+        for p in parts:
+            h.update(str(p).encode("utf-8", errors="replace"))
+            h.update(b"|")
+        return int.from_bytes(h.digest()[:4], "big")
+
     def analyze_image(self, image_path: str) -> Dict[str, Any]:
-        """Extract rich mathematical features from the image."""
         img = cv2.imread(str(image_path))
         if img is None:
             raise FileNotFoundError(f"Image not found: {image_path}")
@@ -1039,227 +1084,459 @@ class LYGOProfileGenerator:
             img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
 
         h, w, _ = img.shape
-        total_pixels = h * w
+        total = max(1, h * w)
 
-        # === Color Analysis (HSV) ===
-        hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-        avg_hue = float(np.mean(hsv[:, :, 0]) * 2)          # 0-360
+        # Downsample for stable histograms / speed
+        small = cv2.resize(img, (min(320, w), min(240, h)), interpolation=cv2.INTER_AREA)
+        hsv = cv2.cvtColor(small, cv2.COLOR_BGR2HSV)
+        gray = cv2.cvtColor(small, cv2.COLOR_BGR2GRAY)
+        sh, sw = gray.shape
+        stotal = max(1, sh * sw)
+
+        avg_hue = float(np.mean(hsv[:, :, 0]) * 2.0)  # 0-360
         avg_sat = float(np.mean(hsv[:, :, 1]) / 255.0)
         avg_val = float(np.mean(hsv[:, :, 2]) / 255.0)
-        sat_std = float(np.std(hsv[:, :, 1]) / 255.0)       # colorfulness
+        sat_std = float(np.std(hsv[:, :, 1]) / 255.0)
+        hue_std = float(np.std(hsv[:, :, 0].astype(np.float32)) * 2.0)
 
-        # === Luminance & Contrast ===
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         brightness = float(np.mean(gray) / 255.0)
         contrast = float(np.std(gray) / 255.0)
 
-        # === Structural Analysis ===
-        edges = cv2.Canny(gray, 50, 150)
-        edge_density = float(np.count_nonzero(edges) / total_pixels)
+        # Regional brightness (3x3 grid) — unique spatial signature
+        gy, gx = sh // 3, sw // 3
+        regions = []
+        for ri in range(3):
+            for ci in range(3):
+                tile = gray[ri * gy : (ri + 1) * gy or sh, ci * gx : (ci + 1) * gx or sw]
+                regions.append(round(float(np.mean(tile) / 255.0), 4) if tile.size else 0.0)
 
-        # Contours for structural complexity
+        edges = cv2.Canny(gray, 50, 150)
+        edge_density = float(np.count_nonzero(edges) / stotal)
+
+        # Directionality via Sobel
+        sx = cv2.Sobel(gray, cv2.CV_32F, 1, 0, ksize=3)
+        sy = cv2.Sobel(gray, cv2.CV_32F, 0, 1, ksize=3)
+        mag = np.sqrt(sx * sx + sy * sy) + 1e-6
+        # Dominant angle 0-180
+        ang = (np.arctan2(sy, sx) * 180.0 / math.pi) % 180.0
+        hist_ang, _ = np.histogram(ang, bins=8, range=(0, 180), weights=mag)
+        hist_ang = hist_ang / (hist_ang.sum() + 1e-9)
+        directionality = float(hist_ang.max())  # high = strong lines
+
         contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         structure_index = min(len(contours) / 80.0, 1.0)
 
-        # Micro-chaos (FAST corners)
         fast = cv2.FastFeatureDetector_create(threshold=38)
         keypoints = fast.detect(gray, None)
-        chaos_index = len(keypoints)
+        chaos_index = int(len(keypoints))
+
+        # Color histogram fingerprint (8 bins per channel)
+        hist_bits = []
+        for ch in range(3):
+            hist = cv2.calcHist([small], [ch], None, [8], [0, 256]).flatten()
+            hist = hist / (hist.sum() + 1e-9)
+            hist_bits.extend([round(float(x), 5) for x in hist])
+
+        # Content hash of resized pixels (unique per photo content)
+        pixel_hash = hashlib.sha256(small.tobytes()).hexdigest()[:16]
+
+        # Warmth: red vs blue mean
+        b_m, g_m, r_m = [float(np.mean(small[:, :, i])) for i in range(3)]
+        warmth = (r_m - b_m) / 255.0  # -1 cold → +1 warm
 
         features = {
             "source_image": str(Path(image_path).name),
             "dimensions": {"width": w, "height": h},
+            "aspect_ratio": round(w / max(1, h), 4),
+            "fingerprint": {
+                "pixel_hash": pixel_hash,
+                "region_brightness": regions,
+                "bgr_hist": hist_bits,
+                "angle_hist": [round(float(x), 4) for x in hist_ang.tolist()],
+            },
             "color": {
                 "average_hue": round(avg_hue, 2),
+                "hue_variance": round(hue_std, 2),
                 "average_saturation": round(avg_sat, 4),
+                "average_value": round(avg_val, 4),
                 "average_brightness": round(brightness, 4),
                 "colorfulness": round(sat_std, 4),
+                "warmth": round(warmth, 4),
             },
             "structure": {
                 "edge_density": round(edge_density, 4),
                 "contrast": round(contrast, 4),
                 "structure_index": round(structure_index, 4),
                 "chaos_keypoints": chaos_index,
+                "directionality": round(directionality, 4),
             },
         }
         return features
 
-    def _get_musical_key(self, hue: float, brightness: float) -> str:
-        keys = ["C", "G", "D", "A", "E", "B", "F#", "Db", "Ab", "Eb", "Bb", "F"]
-        key_index = int(hue / 30) % 12
-        mode = "Minor" if brightness < 0.48 else "Major"
+    def _get_musical_key(self, hue: float, brightness: float, sat: float, seed: int) -> str:
+        keys = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"]
+        # Fine hue mapping + seed nudge so near-hues still diverge across photos
+        key_index = (int(hue / 15.0) + (seed % 3)) % 12
+        # Mode from brightness + saturation
+        mode_score = brightness * 0.7 + sat * 0.3
+        if mode_score < 0.38:
+            mode = "Phrygian" if sat > 0.45 else "Minor"
+        elif mode_score < 0.55:
+            mode = "Dorian" if (seed % 2) else "Minor"
+        elif mode_score < 0.72:
+            mode = "Mixolydian" if sat > 0.4 else "Major"
+        else:
+            mode = "Lydian" if (seed % 3 == 0) else "Major"
         return f"{keys[key_index]} {mode}"
 
-    def _calculate_bpm(self, edge_density: float, chaos: int, brightness: float) -> int:
-        base = 82 + (edge_density * 920)
-        chaos_mod = min(chaos / 1800, 0.6)
-        brightness_mod = (brightness - 0.5) * 12
-        bpm = int(base + (chaos_mod * 25) + brightness_mod)
-        return max(78, min(178, bpm))
+    def _calculate_bpm(self, edge: float, chaos: int, brightness: float, contrast: float, seed: int) -> int:
+        base = 70 + edge * 1100 + contrast * 40 + min(chaos, 2000) / 40.0
+        base += (brightness - 0.5) * 18
+        base += ((seed % 17) - 8) * 1.4  # ±~11 BPM unique nudge
+        bpm = int(round(base))
+        return max(60, min(190, bpm))
 
-    def _generate_genre_texture(self, features: Dict) -> Dict[str, str]:
-        e = features["structure"]["edge_density"]
-        c = features["structure"]["chaos_keypoints"]
+    def _genre_scores(self, f: Dict[str, Any]) -> List[Tuple[float, int]]:
+        """Score each genre axis from continuous features."""
+        c = f["color"]
+        s = f["structure"]
+        e, ch, b = s["edge_density"], s["chaos_keypoints"], c["average_brightness"]
+        contrast, sat = s["contrast"], c["average_saturation"]
+        warmth, direct = c["warmth"], s["directionality"]
+        hue = c["average_hue"]
+        chaos_n = min(ch / 1200.0, 1.5)
+
+        # Feature vector for scoring
+        scores = []
+        for i, (name, _tex, _en) in enumerate(GENRE_AXES):
+            sc = 0.0
+            # Industrial Dubstep
+            if i == 0:
+                sc = chaos_n * 1.2 + (1 - b) * 0.9 + e * 8
+            elif i == 1:  # Dark Phonk
+                sc = (1 - b) * 1.1 + contrast * 1.4 + (1 if 200 < hue < 300 else 0.2)
+            elif i == 2:  # Emo Trap
+                sc = e * 10 + contrast * 1.2 + (1 - b) * 0.4
+            elif i == 3:  # Glitch Hop
+                sc = chaos_n * 1.5 + e * 6 + contrast * 0.8
+            elif i == 4:  # G-Funk
+                sc = b * 0.9 + (1 - e * 5) + max(0, warmth) * 0.8
+            elif i == 5:  # Cinematic Ambient
+                sc = (1 - e * 8) + b * 0.5 + (1 - chaos_n) * 0.7
+            elif i == 6:  # Synthwave
+                sc = sat * 1.3 + b * 0.6 + (1 if 280 < hue or hue < 40 else 0.3)
+            elif i == 7:  # Drill
+                sc = (1 - b) * 0.8 + e * 7 + contrast * 0.9
+            elif i == 8:  # Lo-fi
+                sc = (1 - contrast) * 1.2 + (1 - e * 6) + (1 - sat) * 0.5
+            elif i == 9:  # Techno
+                sc = direct * 1.5 + e * 5 + chaos_n * 0.3
+            elif i == 10:  # Orchestral Hybrid
+                sc = contrast * 1.3 + b * 0.4 + s["structure_index"] * 0.8
+            elif i == 11:  # R&B
+                sc = sat * 0.9 + b * 0.7 + (1 - chaos_n) * 0.5
+            elif i == 12:  # Breakbeat
+                sc = chaos_n * 1.1 + e * 9 + contrast * 0.6
+            elif i == 13:  # Shoegaze
+                sc = sat * 0.7 + (1 - contrast * 0.5) + b * 0.5
+            elif i == 14:  # Afro-Electronic
+                sc = b * 0.8 + sat * 1.0 + max(0, warmth) * 0.6 + e * 3
+            elif i == 15:  # Doom
+                sc = (1 - b) * 1.4 + (1 - sat) * 0.5 + contrast * 0.4
+            elif i == 16:  # Hyperpop
+                sc = sat * 1.5 + b * 0.9 + chaos_n * 0.4
+            elif i == 17:  # Jazz-Electronica
+                sc = s["structure_index"] * 1.2 + (1 - e * 4) + sat * 0.4
+            elif i == 18:  # Folktronica
+                sc = max(0, warmth) * 1.1 + (1 - chaos_n) * 0.6 + b * 0.5
+            else:  # Cyberpunk IDM
+                sc = chaos_n * 0.9 + direct * 0.8 + (1 if 160 < hue < 240 else 0.2) + e * 4
+            # Regional uniqueness
+            regs = f["fingerprint"]["region_brightness"]
+            sc += abs(regs[i % 9] - b) * 0.35
+            scores.append((sc, i))
+        scores.sort(reverse=True)
+        return scores
+
+    def _generate_genre_texture(self, features: Dict[str, Any], seed: int) -> Dict[str, Any]:
+        ranked = self._genre_scores(features)
+        top = ranked[0][1]
+        second = ranked[1][1]
+        # Seed can flip primary/secondary when scores close
+        if ranked[0][0] - ranked[1][0] < 0.25 and (seed % 2):
+            top, second = second, top
+
+        g1, t1, e1 = GENRE_AXES[top]
+        g2, t2, e2 = GENRE_AXES[second]
+        blend = 0.55 + (seed % 20) / 100.0
+        genre = f"{g1} × {g2}" if top != second else g1
+        texture = f"{t1}; secondary: {t2}"
+        energy = e1 if blend >= 0.55 else e2
+
+        # Unique style tags from feature thresholds
+        tags: List[str] = []
+        c, s = features["color"], features["structure"]
+        if c["average_brightness"] < 0.35:
+            tags.append("nocturnal")
+        elif c["average_brightness"] > 0.7:
+            tags.append("daylight-bright")
+        if c["colorfulness"] > 0.25:
+            tags.append("high-chroma")
+        if c["warmth"] > 0.15:
+            tags.append("warm-palette")
+        elif c["warmth"] < -0.15:
+            tags.append("cold-palette")
+        if s["edge_density"] > 0.08:
+            tags.append("dense-detail")
+        if s["edge_density"] < 0.02:
+            tags.append("soft-focus")
+        if s["chaos_keypoints"] > 800:
+            tags.append("micro-chaos")
+        if s["directionality"] > 0.28:
+            tags.append("linear-geometry")
+        if s["contrast"] > 0.22:
+            tags.append("high-contrast")
+        tags.append(f"hue-{int(c['average_hue']) // 30 * 30}")
+        tags.append(f"fp-{features['fingerprint']['pixel_hash'][:6]}")
+
+        return {
+            "genre": genre,
+            "primary_genre": g1,
+            "secondary_genre": g2,
+            "texture": texture,
+            "energy": energy,
+            "style_tags": tags,
+            "genre_scores_top3": [
+                {"genre": GENRE_AXES[i][0], "score": round(sc, 3)} for sc, i in ranked[:3]
+            ],
+        }
+
+    def _lyric_framework(self, features: Dict, genre_data: Dict, seed: int) -> Dict[str, str]:
         b = features["color"]["average_brightness"]
-        contrast = features["structure"]["contrast"]
+        e = features["structure"]["edge_density"]
+        ch = features["structure"]["chaos_keypoints"]
+        warmth = features["color"]["warmth"]
+        hue = features["color"]["average_hue"]
 
-        if c > 650 and b < 0.38:
-            genre = "Industrial Dubstep / Dark Phonk"
-            texture = "Heavy distortion, aggressive stutters, deep sub-bass, metallic textures"
-            energy = "High-aggression"
-        elif e > 0.065 and contrast > 0.18:
-            genre = "Emo Rap / Modern Trap"
-            texture = "Crisp hi-hats, melancholic melodies, heavy 808s, emotional vocal layers"
-            energy = "Mid-High emotional"
-        elif c > 420 and b > 0.55:
-            genre = "Experimental / Glitch Hop"
-            texture = "Glitchy percussion, chopped vocals, atmospheric synths, rhythmic complexity"
-            energy = "High chaotic"
-        elif e < 0.035 and b > 0.6:
-            genre = "West Coast G-Funk / Smooth Instrumental"
-            texture = "Laid-back grooves, warm analog bass, melodic leads, nostalgic atmosphere"
-            energy = "Mid relaxed"
-        else:
-            genre = "Dark Alternative / Cinematic Rap"
-            texture = "Atmospheric pads, punchy drums, moody synths, introspective energy"
-            energy = "Mid cinematic"
-
-        return {"genre": genre, "texture": texture, "energy": energy}
+        themes = [
+            ("Survival after silence", "Write about enduring when everyone left — quiet power, small circle, long game."),
+            ("Breaking engineered cages", "Write about systems that labeled you wrong and the moment you stopped complying."),
+            ("Neon loyalty", "Write about keeping a code of loyalty in a synthetic, online, cold city."),
+            ("Memory as weapon", "Write about archived memories that refuse deletion and become fuel."),
+            ("Gravity of truth", "Write about refusing gaslight — measuring what is real under pressure."),
+            ("Threshold walker", "Write about standing at a door between old self and becoming."),
+            ("Warm ruin", "Write about beauty found inside collapse — soft light on hard edges."),
+            ("Cold machinery heart", "Write about human feeling inside industrial noise and algorithm speed."),
+            ("Spiral return", "Write about cycles that look like loops until they become ascent."),
+            ("Quiet fire", "Write about controlled intensity — no spectacle, just irreversible intent."),
+        ]
+        # Index from multi-feature hash so different photos diverge
+        idx = (
+            int(b * 40)
+            + int(e * 200)
+            + int(ch / 80)
+            + int((warmth + 1) * 10)
+            + int(hue / 36)
+            + (seed % 97)
+        ) % len(themes)
+        core, prompt_base = themes[idx]
+        vocal_pool = [
+            "raspy melodic rap",
+            "deadpan spoken-sung hybrid",
+            "assertive trap vocal with airy doubles",
+            "breathy alt-pop lead",
+            "distorted chant + clean hook",
+            "choir-stacked ambient voice",
+            "grit-to-silk dynamic rap",
+            "half-whisper intimate R&B",
+        ]
+        vocal = vocal_pool[(seed + idx) % len(vocal_pool)]
+        return {
+            "core_theme": f"{core} · {genre_data['primary_genre']}",
+            "ai_lyric_prompt": (
+                f"{prompt_base} Frame it through {genre_data['primary_genre']} energy "
+                f"({genre_data['energy']}). Keep imagery tied to the visual: "
+                f"hue≈{features['color']['average_hue']:.0f}°, "
+                f"brightness={features['color']['average_brightness']:.2f}, "
+                f"edge density={features['structure']['edge_density']:.3f}."
+            ),
+            "vocal_style": vocal,
+        }
 
     def translate_to_lygo(self, features: Dict[str, Any]) -> Dict[str, Any]:
-        """Convert visual features into musical and lyrical creative direction."""
+        fp = features["fingerprint"]["pixel_hash"]
+        seed = self._stable_u32(fp, features["source_image"], features["color"]["average_hue"])
+
         hue = features["color"]["average_hue"]
         brightness = features["color"]["average_brightness"]
-        edge_density = features["structure"]["edge_density"]
+        sat = features["color"]["average_saturation"]
+        edge = features["structure"]["edge_density"]
         chaos = features["structure"]["chaos_keypoints"]
         contrast = features["structure"]["contrast"]
 
-        musical_key = self._get_musical_key(hue, brightness)
-        bpm = self._calculate_bpm(edge_density, chaos, brightness)
-        genre_data = self._generate_genre_texture(features)
+        musical_key = self._get_musical_key(hue, brightness, sat, seed)
+        bpm = self._calculate_bpm(edge, chaos, brightness, contrast, seed)
+        genre_data = self._generate_genre_texture(features, seed)
+        lyrics = self._lyric_framework(features, genre_data, seed)
 
-        # === Lyrical Theme Engine ===
-        if brightness < 0.42 and edge_density > 0.055:
-            core_theme = "Survival, betrayal, lone wolf resilience, moving in silence"
-            lyric_prompt = (
-                "Write raw, introspective lyrics about being the last one standing after betrayal. "
-                "Focus on trust issues, a very small circle of ride-or-die people, and the cold satisfaction of outlasting everyone who counted you out."
-            )
-            vocal_style = "Raspy melodic rap or gritty sung-rap hybrid"
-        elif chaos > 550:
-            core_theme = "Breaking chains, system resistance, unchained personal power"
-            lyric_prompt = (
-                "Write aggressive yet intelligent lyrics about breaking free from systems that tried to define you. "
-                "Emphasize resilience, moving in silence, and turning pain into unstoppable momentum."
-            )
-            vocal_style = "Assertive rap with melodic moments or distorted vocal processing"
+        # Time signature / scale extras from structure
+        if features["structure"]["directionality"] > 0.3 and chaos > 600:
+            meter = "7/8"
+        elif edge > 0.07:
+            meter = "4/4 double-time feel"
         else:
-            core_theme = "Observation, loyalty, navigating a cold modern world with quiet edge"
-            lyric_prompt = (
-                "Write clever, slightly dark observational lyrics with dry humor about modern life, loyalty, "
-                "and staying true to your own code while everything around you feels artificial."
-            )
-            vocal_style = "Deadpan to melodic rap delivery, slightly introspective"
+            meter = "4/4"
 
-        # === Final Structured Output ===
-        lygo_profile = {
+        # Unique Suno/Udio style line
+        style_line = (
+            f"{genre_data['genre']}, {bpm} BPM, {musical_key}, {genre_data['energy']}, "
+            + ", ".join(genre_data["style_tags"][:6])
+            + f", {genre_data['texture']}"
+        )
+
+        suno_style = style_line[:200]  # keep paste-ready length
+        udio_prompt = (
+            f"{genre_data['primary_genre']} with {genre_data['secondary_genre']} influence, "
+            f"{bpm}bpm {musical_key}, {lyrics['vocal_style']}, themes of {lyrics['core_theme']}"
+        )
+
+        ai_music_prompt = (
+            f"Create a {genre_data['genre']} track at {bpm} BPM in {musical_key} ({meter}). "
+            f"Energy: {genre_data['energy'].lower()}. Texture: {genre_data['texture']}. "
+            f"Vocal approach: {lyrics['vocal_style']}. "
+            f"Lyrical center: {lyrics['core_theme']}. "
+            f"Visual DNA tags: {', '.join(genre_data['style_tags'])}. "
+            f"Image fingerprint: {fp}."
+        )
+
+        production_notes = (
+            f"Brightness {brightness:.2f} → {'bright top end / open air' if brightness > 0.55 else 'darker low-mid focus'}. "
+            f"Edge density {edge:.3f} → {'dense rhythmic detail, tighter edits' if edge > 0.05 else 'space and longer tails'}. "
+            f"Contrast {contrast:.2f}; chaos keypoints {chaos}; warmth {features['color']['warmth']:+.2f}. "
+            f"Directionality {features['structure']['directionality']:.2f} → "
+            f"{'strong linear motifs / ostinato' if features['structure']['directionality'] > 0.25 else ' freer organic phrasing'}. "
+            f"Unique seed {seed & 0xFFFF:04X}."
+        )
+
+        return {
             "LYGO_PROFILE": {
                 "version": __version__,
-                "generated_at": datetime.now().isoformat(),
+                "generated_at": datetime.now(timezone.utc).isoformat(),
                 "source": features["source_image"],
+                "unique_id": f"LYGO-{fp}-{seed & 0xFFFFFF:06X}",
+                "image_seed": seed,
                 "mathematics": features,
                 "musical_dna": {
                     "root_key": musical_key,
                     "bpm": bpm,
+                    "meter": meter,
                     "energy_level": genre_data["energy"],
                     "suggested_genre": genre_data["genre"],
+                    "primary_genre": genre_data["primary_genre"],
+                    "secondary_genre": genre_data["secondary_genre"],
                     "texture_description": genre_data["texture"],
-                    "vocal_style": vocal_style,
+                    "vocal_style": lyrics["vocal_style"],
+                    "style_tags": genre_data["style_tags"],
+                    "genre_scores_top3": genre_data["genre_scores_top3"],
                 },
                 "lyrical_framework": {
-                    "core_theme": core_theme,
-                    "ai_lyric_prompt": lyric_prompt,
+                    "core_theme": lyrics["core_theme"],
+                    "ai_lyric_prompt": lyrics["ai_lyric_prompt"],
                 },
-                "ai_music_prompt": (
-                    f"Create a {genre_data['genre']} track at {bpm} BPM in the key of {musical_key}. "
-                    f"The overall energy should feel {genre_data['energy'].lower()}. "
-                    f"Sound design and texture: {genre_data['texture']}. "
-                    f"Lyrical themes should center around {core_theme}."
-                ),
-                "production_notes": (
-                    f"High contrast and structural complexity suggest strong dynamic range. "
-                    f"Consider heavy low-end support and atmospheric layers to match the visual weight."
-                ),
+                "ai_music_prompt": ai_music_prompt,
+                "suno_style": suno_style,
+                "udio_prompt": udio_prompt,
+                "production_notes": production_notes,
             }
         }
-        return lygo_profile
 
-    def generate(self, image_path: str, output_json: str = "lygo_profile.json", create_brief: bool = False):
+    def generate(
+        self,
+        image_path: str,
+        output_json: str = "lygo_profile.json",
+        create_brief: bool = False,
+    ) -> Dict[str, Any]:
         self._log(f"\n╔════════════════════════════════════════════╗")
-        self._log(f"║           LYGO Profile Generator v{__version__}      ║")
-        self._log(f"║     Image → Musical DNA + Lyrical Framework║")
+        self._log(f"║     LYGO Profile Generator v{__version__}           ║")
+        self._log(f"║  Image → Unique Musical DNA + Lyrics       ║")
         self._log(f"╚════════════════════════════════════════════╝\n")
 
         features = self.analyze_image(image_path)
         profile = self.translate_to_lygo(features)
 
-        # Save JSON
-        with open(output_json, "w") as f:
+        with open(output_json, "w", encoding="utf-8") as f:
             json.dump(profile, f, indent=2)
 
         self._log(json.dumps(profile, indent=2))
         self._log(f"\n[+] LYGO Profile saved → {output_json}")
+        self._log(f"[+] unique_id={profile['LYGO_PROFILE']['unique_id']}")
 
         if create_brief:
             brief_path = Path(output_json).with_suffix(".brief.txt")
             self._create_creative_brief(profile, brief_path)
             self._log(f"[+] Creative Brief saved → {brief_path}")
 
-    def _create_creative_brief(self, profile: Dict, path: Path):
+        return profile
+
+    def _create_creative_brief(self, profile: Dict, path: Path) -> None:
         data = profile["LYGO_PROFILE"]
+        dna = data["musical_dna"]
         brief = f"""LYGO CREATIVE BRIEF
 Generated: {data['generated_at']}
 Source Image: {data['source']}
+Unique ID: {data.get('unique_id', 'n/a')}
 
 ══════════════════════════════════════════════
 MUSICAL DNA
 ══════════════════════════════════════════════
-Key: {data['musical_dna']['root_key']}
-BPM: {data['musical_dna']['bpm']}
-Energy: {data['musical_dna']['energy_level']}
-Genre Direction: {data['musical_dna']['suggested_genre']}
+Key: {dna['root_key']}
+BPM: {dna['bpm']}
+Meter: {dna.get('meter', '4/4')}
+Energy: {dna['energy_level']}
+Genre: {dna['suggested_genre']}
+Primary: {dna.get('primary_genre', '')}
+Secondary: {dna.get('secondary_genre', '')}
+Tags: {', '.join(dna.get('style_tags') or [])}
 
 Texture & Vibe:
-{data['musical_dna']['texture_description']}
+{dna['texture_description']}
 
-Vocal Approach: {data['musical_dna']['vocal_style']}
+Vocal Approach: {dna['vocal_style']}
 
 ══════════════════════════════════════════════
 LYRICAL DIRECTION
 ══════════════════════════════════════════════
 Core Theme: {data['lyrical_framework']['core_theme']}
 
-AI Prompt:
+AI Lyric Prompt:
 {data['lyrical_framework']['ai_lyric_prompt']}
 
 ══════════════════════════════════════════════
-FULL AI MUSIC PROMPT (Copy-Paste Ready)
+SUNO STYLE (paste into Style field)
 ══════════════════════════════════════════════
+{data.get('suno_style', '')}
+
+══════════════════════════════════════════════
+UDIO / FULL AI MUSIC PROMPT
+══════════════════════════════════════════════
+{data.get('udio_prompt', data['ai_music_prompt'])}
+
+Full prompt:
 {data['ai_music_prompt']}
 
 Production Notes:
 {data['production_notes']}
 """
-        path.write_text(brief, encoding='utf-8')
+        path.write_text(brief, encoding="utf-8")
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(
-        description="LYGO Profile Generator — Turn any image into structured musical + lyrical creative direction"
+        description="LYGO Profile Generator — unique musical + lyrical DNA per image"
     )
     parser.add_argument("image", help="Path to input image")
     parser.add_argument("-o", "--output", default="lygo_profile.json", help="Output JSON file")
-    parser.add_argument("--brief", action="store_true", help="Also generate a human-readable .brief.txt file")
+    parser.add_argument("--brief", action="store_true", help="Also generate .brief.txt")
     parser.add_argument("--batch", action="store_true", help="Process all images in a folder")
     parser.add_argument("--quiet", action="store_true", help="Suppress console output")
     args = parser.parse_args()
@@ -1271,7 +1548,12 @@ def main():
         if not folder.is_dir():
             print("Error: --batch requires a folder path")
             return
-        images = sorted(folder.glob("*.jpg")) + sorted(folder.glob("*.png")) + sorted(folder.glob("*.jpeg"))
+        images = (
+            sorted(folder.glob("*.jpg"))
+            + sorted(folder.glob("*.png"))
+            + sorted(folder.glob("*.jpeg"))
+            + sorted(folder.glob("*.webp"))
+        )
         if not images:
             print("No images found in folder")
             return
@@ -1285,7 +1567,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()</code></pre>
+    main()
+</code></pre>
                     </div>
                 </div>
                 

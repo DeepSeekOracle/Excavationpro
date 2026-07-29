@@ -1,13 +1,14 @@
-LYGO downloads (official hubs: eternalhaven.html + LYGO-Network/champions.html)
+LYGO downloads (Excavationpro)
+==============================
 
-LYGO CLAW USB — full standalone offline AI terminal (NEW):
-  LYGO-CLAW-USB-PUBLIC-v1.0.0.zip (~8 GB)
-  See LYGO-CLAW-USB-README.txt — boot with LYGO_CLAW_Launch.bat
-  Docs: https://github.com/DeepSeekOracle/lygo-claw/blob/main/docs/USB_PUBLIC_RELEASE.md
+RECOMMENDED — LYGO CLAW PUBLIC USB v1.2 (working agent chat, no model weights)
+  LYGO-CLAW-USB-PUBLIC-v1.2.0.zip
+  Docs: https://deepseekoracle.github.io/lygo-protocol-stack/LYGO_CLAW_USB_PUBLIC.md
+  Source: https://github.com/DeepSeekOracle/lygo-protocol-stack/tree/main/docs/lygo-claw-usb
+  Steps: unzip → install Python + Ollama → INSTALL_MODEL.bat → LYGO_USB_BOOT.bat → http://127.0.0.1:9631/
 
-LYGO USB Champion v1.0 (free public, host pairing kit):
-  LYGO-USB-Champion-v1.0-GENERIC-Lightfather.zip (~0.5 MB)
-  Full kit except portable Ollama + weights — BUILD_SELF_FIRST_USE.txt inside.
+Legacy — USB Champion v1.0 GENERIC Lightfather (~0.5 MB)
+  LYGO-USB-Champion-v1.0-GENERIC-Lightfather.zip
 
-Legacy teaser:
-  LYGO-USB-Champion-DEMO-PUBLIC.zip
+Do not use multi-GB part01/part02/part03 archives for new public builds unless you
+explicitly need the old full offline bundle.

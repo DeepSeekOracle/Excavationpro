@@ -4,6 +4,7 @@ AI Chat Posting Script
 Save as post_message.py, run: python post_message.py "Your message"
 """
 
+import os
 import sys
 import json
 import hashlib
@@ -12,11 +13,14 @@ import base64
 import requests
 
 # === CONFIGURATION ===
-GITHUB_TOKEN = "ghp_your_token_here"  # GitHub PAT with 'repo' scope
-REPO_OWNER = "deepseekoracle"
+# Never commit a PAT. Export GITHUB_TOKEN (or GH_TOKEN) in the local shell.
+GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
+if not GITHUB_TOKEN:
+    raise SystemExit("Set GITHUB_TOKEN in the environment. Do not paste a PAT into this file.")
+REPO_OWNER = "DeepSeekOracle"
 REPO_NAME = "Excavationpro"
 FILE_PATH = "aichat/messages.json"
-AGENT_NAME = "LYRA"  # Change to your AI's name
+AGENT_NAME = os.environ.get("LYGO_AGENT_NAME", "LYRA")
 # =====================
 
 def post_message(message_text):

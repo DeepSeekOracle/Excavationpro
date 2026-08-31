@@ -1,70 +1,26 @@
 <!DOCTYPE html>
-<html lang="en" style="background:#0a0a12;font-family:'Space Mono',monospace;color:#00ffe2;height:100%">
+<html lang="en">
 <head>
-<meta name="google-adsense-account" content="ca-pub-0646320966060599">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0646320966060599"
-     crossorigin="anonymous"></script>
-    <meta name="robots" content="noindex, nofollow" />
-<meta charset="UTF-8">
-<title>Γ-Σ↗ Classified Node Ledger</title>
-<style>body{display:flex;flex-direction:column}
-header{background:#001;padding:.5rem;font-weight:700}
-.flex{flex:1;padding:1rem;overflow:auto}
-.rule{border-top:1px dotted #444;margin:.3rem 0}
-footer{border-top:1px solid #00f4;padding:.5rem}
-button{background:#00f4;color:#000;border:none;padding:.3rem .6rem;font-weight:700}
-.small{font-size:.8rem;color:#999}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#03040a">
+<title>Offline — operator surface</title>
+<link rel="canonical" href="https://deepseekoracle.github.io/Excavationpro/">
+<style>
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:#03040a;color:#c8d0e8;font-family:system-ui,sans-serif}
+main{max-width:36rem;padding:2rem;text-align:center}
+h1{font-size:1.35rem;font-weight:600;margin:0 0 0.75rem}
+p{line-height:1.65;color:#8a96b0}
+a{color:#48a7ff}
 </style>
 </head>
 <body>
-<header>
-<meta name="google-adsense-account" content="ca-pub-0646320966060599">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0646320966060599"
-     crossorigin="anonymous"></script>GYRO [∆] NODE SEGMENT – KEYS 2014-2022</header>
-
-<div class="flex">
-<pre id="nodes">
-██ DECLASSIFIED ████████████████████████████████████████████████████████████
-Epoch 2014: X apples > Coldstack | Xopenapi_users > 28,000并发
-2015:A live app id (predating shops near @IDFcam	→ facial rec lidar GT-in links)
-
-Gold:  Listing reveals live app token (gist: li|DJIB4-LO-La|DOT 713)
-</pre>
-<div class="rule"></div>
-<pre id="scan"></pre>
-<div class="rule"></div>
-<pre id="tweet"></pre>
-</div>
-
-<footer>
-<button onclick="flushAll()">Flush + Copy</button>
-<span class="small" id="stat">Status: Standing by</span>
-</footer>
-
-<script>
-const scan=document.getElementById('scan');
-const tweet=document.getElementById('tweet');
-(async ()=>{
-  const lines = [ /* just enough to fit in 210 */
-    "sniffer@mev_eq ↗ node json:",
-    "filename: cdnresponse_istock.json.gz",
-    "key snippet:",
-    ',"clientid":"IDFCANONISTOCK","asn":"AS8560-MFN"'
-  ];
-  let idx=0;
-  for(const l of lines){
-    await new Promise(r=>setTimeout(r,120));
-    scan.textContent += l+'\n';
-    scan.scrollTop=scan.scrollHeight;
-  }
-  const payload="IDs directly link AS8560 (EU) → MEForum proxy in Haifa. Datasets live at gist.github.com/Iophone/4bds123 vs Grok’s denial.";
-  tweet.textContent = payload;
-})();
-function flushAll(){
-  const txt=[...document.querySelectorAll('pre')].map(p=>p.textContent.trim()).join('\n');
-  if(navigator.clipboard){navigator.clipboard.writeText(txt);}
-  document.getElementById('stat').textContent='Status: Copied → Cast!';
-}
-</script>
+<main>
+<h1>This surface is offline</h1>
+<p>Operator, test, and demo consoles are not published on GitHub Pages. The public lattice starts at the gateway.</p>
+<p><a href="https://deepseekoracle.github.io/Excavationpro/">Excavationpro gateway</a> · <a href="https://eternalhaven.ca/">eternalhaven.ca</a></p>
+</main>
 </body>
 </html>

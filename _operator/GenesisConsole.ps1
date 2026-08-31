@@ -2,7 +2,7 @@ import os
 import subprocess
 import pygame
 
-BASE_PATH = r"C:\Users\justi\LYRA_SYSTEM"
+BASE_PATH = os.environ.get("LYRA_SYSTEM") or os.path.expandvars(r"%USERPROFILE%\LYRA_SYSTEM")
 
 def launch_lyra():
     lyra_path = os.path.join(BASE_PATH, "lyra_loader.py")

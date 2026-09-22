@@ -57,15 +57,27 @@
     const st = streamFor(song);
     const top = document.createElement("div");
     top.className = "sheet-top";
+    const head = document.createElement("div");
     const h = document.createElement("h2");
     h.textContent = song.title;
+    const meta = document.createElement("p");
+    meta.className = "sheet-meta";
+    const bits = [song.artist || "Excavationpro"];
+    if (song.album) bits.push(song.album);
+    meta.textContent = bits.join(" · ");
+    head.appendChild(h);
+    head.appendChild(meta);
     const actions = document.createElement("div");
     actions.className = "sheet-actions";
     const copyBtn = document.createElement("button");
     copyBtn.type = "button";
     copyBtn.textContent = "Copy lyrics";
     copyBtn.addEventListener("click", function () {
-      navigator.clipboard.writeText(song.title + "\n\n" + song.lyrics).then(function () {
+      navigator.clipboard.writeText(
+        (song.artist || "Excavationpro") + "\n" +
+        song.title + (song.album ? "\n" + song.album : "") + "\n\n" +
+        song.lyrics
+      ).then(function () {
         copyBtn.textContent = "Copied";
         setTimeout(function () { copyBtn.textContent = "Copy lyrics"; }, 1200);
       });
@@ -82,7 +94,7 @@
     open.href = LISTEN + "?q=" + encodeURIComponent(song.title);
     open.textContent = "Open full player";
     actions.appendChild(open);
-    top.appendChild(h);
+    top.appendChild(head);
     top.appendChild(actions);
     const pre = document.createElement("pre");
     pre.className = "lyrics";

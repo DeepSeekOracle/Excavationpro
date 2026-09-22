@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lyrics Vault — Excavationpro / Justin Helmer</title>
-<meta name="description" content="Studio lyrics archive for Excavationpro / Justin Helmer: title and lyrics only, with a lattice mini player on the catalog streams.">
+<meta name="description" content="Lyric archive for Excavationpro / Justin Helmer. Artist, album, and lyrics as studio sheets. Search, read, and play mapped catalog streams.">
 <meta name="author" content="Justin Helmer / Excavationpro">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="theme-color" content="#0a0a0b">
@@ -34,7 +34,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="vault.css?v=4">
+<link rel="stylesheet" href="vault.css?v=5">
 </head>
 <body>
 <div class="sky" aria-hidden="true"></div>
@@ -49,6 +49,28 @@
     </nav>
   </header>
 
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="kicker">Justin Helmer · Excavationpro</p>
+      <h1>The words, as they left the booth.</h1>
+      <p class="lede">This is the lyric archive for Excavationpro. Every sheet is artist, album, and the lyric — filed the way a studio keeps paper after a take. Open a title. Read it. If the catalog has a stream, the dock plays it.</p>
+      <ul class="stats" aria-label="Vault size">
+        <li><strong id="stat-n">—</strong><span>sheets</span></li>
+        <li><strong id="stat-m">—</strong><span>mapped streams</span></li>
+        <li><a href="https://asiancoastline.com/listen.html">Listen portal</a></li>
+      </ul>
+      <label class="sr" for="q">Search titles</label>
+      <input id="q" class="search" type="search" placeholder="Search a title" autocomplete="off">
+    </div>
+    <aside class="hero-card" aria-label="From the vault">
+      <p class="card-kicker">From the vault</p>
+      <blockquote>
+        <p>I’ve dug through a million layers of dirt in my mind. But I ain’t never hit solid ground.</p>
+        <footer>Unearth Me</footer>
+      </blockquote>
+    </aside>
+  </section>
+
   <nav class="lattice" aria-label="Lattice paths">
     <a href="https://asiancoastline.com/listen.html">Listen portal</a>
     <a href="https://deepseekoracle.github.io/Excavationpro/excavationpro-listen.html">Listen backup</a>
@@ -60,14 +82,6 @@
     <a href="https://chatagent.ca/lygoskillhub.html">SkillHub</a>
     <a href="https://bpmfinder.ca/app.html">BPM finder</a>
   </nav>
-
-  <section class="hero">
-    <p class="kicker">Justin Helmer · Excavationpro · Δ9Φ963</p>
-    <h1>The page after the take.</h1>
-    <p class="lede">Artist, title, album, lyrics. Search a title, open the sheet, play if a stream is mapped.</p>
-    <label class="sr" for="q">Search titles</label>
-    <input id="q" class="search" type="search" placeholder="Search titles" autocomplete="off">
-  </section>
 
   <div class="layout">
     <aside class="index">
@@ -119,6 +133,6 @@
     <a class="full" id="full-player" href="https://asiancoastline.com/listen.html">Full player</a>
   </div>
 </div>
-<script src="vault.js?v=4"></script>
+<script src="vault.js?v=5"></script>
 </body>
 </html>

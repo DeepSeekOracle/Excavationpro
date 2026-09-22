@@ -204,6 +204,10 @@
       if (t.stream_url) mapped.push(t);
     });
     mappedHint.textContent = mapped.length + " with streams";
+    const sn = document.getElementById("stat-n");
+    const smEl = document.getElementById("stat-m");
+    if (sn) sn.textContent = String(songs.length);
+    if (smEl) smEl.textContent = String(mapped.length);
     paint();
   });
   q.addEventListener("input", paint);

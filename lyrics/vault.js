@@ -54,10 +54,6 @@
     document.querySelectorAll("#list a").forEach(function (a) {
       a.classList.toggle("on", a.getAttribute("href") === "#" + song.slug);
     });
-    const st = streamFor(song);
-    const top = document.createElement("div");
-    top.className = "sheet-top";
-    const head = document.createElement("div");
     const h = document.createElement("h2");
     h.textContent = song.title;
     const meta = document.createElement("p");
@@ -65,43 +61,20 @@
     const bits = [song.artist || "Excavationpro"];
     if (song.album) bits.push(song.album);
     meta.textContent = bits.join(" · ");
-    head.appendChild(h);
-    head.appendChild(meta);
-    const actions = document.createElement("div");
-    actions.className = "sheet-actions";
-    const copyBtn = document.createElement("button");
-    copyBtn.type = "button";
-    copyBtn.textContent = "Copy lyrics";
-    copyBtn.addEventListener("click", function () {
-      navigator.clipboard.writeText(
-        (song.artist || "Excavationpro") + "\n" +
-        song.title + (song.album ? "\n" + song.album : "") + "\n\n" +
-        song.lyrics
-      ).then(function () {
-        copyBtn.textContent = "Copied";
-        setTimeout(function () { copyBtn.textContent = "Copy lyrics"; }, 1200);
-      });
-    });
-    actions.appendChild(copyBtn);
-    if (st) {
-      const playThis = document.createElement("button");
-      playThis.type = "button";
-      playThis.textContent = "Play this sheet";
-      playThis.addEventListener("click", function () { playRecord(st); });
-      actions.appendChild(playThis);
-    }
-    const open = document.createElement("a");
-    open.href = LISTEN + "?q=" + encodeURIComponent(song.title);
-    open.textContent = "Open full player";
-    actions.appendChild(open);
-    top.appendChild(head);
-    top.appendChild(actions);
     const pre = document.createElement("pre");
     pre.className = "lyrics";
     pre.textContent = song.lyrics;
     sheet.innerHTML = "";
-    sheet.appendChild(top);
+    sheet.appendChild(h);
+    sheet.appendChild(meta);
     sheet.appendChild(pre);
+    const st = streamFor(song);
+    if (st) {
+      nowTitle.textContent = st.stream_title || st.title;
+      nowState.textContent = "Mapped catalog stream";
+    } else {
+      nowState.textContent = "Lyrics only · open full player for the catalog";
+    }
     document.title = song.title + " — Lyrics Vault";
   }
 

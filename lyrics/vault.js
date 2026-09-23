@@ -319,10 +319,12 @@
   window.addEventListener("hashchange", paint);
 
   const SHEET_BASE = "https://asiancoastline.com/lyrics/";
-  const TAG_CORE = ["#Excavationpro", "#JustinHelmer", "#Lyrics", "#NewMusic", "#LiveMusic"];
-  const TAG_EXTRA = [
-    "#UndergroundMusic", "#Rap", "#RockMusic", "#MusicVideo",
-    "#NewMusicAlert", "#Radio", "#ReactionVideos"
+  const TAG_CORE = ["#Excavationpro", "#JustinHelmer", "#Lyrics"];
+  const TAG_POOL = [
+    "#NewMusic", "#LiveMusic", "#UndergroundMusic", "#Rap", "#RapMusic",
+    "#RockMusic", "#HipHop", "#MusicVideo", "#NewMusicAlert", "#Radio",
+    "#IndependentMusic", "#OriginalMusic", "#NowPlaying", "#UnsignedArtist",
+    "#LyricsVault", "#ReactionVideos", "#NewMusicFriday"
   ];
   let memePick = null;
 
@@ -360,40 +362,48 @@
     return s.length <= n ? s : s.slice(0, n - 1).replace(/\s+\S*$/, "") + "…";
   }
 
+  function shuffleTags() {
+    const rest = TAG_POOL.slice();
+    for (let i = rest.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const t = rest[i];
+      rest[i] = rest[j];
+      rest[j] = t;
+    }
+    return TAG_CORE.concat(rest);
+  }
+
   function tagLine(head, max) {
-    const tags = TAG_CORE.concat(TAG_EXTRA);
+    const tags = shuffleTags();
     let out = "";
     for (let i = 0; i < tags.length; i++) {
       const next = out ? out + " " + tags[i] : tags[i];
       if ((head + next).length > max) break;
       out = next;
     }
-    return out || TAG_CORE.slice(0, 3).join(" ");
+    return out || TAG_CORE.join(" ");
   }
 
-  function postBody(pick, max) {
-    const by = "— " + pick.song.title + "\nJustin Helmer / Excavationpro";
-    const url = sheetUrl(pick.song.slug);
+  function postBody(pick, max, forX) {
+    const grok = forX ? "@grok make a cinematic photo meme of this lyric as a readable quote. No watermark.\n\n" : "";
+    const quote = "“" + pick.line1 + "\n" + pick.line2 + "”\n\n";
+    const by = "— " + pick.song.title + "\nJustin Helmer / Excavationpro\n";
+    const url = sheetUrl(pick.song.slug) + "\n";
     const listen = "Listen: https://asiancoastline.com/listen.html\nhttps://ffm.to/eovnvo9\n";
-    function pack(q1, q2, withListen) {
-      let head = "“" + q1 + "\n" + q2 + "”\n\n" + by + "\n" + url + "\n";
-      if (withListen) head += listen;
-      return head + tagLine(head, max);
+    const heads = [
+      grok + quote + by + url + listen,
+      grok + quote + by + url,
+      (forX ? "@grok\n\n" : "") + quote + by + url
+    ];
+    for (let h = 0; h < heads.length; h++) {
+      const body = heads[h] + tagLine(heads[h], max);
+      if (body.length <= max) return body;
     }
-    const full = pack(pick.line1, pick.line2, true);
-    if (full.length <= max) return full;
-    const mid = pack(clip(pick.line1, 56), clip(pick.line2, 56), true);
-    if (mid.length <= max) return mid;
-    return pack(clip(pick.line1, 48), clip(pick.line2, 48), false);
+    return heads[heads.length - 1] + TAG_CORE.join(" ");
   }
 
   function grokPrompt(pick) {
-    const ask = "@grok make a public cinematic photo meme of this lyric as a readable quote. No watermark.\n\n";
-    const quote = "“" + clip(pick.line1, 72) + "\n" + clip(pick.line2, 72) + "”\n";
-    const by = "— " + pick.song.title + " · Excavationpro / Justin Helmer\n";
-    const url = sheetUrl(pick.song.slug) + "\n";
-    const head = ask + quote + by + url;
-    return head + tagLine(head, 270);
+    return postBody(pick, 1400, true);
   }
 
   function drawMeme(pick) {
@@ -486,10 +496,12 @@
   }
 
   function openCompose(kind, pick) {
-    const text = postBody(pick, kind === "bsky" ? 290 : 270);
-    const href = kind === "bsky"
-      ? "https://bsky.app/intent/compose?text=" + encodeURIComponent(text)
-      : "https://twitter.com/intent/tweet?text=" + encodeURIComponent(text);
+    const forX = kind !== "bsky";
+    const max = forX ? 1400 : 300;
+    const text = postBody(pick, max, forX);
+    const href = forX
+      ? "https://x.com/intent/post?text=" + encodeURIComponent(text)
+      : "https://bsky.app/intent/compose?text=" + encodeURIComponent(text);
     window.open(href, "_blank", "noopener,noreferrer");
   }
 

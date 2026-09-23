@@ -382,9 +382,12 @@
   }
 
   function grokPrompt(pick) {
-    return "@grok Make one cinematic photograph. Overlay this lyric as a readable quote in elegant serif type. No watermark, no logos, no extra captions.\n\n“" +
-      pick.line1 + "\n" + pick.line2 + "”\n\n— " + pick.song.title + "\nJustin Helmer / Excavationpro\n" +
-      sheetUrl(pick.song.slug);
+    const ask = "@grok make a public cinematic photo meme of this lyric as a readable quote. No watermark.\n\n";
+    const quote = "“" + clip(pick.line1, 72) + "\n" + clip(pick.line2, 72) + "”\n";
+    const by = "— " + pick.song.title + " · Excavationpro / Justin Helmer\n";
+    const url = sheetUrl(pick.song.slug) + "\n";
+    const head = ask + quote + by + url;
+    return head + tagLine(head, 270);
   }
 
   function drawMeme(pick) {
@@ -444,7 +447,7 @@
     if (urlEl) urlEl.textContent = sheetUrl(pick.song.slug).replace(/^https:\/\//, "");
     sessionStorage.setItem("vaultHighlightSlug", pick.song.slug);
     const grok = document.getElementById("share-grok");
-    if (grok) grok.href = "https://grok.com/?q=" + encodeURIComponent(grokPrompt(pick));
+    if (grok) grok.href = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(grokPrompt(pick));
     const stEl = document.getElementById("meme-status");
     if (stEl) stEl.textContent = "";
     drawMeme(pick);

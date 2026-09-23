@@ -192,12 +192,26 @@ h1 {
   margin: 0; font-size: 0.68rem; letter-spacing: 0.04em;
   color: var(--ink-muted); word-break: break-all;
 }
+#meme-canvas {
+  width: 100%; height: auto; display: block;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 8px 24px rgba(0,0,0,.18);
+}
+.tag-row {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+.tag-row span {
+  font-size: 0.68rem; letter-spacing: 0.02em;
+  padding: 4px 8px; border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--ink) 14%, transparent);
+  color: var(--ink-muted);
+}
 .meme-share {
   display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2);
 }
 .share-btn {
   display: inline-flex; align-items: center; justify-content: center;
-  min-height: 40px; padding: 0 var(--space-3);
+  min-height: 44px; padding: 0 var(--space-3);
   border-radius: var(--radius-sm);
   border: 1px solid color-mix(in oklab, var(--ink) 16%, transparent);
   background: color-mix(in oklab, var(--ink) 6%, transparent);
@@ -205,21 +219,14 @@ h1 {
   letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none;
 }
 .share-btn:hover { background: color-mix(in oklab, var(--ink) 11%, transparent); text-decoration: none; }
+.share-btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.share-btn.primary:hover { filter: brightness(1.08); color: var(--paper); }
 .share-btn.grok { grid-column: 1 / -1; }
 .meme-status {
   margin: 0; min-height: 1.2em; font-size: 0.72rem; color: var(--ink-muted);
 }
-.meme-post {
-  display: flex; flex-direction: column; gap: var(--space-2);
-  padding: var(--space-3);
-  border: 1px solid color-mix(in oklab, var(--ink) 14%, transparent);
-  border-radius: var(--radius-sm);
-  background: color-mix(in oklab, var(--ink) 5%, transparent);
-}
-.meme-post[hidden] { display: none !important; }
-.meme-post p { margin: 0; font-size: 0.78rem; color: var(--ink-muted); }
-.meme-post textarea {
-  width: 100%; min-height: 8.5rem; resize: vertical; box-sizing: border-box;
+#meme-caption {
+  width: 100%; min-height: 7.5rem; resize: vertical; box-sizing: border-box;
   padding: 10px 12px; border-radius: var(--radius-sm);
   border: 1px solid color-mix(in oklab, var(--ink) 16%, transparent);
   background: color-mix(in oklab, var(--paper) 70%, #fff);

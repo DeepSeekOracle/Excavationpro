@@ -115,6 +115,29 @@
     fl.href = LISTEN + "?q=" + encodeURIComponent(song.title);
     fl.textContent = "Open in full player ›";
     actions.appendChild(fl);
+    const memeBtn = document.createElement("button");
+    memeBtn.type = "button";
+    memeBtn.textContent = "Meme this lyric";
+    memeBtn.addEventListener("click", function () {
+      applyPick(pickFromSong(song));
+      const card = document.getElementById("vault-card");
+      if (card) card.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+    actions.appendChild(memeBtn);
+    const copyL = document.createElement("button");
+    copyL.type = "button";
+    copyL.textContent = "Copy lyric";
+    copyL.addEventListener("click", function () {
+      const text = (song.artist || "Excavationpro") + "\n" + song.title +
+        (song.album ? "\n" + song.album : "") + "\n\n" + song.lyrics;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () {
+          copyL.textContent = "Copied";
+          setTimeout(function () { copyL.textContent = "Copy lyric"; }, 1200);
+        });
+      }
+    });
+    actions.appendChild(copyL);
 
     const pre = document.createElement("pre");
     pre.className = "lyrics";
@@ -163,8 +186,12 @@
   function paint() {
     const list = vis();
     listEl.innerHTML = "";
-    count.textContent = list.length + " songs";
+    count.textContent = list.length + " lyrics";
     paintLetters(songs);
+    if (!list.length) {
+      sheet.innerHTML = "<p class='empty'>No lyrics match that search.</p>";
+      return;
+    }
     list.forEach(function (s) {
       const li = document.createElement("li");
       const a = document.createElement("a");
@@ -340,17 +367,41 @@
     });
   }
 
-  function pickHighlight(avoid) {
-    const pool = songs.filter(function (s) {
-      return s.slug !== avoid && lyricLines(s).length >= 2;
-    });
-    const song = pool[Math.floor(Math.random() * pool.length)] || songs[0];
+  function pickFromSong(song) {
     const lines = lyricLines(song);
     if (lines.length < 2) {
       return { song: song, line1: song.title, line2: song.artist || "Excavationpro" };
     }
     const i = Math.floor(Math.random() * (lines.length - 1));
     return { song: song, line1: lines[i], line2: lines[i + 1] };
+  }
+
+  function pickHighlight(avoid) {
+    const pool = songs.filter(function (s) {
+      return s.slug !== avoid && lyricLines(s).length >= 2;
+    });
+    const song = pool[Math.floor(Math.random() * pool.length)] || songs[0];
+    return pickFromSong(song);
+  }
+
+  function applyPick(pick) {
+    pick.draft = pick.draft || buildDraft(pick);
+    memePick = pick;
+    const quoteEl = document.getElementById("vault-quote");
+    const citeEl = document.getElementById("vault-cite");
+    const linkEl = document.getElementById("vault-link");
+    const urlEl = document.getElementById("vault-url");
+    if (!quoteEl) return;
+    quoteEl.innerHTML = "";
+    quoteEl.appendChild(document.createTextNode(pick.line1));
+    quoteEl.appendChild(document.createElement("br"));
+    quoteEl.appendChild(document.createTextNode(pick.line2));
+    citeEl.textContent = pick.song.title + (pick.song.album ? " · " + pick.song.album : "");
+    linkEl.href = "#" + pick.song.slug;
+    if (urlEl) urlEl.textContent = sheetUrl(pick.song.slug).replace(/^https:\/\//, "");
+    paintTags(pick.draft.tags);
+    showDraft("x");
+    drawMeme(pick);
   }
 
   function sheetUrl(slug) {
@@ -448,8 +499,9 @@
       });
       if (line) lines.push(line);
       const lh = size.indexOf("52px") >= 0 ? 64 : 36;
-      lines.forEach(function (ln, i) { ctx.fillText(ln, 72, y + i * lh); });
-      return y + lines.length * lh;
+      const shown = lines.slice(0, 5);
+      shown.forEach(function (ln, i) { ctx.fillText(ln, 72, y + i * lh); });
+      return y + shown.length * lh;
     }
     let y = wrap("“" + pick.line1, 260, "italic 500 52px Georgia, serif");
     y = wrap(pick.line2 + "”", y + 12, "italic 500 52px Georgia, serif");
@@ -463,28 +515,16 @@
   }
 
   function paintHighlight(forceNew) {
-    const quoteEl = document.getElementById("vault-quote");
-    const citeEl = document.getElementById("vault-cite");
-    const linkEl = document.getElementById("vault-link");
-    const urlEl = document.getElementById("vault-url");
-    if (!quoteEl || !songs.length) return;
+    if (!songs.length) return;
+    const slug = (location.hash || "").replace(/^#/, "");
+    const fromHash = !forceNew && slug && songs.filter(function (s) { return s.slug === slug; })[0];
     const last = sessionStorage.getItem("vaultHighlightSlug") || "";
-    const pick = pickHighlight(forceNew || last ? last : "");
-    pick.draft = buildDraft(pick);
-    memePick = pick;
-    quoteEl.innerHTML = "";
-    quoteEl.appendChild(document.createTextNode(pick.line1));
-    quoteEl.appendChild(document.createElement("br"));
-    quoteEl.appendChild(document.createTextNode(pick.line2));
-    citeEl.textContent = pick.song.title + (pick.song.album ? " · " + pick.song.album : "");
-    linkEl.href = "#" + pick.song.slug;
-    if (urlEl) urlEl.textContent = sheetUrl(pick.song.slug).replace(/^https:\/\//, "");
+    const pick = fromHash && lyricLines(fromHash).length >= 2
+      ? pickFromSong(fromHash)
+      : pickHighlight(forceNew || last ? last : "");
+    applyPick(pick);
     sessionStorage.setItem("vaultHighlightSlug", pick.song.slug);
-    paintTags(pick.draft.tags);
-    showDraft("x");
-    const stEl = document.getElementById("meme-status");
-    if (stEl) stEl.textContent = "X posts ping @grok. Paste the photo with Ctrl+V after the composer opens.";
-    drawMeme(pick);
+    setMemeStatus("X posts ping @grok. Paste the photo with Ctrl+V after the composer opens.");
   }
 
   function paintTags(tags) {

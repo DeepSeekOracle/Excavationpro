@@ -208,6 +208,15 @@ h1 {
 .meme-status {
   margin: 0; min-height: 1.2em; font-size: 0.72rem; color: var(--ink-muted);
 }
+.meme-post {
+  display: flex; flex-direction: column; gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid color-mix(in oklab, var(--ink) 14%, transparent);
+  border-radius: var(--radius-sm);
+  background: color-mix(in oklab, var(--ink) 5%, transparent);
+}
+.meme-post[hidden] { display: none !important; }
+.meme-post p { margin: 0; font-size: 0.78rem; color: var(--ink-muted); }
 .tv-portal {
   border: 1px solid var(--border);
   border-radius: calc(var(--radius-md) + var(--space-4));

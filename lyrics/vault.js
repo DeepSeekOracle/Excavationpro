@@ -374,11 +374,17 @@
   function postBody(pick, max) {
     const by = "— " + pick.song.title + "\nJustin Helmer / Excavationpro";
     const url = sheetUrl(pick.song.slug);
-    const headFull = "“" + pick.line1 + "\n" + pick.line2 + "”\n\n" + by + "\n" + url + "\n";
-    const tags = tagLine(headFull, max);
-    if ((headFull + tags).length <= max) return headFull + tags;
-    const headShort = "“" + clip(pick.line1, 64) + "\n" + clip(pick.line2, 64) + "”\n\n" + by + "\n" + url + "\n";
-    return headShort + tagLine(headShort, max);
+    const listen = "Listen: https://asiancoastline.com/listen.html\nhttps://ffm.to/eovnvo9\n";
+    function pack(q1, q2, withListen) {
+      let head = "“" + q1 + "\n" + q2 + "”\n\n" + by + "\n" + url + "\n";
+      if (withListen) head += listen;
+      return head + tagLine(head, max);
+    }
+    const full = pack(pick.line1, pick.line2, true);
+    if (full.length <= max) return full;
+    const mid = pack(clip(pick.line1, 56), clip(pick.line2, 56), true);
+    if (mid.length <= max) return mid;
+    return pack(clip(pick.line1, 48), clip(pick.line2, 48), false);
   }
 
   function grokPrompt(pick) {
@@ -450,6 +456,8 @@
     if (grok) grok.href = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(grokPrompt(pick));
     const stEl = document.getElementById("meme-status");
     if (stEl) stEl.textContent = "";
+    const chooser = document.getElementById("meme-post");
+    if (chooser) chooser.hidden = true;
     drawMeme(pick);
   }
 
@@ -560,48 +568,24 @@
     if (!memePick) return;
     drawMeme(memePick);
     const canvas = document.getElementById("meme-canvas");
+    const chooser = document.getElementById("meme-post");
     canvas.toBlob(function (blob) {
       if (!blob) return;
       const name = (memePick.song.slug || "lyric") + "-vault.png";
-      const file = new File([blob], name, { type: "image/png" });
-      const text = postBody(memePick, 270);
-      const url = sheetUrl(memePick.song.slug);
-
-      if (kind === "png" && navigator.share && navigator.canShare) {
-        try {
-          if (navigator.canShare({ files: [file] })) {
-            navigator.share({
-              files: [file],
-              text: text,
-              title: memePick.song.title,
-              url: url
-            }).then(function () {
-              setMemeStatus("Shared with the photo attached.");
-            }).catch(function () {
-              copyImage(blob).then(function (ok) {
-                downloadBlob(blob, name);
-                setMemeStatus(ok
-                  ? "Photo copied and saved. Open X or Bluesky and paste (Ctrl+V)."
-                  : "Photo saved. Attach the PNG to your post.");
-              });
-            });
-            return;
-          }
-        } catch (e) {}
-      }
-
       copyImage(blob).then(function (ok) {
-        if (kind === "png") downloadBlob(blob, name);
-        if (kind === "x" || kind === "bsky") openCompose(kind, memePick);
         if (kind === "png") {
+          downloadBlob(blob, name);
+          if (chooser) chooser.hidden = false;
           setMemeStatus(ok
-            ? "Photo copied and saved. Post to X or Bluesky and paste (Ctrl+V)."
-            : "Photo saved. Attach the PNG to your X or Bluesky post.");
-        } else {
-          setMemeStatus(ok
-            ? "Photo copied. Paste it into the post (Ctrl+V or long-press)."
-            : "Composer opened. Attach the saved PNG if paste is blocked.");
+            ? "Photo copied and saved. Choose X or Bluesky, then paste (Ctrl+V)."
+            : "Photo saved. Choose X or Bluesky and attach the PNG.");
+          return;
         }
+        if (chooser) chooser.hidden = true;
+        openCompose(kind, memePick);
+        setMemeStatus(ok
+          ? "Photo copied. Paste it into the post (Ctrl+V)."
+          : "Composer opened. Attach the PNG if paste is blocked.");
       });
     }, "image/png");
   }
@@ -609,9 +593,13 @@
   const xBtn = document.getElementById("share-x");
   const bskyBtn = document.getElementById("share-bsky");
   const pngBtn = document.getElementById("share-png");
+  const postX = document.getElementById("post-x");
+  const postBsky = document.getElementById("post-bsky");
   if (xBtn) xBtn.addEventListener("click", function () { shareMeme("x"); });
   if (bskyBtn) bskyBtn.addEventListener("click", function () { shareMeme("bsky"); });
   if (pngBtn) pngBtn.addEventListener("click", function () { shareMeme("png"); });
+  if (postX) postX.addEventListener("click", function () { shareMeme("x"); });
+  if (postBsky) postBsky.addEventListener("click", function () { shareMeme("bsky"); });
 
   const gate = document.getElementById("gate");
   const gatePass = document.getElementById("gate-pass");

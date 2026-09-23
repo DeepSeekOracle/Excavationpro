@@ -187,6 +187,24 @@ h1 {
   font-size: var(--text-xs); letter-spacing: 0.14em; text-transform: uppercase;
   color: var(--ink-muted);
 }
+.meme-hint {
+  margin: 0; font-size: 0.68rem; letter-spacing: 0.04em;
+  color: var(--ink-muted); word-break: break-all;
+}
+.meme-share {
+  display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2);
+}
+.share-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 40px; padding: 0 var(--space-3);
+  border-radius: var(--radius-sm);
+  border: 1px solid color-mix(in oklab, var(--ink) 16%, transparent);
+  background: color-mix(in oklab, var(--ink) 6%, transparent);
+  color: var(--ink); font: inherit; font-size: var(--text-xs);
+  letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none;
+}
+.share-btn:hover { background: color-mix(in oklab, var(--ink) 11%, transparent); text-decoration: none; }
+.share-btn.grok { grid-column: 1 / -1; }
 .tv-portal {
   border: 1px solid var(--border);
   border-radius: calc(var(--radius-md) + var(--space-4));

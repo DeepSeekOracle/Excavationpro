@@ -318,13 +318,17 @@
   q.addEventListener("input", paint);
   window.addEventListener("hashchange", paint);
 
+  const SHEET_BASE = "https://asiancoastline.com/lyrics/";
+  const TAGS = "#Excavationpro #JustinHelmer #LyricsVault";
+  let memePick = null;
+
   function lyricLines(song) {
     return (song.lyrics || "").split("\n").map(function (l) {
       return l.trim();
     }).filter(function (l) {
       if (!l || l.charAt(0) === "[") return false;
       if (/^(EXCAVATIONPRO|KENZIE JADE|YUKI|NOVA RAYNE|DOBLE FILO)\.?$/i.test(l)) return false;
-      if (l.length < 24 || l.length > 150) return false;
+      if (l.length < 12 || l.length > 140) return false;
       if (/https?:|style:|gemini|thought for/i.test(l)) return false;
       return true;
     });
@@ -332,30 +336,105 @@
 
   function pickHighlight(avoid) {
     const pool = songs.filter(function (s) {
-      return s.slug !== avoid && lyricLines(s).length > 0;
+      return s.slug !== avoid && lyricLines(s).length >= 2;
     });
     const song = pool[Math.floor(Math.random() * pool.length)] || songs[0];
     const lines = lyricLines(song);
-    if (!lines.length) return { song: song, text: song.title };
-    const i = Math.floor(Math.random() * lines.length);
-    let text = lines[i];
-    if (lines[i + 1] && (text + " " + lines[i + 1]).length < 170) {
-      text += " " + lines[i + 1];
+    if (lines.length < 2) {
+      return { song: song, line1: song.title, line2: song.artist || "Excavationpro" };
     }
-    return { song: song, text: text };
+    const i = Math.floor(Math.random() * (lines.length - 1));
+    return { song: song, line1: lines[i], line2: lines[i + 1] };
+  }
+
+  function sheetUrl(slug) {
+    return SHEET_BASE + "#" + slug;
+  }
+
+  function clip(s, n) {
+    s = String(s || "");
+    return s.length <= n ? s : s.slice(0, n - 1).replace(/\s+\S*$/, "") + "…";
+  }
+
+  function postBody(pick, max) {
+    const quote = "“" + pick.line1 + "\n" + pick.line2 + "”";
+    const by = "— " + pick.song.title + "\nJustin Helmer / Excavationpro";
+    const url = sheetUrl(pick.song.slug);
+    let body = quote + "\n\n" + by + "\n" + url + "\n" + TAGS;
+    if (body.length <= max) return body;
+    body = "“" + clip(pick.line1, 70) + "\n" + clip(pick.line2, 70) + "”\n\n" + by + "\n" + url + "\n" + TAGS;
+    return body.length <= max ? body : clip(body, max);
+  }
+
+  function grokPrompt(pick) {
+    return "@grok Make one cinematic photograph. Overlay this lyric as a readable quote in elegant serif type. No watermark, no logos, no extra captions.\n\n“" +
+      pick.line1 + "\n" + pick.line2 + "”\n\n— " + pick.song.title + "\nJustin Helmer / Excavationpro\n" +
+      sheetUrl(pick.song.slug);
+  }
+
+  function drawMeme(pick) {
+    const canvas = document.getElementById("meme-canvas");
+    if (!canvas || !pick) return;
+    const ctx = canvas.getContext("2d");
+    const w = canvas.width;
+    const h = canvas.height;
+    ctx.fillStyle = "#efe6d6";
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = "#1c1914";
+    ctx.font = "500 28px Georgia, serif";
+    ctx.fillText("FROM THE VAULT", 72, 96);
+    ctx.font = "italic 500 54px Georgia, serif";
+    function wrap(text, y) {
+      const words = text.split(" ");
+      let line = "";
+      const lines = [];
+      words.forEach(function (word) {
+        const test = line ? line + " " + word : word;
+        if (ctx.measureText(test).width > w - 144) {
+          if (line) lines.push(line);
+          line = word;
+        } else line = test;
+      });
+      if (line) lines.push(line);
+      lines.forEach(function (ln, i) {
+        ctx.fillText(ln, 72, y + i * 68);
+      });
+      return y + lines.length * 68;
+    }
+    let y = wrap("“" + pick.line1, 280);
+    y = wrap(pick.line2 + "”", y + 16);
+    ctx.font = "500 28px Georgia, serif";
+    ctx.fillStyle = "#5c564c";
+    ctx.fillText(pick.song.title, 72, y + 80);
+    ctx.fillText("Justin Helmer / Excavationpro", 72, y + 120);
+    ctx.font = "22px Georgia, serif";
+    ctx.fillText(sheetUrl(pick.song.slug).replace(/^https:\/\//, ""), 72, h - 72);
   }
 
   function paintHighlight(forceNew) {
     const quoteEl = document.getElementById("vault-quote");
     const citeEl = document.getElementById("vault-cite");
     const linkEl = document.getElementById("vault-link");
+    const urlEl = document.getElementById("vault-url");
     if (!quoteEl || !songs.length) return;
     const last = sessionStorage.getItem("vaultHighlightSlug") || "";
     const pick = pickHighlight(forceNew || last ? last : "");
-    quoteEl.textContent = pick.text;
+    memePick = pick;
+    quoteEl.innerHTML = "";
+    quoteEl.appendChild(document.createTextNode(pick.line1));
+    quoteEl.appendChild(document.createElement("br"));
+    quoteEl.appendChild(document.createTextNode(pick.line2));
     citeEl.textContent = pick.song.title + (pick.song.album ? " · " + pick.song.album : "");
     linkEl.href = "#" + pick.song.slug;
+    if (urlEl) urlEl.textContent = sheetUrl(pick.song.slug).replace(/^https:\/\//, "");
     sessionStorage.setItem("vaultHighlightSlug", pick.song.slug);
+    const x = document.getElementById("share-x");
+    const bsky = document.getElementById("share-bsky");
+    const grok = document.getElementById("share-grok");
+    if (x) x.href = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(postBody(pick, 270));
+    if (bsky) bsky.href = "https://bsky.app/intent/compose?text=" + encodeURIComponent(postBody(pick, 290));
+    if (grok) grok.href = "https://grok.com/?q=" + encodeURIComponent(grokPrompt(pick));
+    drawMeme(pick);
   }
 
   const TV_PAGE = "https://chatagent.ca/sources/";
@@ -422,6 +501,22 @@
       e.preventDefault();
       e.stopPropagation();
       paintHighlight(true);
+    });
+  }
+  const pngBtn = document.getElementById("share-png");
+  if (pngBtn) {
+    pngBtn.addEventListener("click", function () {
+      if (!memePick) return;
+      drawMeme(memePick);
+      const canvas = document.getElementById("meme-canvas");
+      canvas.toBlob(function (blob) {
+        if (!blob) return;
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = (memePick.song.slug || "lyric") + "-vault.png";
+        a.click();
+        setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
+      }, "image/png");
     });
   }
 

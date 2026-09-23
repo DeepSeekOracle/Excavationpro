@@ -319,7 +319,11 @@
   window.addEventListener("hashchange", paint);
 
   const SHEET_BASE = "https://asiancoastline.com/lyrics/";
-  const TAGS = "#Excavationpro #JustinHelmer #LyricsVault";
+  const TAG_CORE = ["#Excavationpro", "#JustinHelmer", "#Lyrics", "#NewMusic", "#LiveMusic"];
+  const TAG_EXTRA = [
+    "#UndergroundMusic", "#Rap", "#RockMusic", "#MusicVideo",
+    "#NewMusicAlert", "#Radio", "#ReactionVideos"
+  ];
   let memePick = null;
 
   function lyricLines(song) {
@@ -356,14 +360,25 @@
     return s.length <= n ? s : s.slice(0, n - 1).replace(/\s+\S*$/, "") + "…";
   }
 
+  function tagLine(head, max) {
+    const tags = TAG_CORE.concat(TAG_EXTRA);
+    let out = "";
+    for (let i = 0; i < tags.length; i++) {
+      const next = out ? out + " " + tags[i] : tags[i];
+      if ((head + next).length > max) break;
+      out = next;
+    }
+    return out || TAG_CORE.slice(0, 3).join(" ");
+  }
+
   function postBody(pick, max) {
-    const quote = "“" + pick.line1 + "\n" + pick.line2 + "”";
     const by = "— " + pick.song.title + "\nJustin Helmer / Excavationpro";
     const url = sheetUrl(pick.song.slug);
-    let body = quote + "\n\n" + by + "\n" + url + "\n" + TAGS;
-    if (body.length <= max) return body;
-    body = "“" + clip(pick.line1, 70) + "\n" + clip(pick.line2, 70) + "”\n\n" + by + "\n" + url + "\n" + TAGS;
-    return body.length <= max ? body : clip(body, max);
+    const headFull = "“" + pick.line1 + "\n" + pick.line2 + "”\n\n" + by + "\n" + url + "\n";
+    const tags = tagLine(headFull, max);
+    if ((headFull + tags).length <= max) return headFull + tags;
+    const headShort = "“" + clip(pick.line1, 64) + "\n" + clip(pick.line2, 64) + "”\n\n" + by + "\n" + url + "\n";
+    return headShort + tagLine(headShort, max);
   }
 
   function grokPrompt(pick) {

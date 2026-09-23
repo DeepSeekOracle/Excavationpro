@@ -373,37 +373,41 @@
     return TAG_CORE.concat(rest);
   }
 
-  function tagLine(head, max) {
-    const tags = shuffleTags();
+  function fitTags(prefix, tags, max) {
     let out = "";
     for (let i = 0; i < tags.length; i++) {
       const next = out ? out + " " + tags[i] : tags[i];
-      if ((head + next).length > max) break;
+      if ((prefix + next).length > max) break;
       out = next;
     }
     return out || TAG_CORE.join(" ");
   }
 
-  function postBody(pick, max, forX) {
-    const grok = forX ? "@grok make a cinematic photo meme of this lyric as a readable quote. No watermark.\n\n" : "";
-    const quote = "“" + pick.line1 + "\n" + pick.line2 + "”\n\n";
-    const by = "— " + pick.song.title + "\nJustin Helmer / Excavationpro\n";
-    const url = sheetUrl(pick.song.slug) + "\n";
-    const listen = "Listen: https://asiancoastline.com/listen.html\nhttps://ffm.to/eovnvo9\n";
-    const heads = [
-      grok + quote + by + url + listen,
-      grok + quote + by + url,
-      (forX ? "@grok\n\n" : "") + quote + by + url
-    ];
-    for (let h = 0; h < heads.length; h++) {
-      const body = heads[h] + tagLine(heads[h], max);
-      if (body.length <= max) return body;
-    }
-    return heads[heads.length - 1] + TAG_CORE.join(" ");
+  function buildDraft(pick, tags) {
+    tags = tags || shuffleTags();
+    const quote = "“" + pick.line1 + "\n" + pick.line2 + "”";
+    const by = "— " + pick.song.title + "\nJustin Helmer / Excavationpro";
+    const url = sheetUrl(pick.song.slug);
+    const listen = "Listen: https://asiancoastline.com/listen.html\nhttps://ffm.to/eovnvo9";
+    const tagStr = tags.join(" ");
+    const x = "@grok make a cinematic photo meme of this lyric. No watermark.\n\n" +
+      quote + "\n\n" + tagStr + "\n\n" + by + "\n" + url + "\n" + listen;
+    const bskyHead = quote + "\n\n";
+    const bskyTags = fitTags(bskyHead, tags, 220);
+    let bsky = bskyHead + bskyTags + "\n" + by + "\n" + url;
+    if (bsky.length > 300) bsky = bskyHead + bskyTags + "\n" + url;
+    if (bsky.length > 300) bsky = quote + "\n" + fitTags(quote + "\n", tags, 300);
+    return { x: x, bsky: bsky, tags: tags };
   }
 
-  function grokPrompt(pick) {
-    return postBody(pick, 1400, true);
+  function captionEl() {
+    return document.getElementById("meme-caption");
+  }
+
+  function showDraft(kind) {
+    const ta = captionEl();
+    if (!ta || !memePick || !memePick.draft) return;
+    ta.value = kind === "bsky" ? memePick.draft.bsky : memePick.draft.x;
   }
 
   function drawMeme(pick) {
@@ -416,7 +420,7 @@
     ctx.fillRect(0, 0, w, h);
     ctx.fillStyle = "#1c1914";
     ctx.font = "500 28px Georgia, serif";
-    ctx.fillText("FROM THE VAULT", 72, 96);
+    ctx.fillText("LYRICS VAULT", 72, 96);
     ctx.font = "italic 500 54px Georgia, serif";
     function wrap(text, y) {
       const words = text.split(" ");
@@ -453,6 +457,7 @@
     if (!quoteEl || !songs.length) return;
     const last = sessionStorage.getItem("vaultHighlightSlug") || "";
     const pick = pickHighlight(forceNew || last ? last : "");
+    pick.draft = buildDraft(pick);
     memePick = pick;
     quoteEl.innerHTML = "";
     quoteEl.appendChild(document.createTextNode(pick.line1));
@@ -462,8 +467,6 @@
     linkEl.href = "#" + pick.song.slug;
     if (urlEl) urlEl.textContent = sheetUrl(pick.song.slug).replace(/^https:\/\//, "");
     sessionStorage.setItem("vaultHighlightSlug", pick.song.slug);
-    const grok = document.getElementById("share-grok");
-    if (grok) grok.href = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(grokPrompt(pick));
     const stEl = document.getElementById("meme-status");
     if (stEl) stEl.textContent = "";
     const chooser = document.getElementById("meme-post");
@@ -496,9 +499,12 @@
   }
 
   function openCompose(kind, pick) {
+    if (!pick || !pick.draft) return;
     const forX = kind !== "bsky";
-    const max = forX ? 1400 : 300;
-    const text = postBody(pick, max, forX);
+    const ta = captionEl();
+    const chooser = document.getElementById("meme-post");
+    const fromBox = chooser && !chooser.hidden && ta && ta.value.trim();
+    const text = fromBox ? ta.value.trim() : (forX ? pick.draft.x : pick.draft.bsky);
     const href = forX
       ? "https://x.com/intent/post?text=" + encodeURIComponent(text)
       : "https://bsky.app/intent/compose?text=" + encodeURIComponent(text);
@@ -515,9 +521,14 @@
 
   function shareMeme(kind) {
     if (!memePick) return;
+    if (!memePick.draft) memePick.draft = buildDraft(memePick);
+    const chooser = document.getElementById("meme-post");
+    if (kind === "x" || kind === "bsky" || kind === "grok") {
+      showDraft(kind === "bsky" ? "bsky" : "x");
+      openCompose(kind === "bsky" ? "bsky" : "x", memePick);
+    }
     drawMeme(memePick);
     const canvas = document.getElementById("meme-canvas");
-    const chooser = document.getElementById("meme-post");
     canvas.toBlob(function (blob) {
       if (!blob) return;
       const name = (memePick.song.slug || "lyric") + "-vault.png";
@@ -525,30 +536,52 @@
         if (kind === "png") {
           downloadBlob(blob, name);
           if (chooser) chooser.hidden = false;
+          showDraft("x");
           setMemeStatus(ok
-            ? "Photo copied and saved. Choose X or Bluesky, then paste (Ctrl+V)."
-            : "Photo saved. Choose X or Bluesky and attach the PNG.");
+            ? "Photo copied. Edit tags if you want, then post to X or Bluesky and paste (Ctrl+V)."
+            : "Photo saved. Attach the PNG after the composer opens.");
           return;
         }
-        if (chooser) chooser.hidden = true;
-        openCompose(kind, memePick);
         setMemeStatus(ok
-          ? "Photo copied. Paste it into the post (Ctrl+V)."
-          : "Composer opened. Attach the PNG if paste is blocked.");
+          ? "Caption opened. Paste the photo (Ctrl+V)."
+          : "Caption opened. Attach the PNG if paste is blocked.");
       });
     }, "image/png");
   }
 
   const xBtn = document.getElementById("share-x");
   const bskyBtn = document.getElementById("share-bsky");
+  const grokBtn = document.getElementById("share-grok");
   const pngBtn = document.getElementById("share-png");
   const postX = document.getElementById("post-x");
   const postBsky = document.getElementById("post-bsky");
+  const shuffleTagsBtn = document.getElementById("shuffle-tags");
+  const copyCaptionBtn = document.getElementById("copy-caption");
   if (xBtn) xBtn.addEventListener("click", function () { shareMeme("x"); });
   if (bskyBtn) bskyBtn.addEventListener("click", function () { shareMeme("bsky"); });
+  if (grokBtn) grokBtn.addEventListener("click", function () { shareMeme("grok"); });
   if (pngBtn) pngBtn.addEventListener("click", function () { shareMeme("png"); });
   if (postX) postX.addEventListener("click", function () { shareMeme("x"); });
   if (postBsky) postBsky.addEventListener("click", function () { shareMeme("bsky"); });
+  if (shuffleTagsBtn) {
+    shuffleTagsBtn.addEventListener("click", function () {
+      if (!memePick) return;
+      memePick.draft = buildDraft(memePick, shuffleTags());
+      showDraft("x");
+      setMemeStatus("Tags shuffled.");
+    });
+  }
+  if (copyCaptionBtn) {
+    copyCaptionBtn.addEventListener("click", function () {
+      const ta = captionEl();
+      if (!ta || !ta.value) return;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(ta.value).then(function () {
+          setMemeStatus("Caption copied. Paste it, then paste the photo.");
+        }).catch(function () {});
+      }
+    });
+  }
 
   const gate = document.getElementById("gate");
   const gatePass = document.getElementById("gate-pass");

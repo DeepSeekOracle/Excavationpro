@@ -82,12 +82,16 @@
       <div class="meme-share" role="group" aria-label="Share this lyric">
         <button type="button" class="share-btn" id="share-x">Post to X</button>
         <button type="button" class="share-btn" id="share-bsky">Post to Bluesky</button>
-        <a class="share-btn grok" id="share-grok" target="_blank" rel="noopener noreferrer">Ask Grok for a photo</a>
+        <button type="button" class="share-btn grok" id="share-grok">Ask Grok for a photo</button>
         <button type="button" class="share-btn" id="share-png">Save PNG and post</button>
       </div>
       <div class="meme-post" id="meme-post" hidden>
-        <p>Photo copied. Paste it into the post (Ctrl+V).</p>
+        <p>Photo ready. Caption includes @grok and tags. Paste the image (Ctrl+V) after the composer opens.</p>
+        <label class="sr" for="meme-caption">Post caption</label>
+        <textarea id="meme-caption" rows="8" spellcheck="false"></textarea>
         <div class="meme-share">
+          <button type="button" class="share-btn" id="shuffle-tags">Shuffle tags</button>
+          <button type="button" class="share-btn" id="copy-caption">Copy caption</button>
           <button type="button" class="share-btn" id="post-x">Post photo to X</button>
           <button type="button" class="share-btn" id="post-bsky">Post photo to Bluesky</button>
         </div>
@@ -187,6 +191,6 @@
   </div>
 </div>
 <script src="lygo-tv-ninja.js?v=6" defer></script>
-<script src="vault.js?v=20"></script>
+<script src="vault.js?v=21"></script>
 </body>
 </html>

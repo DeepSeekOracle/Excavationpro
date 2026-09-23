@@ -218,6 +218,13 @@ h1 {
 }
 .meme-post[hidden] { display: none !important; }
 .meme-post p { margin: 0; font-size: 0.78rem; color: var(--ink-muted); }
+.meme-post textarea {
+  width: 100%; min-height: 8.5rem; resize: vertical; box-sizing: border-box;
+  padding: 10px 12px; border-radius: var(--radius-sm);
+  border: 1px solid color-mix(in oklab, var(--ink) 16%, transparent);
+  background: color-mix(in oklab, var(--paper) 70%, #fff);
+  color: var(--ink); font: inherit; font-size: 0.8rem; line-height: 1.4;
+}
 .tv-portal {
   border: 1px solid var(--border);
   border-radius: calc(var(--radius-md) + var(--space-4));

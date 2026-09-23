@@ -439,10 +439,10 @@
 
   const TV_PAGE = "https://chatagent.ca/sources/";
   const TV_ROOMS = [
-    { id: "kick_live", title: "Excavationpro on Kick", kind: "kick",
-      url: "https://player.kick.com/excavationpro?autoplay=true" },
     { id: "rumble_live", title: "Excavationpro Rumble LIVE", kind: "rumble",
       url: "https://rumble.com/embed/v7b5p30/?pub=1th29y" },
+    { id: "kick_live", title: "Excavationpro on Kick", kind: "kick",
+      url: "https://player.kick.com/excavationpro?autoplay=true" },
     { id: "twitch_live", title: "Excavationpro on Twitch", kind: "twitch",
       channel: "excavationpro" },
     { id: "yt_justin_live", title: "Justin Helmer YouTube LIVE", kind: "youtube",
@@ -483,7 +483,12 @@
   const tvNext = document.getElementById("tv-next");
   if (tvPrev) tvPrev.addEventListener("click", function () { playTv(tvI - 1); });
   if (tvNext) tvNext.addEventListener("click", function () { playTv(tvI + 1); });
-  playTv(0);
+
+  function rumbleIndex() {
+    const i = TV_ROOMS.findIndex(function (c) { return c.id === "rumble_live"; });
+    return i >= 0 ? i : 0;
+  }
+  playTv(rumbleIndex());
 
   fetch(TV_PAGE + "catalog.json", { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (cat) {
     const live = cat && cat.live;
@@ -492,7 +497,7 @@
     live.forEach(function (ch) {
       if (ch && ch.id && (ch.url || ch.kind === "twitch")) TV_ROOMS.push(ch);
     });
-    playTv(Math.min(tvI, TV_ROOMS.length - 1));
+    playTv(rumbleIndex());
   }).catch(function () {});
 
   const shuffleBtn = document.getElementById("vault-shuffle");

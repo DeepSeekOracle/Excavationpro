@@ -358,6 +358,64 @@
     sessionStorage.setItem("vaultHighlightSlug", pick.song.slug);
   }
 
+  const TV_PAGE = "https://chatagent.ca/sources/";
+  const TV_ROOMS = [
+    { id: "kick_live", title: "Excavationpro on Kick", kind: "kick",
+      url: "https://player.kick.com/excavationpro?autoplay=true" },
+    { id: "rumble_live", title: "Excavationpro Rumble LIVE", kind: "rumble",
+      url: "https://rumble.com/embed/v7b5p30/?pub=1th29y" },
+    { id: "twitch_live", title: "Excavationpro on Twitch", kind: "twitch",
+      channel: "excavationpro" },
+    { id: "yt_justin_live", title: "Justin Helmer YouTube LIVE", kind: "youtube",
+      url: "https://www.youtube-nocookie.com/embed/live_stream?channel=UCIbGSxMpDaj5ivh6mP_-k-A" },
+    { id: "yt_excav_live", title: "Excavationpro YouTube LIVE", kind: "youtube",
+      url: "https://www.youtube-nocookie.com/embed/live_stream?channel=UCr2GPEJcl2lXu0lS9-0FjvA" },
+    { id: "rumble_radio", title: "Excavationpro Rumble radio", kind: "rumble",
+      url: "https://rumble.com/embed/v7anxls/?pub=1th29y" },
+    { id: "yt_justin_videos", title: "Justin Helmer YouTube videos", kind: "youtube",
+      url: "https://www.youtube-nocookie.com/embed/videoseries?list=UUIbGSxMpDaj5ivh6mP_-k-A" },
+    { id: "yt_excav_videos", title: "Excavationpro YouTube videos", kind: "youtube",
+      url: "https://www.youtube-nocookie.com/embed/videoseries?list=UUr2GPEJcl2lXu0lS9-0FjvA" }
+  ];
+  let tvI = 0;
+  const tvFrame = document.getElementById("tv-frame");
+  const tvMeta = document.getElementById("tv-meta");
+  const tvOpen = document.getElementById("tv-open");
+
+  function tvEmbed(ch) {
+    if (ch.kind === "twitch" || (ch.url && ch.url.indexOf("player.twitch.tv") !== -1)) {
+      return "https://player.twitch.tv/?channel=" + encodeURIComponent(ch.channel || "excavationpro") +
+        "&parent=" + encodeURIComponent(location.hostname) + "&autoplay=true&muted=true";
+    }
+    return ch.url;
+  }
+
+  function playTv(i) {
+    if (!TV_ROOMS.length) return;
+    tvI = (i + TV_ROOMS.length) % TV_ROOMS.length;
+    const ch = TV_ROOMS[tvI];
+    if (tvFrame) tvFrame.src = tvEmbed(ch);
+    if (tvMeta) tvMeta.textContent = ch.title + " · " + (tvI + 1) + " / " + TV_ROOMS.length;
+    if (tvOpen) tvOpen.href = TV_PAGE + "#channel/" + ch.id;
+    if (tvFrame) tvFrame.title = ch.title;
+  }
+
+  const tvPrev = document.getElementById("tv-prev");
+  const tvNext = document.getElementById("tv-next");
+  if (tvPrev) tvPrev.addEventListener("click", function () { playTv(tvI - 1); });
+  if (tvNext) tvNext.addEventListener("click", function () { playTv(tvI + 1); });
+  playTv(0);
+
+  fetch(TV_PAGE + "catalog.json", { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (cat) {
+    const live = cat && cat.live;
+    if (!live || !live.length) return;
+    TV_ROOMS.length = 0;
+    live.forEach(function (ch) {
+      if (ch && ch.id && (ch.url || ch.kind === "twitch")) TV_ROOMS.push(ch);
+    });
+    playTv(Math.min(tvI, TV_ROOMS.length - 1));
+  }).catch(function () {});
+
   const shuffleBtn = document.getElementById("vault-shuffle");
   if (shuffleBtn) {
     shuffleBtn.addEventListener("click", function (e) {

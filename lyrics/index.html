@@ -34,7 +34,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="vault.css?v=10">
+<link rel="stylesheet" href="vault.css?v=11">
 </head>
 <body>
 <div class="sky" aria-hidden="true"></div>
@@ -53,7 +53,7 @@
     <div class="hero-copy">
       <p class="kicker">Justin Helmer · writing as Excavationpro</p>
       <h1>The lyric vault for a catalog still being built.</h1>
-      <p class="lede">Justin Helmer records as Excavationpro. This room is the paper: hundreds of titles, artist and album on the sheet, lyrics as they were filed. Search a song. Open it. Play the catalog when a stream is mapped. Live rooms and PayPal sit with the work if it holds.</p>
+      <p class="lede">Justin Helmer records as Excavationpro. This room is the paper: hundreds of titles, artist and album on the sheet, lyrics as they were filed. Search a song. Open it. Play the catalog when a stream is mapped.</p>
       <ul class="stats" aria-label="Vault size">
         <li><strong id="stat-n">—</strong><span>sheets</span></li>
         <li><strong id="stat-m">—</strong><span>mapped streams</span></li>
@@ -62,6 +62,21 @@
       <label class="sr" for="q">Search titles</label>
       <input id="q" class="search" type="search" placeholder="Search a title" autocomplete="off">
     </div>
+    <div class="hero-side">
+    <section class="tv-portal" aria-label="LYGO TV">
+      <div class="tv-top">
+        <p class="card-kicker">LYGO TV</p>
+        <a class="tv-open" id="tv-open" href="https://chatagent.ca/sources/#channel/kick_live" target="_blank" rel="noopener noreferrer">Open player</a>
+      </div>
+      <div class="tv-screen">
+        <iframe id="tv-frame" title="LYGO TV channel" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      </div>
+      <div class="tv-bar">
+        <button type="button" class="tv-zap" id="tv-prev" aria-label="Previous channel">Prev</button>
+        <p class="tv-meta" id="tv-meta">Channel</p>
+        <button type="button" class="tv-zap" id="tv-next" aria-label="Next channel">Next</button>
+      </div>
+    </section>
     <aside class="hero-card" id="vault-card" aria-label="From the vault">
       <div class="card-top">
         <p class="card-kicker">From the vault</p>
@@ -74,6 +89,7 @@
         </blockquote>
       </a>
     </aside>
+    </div>
   </section>
 
   <nav class="lattice" aria-label="Lattice paths">
@@ -164,6 +180,6 @@
     <a class="full" id="full-player" href="https://asiancoastline.com/listen.html">Full player</a>
   </div>
 </div>
-<script src="vault.js?v=10"></script>
+<script src="vault.js?v=11"></script>
 </body>
 </html>

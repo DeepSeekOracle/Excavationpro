@@ -101,11 +101,13 @@ nav.links a { color: var(--fg-muted); min-height: 44px; display: inline-flex; al
 
 .hero {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(240px, 0.8fr);
-  gap: var(--space-7);
-  align-items: end;
+  grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
+  gap: var(--space-6);
+  align-items: start;
   margin: var(--space-6) 0 var(--space-7);
-  min-height: min(62vh, 36rem);
+}
+.hero-side {
+  display: flex; flex-direction: column; gap: var(--space-4);
 }
 .hero-copy { max-width: 40rem; padding-bottom: var(--space-2); }
 .kicker {
@@ -185,6 +187,38 @@ h1 {
   font-size: var(--text-xs); letter-spacing: 0.14em; text-transform: uppercase;
   color: var(--ink-muted);
 }
+.tv-portal {
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius-md) + var(--space-4));
+  overflow: hidden;
+  background: color-mix(in oklab, var(--bg-elevated) 88%, transparent);
+}
+.tv-top, .tv-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--space-3); padding: 10px var(--space-4);
+}
+.tv-open {
+  font-size: var(--text-xs); letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--accent); min-height: 36px; display: inline-flex; align-items: center;
+}
+.tv-screen {
+  position: relative; aspect-ratio: 16 / 9; background: #000;
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--fg) 10%, transparent);
+}
+.tv-screen iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #000; }
+.tv-meta {
+  margin: 0; flex: 1; text-align: center;
+  font-size: var(--text-xs); letter-spacing: 0.04em; color: var(--fg-muted);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.tv-zap {
+  min-width: 52px; min-height: 40px; padding: 0 var(--space-3);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border); background: var(--bg-elevated);
+  color: var(--fg); font: inherit; font-size: var(--text-xs);
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.tv-zap:hover { background: color-mix(in oklab, var(--fg) 8%, transparent); }
 @media (max-width: 840px) {
   .hero { grid-template-columns: 1fr; min-height: 0; gap: var(--space-5); }
   .hero-card { min-height: 0; padding: var(--space-5); }

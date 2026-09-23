@@ -428,12 +428,10 @@
     linkEl.href = "#" + pick.song.slug;
     if (urlEl) urlEl.textContent = sheetUrl(pick.song.slug).replace(/^https:\/\//, "");
     sessionStorage.setItem("vaultHighlightSlug", pick.song.slug);
-    const x = document.getElementById("share-x");
-    const bsky = document.getElementById("share-bsky");
     const grok = document.getElementById("share-grok");
-    if (x) x.href = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(postBody(pick, 270));
-    if (bsky) bsky.href = "https://bsky.app/intent/compose?text=" + encodeURIComponent(postBody(pick, 290));
     if (grok) grok.href = "https://grok.com/?q=" + encodeURIComponent(grokPrompt(pick));
+    const stEl = document.getElementById("meme-status");
+    if (stEl) stEl.textContent = "";
     drawMeme(pick);
   }
 
@@ -508,22 +506,94 @@
       paintHighlight(true);
     });
   }
-  const pngBtn = document.getElementById("share-png");
-  if (pngBtn) {
-    pngBtn.addEventListener("click", function () {
-      if (!memePick) return;
-      drawMeme(memePick);
-      const canvas = document.getElementById("meme-canvas");
-      canvas.toBlob(function (blob) {
-        if (!blob) return;
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = (memePick.song.slug || "lyric") + "-vault.png";
-        a.click();
-        setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
-      }, "image/png");
+  function setMemeStatus(msg) {
+    const el = document.getElementById("meme-status");
+    if (el) el.textContent = msg || "";
+  }
+
+  function copyImage(blob) {
+    if (!navigator.clipboard || !window.ClipboardItem) {
+      return Promise.resolve(false);
+    }
+    return navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]).then(function () {
+      return true;
+    }).catch(function () {
+      return false;
     });
   }
+
+  function openCompose(kind, pick) {
+    const text = postBody(pick, kind === "bsky" ? 290 : 270);
+    const href = kind === "bsky"
+      ? "https://bsky.app/intent/compose?text=" + encodeURIComponent(text)
+      : "https://twitter.com/intent/tweet?text=" + encodeURIComponent(text);
+    window.open(href, "_blank", "noopener,noreferrer");
+  }
+
+  function downloadBlob(blob, name) {
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
+  }
+
+  function shareMeme(kind) {
+    if (!memePick) return;
+    drawMeme(memePick);
+    const canvas = document.getElementById("meme-canvas");
+    canvas.toBlob(function (blob) {
+      if (!blob) return;
+      const name = (memePick.song.slug || "lyric") + "-vault.png";
+      const file = new File([blob], name, { type: "image/png" });
+      const text = postBody(memePick, 270);
+      const url = sheetUrl(memePick.song.slug);
+
+      if (kind === "png" && navigator.share && navigator.canShare) {
+        try {
+          if (navigator.canShare({ files: [file] })) {
+            navigator.share({
+              files: [file],
+              text: text,
+              title: memePick.song.title,
+              url: url
+            }).then(function () {
+              setMemeStatus("Shared with the photo attached.");
+            }).catch(function () {
+              copyImage(blob).then(function (ok) {
+                downloadBlob(blob, name);
+                setMemeStatus(ok
+                  ? "Photo copied and saved. Open X or Bluesky and paste (Ctrl+V)."
+                  : "Photo saved. Attach the PNG to your post.");
+              });
+            });
+            return;
+          }
+        } catch (e) {}
+      }
+
+      copyImage(blob).then(function (ok) {
+        if (kind === "png") downloadBlob(blob, name);
+        if (kind === "x" || kind === "bsky") openCompose(kind, memePick);
+        if (kind === "png") {
+          setMemeStatus(ok
+            ? "Photo copied and saved. Post to X or Bluesky and paste (Ctrl+V)."
+            : "Photo saved. Attach the PNG to your X or Bluesky post.");
+        } else {
+          setMemeStatus(ok
+            ? "Photo copied. Paste it into the post (Ctrl+V or long-press)."
+            : "Composer opened. Attach the saved PNG if paste is blocked.");
+        }
+      });
+    }, "image/png");
+  }
+
+  const xBtn = document.getElementById("share-x");
+  const bskyBtn = document.getElementById("share-bsky");
+  const pngBtn = document.getElementById("share-png");
+  if (xBtn) xBtn.addEventListener("click", function () { shareMeme("x"); });
+  if (bskyBtn) bskyBtn.addEventListener("click", function () { shareMeme("bsky"); });
+  if (pngBtn) pngBtn.addEventListener("click", function () { shareMeme("png"); });
 
   const gate = document.getElementById("gate");
   const gatePass = document.getElementById("gate-pass");

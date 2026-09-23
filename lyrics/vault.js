@@ -75,7 +75,7 @@
   function show(song) {
     current = song || null;
     if (!song) {
-      sheet.innerHTML = "<p class='empty'>Choose a song.</p>";
+      sheet.innerHTML = "<p class='empty'>Choose a lyric.</p>";
       return;
     }
     document.querySelectorAll("#list a").forEach(function (a) {

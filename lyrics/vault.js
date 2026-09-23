@@ -26,6 +26,7 @@
   let playIdx = -1;
   let letterOn = "";
   let seeking = false;
+  let lastShown = "";
 
   function vis() {
     const needle = (q.value || "").toLowerCase();
@@ -76,6 +77,10 @@
       nowState.textContent = "Lyrics only · open full player for the catalog";
     }
     document.title = song.title + " — Lyrics Vault";
+    if (song.slug !== lastShown) {
+      lastShown = song.slug;
+      maybeGate();
+    }
   }
 
   function paintLetters(list) {
@@ -212,4 +217,38 @@
   });
   q.addEventListener("input", paint);
   window.addEventListener("hashchange", paint);
+
+  const gate = document.getElementById("gate");
+  const gatePass = document.getElementById("gate-pass");
+  let sheetOpens = 0;
+  let gateTimer = 0;
+
+  function hideGate() {
+    if (!gate) return;
+    gate.hidden = true;
+    sessionStorage.setItem("vaultGateAt", String(Date.now()));
+  }
+
+  function showGate() {
+    if (!gate || !current) return;
+    gate.hidden = false;
+    if (gatePass) gatePass.focus();
+  }
+
+  function maybeGate() {
+    sheetOpens += 1;
+    window.clearTimeout(gateTimer);
+    const last = parseInt(sessionStorage.getItem("vaultGateAt") || "0", 10);
+    const cooling = Date.now() - last < 7 * 60 * 1000;
+    if (sheetOpens === 1) {
+      gateTimer = window.setTimeout(showGate, 8000);
+      return;
+    }
+    if (!cooling && sheetOpens % 3 === 0) showGate();
+  }
+
+  if (gatePass) gatePass.addEventListener("click", hideGate);
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && gate && !gate.hidden) hideGate();
+  });
 })();

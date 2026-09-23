@@ -34,7 +34,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="vault.css?v=5">
+<link rel="stylesheet" href="vault.css?v=6">
 </head>
 <body>
 <div class="sky" aria-hidden="true"></div>
@@ -92,9 +92,24 @@
       <div class="letters" id="letters" aria-label="Jump by letter"></div>
       <ol id="list"></ol>
     </aside>
-    <article class="sheet" id="sheet">
-      <p class="empty">Choose a song.</p>
-    </article>
+    <div class="sheet-wrap">
+      <article class="sheet" id="sheet">
+        <p class="empty">Choose a song.</p>
+      </article>
+      <div class="gate" id="gate" hidden>
+        <div class="gate-card" role="dialog" aria-modal="true" aria-labelledby="gate-title">
+          <p class="card-kicker">Support the work</p>
+          <h2 id="gate-title">Keep the vault lit.</h2>
+          <p>These sheets stay free. If they land, support Justin Helmer / Excavationpro — PayPal, or stream the catalog.</p>
+          <div class="gate-actions">
+            <a class="btn paypal" href="https://www.paypal.com/paypalme/ExcavationPro" target="_blank" rel="noopener noreferrer">Donate on PayPal</a>
+            <a class="btn" href="https://ffm.to/eovnvo9" target="_blank" rel="noopener noreferrer">Listen — Excavationpro</a>
+            <a class="btn" href="https://ffm.to/justin-helmer" target="_blank" rel="noopener noreferrer">Listen — Justin Helmer</a>
+            <button type="button" class="btn ghost" id="gate-pass">Keep reading</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <footer class="site">
@@ -133,6 +148,6 @@
     <a class="full" id="full-player" href="https://asiancoastline.com/listen.html">Full player</a>
   </div>
 </div>
-<script src="vault.js?v=5"></script>
+<script src="vault.js?v=6"></script>
 </body>
 </html>

@@ -152,13 +152,29 @@ h1 {
   padding: var(--space-6);
   box-shadow: 0 28px 70px rgba(0,0,0,.4);
   min-height: 16rem;
-  display: flex; flex-direction: column; justify-content: flex-end;
+  display: flex; flex-direction: column; justify-content: space-between;
+  gap: var(--space-5);
+}
+.card-top {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-3);
 }
 .card-kicker {
-  margin: 0 0 var(--space-4);
+  margin: 0;
   font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
   color: var(--ink-muted);
 }
+.card-shuffle {
+  min-height: 36px; padding: 0 var(--space-3);
+  border-radius: var(--radius-sm);
+  border: 1px solid color-mix(in oklab, var(--ink) 16%, transparent);
+  background: transparent; color: var(--ink);
+  font: inherit; font-size: var(--text-xs); letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.card-shuffle:hover { background: color-mix(in oklab, var(--ink) 8%, transparent); }
+.card-link { color: inherit; text-decoration: none; display: block; }
+.card-link:hover { text-decoration: none; }
+.card-link:hover blockquote p { text-decoration: underline; text-underline-offset: 4px; }
 .hero-card blockquote { margin: 0; }
 .hero-card blockquote p {
   font-family: var(--font-display); font-weight: 500; font-style: italic;
